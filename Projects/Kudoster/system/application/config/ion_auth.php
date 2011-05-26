@@ -20,9 +20,9 @@
 	/**
 	 * Tables.
 	 **/
-	$config['tables']['groups']  = 'groups';
-	$config['tables']['users']   = 'users';
-	$config['tables']['meta']    = 'meta';
+	$config['tables']['groups']  = 'Role';
+	$config['tables']['users']   = 'User';
+	$config['tables']['meta']    = 'Meta';
 	
 	/**
 	 * Site Title, example.com

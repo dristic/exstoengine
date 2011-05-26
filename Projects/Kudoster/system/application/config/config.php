@@ -11,7 +11,8 @@
 |	http://example.com/
 |
 */
-$config['base_url']	= "http://kudoster.com/";
+$config['base_url']	= "http://localhost:880/Kudoster/";
+//$config['base_url']	= "http://kudoster.com/";
 
 /*
 |--------------------------------------------------------------------------

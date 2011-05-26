@@ -5,16 +5,13 @@ class Welcome extends Controller {
 	function Welcome()
 	{
 		parent::Controller();
-		
-		$this->load->library('ion_auth');
-		$this->load->library('session');
 	}
 	
 	function index()
 	{
-		$this->load->view('main/header');
-		$this->load->view('index');
-		$this->load->view('main/footer');
+		$this->template->load('index');
+		
+		$this->output->cache(30);
 	}
 }
 

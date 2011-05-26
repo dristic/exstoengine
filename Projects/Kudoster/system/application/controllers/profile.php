@@ -6,11 +6,8 @@ class Profile extends Controller
 
     function  Profile() {
         parent::Controller();
-
-        $this->load->library('session');
-        $this->load->library('ion_auth');
+		
         $this->load->library('form_validation');
-        $this->load->helper('url');
 
         $this->load->model('Group_Model');
         $this->load->model('Achievement_Model');
@@ -25,10 +22,8 @@ class Profile extends Controller
         $data['achievements'] = $this->Achievement_Model->get_latest_achievements($this->user->id);
         $data['total_points'] = $this->Achievement_Model->get_total_points($this->user->id);
         $data['last_date'] = $this->Achievement_Model->get_last_date($this->user->id);
-
-        $this->load->view('main/header');
-        $this->load->view('profile/index', $data);
-        $this->load->view('main/footer');
+        
+        $this->template->load('profile/index', $data);
     }
 }
 
