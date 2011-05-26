@@ -1,0 +1,40 @@
+[30-Jan-2011 16:17:38] PHP Fatal error:  Call to a member function userdata() on a non-object in /home/danristi/public_html/catalyst/system/application/libraries/account.php on line 15
+[30-Jan-2011 16:44:18] PHP Fatal error:  Cannot redeclare Account::__construct() in /home/danristi/public_html/catalyst/system/application/libraries/account.php on line 13
+[30-Jan-2011 16:44:32] PHP Fatal error:  Call to a member function userdata() on a non-object in /home/danristi/public_html/catalyst/system/application/libraries/account.php on line 15
+[30-Jan-2011 16:45:00] PHP Fatal error:  Call to a member function userdata() on a non-object in /home/danristi/public_html/catalyst/system/application/libraries/account.php on line 15
+[30-Jan-2011 16:45:02] PHP Fatal error:  Call to a member function userdata() on a non-object in /home/danristi/public_html/catalyst/system/application/libraries/account.php on line 15
+[30-Jan-2011 17:17:36] PHP Fatal error:  Call to a member function logged_in_status() on a non-object in /home/danristi/public_html/catalyst/system/application/views/main/header.php on line 18
+[30-Jan-2011 17:18:11] PHP Fatal error:  Call to a member function logged_in_status() on a non-object in /home/danristi/public_html/catalyst/system/application/views/main/header.php on line 18
+[30-Jan-2011 17:19:11] PHP Fatal error:  Cannot redeclare class Account in /home/danristi/public_html/catalyst/system/application/libraries/account.php on line 3
+[31-Jan-2011 19:22:13] PHP Fatal error:  Call to a member function userdata() on a non-object in /home/danristi/public_html/catalyst/system/application/controllers/api.php on line 32
+[31-Jan-2011 19:25:43] PHP Fatal error:  Call to a member function userdata() on a non-object in /home/danristi/public_html/catalyst/system/application/controllers/api.php on line 32
+[31-Jan-2011 19:25:44] PHP Fatal error:  Call to a member function userdata() on a non-object in /home/danristi/public_html/catalyst/system/application/controllers/api.php on line 32
+[31-Jan-2011 19:40:13] PHP Fatal error:  Call to a member function logged_in_status() on a non-object in /home/danristi/public_html/catalyst/system/application/views/main/header.php on line 47
+[31-Jan-2011 19:40:49] PHP Fatal error:  Call to a member function logged_in_status() on a non-object in /home/danristi/public_html/catalyst/system/application/views/main/header.php on line 47
+[31-Jan-2011 19:40:51] PHP Fatal error:  Call to a member function logged_in_status() on a non-object in /home/danristi/public_html/catalyst/system/application/views/main/header.php on line 47
+[31-Jan-2011 19:42:58] PHP Fatal error:  Call to a member function logged_in() on a non-object in /home/danristi/public_html/catalyst/system/application/views/main/header.php on line 49
+[31-Jan-2011 19:43:00] PHP Fatal error:  Call to a member function logged_in() on a non-object in /home/danristi/public_html/catalyst/system/application/views/main/header.php on line 49
+[31-Jan-2011 19:48:18] PHP Fatal error:  Call to a member function logged_in() on a non-object in /home/danristi/public_html/catalyst/system/application/views/main/header.php on line 48
+[31-Jan-2011 19:54:31] PHP Fatal error:  Call to a member function logged_in() on a non-object in /home/danristi/public_html/catalyst/system/application/views/main/header.php on line 47
+[31-Jan-2011 19:54:43] PHP Fatal error:  Call to undefined function form_open() in /home/danristi/public_html/catalyst/system/application/views/account/signup.php on line 8
+[09-Feb-2011 17:34:16] PHP Fatal error:  require_once() [<a href='function.require'>function.require</a>]: Failed opening required 'recaptchalib.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/danristi/public_html/catalyst/system/application/views/auth/create_user.php on line 62
+[09-Feb-2011 17:35:31] PHP Fatal error:  require_once() [<a href='function.require'>function.require</a>]: Failed opening required 'recaptchalib.php' (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/danristi/public_html/catalyst/system/application/views/auth/create_user.php on line 62
+[18-Feb-2011 13:47:55] PHP Fatal error:  Call to a member function result() on a non-object in /home/danristi/public_html/catalyst/system/application/models/group_model.php on line 16
+[18-Feb-2011 13:49:22] PHP Fatal error:  Call to a member function result() on a non-object in /home/danristi/public_html/catalyst/system/application/models/group_model.php on line 16
+[18-Feb-2011 13:49:25] PHP Fatal error:  Call to a member function result() on a non-object in /home/danristi/public_html/catalyst/system/application/models/group_model.php on line 16
+[22-Feb-2011 01:21:42] PHP Fatal error:  Call to undefined method CI_Session::get_flashdata() in /home/danristi/public_html/kudoster.com/system/application/views/auth/login.php on line 9
+[22-Feb-2011 01:38:32] PHP Fatal error:  Call to a member function get_groups() on a non-object in /home/danristi/public_html/kudoster.com/system/application/controllers/group.php on line 21
+[22-Feb-2011 01:42:27] PHP Fatal error:  Cannot access empty property in /home/danristi/public_html/kudoster.com/system/application/models/group_model.php on line 35
+[22-Feb-2011 02:14:47] PHP Fatal error:  Call to undefined function form_open() in /home/danristi/public_html/kudoster.com/system/application/views/group/create.php on line 8
+[22-Feb-2011 02:15:26] PHP Fatal error:  Call to undefined function form_open() in /home/danristi/public_html/kudoster.com/system/application/views/group/create.php on line 8
+[22-Feb-2011 02:15:29] PHP Fatal error:  Call to undefined function form_open() in /home/danristi/public_html/kudoster.com/system/application/views/group/create.php on line 8
+[22-Feb-2011 02:15:31] PHP Fatal error:  Call to undefined function form_open() in /home/danristi/public_html/kudoster.com/system/application/views/group/create.php on line 8
+[22-Feb-2011 02:15:37] PHP Fatal error:  Call to undefined function form_open() in /home/danristi/public_html/kudoster.com/system/application/views/group/create.php on line 8
+[22-Feb-2011 02:18:16] PHP Fatal error:  Call to undefined function form_open() in /home/danristi/public_html/kudoster.com/system/application/views/group/create.php on line 8
+[22-Feb-2011 02:33:59] PHP Fatal error:  Cannot redeclare class Group in /home/danristi/public_html/kudoster.com/system/application/libraries/group.php on line 3
+[22-Feb-2011 03:22:46] PHP Fatal error:  Call to undefined method CI_DB_mysql_result::rows() in /home/danristi/public_html/kudoster.com/system/application/models/achievement_model.php on line 25
+[16-Mar-2011 17:26:36] PHP Fatal error:  Call to a member function get_groups() on a non-object in /home/danristi/public_html/kudoster.com/system/application/controllers/profile.php on line 23
+[17-Mar-2011 20:38:23] PHP Parse error:  syntax error, unexpected '[' in /home/danristi/public_html/kudoster.com/system/application/models/achievement_model.php on line 45
+[17-Mar-2011 20:38:28] PHP Parse error:  syntax error, unexpected '[' in /home/danristi/public_html/kudoster.com/system/application/models/achievement_model.php on line 45
+[17-Mar-2011 20:38:37] PHP Fatal error:  Call to a member function first() on a non-object in /home/danristi/public_html/kudoster.com/system/application/models/achievement_model.php on line 45
+[17-Mar-2011 20:41:36] PHP Parse error:  syntax error, unexpected '[' in /home/danristi/public_html/kudoster.com/system/application/models/achievement_model.php on line 45
