@@ -1,14 +1,15 @@
-1306401767TS---><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+1306407829TS---><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Kudoster - Achievement System</title>
-
-<link href="http://kudoster.com/system/application/views/style/main.css" rel="stylesheet" type="text/css" />
-
-<script type="text/javascript" src="http://danristic.com/catalyst/lib/jquery.js"></script>
-<script type="text/javascript" src="http://danristic.com/catalyst/lib/jquery-ui-1.8.9.custom.min.js"></script>
-<link href="http://danristic.com/catalyst/lib/css/ui-lightness/jquery-ui-1.8.9.custom.css" rel="stylesheet" type="text/css" />
+	<title>Kudoster - Achievement System</title>
+	
+	<link href="http://localhost:880/Kudoster/system/application/views/style/main.css" rel="stylesheet" type="text/css" />
+	
+	<script type="text/javascript" src="http://localhost:880/Kudoster/lib/jquery-1.4.4.min.js"></script>
+	<script type="text/javascript" src="http://localhost:880/Kudoster/lib/jquery-ui-1.8.9.custom.min.js"></script>
+	<link href="http://localhost:880/Kudoster//lib/css/ui-lightness/jquery-ui-1.8.9.custom.css" rel="stylesheet" type="text/css" />
+	
 <script type="text/javascript">
 	$(document).ready(function () {
 		resize();
@@ -89,7 +90,7 @@
 </div>
 
 <div id="footer">
-	© 2011 Kudoster Technologies &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	© 2011 Shadow Rule LLC. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 </div>
 
 <div id="bg_bottom"></div>
