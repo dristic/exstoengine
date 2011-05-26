@@ -3,32 +3,32 @@
 	<div id="h2-horizontal-rule"></div>
 </div>
 
-<div style="display: table; width: 100%;">
-    <div style="height: 100%; border-right: 2px solid #332f29; width: 65%; display: table-cell; padding-right: 10px; height: 100%;">
-        <h3>Latest Achievements</h3>
+<div class="content">
+    <div class="content-left">
+        <h3>Achievements</h3>
+        
+        <p>
+        	Total awarded points: <?= $total_points; ?> <img src="http://kudoster.com/system/application/views/content/images/coin.png" alt="coin" style="vertical-align: text-top" />
+        </p>
 
         <ul id="sortable" style="list-style: none;">
             <?php
                 foreach($achievements as $achievement)
                 {
-                    echo "<li><div class='achievement-group'>".$achievement->UserName."</div>"
-                            ."<div class='achievement'>"
-                            .$achievement->Name
-                            ."<div class='achievement-description'>".$achievement->Description."</div>"
-                            ."<div class='achievement-points'>"
-                            .$achievement->Points." <img src='http://kudoster.com/system/application/views/content/images/coin.png' alt='coin' style='vertical-align: text-top' />"
-                            ." on ".date("m/d/Y", strtotime($achievement->Date))
-                            ."</div>"
-                            ."</div>"
-                            ."</li>";
+                    echo achievement($achievement->UserName, 
+                    				rand(1, 100), 
+                    				$achievement->Name, 
+                    				$achievement->Description, 
+                    				$achievement->Points, 
+                    				$achievement->Date);
                 }
             ?>
         </ul>
     </div>
-    <div style="height: 100%; width: 25%; display: table-cell; padding: 10px;">
+    <div class="content-right">
         <h3>Members</h3>
 
-        <ul style="list-style: none;">
+        <ul style="list-style: none; max-height: 300px; width: 180px; overflow: auto">
         <?php
             foreach ($members as $member)
             {
@@ -36,7 +36,12 @@
             }
         ?>
         </ul>
+        
         <br />
-        <a href="http://kudoster.com/index.php/group/invite/<?php echo $group->ID; ?>" class="create-link"><div class="plus"></div>Invite Member</a>
+        <?= anchor('group/invite/'.$group->ID, '<div class="plus"></div>Invite Member', array('class' => 'create-link'))?>
+        <br />
+        <?= anchor('group/edit/'.$group->ID, '<div class="edit"></div>Edit Settings', array('class' => 'create-link'))?>
+        <br />
+        <?= anchor('group/award/'.$group->ID, '<div class="award"></div>Award Achievement', array('class' => 'create-link'))?>
     </div>
 </div>

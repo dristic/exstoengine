@@ -38,11 +38,11 @@ class Achievement_Model extends CI_Model
 	{
 		$return = array();
 		
-		$query = $this->db->select('organization.Name as OrganizationName, achievement.Name as Name, Description, Points, Date, users.username as UserName')
+		$query = $this->db->select('organization.Name as OrganizationName, achievement.Name as Name, Description, Points, Date, User.username as UserName')
 						  ->from('user_achievement')
 						  ->join('achievement', 'user_achievement.AchievementID = achievement.ID')
 						  ->join('organization', 'achievement.OrganizationID = organization.ID')
-						  ->join('users', 'users.ID = user_achievement.UserID')
+						  ->join('User', 'User.ID = user_achievement.UserID')
 						  ->where('OrganizationID', $groupID)
 						  ->order_by('Date', 'desc')
 						  ->limit(20)
@@ -90,6 +90,22 @@ class Achievement_Model extends CI_Model
 
         $return = $query->row()->Points;
 
+        return $return;
+    }
+    
+	public function get_group_total_points($id)
+    {
+    	$return = 0;
+    	
+    	$query = $this->db->select_sum('Points')
+                          ->from('user_achievement')
+                          ->join('achievement', 'user_achievement.AchievementID = achievement.ID')
+                          ->join('user_organization', 'user_achievement.UserID = user_organization.UserID')
+                          ->where('GroupID', $id)
+                          ->get();
+
+        $return = $query->row()->Points;
+        
         return $return;
     }
 }

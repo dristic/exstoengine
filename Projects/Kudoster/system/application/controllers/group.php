@@ -1,16 +1,14 @@
 <?php
 
 class Group extends Controller {
-    private $user;
+	
+    protected $user;
 
     function Group()
     {
         parent::Controller();
-
-        $this->load->library('session');
-        $this->load->library('ion_auth');
+		
         $this->load->library('form_validation');
-        $this->load->helper('url');
 
         $this->load->model('Group_Model');
 		$this->load->model('Achievement_Model');
@@ -77,10 +75,9 @@ class Group extends Controller {
         $data['group'] = $this->Group_Model->get_group($id);
         $data['members'] = $this->Group_Model->get_members($id);
 		$data['achievements'] = $this->Achievement_Model->get_latest_group_achievements($id);
-
-        $this->load->view('main/header');
-        $this->load->view('group/view', $data);
-        $this->load->view('main/footer');
+		$data['total_points'] = $this->Achievement_Model->get_group_total_points($id);
+		
+        $this->template->load('group/view', $data);
     }
 	
 	public function invite($id)

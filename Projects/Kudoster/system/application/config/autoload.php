@@ -51,7 +51,7 @@ $autoload['libraries'] = array('template', 'ion_auth', 'session');
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array("url");
+$autoload['helper'] = array("url", "achievement");
 
 
 /*

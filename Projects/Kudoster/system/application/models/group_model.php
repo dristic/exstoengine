@@ -1,12 +1,12 @@
 <?php
 
-class Group_Model extends CI_Model
+class Group_Model extends Model
 {
     protected $errors = array();
 
-    function __construct()
+    function Group_Model()
     {
-        parent::__construct();
+        parent::Model();
         $this->load->database();
     }
 
@@ -27,8 +27,8 @@ class Group_Model extends CI_Model
     {
         $return = array();
 
-        $query = $this->db->query('SELECT * FROM users
-                                   LEFT JOIN user_organization ON users.id = user_organization.UserID
+        $query = $this->db->query('SELECT * FROM User
+                                   LEFT JOIN user_organization ON User.id = user_organization.UserID
                                    LEFT JOIN organization ON user_organization.GroupID = organization.ID
                                    WHERE organization.ID = '.$groupID);
 
