@@ -1,5 +1,3 @@
-/// <reference path="../ExstoEngine.js" />
-
 (function (window) {
 
     /**
@@ -9,8 +7,6 @@
     * 
     * @param proto: The prototype for the new class
     * @param base: The base class type to extend from
-    * 
-    * TODO: Extending from multiple base classes
     */
     ex.Class = function (base, proto) {
         var _base = {};
@@ -36,7 +32,7 @@
             //--Mix in the supplied prototype
             NewClass.prototype.mixInto(proto);
 
-            //--Add super() for onstructor and base properties
+            //--Add super() for constructor and base properties
             NewClass.prototype._super = function (func, args) {
                 _base[func].apply(this, args);
             };
@@ -52,6 +48,3 @@
     };
 
 })(window);
-
-
-

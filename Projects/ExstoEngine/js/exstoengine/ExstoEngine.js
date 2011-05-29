@@ -1,11 +1,6 @@
 (function (window) {
 	"use strict";
 	
-	var _includeTypes = {
-		Inline: "Inline",
-		Ajax: "Ajax"
-	};
-	
 	/**
 	 * The main namespace for all engine classes and global functions.
 	 * 
@@ -67,11 +62,6 @@
 				
 				xmlhttp.open("GET", fileName);
 				xmlhttp.send();
-			} else if(this.includeType == this.includeTypes.Inline) {
-				//--Append script tag to header
-				if(document.getElementById(fileName) == null) {
-					document.write('<script type="text/javascript" src="' + fileName + '"></script>');
-				}	
 			}
 		}
 	};
