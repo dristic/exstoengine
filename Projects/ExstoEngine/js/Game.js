@@ -1,16 +1,11 @@
-//@include "exstoengine/ExstoEngine.js"
-//@include "exstoengine/display/Sprite.js"
-//@include "exstoengine/base/Class.js"
-
 (function (engine) {
 	
 	var shipSpeed = 5;
 	var playerSpeed = 10;
 	
-	
+	window.onload = function () {
 		//--Startup new engine
 		var _engine = new ExstoEngine.Base.Engine(800, 500, 60);
-		var sprite = new ExstoEngine.Display.Sprite(0, 0, new Image());
 		
 		//--Setup rendering
 		_engine.setupCanvas("#000000");
@@ -106,7 +101,7 @@
 		var collisionMap = new ExstoEngine.World.CollisionMap(32, 32, colData);
 		
 		player.onUpdate = function(dt) {
-			if(_engine.input.isKeyPressed(ExstoEngine.Util.Key.W)) {
+			if(_engine.input.isKeyPressed(ExstoEngine.Util.Key.Spacebar)) {
 				//--Jump
 				this.velocity.y -= playerSpeed * 75;
 			}
@@ -152,6 +147,6 @@
 		var nebula = new ExstoEngine.Display.Sprite(0, 0, _engine.imageRepository.img.Nebula);
 		nebula.scrollFactorX = nebula.scrollFactorY = 0;
 		_engine.currentWorld.addObject(nebula);
-	
+	}
 	
 })(window.ExstoEngine);

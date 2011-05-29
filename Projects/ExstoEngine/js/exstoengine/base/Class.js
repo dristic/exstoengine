@@ -1,6 +1,6 @@
 /// <reference path="../ExstoEngine.js" />
 
-(function () {
+(function (window) {
 
     /**
     * The base class definition for all classes in ExstoEngine.
@@ -12,14 +12,14 @@
     * 
     * TODO: Extending from multiple base classes
     */
-    window.ExstoEngine.Base.Class = function (base, proto) {
+    ex.Class = function (base, proto) {
         var _base = {};
         if (base != null) {
-            _base = clone(base.prototype);
+            _base = base.prototype.clone();
         }
 
         function NewClass() {
-
+			
         };
 
         //--If a constructor is supplied call it
@@ -31,12 +31,12 @@
 
         if (base != null) {
             //--Chain the base prototype
-            NewClass.prototype = clone(base.prototype);
+            NewClass.prototype = base.prototype.clone();
 
             //--Mix in the supplied prototype
-            mixInto(NewClass.prototype, proto);
+            NewClass.prototype.mixInto(proto);
 
-            //--Add super() for constructor and base properties
+            //--Add super() for onstructor and base properties
             NewClass.prototype._super = function (func, args) {
                 _base[func].apply(this, args);
             };
@@ -49,61 +49,9 @@
         NewClass.constructor = NewClass;
 
         return NewClass;
-    }
-
-    function clone(object) {
-        function Constructor() { }
-        Constructor.prototype = object;
-        return new Constructor();
     };
 
-    function mixInto(object, mixIn) {
-        forEachIn(mixIn, function (name, value) {
-            object[name] = value;
-        });
-    };
-
-    //--Calls a function on each value of an array
-    function forEachIn(object, action) {
-        for (var property in object) {
-            if (Object.prototype.propertyIsEnumerable.call(object, property)) {
-                action(property, object[property]);
-            }
-        }
-    }
-
-    /* How the Eloquent Java Script book does it
-    Object.prototype.inherit = function(base) {
-    this.prototype = clone(base.prototype);
-    this.prototype.constructor = this;
-    };
-    Object.prototype.method = function(name, func) {
-    this.prototype[name] = func;
-    };
-    Object.prototype.create = function() {
-    var object = clone(this);
-    if(object.construct != undefined)
-    object.construct.apply(object, arguments);
-    return object;
-    };
-    Object.prototype.extend = function(properties) {
-    var result = clone(this);
-    forEachIn(properties, function(name, value) {
-    result[name] = value;
-    });
-    return result;
-    };
-    Object.prototype.isA = function(prototype) {
-    function Constructor() {}
-    Constructor.prototype = prototype;
-    return this instanceof Constructor;
-    };
-    */
-
-    //--Globalize class
-    //ExstoEngine.Base.Class = Class;
-
-})();
+})(window);
 
 
 

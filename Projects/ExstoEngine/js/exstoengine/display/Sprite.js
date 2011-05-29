@@ -1,8 +1,5 @@
-/// <reference path="../ExstoEngine.js" />
-/// <reference path="../base/Class.js" />
-
-(function () {
-    window.ExstoEngine.Display.Sprite = new window.ExstoEngine.Base.Class(null, {
+(function (window) {
+    ex.Display.Sprite = new ex.Base.Class(null, {
         constructor: function (x, y, img) {
             this.x = x || 0;
             this.y = y || 0;
@@ -81,5 +78,5 @@
         }
     });
 
-})();
+})(window);
 	

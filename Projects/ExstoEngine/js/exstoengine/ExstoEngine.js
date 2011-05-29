@@ -1,16 +1,16 @@
-(function () {
+(function (window) {
 	"use strict";
 	
 	var _includeTypes = {
 		Inline: "Inline",
 		Ajax: "Ajax"
-	}
+	};
 	
 	/**
 	 * The main namespace for all engine classes and global functions.
 	 * 
 	 */
-	var ExstoEngine = {
+	var _ex = {
 		bind: function (func, object) {
 			return function() {
 				return func.apply(object, arguments);
@@ -34,7 +34,7 @@
 			//--If were passing in a list of includes, iterate through them
 			if(typeof fileName == "object") {
 				for(var i = 0; i < fileName.length; i++) {
-					ExstoEngine.include(fileName[i]);
+					_ex.include(fileName[i]);
 				}
 			} else if(this.includeType == this.includeTypes.Ajax) {
 				toLoad++;
@@ -63,7 +63,7 @@
 						oScript.text = xmlhttp.responseText;
 						oHead.appendChild( oScript );
 					}
-				}
+				};
 				
 				xmlhttp.open("GET", fileName);
 				xmlhttp.send();
@@ -80,11 +80,17 @@
 	 * Include files
 	 */
 	//--External libraries
-	ExstoEngine.include("js/exstoengine/util/Stats.js");
+	_ex.include("js/exstoengine/util/Stats.js");
+	
+	//--Include:
+	//--Is defined? do nothing
+	//--Is not defined? load based on '.'
+	//--Use modules[] to keep track
 	
 	//--Engine files
-	ExstoEngine.include([
+	_ex.include([
 						//--Base
+						"js/exstoengine/base/Helpers.js",
 						"js/exstoengine/base/Class.js",
 			 			"js/exstoengine/base/Component.js",
 			 			"js/exstoengine/base/Vector.js",
@@ -117,6 +123,6 @@
 	//--
 	
 	//--Expose the engine
-	window.ExstoEngine = ExstoEngine;
+	window.ex = window.ExstoEngine = _ex;
 	
-}());
+})(window);
