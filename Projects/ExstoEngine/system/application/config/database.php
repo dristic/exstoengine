@@ -37,10 +37,10 @@
 $active_group = "default";
 $active_record = TRUE;
 
-$db['default']['hostname'] = "localhost";
+$db['default']['hostname'] = "danristic.com";
 $db['default']['username'] = "danristi_client";
 $db['default']['password'] = "dj102889";
-$db['default']['database'] = "danristi_catalyst";
+$db['default']['database'] = "danristi_exstoengine";
 $db['default']['dbdriver'] = "mysql";
 $db['default']['dbprefix'] = "";
 $db['default']['pconnect'] = TRUE;
