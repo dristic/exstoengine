@@ -3,7 +3,36 @@
 	var shipSpeed = 5;
 	var playerSpeed = 10;
 	
-	window.onload = function () {
+	ex.onReady(function () {
+		/*var foo = new ex.Class({
+			constructor: function () {
+				alert("foo.construct");
+			},
+			
+			doSomething: function () {
+				alert("foo.doSomething");
+			}
+		});
+		
+		var bar = new ex.Class(foo, {
+			constructor: function () {
+				alert("bar.construct");
+				
+				this._super("constructor");
+			},
+			
+			doSomethingElse: function () {
+				alert("bar.doSomethingElse");
+				this._super("doSomething");
+			}
+		});
+		
+		var f = new foo();
+		var b = new bar();
+		alert("bar is bar " + (b instanceof bar));
+		alert("bar is foo " + (b instanceof foo));
+		b.doSomethingElse();*/
+		
 		//--Startup new engine
 		var _engine = new ExstoEngine.Base.Engine(800, 500, 60);
 		
@@ -147,6 +176,6 @@
 		var nebula = new ExstoEngine.Display.Sprite(0, 0, _engine.imageRepository.img.Nebula);
 		nebula.scrollFactorX = nebula.scrollFactorY = 0;
 		_engine.currentWorld.addObject(nebula);
-	}
+	});
 	
 })(window.ExstoEngine);

@@ -13,7 +13,7 @@
 	 * @param height: The height of the canvas
 	 * @param frameRate: The frame rate of the game
 	 */
-	var Engine = new ExstoEngine.Base.Class(null, {
+	var Engine = new ex.Class(null, {
 		constructor: function (width, height, frameRate) {
 			//--Check for canvas support
 			if(document.createElement("canvas").getContext) {

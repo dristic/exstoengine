@@ -1,77 +1,123 @@
 (function (window) {
 	"use strict";
 	
+	var baseUrl = "../";
+	
 	/**
 	 * The main namespace for all engine classes and global functions.
 	 * 
 	 */
 	var _ex = {
-		bind: function (func, object) {
+		bind: function (object, func) {
 			return function() {
 				return func.apply(object, arguments);
 			};
 		},
 		
 		//--Namespaces
-		Base: {},
+		base: {},
 		Display: {},
 		Util: {},
 		World: {},
 		
-		includeTypes: {
-			Inline: "Inline",
-			Ajax: "Ajax"
+		_scriptsToLoad: 0,
+		_scriptsLoaded: 0,
+		_isReady: false,
+		_listeners: {},
+		
+		onReady: function (func) {
+			if(ex._isReady == true) {
+				func();
+			} else {
+				if(typeof ex._listeners["ready"] == "undefined") {
+					ex._listeners["ready"] = [];
+				}
+				
+				ex._listeners["ready"].push(func);
+			}
 		},
-		includeType: _includeTypes.Inline,
+		
+		_fire: function (event) {
+			if(this._listeners[event] != null) {
+				for(var i = 0; i < this._listeners[event].length; i++) {
+					this._listeners[event][i]();
+				}
+			}
+		},
+		
+		using: function (namespaces, func) {
+			// Check if namespaces are loaded
+			
+			// Setup function to run on namespaces loading complete
+		},
 		
 		//--Includes an external JS file
-		include: function (fileName) {
+		include: function (namespace) {
 			//--If were passing in a list of includes, iterate through them
-			if(typeof fileName == "object") {
-				for(var i = 0; i < fileName.length; i++) {
-					_ex.include(fileName[i]);
+			if(typeof namespace == "object") {
+				for(var i = 0; i < namespace.length; i++) {
+					_ex.include(namespace[i]);
 				}
-			} else if(this.includeType == this.includeTypes.Ajax) {
-				toLoad++;
-				if(isLast == true) {
-					last = true;
-				}
-				//--Use ajax call to grab file and append it to the document
-				var xmlhttp;
+			} else {
+				this._scriptsToLoad++;
 				
-				if(window.XMLHttpRequest) {
-					//--If XML Http request is available (FF, Chrome, IE 8+)
-					xmlhttp = new XMLHttpRequest();
-				} else {
-					//--If http request is not available (IE 6, 7)
-					xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-				}
-				
-				xmlhttp.onreadystatechange = function () {
-					//--If the request was successful
-					if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-						var oHead = document.getElementsByTagName('HEAD').item(0);
-						var oScript = document.createElement( "script" );
-						oScript.language = "javascript";
-						oScript.type = "text/javascript";
-						oScript.defer = true;
-						oScript.text = xmlhttp.responseText;
-						oHead.appendChild( oScript );
+				var head = document.getElementsByTagName("head").item(0);
+				var script = document.createElement("script");
+				script.language = "javascript";
+				script.type = "text/javascript";
+				script.src = baseUrl + namespace;
+				script.onload = function () {
+					_ex._scriptsLoaded++;
+					
+					if(_ex._scriptsLoaded == _ex._scriptsToLoad) {
+						_ex._isReady = true;
+						_ex._fire("ready");
 					}
 				};
-				
-				xmlhttp.open("GET", fileName);
-				xmlhttp.send();
+				head.appendChild(script);
 			}
+		},
+		
+		ajax: function () {
+			//--Use ajax call to grab file and append it to the document
+			var xmlhttp;
+			
+			if(window.XMLHttpRequest) {
+				//--If XML Http request is available (FF, Chrome, IE 8+)
+				xmlhttp = new XMLHttpRequest();
+			} else {
+				//--If http request is not available (IE 6, 7)
+				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+			
+			xmlhttp.onreadystatechange = function () {
+				//--If the request was successful
+				if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					// Create a script tag and add it to the html
+					var head = document.getElementsByTagName("head").item(0);
+					var script = document.createElement("script");
+					script.language = "javascript";
+					script.type = "text/javascript";
+					script.defer = true;
+					script.text = xmlhttp.responseText;
+					head.appendChild(script);
+					
+					ex._scriptsLoaded++;
+					if(ex._scriptsLoaded == ex._scriptsToLoad) {
+						ex._isReady = true;
+						ex._fire("ready");
+					}
+				}
+			};
+			
+			xmlhttp.open("GET", baseUrl + namespace);
+			xmlhttp.send();
 		}
 	};
 	
 	/**
 	 * Include files
-	 */
-	//--External libraries
-	_ex.include("js/exstoengine/util/Stats.js");
-	
+	 */	
 	//--Include:
 	//--Is defined? do nothing
 	//--Is not defined? load based on '.'
@@ -79,37 +125,10 @@
 	
 	//--Engine files
 	_ex.include([
-						//--Base
-						"js/exstoengine/base/Helpers.js",
-						"js/exstoengine/base/Class.js",
-			 			"js/exstoengine/base/Component.js",
-			 			"js/exstoengine/base/Vector.js",
-			 			"js/exstoengine/base/Point.js",
-			 			"js/exstoengine/base/Rectangle.js",
-			 			
-			 			//--Util
-					    "js/exstoengine/util/Debug.js",
-						"js/exstoengine/util/Key.js",
-						"js/exstoengine/util/Input.js",
-						"js/exstoengine/util/Logger.js",
-						
-						//--Display
-						"js/exstoengine/world/TileMap.js",
-						"js/exstoengine/display/Camera.js",
-						"js/exstoengine/display/ImageRepository.js",
-						"js/exstoengine/display/SpriteMap.js",
-						"js/exstoengine/display/Sprite.js",
-						"js/exstoengine/display/AnimatedSprite.js",
-						"js/exstoengine/display/Emitter.js",
-						"js/exstoengine/display/Particle.js",
-						"js/exstoengine/display/Renderer.js",
-						
-						//--World
-						"js/exstoengine/world/World.js",
-						"js/exstoengine/world/CollisionMap.js",
-						
-						"js/exstoengine/base/Engine.js"
-						 ]);
+			//--Base
+			"js/exstoengine/Helpers.js",
+			"js/exstoengine/Class.js",
+			 ]);
 	//--
 	
 	//--Expose the engine

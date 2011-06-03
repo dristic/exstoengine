@@ -5,6 +5,9 @@
 	<meta charset="utf-8" />
 	<title>Exsto Engine - HTML 5 and Javascript Game Engine</title>
 	
+	<!-- Favicon -->
+	<link href="<?=base_url()?>/favicon.png" rel="icon" type="image/png" />
+	
 	<!-- Main stylesheet -->
 	<link href="<?=base_url().'system/application/views/style/main.css'?>" rel="stylesheet" type="text/css" />
 	

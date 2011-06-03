@@ -9,41 +9,55 @@
     * @param base: The base class type to extend from
     */
     ex.Class = function (base, proto) {
-        var _base = {};
-        if (base != null) {
-            _base = base.prototype.clone();
-        }
-
-        function NewClass() {
+    	if(proto == null) {
+    		return createNewClass(base);
+    	} else {
+    		return extendBaseClass(base, proto);
+    	}
+    };
+    
+    function createNewClass(proto) {
+    	function NewClass() {
 			
         };
 
         //--If a constructor is supplied call it
         if (typeof proto.constructor == "function" && proto.constructor != Object) {
             NewClass = proto.constructor;
-        } else if (typeof _base.constructor == "function") {
-            NewClass = _base.constructor;
         }
-
+    	
+        NewClass.prototype = proto;
+        
+        return NewClass;
+    };
+    
+    function extendBaseClass(base, proto) {
+    	var _base = {};
         if (base != null) {
-            //--Chain the base prototype
-            NewClass.prototype = base.prototype.clone();
-
-            //--Mix in the supplied prototype
-            NewClass.prototype.mixInto(proto);
-
-            //--Add super() for constructor and base properties
-            NewClass.prototype._super = function (func, args) {
-                _base[func].apply(this, args);
-            };
-        } else {
-            //--Just create the new class
-            NewClass.prototype = proto;
+            _base = base.prototype.clone();
         }
+        
+        function NewClass() {
+        	
+        };
+        
+        if (typeof proto.constructor == "function" && proto.constructor != Object) {
+        	NewClass = proto.constructor;
+        } else if (typeof _base.constructor == "function") {
+            newClass.constructor = _base.constructor;
+        }
+        
+        //--Chain the base prototype
+        NewClass.prototype = base.prototype.clone();
 
-        //--Make sure the constructor is set properly
-        NewClass.constructor = NewClass;
+        //--Mix in the supplied prototype
+        NewClass.prototype.mixInto(proto);
 
+        //--Add super() for constructor and base properties
+        NewClass.prototype._super = function (func, args) {
+            _base[func].apply(this, args);
+        };
+        
         return NewClass;
     };
 
