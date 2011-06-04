@@ -14,12 +14,7 @@
 			};
 		},
 		
-		//--Namespaces
-		base: {},
-		Display: {},
-		Util: {},
-		World: {},
-		
+		_namespaces: {},
 		_scriptsToLoad: 0,
 		_scriptsLoaded: 0,
 		_isReady: false,
@@ -46,9 +41,43 @@
 		},
 		
 		using: function (namespaces, func) {
-			// Check if namespaces are loaded
+			var i = 0;
+			while(i++ < namespaces.length)
+			{
+				var namespace = namespaces[i];
+				
+				// Check if namespaces are loaded
+				if(this._namespaces[namespace] != null) {
+					// If they are loaded, run function
+					func();
+				} else {
+					// If they are not loaded, import them
+					_importNamespace(namespace);
+				}
+			}
+		},
+		
+		_importNamespace: function(namespace) {
+			// Break up namespace by '.'
+			var parts = namespace.split(".");
 			
-			// Setup function to run on namespaces loading complete
+			// Build file url
+			var fileUrl = baseUrl;
+			var i = 0;
+			while(i++ < parts.length) {
+				fileUrl += "/" + parts[i];
+			}
+			
+			// Include file
+			var head = document.getElementsByTagName("head").item(0);
+			var script = document.createElement("script");
+			script.language = "javascript";
+			script.type = "text/javascript";
+			script.src = baseUrl + namespace;
+			script.onload = function () {
+				
+			};
+			head.appendChild(script);
 		},
 		
 		//--Includes an external JS file
@@ -78,8 +107,8 @@
 			}
 		},
 		
-		ajax: function () {
-			//--Use ajax call to grab file and append it to the document
+		ajaxScript: function (fileName) {
+			//--Use ajax call to grab a script and append it to the document
 			var xmlhttp;
 			
 			if(window.XMLHttpRequest) {
@@ -110,7 +139,7 @@
 				}
 			};
 			
-			xmlhttp.open("GET", baseUrl + namespace);
+			xmlhttp.open("GET", baseUrl + fileName);
 			xmlhttp.send();
 		}
 	};
