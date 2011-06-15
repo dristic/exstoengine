@@ -1,6 +1,9 @@
-(function () {
+ex.using([
+  "ex.util.Key"
+], function () {
+	ex.namespace("ex.util");
 	
-	var Input = ExstoEngine.Base.Class(null, {
+	var Input = ex.Class({
 		constructor: function () {
 			this.keys = [];
 			this.pressed = [];
@@ -10,11 +13,11 @@
 			this.mouseDown = false;
 			this.mouseUp = false;
 			
-			document.addEventListener("keydown", ExstoEngine.bind(this.onKeyDown, this));
-			document.addEventListener("keyup", ExstoEngine.bind(this.onKeyUp, this));
-			document.addEventListener("mousedown", ExstoEngine.bind(this.onMouseDown, this));
-			document.addEventListener("mouseup", ExstoEngine.bind(this.onMouseUp, this));
-			document.addEventListener("mousemove", ExstoEngine.bind(this.onMouseMove, this));
+			document.addEventListener("keydown", ex.bind(this.onKeyDown, this));
+			document.addEventListener("keyup", ex.bind(this.onKeyUp, this));
+			document.addEventListener("mousedown", ex.bind(this.onMouseDown, this));
+			document.addEventListener("mouseup", ex.bind(this.onMouseUp, this));
+			document.addEventListener("mousemove", ex.bind(this.onMouseMove, this));
 		},
 		
 		update: function(dt) {
@@ -71,6 +74,6 @@
 		}
 	});
 	
-	window.ExstoEngine.Util.Input = Input;
+	window.ex.util.Input = Input;
 	
-}());
+});

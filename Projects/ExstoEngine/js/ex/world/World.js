@@ -1,6 +1,7 @@
 (function() {
+	ex.namespace("ex.world");
 	
-	var World = new ExstoEngine.Base.Class(null, {
+	var World = new ex.Class({
 		constructor: function(renderer) {
 			this.renderer = renderer;
 			this.objects = [];
@@ -23,6 +24,6 @@
 		}
 	});
 	
-	window.ExstoEngine.World.World = World;
+	window.ex.world.World = World;
 	
 }());

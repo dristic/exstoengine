@@ -1,6 +1,7 @@
 (function () {
-
-	var Logger = new ExstoEngine.Base.Class(null, {
+	ex.namespace("ex.util");
+	
+	var Logger = new ex.Class({
 		constructor: function() {
 			this.textLog = "--Logger Enabled \n";
 		},
@@ -10,6 +11,6 @@
 		}
 	});
 	
-	window.ExstoEngine.Util.Logger = Logger;
+	window.ex.util.Logger = Logger;
 	
 }());

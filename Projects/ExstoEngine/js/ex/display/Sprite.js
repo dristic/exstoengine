@@ -1,10 +1,14 @@
-(function (window) {
-    ex.Display.Sprite = new ex.Base.Class(null, {
+ex.using([
+  "ex.base.Vector"
+], function () {
+	ex.namespace("ex.display");
+	
+    window.ex.display.Sprite = new ex.Class({
         constructor: function (x, y, img) {
             this.x = x || 0;
             this.y = y || 0;
-            this.position = new ExstoEngine.Base.Vector(x, y);
-            this.velocity = new ExstoEngine.Base.Vector(0, 0);
+            this.position = new ex.base.Vector(x, y);
+            this.velocity = new ex.base.Vector(0, 0);
             this.img = img || new Image();
             this.visible = true;
             this.width = this.img.width;
@@ -78,5 +82,4 @@
         }
     });
 
-})(window);
-	
+});

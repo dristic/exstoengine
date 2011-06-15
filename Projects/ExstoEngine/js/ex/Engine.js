@@ -1,10 +1,13 @@
-(function() {
-	
-	function bind(func, object) {
-		return function() {
-			return func.apply(object, arguments);
-		};
-	};
+ex.using([
+          "ex.base.Component",
+          "ex.util.Logger",
+          "ex.util.Input",
+          "ex.util.Debug",
+          "ex.display.ImageRepository",
+          "ex.display.Camera",
+          "ex.display.Renderer"
+          ],
+	function () {
 	
 	/**
 	 * The base engine class for loading games and drawing to the canvas
@@ -13,7 +16,7 @@
 	 * @param height: The height of the canvas
 	 * @param frameRate: The frame rate of the game
 	 */
-	var Engine = new ex.Class(null, {
+	window.ex.Engine = new ex.Class({
 		constructor: function (width, height, frameRate) {
 			//--Check for canvas support
 			if(document.createElement("canvas").getContext) {
@@ -29,21 +32,21 @@
 				var _gameInterval = null;
 				
 				//--Load logger
-				this.logger = new ExstoEngine.Util.Logger();
+				this.logger = new ex.util.Logger();
 				
 				//--Load up input class
-				this.input = new ExstoEngine.Util.Input();
+				this.input = new ex.util.Input();
 				
 				//--Load new image repository
-				this.imageRepository = new ExstoEngine.Display.ImageRepository();
+				this.imageRepository = new ex.display.ImageRepository();
 				
 				//--Load new camera
-				this.camera = new ExstoEngine.Display.Camera();
+				this.camera = new ex.display.Camera();
 				
 				//--Setup update interval
-				_gameInterval = setInterval(bind(this.update, this), (1 / frameRate) * 1000);
+				_gameInterval = setInterval(ex.bind(this.update, this), (1 / frameRate) * 1000);
 			} else {
-				this.logger = new ExstoEngine.Util.Logger();
+				this.logger = new ex.util.Logger();
 				
 				this.logger.log("Your browser does not support canvas!");
 			}
@@ -52,14 +55,14 @@
 		enableDebugging: function() {
 			this.debug = true;
 			
-			this.loadComponent(new ExstoEngine.Util.Debug());
+			this.loadComponent(new ex.util.Debug());
 			
 			this.getComponent("Debug").renderer = this.renderer;
 			this.getComponent("Debug").logger = this.logger;
 		},
 		
 		setupCanvas: function (bgColor, canvas) {
-			this.renderer = new ExstoEngine.Display.Renderer(this.width, this.height, bgColor, canvas);
+			this.renderer = new ex.display.Renderer(this.width, this.height, bgColor, canvas);
 			
 			this.camera.canvas = canvas || this.renderer.canvas;
 		},
@@ -108,7 +111,7 @@
 		},
 		
 		loadComponent: function(component) {
-			if(component instanceof ExstoEngine.Base.Component == false) {
+			if(component instanceof ex.base.Component == false) {
 				this.logger.log("Component must be an instance of ExstoEngine.Base.Component!");
 			} else {
 				this.components.push(component);
@@ -124,7 +127,4 @@
 			}
 		}
 	});
-	
-	//--Show class
-	window.ExstoEngine.Base.Engine = Engine;
-}());
+});

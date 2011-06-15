@@ -1,6 +1,7 @@
 (function () {
+	ex.namespace("ex.display");
 	
-	var Camera = new ExstoEngine.Base.Class(null, {
+	var Camera = new ex.Class({
 		constructor: function() {
 			this.x = 0;
 			this.y = 0;
@@ -20,6 +21,6 @@
 		}
 	});
 	
-	window.ExstoEngine.Display.Camera = Camera;
+	window.ex.display.Camera = Camera;
 	
 }());

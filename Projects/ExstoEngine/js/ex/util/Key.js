@@ -111,6 +111,6 @@
 		 SingleQuote:						222
 	};
 	
-	window.ExstoEngine.Util.Key = Key;
+	window.ex.util.Key = Key;
 	
 }());

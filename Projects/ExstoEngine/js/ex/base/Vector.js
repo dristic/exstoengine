@@ -1,6 +1,7 @@
 (function () {
+	ex.namespace("ex.base");
 	
-	var Vector = new ExstoEngine.Base.Class(null, {
+	var Vector = new ex.Class({
 		constructor: function(x, y) {
 			this.x = x || 0;
 			this.y = y || 0;
@@ -49,6 +50,6 @@
 	  	}
 	});
 	
-	window.ExstoEngine.Base.Vector = Vector;
+	window.ex.base.Vector = Vector;
 	
 }());

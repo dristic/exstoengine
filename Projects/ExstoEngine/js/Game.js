@@ -1,152 +1,107 @@
-(function (engine) {
+(function () {
 	
+	// Global variables
 	var shipSpeed = 5;
 	var playerSpeed = 10;
+	var data = [
+				[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				[ 0, 0, 0, 0, 51, 52, 52, 53, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 51, 52, 52, 52, 52, 53, 0, 0, 0, 0, 0, 0],
+				[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				[ 0, 0, 0, 0, 0, 0, 0,  91, 92, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				[ 0, 0, 0, 0, 0, 0, 0,  93, 94, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				[ 0, 0, 0, 0, 0,91, 92, 95, 94, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				[ 0, 0, 0,   4,  5,  5,  5,  5,  5,  6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				[ 0, 0,  0, 10, 11, 11, 11, 11, 11, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,83, 83, 83, 0, 0],
+				[ 0, 0,  0, 10, 11, 11, 11, 11, 11, 12, 0, 0, 0, 0, 0, 0, 0,  4,  5, 81, 82, 82, 82, 81, 5],
+				[ 4,  6, 0, 10, 11, 11, 11, 11, 11, 12, 0, 0, 0, 0, 0, 0, 0, 10, 11, 12, 0, 0, 0, 10, 11],
+				[10, 12, 0, 10, 11, 11, 11, 66, 11, 12, 2, 2, 2, 2, 2, 3, 0, 10, 11, 12, 0, 0, 0, 10, 11],
+				[10, 12, 0, 10, 11, 11, 66, 66, 11,  8, 8, 8, 8, 8, 8, 9, 0, 10, 11, 12, 0, 0, 0, 10, 11],
+				[10, 12, 0, 10, 11, 11, 66, 66,  8,  8, 8, 8, 8, 8, 8, 9, 0, 10, 11, 12, 0, 0, 0, 10, 11],
+			];
+	var colData = [
+	   			[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	   			[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	   			[ 0, 0, 0, 0, 51, 52, 52, 53, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	   			[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 51, 52, 52, 52, 52, 53, 0, 0, 0, 0, 0, 0],
+	   			[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	   			[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	   			[ 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	   			[ 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	   			[ 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	   			[ 0, 0, 0,   4,  5,  5,  5,  5,  5,  6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+	   			[ 0, 0,  0, 10, 11, 11, 11, 11, 11, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0],
+	   			[ 0, 0,  0, 10, 11, 11, 11, 11, 11, 12, 0, 0, 0, 0, 0, 0, 0,  4,  5, 81, 82, 82, 82, 81, 5],
+	   			[ 4,  6, 0, 10, 11, 11, 11, 11, 11, 12, 0, 0, 0, 0, 0, 0, 0, 10, 11, 12, 0, 0, 0, 10, 11],
+	   			[10, 12, 0, 10, 11, 11, 11, 66, 11, 12, 2, 2, 2, 2, 2, 3, 0, 10, 11, 12, 0, 0, 0, 10, 11],
+	   			[10, 12, 0, 10, 11, 11, 66, 66, 11,  8, 8, 8, 8, 8, 8, 9, 0, 10, 11, 12, 0, 0, 0, 10, 11],
+	   			[10, 12, 0, 10, 11, 11, 66, 66,  8,  8, 8, 8, 8, 8, 8, 9, 0, 10, 11, 12, 0, 0, 0, 10, 11],
+	   		];
 	
-	ex.onReady(function () {
-		/*var foo = new ex.Class({
-			constructor: function () {
-				alert("foo.construct");
-			},
-			
-			doSomething: function () {
-				alert("foo.doSomething");
-			}
-		});
-		
-		var bar = new ex.Class(foo, {
-			constructor: function () {
-				alert("bar.construct");
-				
-				this._super("constructor");
-			},
-			
-			doSomethingElse: function () {
-				alert("bar.doSomethingElse");
-				this._super("doSomething");
-			}
-		});
-		
-		var f = new foo();
-		var b = new bar();
-		alert("bar is bar " + (b instanceof bar));
-		alert("bar is foo " + (b instanceof foo));
-		b.doSomethingElse();*/
-		
+	// Setup base url for the engine
+	ex.config.baseUrl = "../js";
+	
+	ex.using([
+          "ex.Engine",
+          "ex.display.AnimatedSprite",
+          "ex.world.World",
+          "ex.world.CollisionMap",
+          "ex.display.SpriteMap"
+          	], 
+  	function () {
 		//--Startup new engine
-		var _engine = new ExstoEngine.Base.Engine(800, 500, 60);
+		var _engine = new ex.Engine(800, 500, 60);
 		
 		//--Setup rendering
 		_engine.setupCanvas("#000000");
 		_engine.enableDebugging();
 		
+		// Images
+		_engine.imageRepository.loadImage("Ship", "../assets/units/ship1.png");
+		_engine.imageRepository.loadImage("Base", "../assets/units/base2.png");
+		_engine.imageRepository.loadImage("Nebula", "../assets/world/bg.png");
+		_engine.imageRepository.loadImage("Explosion", "../assets/effects/explode3.png");
+		_engine.imageRepository.loadImage("Tiles", "../assets/world/tileset-platformer.png");
+		_engine.imageRepository.loadImage("Player", "../assets/units/player.png");
+		
+		//--Open base world
+		_engine.openWorld(ex.world.World);
+		
 		_engine.onUpdate = function() {
 			//
 		};
 		
-		//--Open base world
-		_engine.openWorld(ExstoEngine.World.World);
-		
-		//--Images
-		_engine.imageRepository.loadImage("Ship", "assets/units/ship1.png");
-		_engine.imageRepository.loadImage("Base", "assets/units/base2.png");
-		_engine.imageRepository.loadImage("Nebula", "assets/world/bg.png");
-		_engine.imageRepository.loadImage("Explosion", "assets/effects/explode3.png");
-		_engine.imageRepository.loadImage("Tiles", "assets/world/tileset-platformer.png");
-		_engine.imageRepository.loadImage("Player", "assets/units/player.png");
-		
-		var data = [
-			[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[ 0, 0, 0, 0, 51, 52, 52, 53, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 51, 52, 52, 52, 52, 53, 0, 0, 0, 0, 0, 0],
-			[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[ 0, 0, 0, 0, 0, 0, 0,  91, 92, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[ 0, 0, 0, 0, 0, 0, 0,  93, 94, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[ 0, 0, 0, 0, 0,91, 92, 95, 94, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[ 0, 0, 0,   4,  5,  5,  5,  5,  5,  6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[ 0, 0,  0, 10, 11, 11, 11, 11, 11, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,83, 83, 83, 0, 0],
-			[ 0, 0,  0, 10, 11, 11, 11, 11, 11, 12, 0, 0, 0, 0, 0, 0, 0,  4,  5, 81, 82, 82, 82, 81, 5],
-			[ 4,  6, 0, 10, 11, 11, 11, 11, 11, 12, 0, 0, 0, 0, 0, 0, 0, 10, 11, 12, 0, 0, 0, 10, 11],
-			[10, 12, 0, 10, 11, 11, 11, 66, 11, 12, 2, 2, 2, 2, 2, 3, 0, 10, 11, 12, 0, 0, 0, 10, 11],
-			[10, 12, 0, 10, 11, 11, 66, 66, 11,  8, 8, 8, 8, 8, 8, 9, 0, 10, 11, 12, 0, 0, 0, 10, 11],
-			[10, 12, 0, 10, 11, 11, 66, 66,  8,  8, 8, 8, 8, 8, 8, 9, 0, 10, 11, 12, 0, 0, 0, 10, 11],
-		];
-		
-		var colData = [
-			[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[ 0, 0, 0, 0, 51, 52, 52, 53, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 51, 52, 52, 52, 52, 53, 0, 0, 0, 0, 0, 0],
-			[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[ 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[ 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[ 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[ 0, 0, 0,   4,  5,  5,  5,  5,  5,  6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			[ 0, 0,  0, 10, 11, 11, 11, 11, 11, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0],
-			[ 0, 0,  0, 10, 11, 11, 11, 11, 11, 12, 0, 0, 0, 0, 0, 0, 0,  4,  5, 81, 82, 82, 82, 81, 5],
-			[ 4,  6, 0, 10, 11, 11, 11, 11, 11, 12, 0, 0, 0, 0, 0, 0, 0, 10, 11, 12, 0, 0, 0, 10, 11],
-			[10, 12, 0, 10, 11, 11, 11, 66, 11, 12, 2, 2, 2, 2, 2, 3, 0, 10, 11, 12, 0, 0, 0, 10, 11],
-			[10, 12, 0, 10, 11, 11, 66, 66, 11,  8, 8, 8, 8, 8, 8, 9, 0, 10, 11, 12, 0, 0, 0, 10, 11],
-			[10, 12, 0, 10, 11, 11, 66, 66,  8,  8, 8, 8, 8, 8, 8, 9, 0, 10, 11, 12, 0, 0, 0, 10, 11],
-		];
-		
-		//--Add game objects		
-		/*var ship = new ExstoEngine.Display.Sprite(10, 10, _engine.imageRepository.img.Ship);
-		ship.rotationEnabled = true;
-		_engine.currentWorld.addObject(ship);
-		
-		ship.update = function(dt) {
-			if(_engine.input.isKeyDown(ExstoEngine.Util.Key.W)) {
-				this.y += shipSpeed * -Math.cos(this.rotation);
-				this.x += shipSpeed * Math.sin(this.rotation);
-			}
-			
-			if(_engine.input.isKeyDown(ExstoEngine.Util.Key.S)) {
-				this.y += shipSpeed * Math.cos(this.rotation);
-				this.x += shipSpeed * -Math.sin(this.rotation);
-			}
-			
-			if(_engine.input.isKeyDown(ExstoEngine.Util.Key.A)) {
-				this.rotation -= shipSpeed * Math.PI / 180;
-			}
-			
-			if(_engine.input.isKeyDown(ExstoEngine.Util.Key.D)) {
-				this.rotation += shipSpeed * Math.PI / 180;
-			}
-		}*/
-		
-		var explosion = new ExstoEngine.Display.AnimatedSprite(100, 100, 48, 48, 7, _engine.imageRepository.img.Explosion);
+		var explosion = new ex.display.AnimatedSprite(100, 100, 48, 48, 7, _engine.imageRepository.img.Explosion);
 		_engine.currentWorld.addObject(explosion);
 		
-		var player = new ExstoEngine.Display.AnimatedSprite(400, 150, 41, 47, 7, _engine.imageRepository.img.Player);
+		var player = new ex.display.AnimatedSprite(400, 150, 41, 47, 7, _engine.imageRepository.img.Player);
 		player.createAnimation("Stand", [5]);
 		player.createAnimation("Walk", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
 		player.play("Stand");
 		_engine.currentWorld.addObject(player);
 		
-		var collisionMap = new ExstoEngine.World.CollisionMap(32, 32, colData);
+		var collisionMap = new ex.world.CollisionMap(32, 32, colData);
 		
 		player.onUpdate = function(dt) {
-			if(_engine.input.isKeyPressed(ExstoEngine.Util.Key.Spacebar)) {
+			if(_engine.input.isKeyPressed(ex.util.Key.Spacebar)) {
 				//--Jump
 				this.velocity.y -= playerSpeed * 75;
 			}
 			
-			if(_engine.input.isKeyDown(ExstoEngine.Util.Key.S)) {
+			if(_engine.input.isKeyDown(ex.util.Key.S)) {
 				//--Crouch
 				this.velocity.y += playerSpeed;
 				this.play("Walk");
 			}
 			
-			if(_engine.input.isKeyDown(ExstoEngine.Util.Key.A)) {
+			if(_engine.input.isKeyDown(ex.util.Key.A)) {
 				this.velocity.x -= playerSpeed;
 				this.play("Walk");
 			}
 			
-			if(_engine.input.isKeyDown(ExstoEngine.Util.Key.D)) {
+			if(_engine.input.isKeyDown(ex.util.Key.D)) {
 				this.velocity.x += playerSpeed;
 				this.play("Walk");
 			}
@@ -167,15 +122,15 @@
 		
 		_engine.camera.follow(player);
 		
-		var emitter = new ExstoEngine.Display.Emitter({});
-		_engine.currentWorld.addObject(emitter);
+		//var emitter = new ex.display.Emitter({});
+		//_engine.currentWorld.addObject(emitter);
 		
-		var tiles = new ExstoEngine.Display.SpriteMap(32, 32, data, _engine.imageRepository.img.Tiles);
+		var tiles = new ex.display.SpriteMap(32, 32, data, _engine.imageRepository.img.Tiles);
 		_engine.currentWorld.addObject(tiles);
 		
-		var nebula = new ExstoEngine.Display.Sprite(0, 0, _engine.imageRepository.img.Nebula);
+		var nebula = new ex.display.Sprite(0, 0, _engine.imageRepository.img.Nebula);
 		nebula.scrollFactorX = nebula.scrollFactorY = 0;
 		_engine.currentWorld.addObject(nebula);
 	});
 	
-})(window.ExstoEngine);
+})();

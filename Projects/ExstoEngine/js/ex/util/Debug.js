@@ -1,4 +1,5 @@
 (function() {
+	ex.namespace("ex.util");
 	
 	function average(array) {
 		var ret = 0;
@@ -13,7 +14,7 @@
 		return ret;
 	}
 	
-	var Debug = new ExstoEngine.Base.Class(ExstoEngine.Base.Component, {
+	var Debug = new ex.Class(ex.base.Component, {
 		constructor: function() {
 			this.domElement = document.createElement("div");
 			this.domElement.style.backgroundColor = "#222526";
@@ -82,6 +83,6 @@
 		}
 	});
 	
-	window.ExstoEngine.Util.Debug = Debug;
+	window.ex.util.Debug = Debug;
 	
 }());

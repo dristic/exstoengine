@@ -1,6 +1,6 @@
 (function () {
 	
-	var TileMap = new ExstoEngine.Base.Class(null, {
+	var TileMap = new ex.Class({
 		constructor: function(tileWidth, tileHeight, map) {
 			this.tileWidth = tileWidth;
 			this.tileHeight = tileHeight;
@@ -24,6 +24,6 @@
 		}
 	});
 	
-	window.ExstoEngine.World.TileMap = TileMap;
+	window.ex.world.TileMap = TileMap;
 	
 }());

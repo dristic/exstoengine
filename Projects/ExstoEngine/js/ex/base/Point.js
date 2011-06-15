@@ -1,6 +1,6 @@
 (function () {
 	
-	var Point = new ExstoEngine.Base.Class(null, {
+	var Point = new ex.Class({
 		constructor: function(x, y) {
 			this.x = x;
 			this.y = y;
@@ -17,6 +17,6 @@
 		}
 	});
 	
-	window.ExstoEngine.Base.Point = Point;
+	window.ex.base.Point = Point;
 	
 }());

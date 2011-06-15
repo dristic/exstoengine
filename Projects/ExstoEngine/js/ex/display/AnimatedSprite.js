@@ -1,6 +1,9 @@
-(function () {
+ex.using([
+  "ex.display.Sprite"
+], function () {
+	ex.namespace("ex.display");
 	
-	var AnimatedSprite = new ExstoEngine.Base.Class(ExstoEngine.Display.Sprite, {
+	ex.display.AnimatedSprite = new ex.Class(ex.display.Sprite, {
 		constructor: function(x, y, frameWidth, frameHeight, frameRate, img) {
 			this.timer = (1 / frameRate);
 			this.frameRate = frameRate;
@@ -141,6 +144,4 @@
 		return i;
 	}
 	
-	window.ExstoEngine.Display.AnimatedSprite = AnimatedSprite;
-	
-}());
+});

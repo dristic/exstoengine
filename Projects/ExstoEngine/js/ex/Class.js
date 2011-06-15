@@ -32,10 +32,12 @@
     };
     
     function extendBaseClass(base, proto) {
-    	var _base = {};
-        if (base != null) {
-            _base = base.prototype.clone();
-        }
+    	// Check for passing in null base class
+    	if(base == null) {
+    		throw new Error("The base class has not been defined: " + proto.constructor);
+    	}
+    	
+    	var _base = base.prototype.clone();
         
         function NewClass() {
         	

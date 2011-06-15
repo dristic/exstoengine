@@ -1,6 +1,7 @@
 (function() {
+	window.ex.base = window.ex.base || {};
 	
-	var Component = new ExstoEngine.Base.Class(null, {
+	var Component = new ex.Class({
 		constructor: function() {
 			
 		},
@@ -12,6 +13,6 @@
 		name: "Component"
 	});
 	
-	window.ExstoEngine.Base.Component = Component;
+	window.ex.base.Component = Component;
 	
 }());

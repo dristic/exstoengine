@@ -1,6 +1,7 @@
 (function() {
+	ex.namespace("ex.display");
 	
-	var Renderer = new ExstoEngine.Base.Class(null, {
+	var Renderer = new ex.Class({
 		constructor: function (width, height, bgColor, canvas) {
 			this.canvas = canvas || document.createElement("canvas");
 			this.canvas.width = width;
@@ -26,6 +27,6 @@
 		}
 	});
 	
-	window.ExstoEngine.Display.Renderer = Renderer;
+	window.ex.display.Renderer = Renderer;
 	
 }());

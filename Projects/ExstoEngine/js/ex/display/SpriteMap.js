@@ -1,6 +1,8 @@
-(function () {
+ex.using([
+  "ex.world.TileMap"
+], function () {
 	
-	var SpriteMap = new ExstoEngine.Base.Class(ExstoEngine.World.TileMap, {
+	var SpriteMap = new ex.Class(ex.world.TileMap, {
 		constructor: function(tileWidth, tileHeight, map, img) {
 			this.img = img;
 			this.x = 0;
@@ -41,6 +43,6 @@
 		}
 	});
 	
-	window.ExstoEngine.Display.SpriteMap = SpriteMap;
+	window.ex.display.SpriteMap = SpriteMap;
 	
-}());
+});

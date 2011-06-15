@@ -1,16 +1,20 @@
-(function() {
+ex.using([
+  "ex.base.Point",
+  "ex.world.TileMap"
+], function () {
+	ex.namespace("ex.world");
 	
-	var CollisionMap = new ExstoEngine.Base.Class(ExstoEngine.World.TileMap, {
+	var CollisionMap = new ex.Class(ex.world.TileMap, {
 		constructor: function(tileWidth, tileHeight, data) {
 			this._super("constructor", [tileWidth, tileHeight, data]);
 		},
 		
 		collide: function(dt, x, y, vx, vy, width, height) {
 			var collision = {
-				x:false, 
+				x:false,
 				y:false,
-				position: new ExstoEngine.Base.Vector(),
-				tileType: new ExstoEngine.Base.Point()
+				position: new ex.base.Vector(),
+				tileType: new ex.base.Point()
 			};
 			
 			var stepsX = Math.ceil(Math.abs(vx * dt) / this.tileWidth);
@@ -104,6 +108,6 @@
 		}
 	});
 	
-	window.ExstoEngine.World.CollisionMap = CollisionMap;
+	window.ex.world.CollisionMap = CollisionMap;
 	
-}());
+});

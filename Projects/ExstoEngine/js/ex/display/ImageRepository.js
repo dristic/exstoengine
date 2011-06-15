@@ -1,6 +1,7 @@
 (function () {
+	ex.namespace("ex.display");
 	
-	var ImageRepository = new ExstoEngine.Base.Class(null, {
+	var ImageRepository = new ex.Class({
 		constructor: function () {
 			this.img = [];
 			this.ready = true;
@@ -27,6 +28,6 @@
 		}
 	});
 	
-	window.ExstoEngine.Display.ImageRepository = ImageRepository;
+	window.ex.display.ImageRepository = ImageRepository;
 	
 }());
