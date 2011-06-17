@@ -1,4 +1,7 @@
-(function () {
+ex.using([
+  "ex.base.Vector"
+], function () {
+	ex.namespace("ex.display");
 	
 	function vary(n) {
 		return (Math.random() * n << 1) - n;
@@ -10,14 +13,14 @@
 		}
 	}
 	
-	var Particle = new ExstoEngine.Base.Class(null, {
+	var Particle = new ex.Class({
 		constructor: function(options) {
 			var defaults = {
-				position: new ExstoEngine.Base.Vector(0, 0),
-				velocity: new ExstoEngine.Base.Vector(0, 0),
+				position: new ex.base.Vector(0, 0),
+				velocity: new ex.base.Vector(0, 0),
 				xVariance: 0,
 				yVariance: 0,
-				direction: new ExstoEngine.Base.Vector(0, 0),
+				direction: new ex.base.Vector(0, 0),
 				directionVariance: 0,
 				age: 0,
 				life: 0,
@@ -28,7 +31,8 @@
 				alpha: 1,
 				color: "#cef"
 			};
-			extend(defaults, options);
+			
+			defaults.extend(options);
 			
 			defaults.direction = options.direction + vary(options.directionVariance);
 			defaults.position = options.position.clone().add(defaults.position);
@@ -36,7 +40,7 @@
 			defaults.life = options.life + vary(options.lifeVariance);
 			defaults.size = options.size + vary(options.sizeVariance);
 			
-			extend(this, defaults);
+			this.extend(defaults);
 		},
 		
 		update: function(dt) {
@@ -68,6 +72,6 @@
 		}
 	});
 	
-	window.ExstoEngine.Display.Particle = Particle;
+	window.ex.display.Particle = Particle;
 	
-}());
+});

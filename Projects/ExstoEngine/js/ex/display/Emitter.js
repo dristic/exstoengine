@@ -1,6 +1,8 @@
 ex.using([
-  "ex.base.Vector"
+  "ex.base.Vector",
+  "ex.display.Particle"
 ], function () {
+	ex.namespace("ex.display");
 	
 	var Emitter = new ex.Class({
 		constructor: function(options) {
@@ -57,28 +59,22 @@ ex.using([
 					particle.update(dt);
 				}
 			}
+			
+			// Generate new particles
+			for(var spawned = 0; spawned < this.options.spawnSpeed; spawned++) {
+				if(this.particles.length >= this.options.maxParticles || this.options.time <= 0) {
+					// Do nothing
+				} else {
+					this.particles.push(new ex.display.Particle(this.options));
+				}
+			}
+		},
   
-	    // Check to see if we've reached the max # of generation cycles
-	    //if(this.options.generations != -1 && this.age <= this.options.generations) {
-	      //if(this.particles.length == 0 && this.options.generations <= this.age) this.active = false;
-	      //this.age++;
-	    //}
-	  
-	    // Generate # (spawnSpeed) of particles for this update iteration
-	    // as long as we haven't reached the max # of particles
-	    for(var spawned = 0; spawned < this.options.spawnSpeed; spawned++) {
-	      if(this.particles.length >= this.options.maxParticles || this.options.generations <= this.age) {
-	        return; 
-	      }
-	      this.particles.push(new ExstoEngine.Display.Particle(this.options));
-	    }
-	  },
-  
-	  render: function(context, camX, camY) {
-	    for(var i in this.particles) {
-	      this.particles[i].render(context, camX, camY);
-	    }
-	  }
+		render: function(context, camX, camY) {
+			for(var i = 0; i < this.particles.length; i++) {
+				this.particles[i].render(context, camX, camY);
+			}
+		}
 	});
 	
 	window.ex.display.Emitter = Emitter;

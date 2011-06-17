@@ -39,7 +39,7 @@
 		},
 		
 		clone: function() {
-			return new ExstoEngine.Base.Vector(this.x, this.y);
+			return new ex.base.Vector(this.x, this.y);
 		},
 		
 		rotate: function(rad) {

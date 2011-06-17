@@ -48,7 +48,8 @@
           "ex.display.AnimatedSprite",
           "ex.world.World",
           "ex.world.CollisionMap",
-          "ex.display.SpriteMap"
+          "ex.display.SpriteMap",
+          "ex.display.Emitter"
           	], 
   	function () {
 		//--Startup new engine
@@ -122,8 +123,8 @@
 		
 		_engine.camera.follow(player);
 		
-		//var emitter = new ex.display.Emitter({});
-		//_engine.currentWorld.addObject(emitter);
+		var emitter = new ex.display.Emitter({});
+		_engine.currentWorld.addObject(emitter);
 		
 		var tiles = new ex.display.SpriteMap(32, 32, data, _engine.imageRepository.img.Tiles);
 		_engine.currentWorld.addObject(tiles);
