@@ -1,6 +1,7 @@
 (function() {
+	ex.namespace("ex.display");
 	
-	var Renderable = new ExstoEngine.Base.Class(null, {
+	var Renderable = new ex.Class({
 		constructor: function() {
 			
 		},
@@ -14,6 +15,6 @@
 		}
 	});
 	
-	window.ExstoEngine.Display.Renderable = Renderable;
+	window.ex.display.Renderable = Renderable;
 	
 }());
