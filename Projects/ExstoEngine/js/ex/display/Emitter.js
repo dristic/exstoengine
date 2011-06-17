@@ -4,6 +4,20 @@ ex.using([
 ], function () {
 	ex.namespace("ex.display");
 	
+	/*
+	 * Requirements:
+	 * - Support for animated sprites as particles
+	 * - drawing objects as particles
+	 * - variance in all directions (angle or cartesian)
+	 * - variance in age/size
+	 * - spawn rate
+	 * - initial velocity
+	 * - degree of randomness
+	 * - simulation and render phases
+	 * - emitters on points, lines, and maybe polys? (lines could be used for rain effects)
+	 */
+	
+	
 	var Emitter = new ex.Class({
 		constructor: function(options) {
 			var defaults = {
