@@ -49,9 +49,13 @@
           "ex.world.World",
           "ex.world.CollisionMap",
           "ex.display.SpriteMap",
-          "ex.display.Emitter"
+          "ex.display.Emitter",
+          "ex.sound.Sound"
           	], 
   	function () {
+		// Create new sound
+		var snd = new ex.sound.Sound('../assets/sounds/lazer.ogg', 7);
+		
 		//--Startup new engine
 		var _engine = new ex.Engine(800, 500, 60);
 		
@@ -105,6 +109,10 @@
 			if(_engine.input.isKeyDown(ex.util.Key.D)) {
 				this.velocity.x += playerSpeed;
 				this.play("Walk");
+			}
+			
+			if(_engine.input.isKeyPressed(ex.util.Key.J)) {
+				snd.play();
 			}
 			
 			if(this.velocity.x < 0.5 && this.velocity.x > -0.5) this.play("Stand");

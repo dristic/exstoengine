@@ -210,9 +210,9 @@
 		},
 		
 		startQueue: function(func) {
-			// Ensure files are queued
+			// If no files are queued, call function
 			if(typeof this._requests[func] == "undefined") {
-				return false;
+				func();
 			} else {
 				// Get _toLoad
 				this._requests[func]._toLoad = this._requests[func]._urls.length;
