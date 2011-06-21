@@ -50,6 +50,7 @@
           "ex.world.CollisionMap",
           "ex.display.SpriteMap",
           "ex.display.Emitter",
+          "ex.plugins.ParticleSystem",
           "ex.sound.Sound"
           	], 
   	function () {
@@ -133,6 +134,25 @@
 		
 		var emitter = new ex.display.Emitter({});
 		_engine.currentWorld.addObject(emitter);
+		
+		/**
+		 * The object function is at ExstoEngine.js:4, Array.prototype.contains
+		 * Uncaught TypeError: Object function (item) {
+					var i = this.length;
+					while(i--) {
+						if(this[i] === item) {
+							return true;
+						}
+					}
+					return false;
+				} has no method 'update'
+			Emitter.ex.Class.updateParticleSystem.js:195
+			World.ex.Class.updateWorld.js:13
+			window.ex.Engine.ex.Class.updateEngine.js:85
+			window.ex._ex.bindExstoEngine.js:24
+		 */
+		//var newEmitter = new ex.plugins.ParticleSystem.Emitter({}, {});
+		//_engine.currentWorld.addObject(newEmitter);
 		
 		var tiles = new ex.display.SpriteMap(32, 32, data, _engine.imageRepository.img.Tiles);
 		_engine.currentWorld.addObject(tiles);
