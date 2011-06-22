@@ -50,7 +50,7 @@
           "ex.world.CollisionMap",
           "ex.display.SpriteMap",
           "ex.display.Emitter",
-          "ex.plugins.ParticleSystem",
+          "ex.plugins.Emitter2",
           "ex.sound.Sound"
           	], 
   	function () {
@@ -151,8 +151,8 @@
 			window.ex.Engine.ex.Class.updateEngine.js:85
 			window.ex._ex.bindExstoEngine.js:24
 		 */
-		//var newEmitter = new ex.plugins.ParticleSystem.Emitter({}, {});
-		//_engine.currentWorld.addObject(newEmitter);
+		var newEmitter = new ex.plugins.Emitter2({}, {});
+		_engine.currentWorld.addObject(newEmitter);
 		
 		var tiles = new ex.display.SpriteMap(32, 32, data, _engine.imageRepository.img.Tiles);
 		_engine.currentWorld.addObject(tiles);

@@ -21,8 +21,9 @@
 
 ex.using([
   "ex.base.Vector",
+  "ex.plugins.Particle2"
 ], function () {
-	ex.namespace("ex.plugins.ParticleSystem");
+	ex.namespace("ex.plugins");
 	
 	function vary(n) {
 		return (Math.random() * n << 1) - n;
@@ -63,73 +64,6 @@ ex.using([
 	};
 	
 	/*
-	 * Particle Class
-	 */
-	var Particle = new ex.Class({
-		constructor: function (options) {
-			var defaults = {
-				position: new ex.base.Vector(0,0),
-				vector: new ex.base.Vector(0,0),
-				age: 0,
-				lifespan: 0,
-				size: 0,
-				alpha: 1,
-				color: "#cef"
-			};
-			defaults.extend(options);
-			this.extend(defaults);
-			
-			// Execute birth event
-			this.birth();
-		},
-		
-		// Performs on every time step
-		update: function(dt) {
-			if(this.age >= this.lifespan){
-				this.die();
-			} else {
-				this.position.add(this.vector);
-				this.age();
-			}
-		},
-		
-		// Perform on birth event
-		birth: function() {
-			//TODO: consider a different name for this function
-		},
-		
-		// Age the particle in some way
-		age: function() {
-			this.alpha -= 1.0/life;	//evenly reduces alpha over lifespan
-			this.age++;
-		},
-		
-		// Perform on death event
-		die: function() {
-			this.active = false;
-		},
-		
-		render: function(context, camX, camY) {
-			// Copied from old Particle class...consider revision.
-			if(typeof this.onDraw === "function") this.onDraw(this);
-			context.save();
-			context.fillStyle = this.color;
-			try {
-				context.globalAlpha = this.alpha;
-			} catch(e) { }
-			context.translate(this.position.x - (camX * this.scrollFactorX), this.position.y - (camY * this.scrollFactorY));
-			
-			context.beginPath();
-	        context.arc(0, 0, this.size/2, 0, Math.PI/180, true);
-	        context.closePath();
-	        context.fill();
-	        
-	        context.restore();
-		}
-	});
-	window.ex.plugins.ParticleSystem.Particle = Particle;
-
-	/*
 	 * Emitter Class
 	 */
 	var Emitter = new ex.Class({
@@ -137,13 +71,13 @@ ex.using([
 			/* Set Emitter default options and extend new options */
 			var defaults = {
 				position: new ex.base.Vector(150,150),		// position of emitter
-				baseVector: new ex.base.Vector(100, 50),	// v0 and theta
-				angleVariance: Math.PI / 4,					// theta variance (radians)
+				baseVector: new ex.base.Vector(150, 150),	// v0 and theta
+				angleVariance: Math.PI / 8,					// theta variance (radians)
 				magnitudeVariance: 0.20,					// v0 variance (0.0 - 1.0)
 				spawnSpeed: 4,								// max spawn per time step
 				maxParticles: 500,							// particle cap
 				sizeVariance: 5,							// randomness of size
-				lifeVariance: 50,							// randomness of lifespan
+				lifeVariance: 20,							// randomness of lifespan
 				active: true								// is emitter emitting?
 			};
 			defaults.extend(emitterOptions);
@@ -153,8 +87,8 @@ ex.using([
 				position: this.options.position,
 				vector: new ex.base.Vector(100,200),
 				age: 0,
-				lifespan: 100,
-				size: 8,
+				lifespan: 50,
+				size: 2,
 				alpha: 1,
 				color: '#cef',
 				onDraw: function(particle) {
@@ -167,7 +101,7 @@ ex.using([
 			particleDefaults.extend(particleOptions);
 			this.particleOptions = particleDefaults;
 			
-			this.particles = new Array();
+			this.particles = [];
 			this.active = true;
 		},
 		
@@ -187,8 +121,10 @@ ex.using([
 		 * @param dt
 		 */
 		update: function(dt) {			
+			
 			// Update each live particle, remove dead ones
-			for(var index in this.particles) {
+			var index = this.particles.length;
+			while(index--) {
 				if(this.particles[index].age > this.particles[index].lifespan) {
 					this.particles.splice(index, 1);
 				} else {
@@ -211,14 +147,15 @@ ex.using([
 			optionsWithVariance.lifespan += vary(this.options.lifeVariance);
 			optionsWithVariance.vector = varyVector(this.particleOptions.vector);
 			optionsWithVariance.size += vary(this.options.sizeVariance);
-			this.particles.push(new ex.plugins.ParticleSystem.Particle(optionsWithVariance));
+			this.particles.push(new ex.plugins.Particle2(optionsWithVariance));
 		},
 		
 		render: function(context, camX, camY) {
-			for(var index in this.particles) {
+			var index = this.particles.length;
+			while(index--) {
 				this.particles[index].render(context, camX, camY);
 			}
 		}
 	});
-	window.ex.plugins.ParticleSystem.Emitter = Emitter;
+	window.ex.plugins.Emitter2 = Emitter;
 });
