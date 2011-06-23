@@ -88,7 +88,7 @@ ex.using([
 				vector: new ex.base.Vector(0, -100),
 				age: 0,
 				lifespan: 2,
-				size: 20,
+				size: 15,
 				alpha: 1,
 				color: '#cef',
 				onDraw: function(particle) {
@@ -96,7 +96,7 @@ ex.using([
 					y = Math.floor(y);
 					particle.size *= 0.98;
 					particle.color = 'rgb(255, ' + (y + 255) + ', 68)';
-					particle.alpha = 0.5 - (particle.age / particle.life * 0.4);
+					particle.alpha = 0.5 - (particle.age / particle.lifespan * 0.4);
 			    }
 			};
 			particleDefaults.extend(particleOptions);

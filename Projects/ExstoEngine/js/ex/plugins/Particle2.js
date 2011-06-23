@@ -16,8 +16,8 @@ ex.using([
 				size: 0,
 				alpha: 1,
 				color: "#cef",
-				scrollFactorX: 0,
-				scrollFactorY: 0
+				scrollFactorX: 1,
+				scrollFactorY: 1
 			};
 			
 			defaults.extend(options);
@@ -46,7 +46,7 @@ ex.using([
 		
 		// Age the particle in some way
 		mature: function(dt) {
-			//this.alpha -= 1.0/this.lifespan;	//evenly reduces alpha over lifespan
+			this.alpha -= 1.0/this.age;	//evenly reduces alpha over lifespan
 			this.age += dt;
 		},
 		
