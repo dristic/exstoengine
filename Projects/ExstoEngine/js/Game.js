@@ -132,8 +132,8 @@
 		
 		_engine.camera.follow(player);
 		
-		var emitter = new ex.display.Emitter({});
-		_engine.currentWorld.addObject(emitter);
+		//var emitter = new ex.display.Emitter({});
+		//_engine.currentWorld.addObject(emitter);
 		
 		/**
 		 * The object function is at ExstoEngine.js:4, Array.prototype.contains

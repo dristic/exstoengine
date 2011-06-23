@@ -26,7 +26,7 @@ ex.using([
 	ex.namespace("ex.plugins");
 	
 	function vary(n) {
-		return (Math.random() * n << 1) - n;
+		return (Math.random() * n / 2) - n;
 	};
 	
 	// (x,y) to (r,theta)
@@ -70,11 +70,11 @@ ex.using([
 		constructor: function(emitterOptions, particleOptions) {
 			/* Set Emitter default options and extend new options */
 			var defaults = {
-				position: new ex.base.Vector(150,150),		// position of emitter
+				position: new ex.base.Vector(300, 300),		// position of emitter
 				baseVector: new ex.base.Vector(150, 150),	// v0 and theta
 				angleVariance: Math.PI / 8,					// theta variance (radians)
-				magnitudeVariance: 0.20,					// v0 variance (0.0 - 1.0)
-				spawnSpeed: 4,								// max spawn per time step
+				magnitudeVariance: 0.2,						// v0 variance (0.0 - 1.0)
+				spawnSpeed: 1,								// max spawn per time step
 				maxParticles: 500,							// particle cap
 				sizeVariance: 5,							// randomness of size
 				lifeVariance: 20,							// randomness of lifespan
@@ -84,15 +84,16 @@ ex.using([
 			this.options = defaults;
 			/* Set particle default options and extend new options */
 			var particleDefaults = {
-				position: this.options.position,
-				vector: new ex.base.Vector(100,200),
+				position: this.options.position.clone(),
+				vector: new ex.base.Vector(0, -100),
 				age: 0,
-				lifespan: 50,
-				size: 2,
+				lifespan: 2,
+				size: 20,
 				alpha: 1,
 				color: '#cef',
 				onDraw: function(particle) {
-					var y = -this.age * 3;
+					var y = -this.age * 100;
+					y = Math.floor(y);
 					particle.size *= 0.98;
 					particle.color = 'rgb(255, ' + (y + 255) + ', 68)';
 					particle.alpha = 0.5 - (particle.age / particle.life * 0.4);
@@ -143,9 +144,10 @@ ex.using([
 		},
 		
 		spawnParticle: function() {
-			var optionsWithVariance = this.particleOptions;
-			optionsWithVariance.lifespan += vary(this.options.lifeVariance);
-			optionsWithVariance.vector = varyVector(this.particleOptions.vector);
+			var optionsWithVariance = {};
+			optionsWithVariance.extend(this.particleOptions.clone());
+			//optionsWithVariance.lifespan += vary(this.options.lifeVariance);
+			optionsWithVariance.vector = varyVector(optionsWithVariance.vector, this.options.angleVariance, this.options.magnitudeVariance);
 			optionsWithVariance.size += vary(this.options.sizeVariance);
 			this.particles.push(new ex.plugins.Particle2(optionsWithVariance));
 		},

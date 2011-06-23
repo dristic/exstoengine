@@ -15,9 +15,14 @@ ex.using([
 				lifespan: 0,
 				size: 0,
 				alpha: 1,
-				color: "#cef"
+				color: "#cef",
+				scrollFactorX: 0,
+				scrollFactorY: 0
 			};
+			
 			defaults.extend(options);
+			defaults.position = options.position.clone();
+			
 			this.extend(defaults);
 			
 			// Execute birth event
@@ -29,8 +34,8 @@ ex.using([
 			if(this.age >= this.lifespan){
 				this.onDeath();
 			} else {
-				this.position.add(this.vector);
-				this.mature();
+				this.position = this.position.addScaled(this.vector, dt);
+				this.mature(dt);
 			}
 		},
 		
@@ -40,9 +45,9 @@ ex.using([
 		},
 		
 		// Age the particle in some way
-		mature: function() {
-			this.alpha -= 1.0/this.lifespan;	//evenly reduces alpha over lifespan
-			this.age++;
+		mature: function(dt) {
+			//this.alpha -= 1.0/this.lifespan;	//evenly reduces alpha over lifespan
+			this.age += dt;
 		},
 		
 		// Perform on death event
@@ -53,7 +58,9 @@ ex.using([
 		render: function(context, camX, camY) {
 			// Copied from old Particle class...consider revision.
 			if(typeof this.onDraw === "function") this.onDraw(this);
+			
 			context.save();
+			
 			context.fillStyle = this.color;
 			try {
 				context.globalAlpha = this.alpha;
