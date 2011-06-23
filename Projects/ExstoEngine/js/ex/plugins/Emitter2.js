@@ -26,7 +26,7 @@ ex.using([
 	ex.namespace("ex.plugins");
 	
 	function vary(n) {
-		return (Math.random() * n / 2) - n;
+		return (Math.random() * n) - n / 2;
 	};
 	
 	// (x,y) to (r,theta)
@@ -57,6 +57,10 @@ ex.using([
 		return new ex.base.Vector(adjustedCoords.x, adjustedCoords.y);
 	};
 	
+	function vectorDifference(a, b){
+		return new ex.base.Vector(b.x - a.x, b.y - a.y);
+	}
+	
 	function extend(object, extend) {
 		for(var param in extend) {
 			object[param] = extend[param];
@@ -70,22 +74,24 @@ ex.using([
 		constructor: function(emitterOptions, particleOptions) {
 			/* Set Emitter default options and extend new options */
 			var defaults = {
-				position: new ex.base.Vector(300, 300),		// position of emitter
-				baseVector: new ex.base.Vector(150, 150),	// v0 and theta
-				angleVariance: Math.PI / 8,					// theta variance (radians)
-				magnitudeVariance: 0.2,						// v0 variance (0.0 - 1.0)
-				spawnSpeed: 1,								// max spawn per time step
-				maxParticles: 500,							// particle cap
-				sizeVariance: 5,							// randomness of size
-				lifeVariance: 20,							// randomness of lifespan
-				active: true								// is emitter emitting?
+				position: new ex.base.Vector(300, 300),			// position of emitter
+				particleVector: new ex.base.Vector(150, -50),	// base particle vector
+				angleVariance: Math.PI / 4,						// theta variance (radians)
+				magnitudeVariance: 0.2,							// v0 variance (0.0 - 1.0)
+				spawnSpeed: 5,									// max spawn per time step
+				maxParticles: 500,								// particle cap
+				sizeVariance: 5,								// randomness of size
+				lifeVariance: 20,								// randomness of lifespan
+				active: true									// is emitter emitting?
 			};
 			defaults.extend(emitterOptions);
 			this.options = defaults;
+			this.options.origin = this.options.position.clone();		//remembers start for movement
+			this.options.lastPosition = this.options.origin.clone();	//used to detect movement
 			/* Set particle default options and extend new options */
 			var particleDefaults = {
-				position: this.options.position.clone(),
-				vector: new ex.base.Vector(0, -100),
+				position: this.options.position.clone(),	//.clone() to pass by value
+				vector: defaults.particleVector.clone(),	//
 				age: 0,
 				lifespan: 2,
 				size: 15,
@@ -121,11 +127,20 @@ ex.using([
 		 *  Below is the Speed implementation.
 		 * @param dt
 		 */
-		update: function(dt) {			
-			
+		update: function(dt) {
 			// Update each live particle, remove dead ones
 			var index = this.particles.length;
+			var emitterMoved = false;
+			if(this.options.position != this.options.lastPosition) {
+				emitterMoved = true;
+				this.options.lastPosition = this.options.position.clone();
+			}
 			while(index--) {
+				if(emitterMoved){
+					this.particleOptions.position = this.options.position.clone();
+					// This does cool whip shit, try it out! (needs low particle velocity is too high)
+					//this.particles[index].position.add(vectorDifference(this.options.origin, this.options.position));
+				}
 				if(this.particles[index].age > this.particles[index].lifespan) {
 					this.particles.splice(index, 1);
 				} else {
@@ -135,7 +150,7 @@ ex.using([
 			
 			// spawn new particles
 			for(var birthCount = 0; birthCount < this.options.spawnSpeed; birthCount++) {
-				if(this.particles.length >= this.options.maxParticles || this.active == false) {
+				if(this.particles.length >= this.options.maxParticles || this.options.active == false) {
 					// Do nothing, no room or emitter inactive
 				} else {
 					this.spawnParticle();
@@ -145,7 +160,8 @@ ex.using([
 		
 		spawnParticle: function() {
 			var optionsWithVariance = {};
-			optionsWithVariance.extend(this.particleOptions.clone());
+			//MUST use .clone(), will pass by reference otherwise
+			optionsWithVariance.extend(this.particleOptions.clone());	
 			//optionsWithVariance.lifespan += vary(this.options.lifeVariance);
 			optionsWithVariance.vector = varyVector(optionsWithVariance.vector, this.options.angleVariance, this.options.magnitudeVariance);
 			optionsWithVariance.size += vary(this.options.sizeVariance);

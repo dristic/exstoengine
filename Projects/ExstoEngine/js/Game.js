@@ -90,6 +90,18 @@
 		
 		var collisionMap = new ex.world.CollisionMap(32, 32, colData);
 		
+		var jetPackOffset = new ex.base.Vector(5,20);
+		var jetPackEmitter = new ex.plugins.Emitter2({
+			position: player.position.clone().add(jetPackOffset),
+			particleVector: new ex.base.Vector(0, 100),
+			angleVariance: Math.PI / 8,
+			spawnSpeed: 30,
+			sizeVariance: 4
+		}, 
+		{	lifespan: 0.2,
+			size: 10 });
+		_engine.currentWorld.addObject(jetPackEmitter);
+		
 		player.onUpdate = function(dt) {
 			if(_engine.input.isKeyPressed(ex.util.Key.Spacebar)) {
 				//--Jump
@@ -100,23 +112,29 @@
 				//--Crouch
 				this.velocity.y += playerSpeed;
 				this.play("Walk");
+				jetPackEmitter.options.active = true;
 			}
 			
 			if(_engine.input.isKeyDown(ex.util.Key.A)) {
 				this.velocity.x -= playerSpeed;
 				this.play("Walk");
+				jetPackEmitter.options.active = true;
 			}
 			
 			if(_engine.input.isKeyDown(ex.util.Key.D)) {
 				this.velocity.x += playerSpeed;
 				this.play("Walk");
+				jetPackEmitter.options.active = true;
 			}
 			
 			if(_engine.input.isKeyPressed(ex.util.Key.J)) {
 				snd.play();
 			}
 			
-			if(this.velocity.x < 0.5 && this.velocity.x > -0.5) this.play("Stand");
+			if(this.velocity.x < 0.5 && this.velocity.x > -0.5){
+				this.play("Stand");
+				jetPackEmitter.options.active = false;
+			}
 			
 			this.velocity.y += playerSpeed;
 			
@@ -128,6 +146,7 @@
 			this.y = this.position.y;
 			
 			this.velocity.scale(0.95);
+			jetPackEmitter.options.position = this.position.clone().add(jetPackOffset);
 		};
 		
 		_engine.camera.follow(player);
