@@ -35,6 +35,7 @@
                 <li><?= anchor("", "Home") ?></li>
                 <li><?= anchor("", "Documentation") ?></li>
                 <li><?= anchor("", "Blog") ?></li>
+                <li><?= anchor("auth/login", "Login") ?></li>
             </ul>
 		</nav>
 	</header>

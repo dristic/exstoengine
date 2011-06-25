@@ -297,3 +297,23 @@ span
 	color: #332f29;
 	text-decoration: none;
 }
+
+/*
+ * Tables
+ */
+table
+{
+	border: 1px solid #CCC;
+	border-collapse: collapse;
+}
+
+table th
+{
+	background: #CCC;
+}
+
+table th, td
+{
+	border: 1px solid #CCC;
+	padding: 4px;
+}

@@ -11,7 +11,6 @@ class Auth extends Controller {
 	{
 		parent::__construct();
 		$this->load->library('ion_auth');
-		$this->load->library('session');
 		$this->load->library('form_validation');
 		$this->load->database();
 		$this->load->helper('url');
@@ -82,10 +81,8 @@ class Auth extends Controller {
 				'id' => 'password',
 				'type' => 'password',
 			);
-
-                        $this->load->view('main/header');
-			$this->load->view('auth/login', $this->data);
-                        $this->load->view('main/footer');
+			
+			$this->template->load('auth/login', $this->data);
 		}
 	}
 
@@ -138,9 +135,7 @@ class Auth extends Controller {
 			);
 
 			//render
-                        $this->load->view('main/header');
-			$this->load->view('auth/change_password', $this->data);
-                        $this->load->view('main/footer');
+			$this->template->load('auth/change_password', $this->data);
 		}
 		else
 		{
@@ -292,23 +287,25 @@ class Auth extends Controller {
 		$this->form_validation->set_rules('company', 'Company Name', 'required|xss_clean');
 		$this->form_validation->set_rules('password', 'Password', 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|max_length[' . $this->config->item('max_password_length', 'ion_auth') . ']|matches[password_confirm]');
 		$this->form_validation->set_rules('password_confirm', 'Password Confirmation', 'required');
+		$this->form_validation->set_rules('registrationKey', 'Registration Key', 'required');
 
-                require_once('lib/recaptchalib.php');
-                $privatekey = "6LfbXcESAAAAAIdG3K0m3gJ-CzkskRw7FULFWr6U";
-                if($_POST) {
-                    $resp = recaptcha_check_answer ($privatekey,
-                                                    $_SERVER["REMOTE_ADDR"],
-                                                    $_POST["recaptcha_challenge_field"],
-                                                    $_POST["recaptcha_response_field"]);
-                } else {
-                    $resp = null;
-                }
+        require_once('lib/recaptchalib.php');
+        $privatekey = "6LfbXcESAAAAAIdG3K0m3gJ-CzkskRw7FULFWr6U";
+        if($_POST) {
+            $resp = recaptcha_check_answer ($privatekey,
+                                            $_SERVER["REMOTE_ADDR"],
+                                            $_POST["recaptcha_challenge_field"],
+                                            $_POST["recaptcha_response_field"]);
+        } else {
+        	$resp = null;
+        }
 
 		if ($this->form_validation->run() == true && $resp->is_valid)
 		{
 			$username = strtolower($this->input->post('first_name')) . ' ' . strtolower($this->input->post('last_name'));
 			$email = $this->input->post('email');
 			$password = $this->input->post('password');
+			$registrationKey = $this->input->post('registrationKey');
 
 			$additional_data = array('first_name' => $this->input->post('first_name'),
 				'last_name' => $this->input->post('last_name'),
@@ -316,7 +313,7 @@ class Auth extends Controller {
 				'phone' => $this->input->post('phone1') . '-' . $this->input->post('phone2') . '-' . $this->input->post('phone3'),
 			);
 		}
-		if ($this->form_validation->run() == true && $resp->is_valid && $this->ion_auth->register($username, $password, $email, $additional_data))
+		if ($this->form_validation->run() == true && $resp->is_valid && $this->ion_auth->register($username, $password, $email, $registrationKey, $additional_data))
 		{ //check to see if we are creating the user
 			//redirect them back to the admin page
 			$this->session->set_flashdata('message', "User Created");
@@ -326,7 +323,7 @@ class Auth extends Controller {
 		{ //display the create user form
 			//set the flash data error message if there is one
 			$this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
-                        $this->data['captcha'] = ($resp == null ? "" : "The captcha entered was incorrect");
+            $this->data['captcha'] = ($resp == null ? "" : "The Captcha entered was incorrect");
                         
 			$this->data['first_name'] = array('name' => 'first_name',
 				'id' => 'first_name',
@@ -376,10 +373,13 @@ class Auth extends Controller {
 				'type' => 'password',
 				'value' => $this->form_validation->set_value('password_confirm'),
 			);
-
-                        $this->load->view('main/header');
-			$this->load->view('auth/create_user', $this->data);
-                        $this->load->view('main/footer');
+			$this->data['registrationKey'] = array('name' => 'registrationKey',
+				'id' => 'registrationKey',
+				'type' => 'text',
+				'value' => $this->form_validation->set_value('registrationKey'),
+			);
+			
+			$this->template->load('auth/create_user', $this->data);
 		}
 	}
 

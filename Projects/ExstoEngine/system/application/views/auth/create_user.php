@@ -70,6 +70,13 @@
                 ?>
             </div>
         </div>
+        
+        <div class="form-field">
+            <div class="form-label">Registration Key</div>
+            <div class="form-input">
+                <?php echo form_input($registrationKey);?>
+            </div>
+        </div>
 
         <div class="form-field">
             <div class="form-label">&nbsp;</div>
