@@ -20,19 +20,19 @@
 	/**
 	 * Tables.
 	 **/
-	$config['tables']['groups']  = 'groups';
-	$config['tables']['users']   = 'users';
-	$config['tables']['meta']    = 'meta';
+	$config['tables']['groups']  = 'Role';
+	$config['tables']['users']   = 'User';
+	$config['tables']['meta']    = 'Meta';
 	
 	/**
 	 * Site Title, example.com
 	 */
-	$config['site_title']		   = "kudoster.com";
+	$config['site_title']		   = "exstoengine.com";
 	
 	/**
 	 * Admin Email, admin@example.com
 	 */
-	$config['admin_email']		   = "admin@example.com";
+	$config['admin_email']		   = "administrator@exstoengine.com";
 	
 	/**
 	 * Default group, use name
@@ -75,7 +75,7 @@
 	/**
 	 * Email Activation for registration
 	 **/
-	$config['email_activation']    = false;
+	$config['email_activation']    = true;
 	
 	/**
 	 * Allow users to be remembered and enable auto-login

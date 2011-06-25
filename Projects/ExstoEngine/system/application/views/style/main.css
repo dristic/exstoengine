@@ -1,14 +1,6 @@
 @charset "utf-8";
 /* CSS Document */
 
-@font-face {
-	font-family: 'ComfortaaBold';
-	src: url('Fonts/comfortaa-bold-webfont.eot');
-	src: local('☺'), url('Fonts/comfortaa-bold-webfont.woff') format('woff'), url('Fonts/comfortaa-bold-webfont.ttf') format('truetype'), url('Fonts/comfortaa-bold-webfont.svg#webfont33VG5D0T') format('svg');
-	font-weight: normal;
-	font-style: normal;
-}
-
 html
 {
 	height: 100%;

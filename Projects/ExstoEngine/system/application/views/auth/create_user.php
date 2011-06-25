@@ -3,7 +3,7 @@
     <div class="form-header">Sign Up</div>
 	<p>Enter your information in the fields below to create a new account.</p>
 	
-	<div id="infoMessage"><?php echo $message; echo $captcha;?></div>
+	<div id="infoMessage"><?php echo $message; ?></div>
 	
     <?php echo form_open("auth/create_user");?>
         <div class="form-field">
@@ -65,7 +65,7 @@
                  </script>
                 <?php
                   require_once('lib/recaptchalib.php');
-                  $publickey = "6LfbXcESAAAAANDp4uEWjtSShDlzjU4qM86iocoi"; // you got this from the signup page
+                  $publickey = "6LfwlMUSAAAAAMZ4kn5BWb3PxaqlRBGaOTRqzvm6"; // you got this from the signup page
                   echo recaptcha_get_html($publickey);
                 ?>
             </div>

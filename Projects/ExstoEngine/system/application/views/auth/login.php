@@ -6,7 +6,7 @@
         </div>
         Please login with your email address and password below.
         <br />
-        Don't have an account? <?= anchor("auth/create", "Register") ?>
+        Don't have an account? <?= anchor("auth/create_user", "Register") ?>
         
         <div id="infoMessage"><?php echo $message; ?></div>
         

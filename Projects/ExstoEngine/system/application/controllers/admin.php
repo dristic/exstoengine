@@ -13,6 +13,8 @@ class Admin extends Controller {
 	
 	function delete_key($id)
 	{
+		$this->authentication->admin_only();
+		
 		if($_SERVER['REQUEST_METHOD'] == 'POST')
 		{
 			$this->Admin_Model->delete_key($id);
@@ -28,6 +30,8 @@ class Admin extends Controller {
 	
 	function list_keys()
 	{
+		$this->authentication->admin_only();
+		
 		$this->data['keys'] = $this->Admin_Model->get_keys();
 		
 		$this->template->load('admin/list_keys', $this->data);
@@ -35,6 +39,8 @@ class Admin extends Controller {
 	
 	function generate_key()
 	{
+		$this->authentication->admin_only();
+		
 		$this->form_validation->set_rules('random_data', 'Random Data', 'trim|required|min_length[5]|max_length[12]|xss_clean');
 		
 		if($this->form_validation->run() == false)

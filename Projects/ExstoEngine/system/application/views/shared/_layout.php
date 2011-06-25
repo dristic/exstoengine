@@ -35,7 +35,19 @@
                 <li><?= anchor("", "Home") ?></li>
                 <li><?= anchor("", "Documentation") ?></li>
                 <li><?= anchor("", "Blog") ?></li>
-                <li><?= anchor("auth/login", "Login") ?></li>
+                <?php 
+                	if($this->ion_auth->logged_in())
+                	{
+                		?><li>
+                			<?= $this->ion_auth->get_user()->email ?>
+                			<?= anchor("auth/logout", "Logout") ?>
+                	 	</li><?php
+                	}
+                	else
+                	{
+                		?><li><?= anchor("auth/login", "Login") ?></li><?php
+                	}
+                ?>
             </ul>
 		</nav>
 	</header>

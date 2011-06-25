@@ -14,6 +14,8 @@ class Auth extends Controller {
 		$this->load->library('form_validation');
 		$this->load->database();
 		$this->load->helper('url');
+		$this->load->library('model_validation');
+		$this->load->model('Admin_Model');
 	}
 
 	//redirect if needed, otherwise display the user list
@@ -276,7 +278,18 @@ class Auth extends Controller {
 //		{
 //			redirect('auth', 'refresh');
 //		}
-
+		
+		if($_SERVER['REQUEST_METHOD'] == 'POST')
+		{
+			$this->response_field = $_POST["recaptcha_response_field"];
+			$this->challenge_field = $_POST["recaptcha_challenge_field"];	
+		}
+		else
+		{
+			$this->response_field = "";
+			$this->challenge_field = "";
+		}
+		
 		//validate form input
 		$this->form_validation->set_rules('first_name', 'First Name', 'required|xss_clean');
 		$this->form_validation->set_rules('last_name', 'Last Name', 'required|xss_clean');
@@ -284,23 +297,14 @@ class Auth extends Controller {
 		$this->form_validation->set_rules('phone1', 'First Part of Phone', 'required|xss_clean|min_length[3]|max_length[3]');
 		$this->form_validation->set_rules('phone2', 'Second Part of Phone', 'required|xss_clean|min_length[3]|max_length[3]');
 		$this->form_validation->set_rules('phone3', 'Third Part of Phone', 'required|xss_clean|min_length[4]|max_length[4]');
-		$this->form_validation->set_rules('company', 'Company Name', 'required|xss_clean');
 		$this->form_validation->set_rules('password', 'Password', 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|max_length[' . $this->config->item('max_password_length', 'ion_auth') . ']|matches[password_confirm]');
 		$this->form_validation->set_rules('password_confirm', 'Password Confirmation', 'required');
-		$this->form_validation->set_rules('registrationKey', 'Registration Key', 'required');
-
-        require_once('lib/recaptchalib.php');
-        $privatekey = "6LfbXcESAAAAAIdG3K0m3gJ-CzkskRw7FULFWr6U";
-        if($_POST) {
-            $resp = recaptcha_check_answer ($privatekey,
-                                            $_SERVER["REMOTE_ADDR"],
-                                            $_POST["recaptcha_challenge_field"],
-                                            $_POST["recaptcha_response_field"]);
-        } else {
-        	$resp = null;
-        }
-
-		if ($this->form_validation->run() == true && $resp->is_valid)
+		$this->form_validation->set_rules('recaptcha_response_field', 'Captcha', 'callback_check_captcha');
+		$this->form_validation->set_rules('registrationKey', 'Registration Key', 'required|callback_check_key');
+		
+		$valid = $this->form_validation->run();
+		
+		if ($valid == true)
 		{
 			$username = strtolower($this->input->post('first_name')) . ' ' . strtolower($this->input->post('last_name'));
 			$email = $this->input->post('email');
@@ -313,7 +317,9 @@ class Auth extends Controller {
 				'phone' => $this->input->post('phone1') . '-' . $this->input->post('phone2') . '-' . $this->input->post('phone3'),
 			);
 		}
-		if ($this->form_validation->run() == true && $resp->is_valid && $this->ion_auth->register($username, $password, $email, $registrationKey, $additional_data))
+		
+		if ($valid == true && 
+			$this->ion_auth->register($username, $password, $email, $registrationKey, $additional_data))
 		{ //check to see if we are creating the user
 			//redirect them back to the admin page
 			$this->session->set_flashdata('message', "User Created");
@@ -323,7 +329,6 @@ class Auth extends Controller {
 		{ //display the create user form
 			//set the flash data error message if there is one
 			$this->data['message'] = (validation_errors() ? validation_errors() : ($this->ion_auth->errors() ? $this->ion_auth->errors() : $this->session->flashdata('message')));
-            $this->data['captcha'] = ($resp == null ? "" : "The Captcha entered was incorrect");
                         
 			$this->data['first_name'] = array('name' => 'first_name',
 				'id' => 'first_name',
@@ -381,6 +386,42 @@ class Auth extends Controller {
 			
 			$this->template->load('auth/create_user', $this->data);
 		}
+	}
+	
+	function check_key($key)
+	{
+		$exists = $this->Admin_Model->check_key($key);
+		
+		if($exists)
+		{
+			return true;
+		}
+		else
+		{
+			$this->form_validation->set_message('check_key', 'The given key could not be found');
+			$this->model_validation->get_errors();
+			return false;
+		}
+	}
+	
+	function check_captcha($captcha)
+	{
+		require_once('lib/recaptchalib.php');
+        $privatekey = "6LfwlMUSAAAAAEzXi3i0zTIWmEyCmC2Rm_YPa0Kx";
+        $resp = recaptcha_check_answer ($privatekey,
+                                        $_SERVER["REMOTE_ADDR"],
+                                        $this->challenge_field,
+                                        $this->response_field);
+        
+        if(!$resp->is_valid)
+        {
+        	$this->form_validation->set_message('check_captcha', 'The Captcha entered was incorrect');
+        	return false;
+        }
+        else
+        {
+        	return true;
+        }
 	}
 
 	function _get_csrf_nonce()

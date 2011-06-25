@@ -91,6 +91,7 @@ class Ion_auth
 		$this->ci->load->library('session');
 		$this->ci->lang->load('ion_auth');
 		$this->ci->load->model('ion_auth_model');
+		$this->ci->load->model('Admin_Model');
 		$this->ci->load->helper('cookie');
 
 		$this->messages = array();
@@ -282,7 +283,7 @@ class Ion_auth
 	 * @return void
 	 * @author Mathew
 	 **/
-	public function register($username, $password, $email, $additional_data, $group_name = false) //need to test email activation
+	public function register($username, $password, $email, $registration_key, $additional_data, $group_name = false) //need to test email activation
 	{
 		$email_activation = $this->ci->config->item('email_activation', 'ion_auth');
 
@@ -308,6 +309,13 @@ class Ion_auth
 			{
 				$this->set_error('account_creation_unsuccessful');
 				return FALSE;
+			}
+			
+			// Try to set the user's key in the database
+			if($this->ci->Admin_Model->set_key_user($registration_key, $id) == false)
+			{
+				$this->set_error('registration_key_unsuccessful');
+				return false;
 			}
 
 			$deactivate = $this->ci->ion_auth_model->deactivate($id);

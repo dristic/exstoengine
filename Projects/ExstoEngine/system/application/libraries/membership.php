@@ -9,8 +9,7 @@ class Membership {
 	function logged_in_status()
 	{
             $CI =& get_instance();
-
-            $CI->load->library('session');
+			
             $username = $CI->session->userdata('username');
 
             if($username == NULL)

@@ -20,5 +20,7 @@
             </div>
         </div>
     <?php echo form_close();?>
+    
+    <?= anchor('admin/list_keys', 'Back To List') ?>
 
 </div>

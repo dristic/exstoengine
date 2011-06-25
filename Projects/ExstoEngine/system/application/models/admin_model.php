@@ -11,6 +11,51 @@ class Admin_Model extends CI_Model
 		$this->salt_length = 10;
 	}
 	
+	public function check_key($key)
+	{
+		// Try to find the key in the database
+		$query = $this->db->select('*')
+						  ->from('Key')
+						  ->join('User', 'User.id = Key.UserId', 'left')
+						  ->where('Key', $key)
+						  ->where('email', null)
+						  ->get();
+						  
+	  	if($query->num_rows() == 1)
+	  	{
+	  		return true;
+	  	}
+	  	else
+	  	{
+	  		$this->model_validation->add_error('The given key could not be found');
+	  		return false;
+	  	}
+	}
+	
+	public function set_key_user($key, $id)
+	{
+		// Grab the key out of the database
+		$query = $this->db->select('*')
+					 	  ->from('Key')
+					 	  ->where('Key', $key)
+					 	  ->get();
+					 	  
+ 	    if($query->num_rows() == 0)
+ 	    {
+ 	    	$this->model_validation->add_error('The given key could not be found');
+ 	    	return false;
+ 	    }
+ 	    else
+ 	    {
+ 	    	$key = $query->first_row();
+ 	    	$key->UserId = $id;
+ 	    	$this->db->where('Id', $key->Id)
+ 	    			 ->update('Key', $key);
+ 	    			 
+ 	    	return true;
+ 	    }
+	}
+	
 	public function delete_key($id)
 	{
 		$this->db->delete('Key', array('Id' => $id));
@@ -21,6 +66,7 @@ class Admin_Model extends CI_Model
 		// Get all keys from the database
 		$query = $this->db->select('*')
 						  ->from('Key')
+						  ->join('User', 'User.id = Key.UserId', 'left')
 						  ->get();
 		
 	    if($query->num_rows() > 0)
@@ -54,7 +100,7 @@ class Admin_Model extends CI_Model
 						  
 	    if($query->num_rows() > 0)
 	    {
-	    	$this->model_validation->set_error('This key has already been generated');
+	    	$this->model_validation->add_error('This key has already been generated');
 	    	return false;
 	    }
 	    else

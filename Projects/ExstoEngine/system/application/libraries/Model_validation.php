@@ -11,7 +11,7 @@ class Model_validation
 		$this->errors = array();
 	}
 	
-	function set_error($message)
+	function add_error($message)
 	{
 		array_push($this->errors, $message);
 	}
@@ -23,11 +23,16 @@ class Model_validation
 	
 	function get_errors()
 	{
+		// Build error string
 		$message = "";
 		foreach($this->errors as $error)
 		{
 			$message .= "$error<br />";
 		}
+		
+		// Clear error list out
+		$this->errors = array();
+		
 		return $message;
 	}
 }

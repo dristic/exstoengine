@@ -11,6 +11,11 @@ class Welcome extends Controller {
 	{
 		$this->template->load('index');
 	}
+	
+	function message()
+	{
+		$this->template->load('shared/message');
+	}
 }
 
 /* End of file welcome.php */
