@@ -5,9 +5,9 @@
     <div style="padding: 0px 0px 0px 20px; display: table-cell; width: 500px; vertical-align: top;">
         <h1>What is Exsto Engine?</h1>
 
-        <p style="width: 450px; font-size: 1.0em; line-height: 1.5em;">Kudoster is an achievement tracking system for groups and companies. It allows users to create groups, design achievements, and reward group members. Sign up to the right today!</p>
-
-        <a href="http://kudoster.com/system/application/views/content/System.pdf">Download Design Document</a>
+        <p style="width: 450px; font-size: 1.0em; line-height: 1.5em;">
+        	Exsto Engine is a game development engine built in JavaScript for use with HTML 5.
+        </p>
     </div>
 
     <div class="vr">&nbsp;</div>

@@ -322,7 +322,7 @@ class Auth extends Controller {
 			$this->ion_auth->register($username, $password, $email, $registrationKey, $additional_data))
 		{ //check to see if we are creating the user
 			//redirect them back to the admin page
-			$this->session->set_flashdata('message', "User Created");
+			$this->session->set_flashdata('message', "An e-mail has been sent with a link to activate your account");
 			redirect("auth", 'refresh');
 		}
 		else

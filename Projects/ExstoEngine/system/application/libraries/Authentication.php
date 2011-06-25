@@ -18,4 +18,13 @@ class Authentication {
 		}
 	}
 	
+	function authenticate()
+	{
+		if($this->ci->ion_auth->logged_in() == false)
+		{
+			$this->ci->session->set_flashdata('message', 'You must be logged in to view this page');
+			redirect('welcome/message');
+		}
+	}
+	
 }

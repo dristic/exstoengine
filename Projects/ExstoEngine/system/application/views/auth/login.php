@@ -4,6 +4,7 @@
         <div class="form-header">
                 Login
         </div>
+        <?= $this->session->flashdata('message') ?>
         Please login with your email address and password below.
         <br />
         Don't have an account? <?= anchor("auth/create_user", "Register") ?>

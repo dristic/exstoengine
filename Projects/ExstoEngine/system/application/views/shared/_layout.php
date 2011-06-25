@@ -38,10 +38,13 @@
                 <?php 
                 	if($this->ion_auth->logged_in())
                 	{
-                		?><li>
+                		?>
+                		<li><?= anchor('download', 'Download') ?></li>
+                		<li>
                 			<?= $this->ion_auth->get_user()->email ?>
                 			<?= anchor("auth/logout", "Logout") ?>
-                	 	</li><?php
+                	 	</li>
+                	 	<?php
                 	}
                 	else
                 	{
