@@ -33,14 +33,7 @@
                 <?php echo form_input($email);?>
             </div>
         </div>
-
-        <div class="form-field">
-            <div class="form-label">Phone</div>
-            <div class="form-input">
-                <?php echo form_input($phone1);?>-<?php echo form_input($phone2);?>-<?php echo form_input($phone3);?>
-            </div>
-        </div>
-
+        
         <div class="form-field">
             <div class="form-label">Password</div>
             <div class="form-input">
@@ -52,6 +45,13 @@
             <div class="form-label">Confirm Password</div>
             <div class="form-input">
                 <?php echo form_input($password_confirm);?>
+            </div>
+        </div>
+
+        <div class="form-field">
+            <div class="form-label">Phone</div>
+            <div class="form-input">
+                <?php echo form_input($phone1);?>-<?php echo form_input($phone2);?>-<?php echo form_input($phone3);?>
             </div>
         </div>
 
