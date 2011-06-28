@@ -1,13 +1,13 @@
 <div class='mainInfo'>
 
-    <?php echo form_open("auth/login");?>
+    <?php echo form_open(site_url("auth/login", true));?>
         <div class="form-header">
                 Login
         </div>
         <?= $this->session->flashdata('message') ?>
         Please login with your email address and password below.
         <br />
-        Don't have an account? <?= anchor("auth/create_user", "Register") ?>
+        Don't have an account? <?= anchor("auth/create_user", "Register", "", true) ?>
         
         <div id="infoMessage"><?php echo $message; ?></div>
         

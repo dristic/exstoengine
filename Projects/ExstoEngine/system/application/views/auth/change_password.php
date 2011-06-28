@@ -2,7 +2,7 @@
 
 <div id="infoMessage"><?php echo $message;?></div>
 
-<?php echo form_open("auth/change_password");?>
+<?php echo form_open(site_url("auth/change_password", true));?>
 
       <p>Old Password:<br />
       <?php echo form_input($old_password);?>

@@ -6,6 +6,17 @@ function base_url()
 	return check_secure_url($CI->config->slash_item('base_url'));
 }
 
+function site_url($uri = '', $secure = false)
+{
+	$CI =& get_instance();
+	$url = $CI->config->site_url($uri);
+	if($secure == true)
+	{
+		$url = secure_url($url);
+	}
+	return $url;
+}
+
 function anchor($uri = '', $title = '', $attributes = '', $secure = false)
 {
 	$title = (string) $title;
@@ -19,11 +30,10 @@ function anchor($uri = '', $title = '', $attributes = '', $secure = false)
 		$site_url = site_url($uri);
 	}
 	
-	$site_url = check_secure_url($site_url);
-	
+	// If the user passes true, try to secure the url
 	if($secure == true)
 	{
-		$site_url = secure_url($url);
+		$site_url = secure_url($site_url);
 	}
 
 	if ($title == '')

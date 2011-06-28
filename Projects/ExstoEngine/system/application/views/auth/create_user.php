@@ -5,7 +5,7 @@
 	
 	<div id="infoMessage"><?php echo $message; ?></div>
 	
-    <?php echo form_open("auth/create_user");?>
+    <?php echo form_open(site_url("auth/create_user", true));?>
         <div class="form-field">
             <div class="form-label">First Name</div>
             <div class="form-input">

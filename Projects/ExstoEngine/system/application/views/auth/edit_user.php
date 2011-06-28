@@ -5,7 +5,7 @@
 	
 	<div id="infoMessage"><?php echo $message;?></div>
 	
-    <?php echo form_open("admin/edit_user/".$this->uri->segment(3));?>
+    <?php echo form_open(site_url("admin/edit_user/".$this->uri->segment(3), true));?>
       <p>First Name:<br />
       <?php echo form_input($firstName);?>
       </p>

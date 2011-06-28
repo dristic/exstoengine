@@ -42,13 +42,13 @@
                 		<li><?= anchor('download', 'Download') ?></li>
                 		<li>
                 			<?= $this->ion_auth->get_user()->email ?>
-                			<?= anchor("auth/logout", "Logout") ?>
+                			<?= anchor("auth/logout", "Logout", "", true) ?>
                 	 	</li>
                 	 	<?php
                 	}
                 	else
                 	{
-                		?><li><?= anchor("auth/login", "Login") ?></li><?php
+                		?><li><?= anchor("auth/login", "Login", "", true) ?></li><?php
                 	}
                 ?>
             </ul>
