@@ -66,7 +66,7 @@
                 <?php
                   require_once('lib/recaptchalib.php');
                   $publickey = "6LfwlMUSAAAAAMZ4kn5BWb3PxaqlRBGaOTRqzvm6"; // you got this from the signup page
-                  echo recaptcha_get_html($publickey);
+                  echo recaptcha_get_html($publickey, null, true);
                 ?>
             </div>
         </div>

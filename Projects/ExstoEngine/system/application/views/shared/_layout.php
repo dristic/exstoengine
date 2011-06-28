@@ -13,11 +13,9 @@
 	
 	<!-- jQuery library + UI -->
 	<script type="text/javascript" src="<?=base_url().'lib/jquery-1.4.4.min.js'?>"></script>
-	<script type="text/javascript" src="<?=base_url().'lib/jquery-ui-1.8.9.custom.min.js'?>"></script>
-	<link href="<?=base_url().'/lib/css/ui-lightness/jquery-ui-1.8.9.custom.css'?>" rel="stylesheet" type="text/css" />
 	
 	<!--[if IE]>
-    	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    	<script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 </head>
 
