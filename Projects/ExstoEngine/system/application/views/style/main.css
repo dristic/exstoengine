@@ -140,6 +140,11 @@ footer
 	text-align: right;
 }
 
+footer a
+{
+	color: #9e9586;
+}
+
 a {
  color: #003399;
  background-color: transparent;

@@ -62,7 +62,7 @@
 	</section>
 	
 	<footer>
-		© 2011 Shadow Rule LLC.
+		&copy; 2011 Shadow Rule LLC. <?= anchor("legal", "Terms of Service / Privacy Policy") ?>
 	</footer>
 
 </body>
