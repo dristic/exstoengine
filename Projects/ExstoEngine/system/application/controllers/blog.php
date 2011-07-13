@@ -27,7 +27,7 @@ class Blog extends Controller {
 			$this->data['error'] = "There are no blog posts.";
 		}
 		
-		$this->load->view('blog/index', $this->data);
+		$this->template->load('blog/index', $this->data);
 	}
 	
 	function Comments()
@@ -44,7 +44,7 @@ class Blog extends Controller {
 			$this->data['error'] = "There are no comments.";
 		}
 		
-		$this->load->view('blog/comments', $this->data);
+		$this->template->load('blog/comments', $this->data);
 	}
 	
 	function comment_insert()

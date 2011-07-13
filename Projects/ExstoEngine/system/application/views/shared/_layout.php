@@ -32,7 +32,7 @@
             <ul>
                 <li><?= anchor("", "Home") ?></li>
                 <li><?= anchor("", "Documentation") ?></li>
-                <li><?= anchor("", "Blog") ?></li>
+                <li><?= anchor("blog", "Blog") ?></li>
                 <?php 
                 	if($this->ion_auth->logged_in())
                 	{
