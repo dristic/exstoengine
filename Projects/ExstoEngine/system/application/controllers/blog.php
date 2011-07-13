@@ -8,8 +8,9 @@ class Blog extends Controller {
 		
 		$this->load->helper('url');
 		$this->load->helper('form');
+		$this->load->helper('date');
 		
-		$this->load->scaffolding('blog_entries');
+		//$this->load->scaffolding('blog_entries');
 	}
 
 	function index()

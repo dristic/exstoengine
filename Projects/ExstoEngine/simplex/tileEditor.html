@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Tile Editor - Simplex</title>
+		<style type="text/css">
+			#container { position: relative; }
+			#tileView { border: 5px solid: #555; }
+			#colorPalette { border: 5px solid: #555 }
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript" src="tileEditor.js">
+			var editor = new tileEditor();
+			editor.init();
+		</script>
+		<h1>Simplex Tile Editor</h1>
+		<p>
+			<label> Toolbar: 
+				<select id="toolbar">
+					<option value="pencil">Pencil</option>
+					<option value="line">Line</option>
+					<option value="rect">Rectangle</option>
+				</select>
+			</label>
+		</p>
+		<div id="container">
+			<canvas id="tileView" width="400" height="300">
+				<p>It seems your browser wants to keep this canvas all to itself because it is so amazing. Just kidding, your browser doesn't support HTML5.</p>
+				<p>You should try Google Chrome!</p>
+			</canvas>
+		</div>
+		<div id="colorPalette">
+			<canvas id="colorPalette" width="400" height="100">
+				<p> color palette should be here...you must not have HTML5 support.</p>
+			</canvas>
+		</div>
+	</body>
+</html>

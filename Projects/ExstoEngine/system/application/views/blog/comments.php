@@ -25,6 +25,7 @@
 <h3>Submit a Comment:</h3>
 <?=form_open('blog/comment_insert'); ?>
 <?=form_hidden('entry_id', $this->uri->segment(3));?>
+<?=form_hidden('date', date("Y-m-d H:i:s", now()));?>
 
 <p><textarea name="body" rows="10"></textarea></p>
 <p><input type="text" name="author_id"/></p>
