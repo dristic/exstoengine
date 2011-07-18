@@ -33,9 +33,23 @@ class Blog extends Controller {
 	
 	function Comments()
 	{
-		$this->data['title'] = "Comment Title";
-		$this->data['heading'] = "Comment Heading";
-		$this->data['error'] = "";
+		$this->db->where('id', $this->uri->segment(3));
+		$query = $this->db->get('blog_entries');
+		if($query->num_rows() == 1)
+		{
+			foreach($query->result() as $blogEntry)
+			{
+				$this->data['title'] = $blogEntry->title;
+			}
+			$this->data['error'] = "";
+		}
+		else 
+		{
+			$this->data['title'] = "Entry not found";
+			$this->data['error'] = "Blog post not found";
+		}
+		
+		$this->data['heading'] = "Comments";
 		
 		$this->db->where('entry_id', $this->uri->segment(3));
 		$this->data['query'] = $this->db->get('blog_comments');

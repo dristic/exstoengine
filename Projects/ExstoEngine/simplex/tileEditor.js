@@ -219,6 +219,37 @@ if(window.addEventListener) {
 				}
 			};
 		};
+
+		tools.image = function() {
+			var tool = this;		//named self-reference
+			this.started = false;
+			this.ready = false;
+			this.image = new Image();
+			this.image.src = 'imageTest.png';
+			this.image.addEventListener('load', this.ready = true, false);
+			// Mouse Down - start drawing
+			this.mousedown = function(event) {
+				tool.started = true;
+				tool.x0 = event._x;
+				tool.y0 = event._y;
+			};
+			
+			// Mouse Move - continue drawing if mouse down
+			this.mousemove = function(event) {
+				if(tool.ready){
+					contextBuffer.clearRect(0,0, canvasBuffer.width, canvasBuffer.height);				
+					contextBuffer.drawImage(tool.image,event._x, event._y);
+				}
+			};
+			
+			// Mouse Up - stop drawing
+			this.mouseup = function(event) {
+				if(tool.started && tool.ready && tool.x0 == event._x && tool.y0 == event._y){
+					tool.started = false;
+					updateBuffer();
+				}
+			};
+		};
 		
 		init();
 	}, false);
