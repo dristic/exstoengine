@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Map Editor - Simplex</title>
+		<link href="main.css" rel="stylesheet" type="text/css">
+		<link href="tooltip.css" rel="stylesheet" type="text/css">
+		<style type="text/css">
+  			#container { 
+  				position: relative;
+  			}
+  			#mapView { 
+  				position: relative;
+  				display: inline-block;
+  				border: 1px solid #000; 
+  			}
+  			#tileView { 
+  				position: relative;
+  				display: inline-block;
+  				border: 1px solid #000; 
+  			}
+  			#canvasBuffer { 
+  				position: absolute; 
+  				top: 1px; 
+  				left: 1px; 
+  			}
+  			#codeOutput {	
+  				width: auto; 
+  				border: 1px solid #666; 
+  				background-color: #ccc; 
+  				display: none; 
+  				font-family: monospace; 
+  			}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript" src="tooltip.js"></script>
+		<script type="text/javascript" src="mapEditor.js">
+			var editor = new mapEditor();
+			editor.init();			
+		</script>
+		<div id='main'>
+			<h1>Simplex Map Editor</h1>
+			<h3>Early Development Demo</h3>
+			<p>
+				<strong>Controls:</strong>
+				<ul>
+					<li>WASD - move map</li>
+					<li>Scroll Wheel - scroll through tile viewer</li>
+				</ul>
+			</p>
+			<p>
+				<label id="toolbarContainer"> Toolbar: 
+					<select id="toolbar">
+						<option value="pencil">Pencil</option>
+						<option value="line">Line</option>
+						<option value="rect">Rectangle</option>
+						<option value="image">Image</optoin>
+					</select>
+				</label>
+			</p>
+			<p>
+				<div id="codeViewContainer">
+					<button id="codeView">View Code</button>
+					<button id="codeHide">Hide Code</button>
+					<code id="codeOutput"></code>
+				</div>
+			</p>
+			<div id="container">
+				<canvas id="mapView" width="500" height="400">
+					<p>It seems your browser wants to keep this canvas all to itself because it is so amazing. Just kidding, your browser doesn't support HTML5.</p>
+					<p>You should try Google Chrome!</p>
+				</canvas>
+				
+				<canvas id="tileView" width="224" height="400">
+					<p>HTML5 is not supported by this browser.</p>
+				</canvas>
+			</div>
+			<div id="toolOptions">
+				
+			</div>
+		</div>
+	</body>
+</html>

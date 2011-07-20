@@ -1,0 +1,38 @@
+#tooltip 
+{
+    position:absolute;
+    display:block;
+    background-color:#f08920;
+    z-index: 1;
+}
+
+#tooltip-top
+{
+    display:block;
+    height:5px;
+    margin-left:5px;
+    margin-right:5px;
+    background-color:#f08920;
+    overflow:hidden;
+}
+
+#tooltip-content
+{
+    display:block;
+    padding: 2px 12px 3px 7px;
+    margin-left:5px;
+    margin-right:5px;
+    background:#808080;
+    color:#ffffff;
+    font-family: monospace;
+}
+
+#tooltip-bottom
+{
+    display:block;
+    height:5px;
+    margin-left:5px;
+    margin-right:5px;
+    background-color:#f08920;
+    overflow:hidden;
+}
