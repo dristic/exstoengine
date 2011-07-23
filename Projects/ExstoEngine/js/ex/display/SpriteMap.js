@@ -1,6 +1,7 @@
 ex.using([
   "ex.world.TileMap"
 ], function () {
+	ex.namespace("ex.simplex");
 	
 	var SpriteMap = new ex.Class(ex.world.TileMap, {
 		constructor: function(tileWidth, tileHeight, map, img) {

@@ -299,11 +299,11 @@ if(window.addEventListener) {
 				map.yOffset += dy;
 				
 //				if(map.xOffset < minScrollX)
-//					map.xOffset = minScrollX;
-//				if(map.xOffset > maxScrollX)
-//					map.xOffset = maxScrollX;
-//				if(map.yOffset > minScrollY)
-//					map.yOffset = minScrollY;
+//					map.xOffset = minScrollX;				//// Commented out sections are
+//				if(map.xOffset > maxScrollX)				//// for keeping the map from
+//					map.xOffset = maxScrollX;				//// scrolling off the screen.
+//				if(map.yOffset > minScrollY)				
+//					map.yOffset = minScrollY;				//// Commented cuz its broken :D
 //				if(map.yOffset < maxScrollY)
 //					map.yOffset = maxScrollY;
 				
@@ -373,6 +373,7 @@ if(window.addEventListener) {
 			var tileView = this;
 			this.canvas;
 			this.context;
+			this.xOffset;
 			this.yOffset;				// for scrolling through tiles
 			this.tileSetReady;			// bool for state of tileset
 			this.tileSet;				// Image object
@@ -383,6 +384,7 @@ if(window.addEventListener) {
 			this.init = function(filePath) {
 				tileView.canvas = document.getElementById('tileView');
 				tileView.context = tileView.canvas.getContext('2d');
+				tileView.xOffset = 0;
 				tileView.yOffset = 0;
 
 				tileView.tileSetReady = false;			// image related - separate into Image class(?)
@@ -429,6 +431,30 @@ if(window.addEventListener) {
 				// Draw any overlays
 			};
 			
+			this.getTileAt = function(canvasX, canvasY){
+				var tileX = Math.floor((canvasX + tileView.xOffset) / map.tileSize);
+				var tileY = Math.floor((canvasY - tileView.yOffset) / map.tileSize);
+				var tileNumber = tileY * tileView.columnCount + tileX;
+				return tileNumber;
+			};
+			
+			this.drawSelectedTile = function(context, x, y, width, height){
+				var position = tileView.getTilePosition(tileView.selectedTile);
+				context.drawImage(
+						tileView.tileSet,
+						position.x, position.y,
+						map.tileSize, map.tileSize,
+						x, y,
+						width, height);
+				
+			};
+			
+			this.getTilePosition = function(tileNumber){
+				var sourceX = Math.floor(tileNumber % (tileView.tileSet.width / map.tileSize)) * map.tileSize;
+				var sourceY = Math.floor(tileNumber / (tileView.tileSet.width / map.tileSize)) * map.tileSize;
+				return {x: sourceX, y: sourceY};
+			};
+			
 			this.drawTileSet = function(){
 				var counter = tileView.tileCount;
 				var currentTile;
@@ -455,11 +481,17 @@ if(window.addEventListener) {
 			};
 			
 			this.mousemove = function(event){
-				
+				var tileNumber = tileView.getTileAt(event._x, event._y);
+				var message = 'Tile #: ' + tileNumber;
+				tooltip.show(message, 100);
+			};
+			
+			this.mouseout = function(event){
+				tooltip.hide();
 			};
 			
 			this.click = function(event){
-				
+				tileView.selectedTile = tileView.getTileAt(event._x, event._y);
 			};
 			
 			this.mousewheel = function(event){
