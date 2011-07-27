@@ -30,7 +30,7 @@ echo "<h1>$title</h1>"."<h2>$heading</h2>";
 				form_input('title','').
 				form_label('<br>Body:<br>', 'body').
 				form_textarea('body','').'<br>'.
-				form_submit('submit', 'Submit Entry');
+				 '<p><input type="submit" value="Submit Comment"/></p>';
 		}
 		else 
 		{
