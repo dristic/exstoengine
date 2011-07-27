@@ -3,9 +3,10 @@
 <title><?=$title?></title>
 </head>
 <body>
-<h1><?=$title?></h1>
-<h3><?=$heading?></h3>
-<?php 
+<?php
+
+echo "<h1>$title</h1>"."<h2>$heading</h2>";
+ 
 	if ($this->ion_auth->logged_in())
 	{
 		$user = $this->ion_auth->get_user();
@@ -38,7 +39,7 @@
 	}
 	else
 	{
-		echo "<p><strong>You must login before posting comments.</strong></p>";
+		echo "<p><strong>How did you get here? You're not allowed to make new posts...</strong></p>";
 	}
 ?>
 

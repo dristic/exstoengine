@@ -3,9 +3,10 @@
 <title><?=$title?></title>
 </head>
 <body>
-<h1><?=$title?></h1>
-<h2><?=$heading?></h2>
 <?php
+
+echo "<h1>$title</h1>"."<h2>$heading</h2>";
+
 	if ($this->ion_auth->logged_in())
 	{
 		$user = $this->ion_auth->get_user();

@@ -3,13 +3,12 @@
 <title><?=$title?></title>
 </head>
 <body>
-<h1><?=$title?></h1>
-<h3><?=$heading?></h3>
 <?php
 	if ($this->ion_auth->logged_in())
 	{
 		$user = $this->ion_auth->get_user();
 		
+		echo 	"<h1>$title</h1>"."<h2>$heading</h2>";
 		echo 	"<p>Total entries: $rowCount</p>".
 				"<p>$error</p>";
 		
@@ -51,7 +50,7 @@
 	}
 	else
 	{
-		echo "<p><strong>You must login before viewing comments.</strong></p>";
+		echo "<h1>Comments</h1><p><strong>You must login before viewing comments.</strong></p>";
 	}
 ?>
 
