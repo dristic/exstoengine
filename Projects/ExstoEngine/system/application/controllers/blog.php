@@ -10,7 +10,7 @@ class Blog extends Controller {
 		$this->load->helper('form');
 		$this->load->helper('date');
 		
-		//$this->load->scaffolding('blog_entries');
+		$this->load->scaffolding('blog_entries');
 	}
 
 	function index()
@@ -29,6 +29,15 @@ class Blog extends Controller {
 		}
 		
 		$this->template->load('blog/index', $this->data);
+	}
+	
+	function NewEntry()
+	{
+		$this->data['title'] = "ExstoEngine Blog";
+		$this->data['heading'] = "New Blog Entry";
+		$this->data['error'] = "";
+		
+		$this->template->load('blog/newEntry', $this->data);
 	}
 	
 	function Comments()
@@ -65,8 +74,13 @@ class Blog extends Controller {
 	function comment_insert()
 	{
 		$this->db->insert('blog_comments', $_POST);
-		
 		redirect('blog/comments/'.$_POST['entry_id']);
+	}
+	
+	function entry_insert()
+	{
+		$this->db->insert('blog_entries', $_POST);
+		redirect('blog/'.$_POST['id']);
 	}
 }
 
