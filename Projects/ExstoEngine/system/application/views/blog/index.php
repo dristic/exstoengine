@@ -8,9 +8,19 @@
 <?php
 	if ($this->ion_auth->logged_in())
 	{
+		$user = $this->ion_auth->get_user();
 		echo 	"<p>Total entries: $rowCount</p>".
-				"<p>$error</p>".
-				"<p>".anchor('Blog/NewEntry/', 'New Blog Entry')."</p>";
+				"<p>$error</p>";
+		
+		if ($user->group_id == 1)
+		{
+			echo "<p>".anchor('Blog/NewEntry/', 'New Blog Entry')."</p>";
+		}
+		else
+		{
+			echo "<p><strong>You do not have permission to create new blog entries.</strong></p>";
+		}
+		
 		if ($rowCount > 0)
 		{			
 			
@@ -27,7 +37,7 @@
 	}
 	else
 	{
-		echo "<p><strong>You must login before posting comments.</strong></p>";
+		echo "<p><strong>You must login to view this page.</strong></p>";
 	}
 ?>
 </body>
