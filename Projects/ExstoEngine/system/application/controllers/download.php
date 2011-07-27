@@ -4,13 +4,24 @@ class Download extends Controller {
 
 	function Download()
 	{
-		parent::Controller();
+		parent::__construct();
+		$this->load->library('form_validation');
 	}
 	
 	function index()
 	{
 		$this->authentication->authenticate();
 		
-		$this->template->load('download/index');
+		$this->form_validation->set_rules('agree', 'Agree', 'true');
+		
+		if($this->form_validation->run() == false)
+		{
+			$this->data['message'] = validation_errors();
+			$this->template->load('download/index', $this->data);
+		}
+		else
+		{	
+			$this->template->load('download/download');	
+		}
 	}
 }

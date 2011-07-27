@@ -13,11 +13,11 @@ ex.using([
 			this.mouseDown = false;
 			this.mouseUp = false;
 			
-			document.addEventListener("keydown", ex.bind(this.onKeyDown, this));
-			document.addEventListener("keyup", ex.bind(this.onKeyUp, this));
-			document.addEventListener("mousedown", ex.bind(this.onMouseDown, this));
-			document.addEventListener("mouseup", ex.bind(this.onMouseUp, this));
-			document.addEventListener("mousemove", ex.bind(this.onMouseMove, this));
+			document.addEventListener("keydown", ex.bind(this, this.onKeyDown));
+			document.addEventListener("keyup", ex.bind(this, this.onKeyUp));
+			document.addEventListener("mousedown", ex.bind(this, this.onMouseDown));
+			document.addEventListener("mouseup", ex.bind(this, this.onMouseUp));
+			document.addEventListener("mousemove", ex.bind(this, this.onMouseMove));
 		},
 		
 		update: function(dt) {

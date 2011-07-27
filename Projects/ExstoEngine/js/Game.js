@@ -55,7 +55,6 @@
           	], 
   	function () {
 		// Create new sound
-		alert('Includes complete');
 		var snd = new ex.sound.Sound('../assets/sounds/lazer.ogg', 7);
 		
 		//--Startup new engine

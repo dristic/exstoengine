@@ -44,7 +44,7 @@ ex.using([
 				this.camera = new ex.display.Camera();
 				
 				//--Setup update interval
-				_gameInterval = setInterval(ex.bind(this.update, this), (1 / frameRate) * 1000);
+				_gameInterval = setInterval(ex.bind(this, this.update), (1 / frameRate) * 1000);
 			} else {
 				this.logger = new ex.util.Logger();
 				

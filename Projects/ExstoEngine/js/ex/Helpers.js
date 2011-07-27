@@ -6,7 +6,7 @@
 	};
 	    
 	Object.prototype.mixInto = function (mixIn) {
-	    mixIn.forEachIn(ex.bind(_assign, this));
+	    mixIn.forEachIn(ex.bind(this, _assign));
 	};
 	
 	function _assign(name, value) {
