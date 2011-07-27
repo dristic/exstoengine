@@ -19,10 +19,13 @@ class Blog extends Controller {
 		$this->data['heading'] = "Development Notes and Updates";
 		$this->data['error'] = "";
 		
-		$this->db->select('*');
-		$this->db->from('blog_entries');
-		$this->data['query'] = $this->db->get();
-		$this->data['rowCount'] = $this->data['query']->num_rows();
+		$query = $this->db->select('*')
+				 ->from('blog_entries')
+				 ->join('User', 'User.id = blog_entries.author_id')
+				 ->get();
+		
+		$this->data['query'] = $query;
+		$this->data['rowCount'] = $query->num_rows();
 		if($this->data['rowCount'] == 0)
 		{ 	
 			$this->data['error'] = "There are no blog posts.";
