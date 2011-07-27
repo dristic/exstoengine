@@ -10,7 +10,7 @@ echo "<h1>$title</h1>"."<h2>$heading</h2>";
 	if ($this->ion_auth->logged_in())
 	{
 		$user = $this->ion_auth->get_user();
-		echo 	"<p>Total entries: $rowCount</p>".
+		echo 	"<p>Total entries: $entryCount</p>".
 				"<p>$error</p>";
 		
 		if ($user->group_id == 1)
@@ -22,15 +22,14 @@ echo "<h1>$title</h1>"."<h2>$heading</h2>";
 			echo "<p><strong>You do not have permission to create new blog entries.</strong></p>";
 		}
 		
-		if ($rowCount > 0)
+		if ($entryCount > 0)
 		{			
-			
-			foreach($query->result() as $row)
+			foreach($blogEntries as $entry)
 			{
-				echo 	"<h3>$row->title</h3>".
-						"<p>By ". $row->username ." on ".$row->date."</p>".
-						"<p>$row->body</p>".
-						"<p>".anchor('Blog/Comments/'.$row->id,'Comments')."</p>".
+				echo 	"<h3>$entry->title</h3>".
+						"<p>By ". $entry->username ." on ".$entry->date."</p>".
+						"<p>$entry->body</p>".
+						"<p>".anchor('Blog/Comments/'.$entry->id,'Comments')."</p>".
 						"<hr>";
 			}
 		}

@@ -8,17 +8,16 @@
 	{
 		$user = $this->ion_auth->get_user();
 		
-		echo 	"<h1>$title</h1>"."<h2>$heading</h2>";
-		echo 	"<p>Total entries: $rowCount</p>".
+		echo 	"<h1>$blogEntry->title</h1>"."<h2>$heading</h2>";
+		echo 	"<p>Total entries: $commentCount</p>".
 				"<p>$error</p>";
 		
-		if ($rowCount > 0)
+		if ($commentCount > 0)
 		{
-			foreach($query->result() as $row)
+			foreach($comments as $comment)
 			{
-				$rowUser = $this->db->get_where('User', array('id' => $row->author_id), 1)->result();
-				echo 	"<p>By ".$rowUser[0]->username." on ".$row->date."</p>".
-						"<p>$row->body</p>".
+				echo 	"<p>By ".$comment->username." on ".$comment->date."</p>".
+						"<p>$comment->body</p>".
 						"<hr>";
 			}
 		}	

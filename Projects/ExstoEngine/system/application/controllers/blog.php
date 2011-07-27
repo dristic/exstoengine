@@ -10,6 +10,10 @@ class Blog extends Controller {
 		$this->load->helper('form');
 		$this->load->helper('date');
 		
+		$this->load->model('blog/Entry_model', 'entryModel');
+		$this->load->model('blog/Comment_model', 'commentModel');
+		$this->load->model('blog/Tag_model', 'tagModel');
+		
 		//$this->load->scaffolding('blog_entries');
 	}
 
@@ -19,14 +23,9 @@ class Blog extends Controller {
 		$this->data['heading'] = "Development Notes and Updates";
 		$this->data['error'] = "";
 		
-		$query = $this->db->select('*')
-				 ->from('blog_entries')
-				 ->join('User', 'User.id = blog_entries.author_id')
-				 ->get();
-		
-		$this->data['query'] = $query;
-		$this->data['rowCount'] = $query->num_rows();
-		if($this->data['rowCount'] == 0)
+		$this->data['blogEntries'] = $this->entryModel->getAllEntries();
+		$this->data['entryCount'] = count($this->data['blogEntries']);
+		if($this->data['entryCount'] == 0)
 		{ 	
 			$this->data['error'] = "There are no blog posts.";
 		}
@@ -45,15 +44,14 @@ class Blog extends Controller {
 	
 	function Comments()
 	{
-		$this->db->where('id', $this->uri->segment(3));
-		$query = $this->db->get('blog_entries');
-		if($query->num_rows() == 1)
+		$this->data['error'] = "";
+		$queryResults = $this->entryModel->getEntryById($this->uri->segment(3));
+		if(count($queryResults) == 1)
 		{
-			foreach($query->result() as $blogEntry)
+			foreach($queryResults as $blogEntry)
 			{
-				$this->data['title'] = $blogEntry->title;
+				$this->data['blogEntry'] = $blogEntry;
 			}
-			$this->data['error'] = "";
 		}
 		else 
 		{
@@ -62,11 +60,9 @@ class Blog extends Controller {
 		}
 		
 		$this->data['heading'] = "Comments";
-		
-		$this->db->where('entry_id', $this->uri->segment(3));
-		$this->data['query'] = $this->db->get('blog_comments');
-		$this->data['rowCount'] = $this->data['query']->num_rows();
-		if($this->data['rowCount'] == 0)
+		$this->data['comments'] = $this->commentModel->getAllCommentsFor($this->uri->segment(3));
+		$this->data['commentCount'] = count($this->data['comments']);
+		if($this->data['commentCount'] == 0)
 		{ 	
 			$this->data['error'] = "There are no comments.";
 		}
