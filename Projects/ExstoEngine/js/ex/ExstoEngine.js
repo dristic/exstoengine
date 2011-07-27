@@ -19,7 +19,7 @@
 	var _ex;
 	
 	window.ex = _ex = {
-		bind: function (func, object) {
+		bind: function (object, func) {
 			return function() {
 				return func.apply(object, arguments);
 			};
