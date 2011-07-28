@@ -10,7 +10,7 @@
 	
 	if ($canPost)
 	{
-		echo "<p>".anchor('Blog/NewEntry/', 'New Blog Entry')."</p>";
+		echo "<p>".anchor('blog/newEntry/', 'New Blog Entry')."</p>";
 	}
 	
 	if ($entryCount > 0)
@@ -27,7 +27,7 @@
 					"<p>By ". $entry->username ." on ".$entry->date."</p>".
 					"<p>Viewable to ". $entry->tagName ."</p>".
 					"<p>$snippet</p>".
-					"<p>".anchor('Blog/Entry/'.$entry->entryID,'Read More')."</p>".
+					"<p>".anchor('blog/entry/'.$entry->entryID,'Read More')."</p>".
 					"<hr>";
 		}
 	}

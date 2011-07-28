@@ -11,7 +11,7 @@ echo "<h1>$title</h1>"."<h2>$heading</h2>";
 	{
 		$user = $this->ion_auth->get_user();
 		
-		echo "<p>".anchor('Blog','Back to Blog')."</p>";
+		echo "<p>".anchor('blog','Back to Blog')."</p>";
 		
 		if($user->group_id == 1)
 		{

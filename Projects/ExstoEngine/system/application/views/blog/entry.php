@@ -9,7 +9,7 @@
 		echo 	"<h1>$blogEntry->title</h1>".
 				"<h3>By ". $blogEntry->username ." on ". $blogEntry->date ."</h3>".
 				"<p>".$blogEntry->body."</p>".
-				"<p>".anchor('Blog','Back to Blog')."</p>";
+				"<p>".anchor('blog','Back to Blog')."</p>";
 		
 		echo 	"<h2>$heading</h2>".
 				"<p>Total Comments: $commentCount</p>";
@@ -53,7 +53,7 @@
 		echo "<p><strong>You do not have permission to post comments.</strong></p>";
 	}
 
-	echo "<p>".anchor('Blog','Back to Blog')."</p>";
+	echo "<p>".anchor('blog','Back to Blog')."</p>";
 ?>
 
 
