@@ -10,9 +10,25 @@ class Entry_model extends CI_Model
 	function getAllEntries()
 	{
 		$query = $this->db
-			->select('*')
+			->select('blog_entries.id as entryID, User.username as username, blog_tags.group_id as tagGroup, blog_tags.name as tagName, title, body, date, author_id')
 			->from('blog_entries')
 			->join('User', 'User.id = blog_entries.author_id')
+			->join('blog_entry_tags', 'blog_entry_tags.entry_id = blog_entries.id')
+			->join('blog_tags', 'blog_tags.id = blog_entry_tags.tag_id')
+			->get();
+			
+		return $query->result();
+	}
+	
+	function getAllEntriesByGroup($group_id)
+	{
+		$query = $this->db
+			->select('blog_entries.id as entryID, User.username as username, blog_tags.group_id as tagGroup, blog_tags.name as tagName, title, body, date, author_id')
+			->from('blog_entries')
+			->join('User', 'User.id = blog_entries.author_id')
+			->join('blog_entry_tags', 'blog_entry_tags.entry_id = blog_entries.id')
+			->join('blog_tags', 'blog_tags.id = blog_entry_tags.tag_id')
+			->where('blog_tags.group_id >=', $group_id)
 			->get();
 			
 		return $query->result();
@@ -21,8 +37,12 @@ class Entry_model extends CI_Model
 	function getEntryById($id)
 	{
 		$query = $this->db
-			->where('id',$id)
+			->select('blog_entries.id as entryID, User.username as username, blog_tags.group_id as tagGroup, blog_tags.name as tagName, title, body, date, author_id')
 			->from('blog_entries')
+			->where('blog_entries.id',$id)
+			->join('User', 'User.id = blog_entries.author_id')
+			->join('blog_entry_tags', 'blog_entry_tags.entry_id = blog_entries.id')
+			->join('blog_tags', 'blog_tags.id = blog_entry_tags.tag_id')
 			->limit(1)
 			->get();
 			
@@ -37,6 +57,7 @@ class Entry_model extends CI_Model
 	function searchForEntry($search)
 	{
 		$query = $this->db
+			->select('blog_entries.id as entryID, title, body, date, author_id')
 			->from('blog_entries')
 			->like('title', $search)
 			->or_like('body', $search)

@@ -19,11 +19,25 @@ class Blog extends Controller {
 
 	function index()
 	{
+		$user = $this->ion_auth->get_user();
 		$this->data['title'] = "ExstoEngine Blog";
 		$this->data['heading'] = "Development Notes and Updates";
+		$this->data['canPost'] = false;
 		$this->data['error'] = "";
 		
-		$this->data['blogEntries'] = $this->entryModel->getAllEntries();
+		if($this->ion_auth->logged_in())
+		{
+			$this->data['blogEntries'] = $this->entryModel->getAllEntriesByGroup($user->group_id);
+			if($user->group_id == 1)
+			{
+				$this->data['canPost'] = true;
+			}
+		}
+		else 
+		{
+			$this->data['blogEntries'] = $this->entryModel->getAllEntriesByGroup(3); // Public Entries
+		}
+		
 		$this->data['entryCount'] = count($this->data['blogEntries']);
 		if($this->data['entryCount'] == 0)
 		{ 	
@@ -39,23 +53,51 @@ class Blog extends Controller {
 		$this->data['heading'] = "New Blog Entry";
 		$this->data['error'] = "";
 		
+		$tags = $this->tagModel->getAllTags();
+		$tagList;
+		foreach($tags as $tag)
+		{
+			$tagList[$tag->id] = $tag->name;
+		}
+		$this->data['tagList'] = $tagList;
+		
 		$this->template->load('blog/newEntry', $this->data);
 	}
 	
-	function Comments()
+	function Entry()
 	{
+		$this->data['blogEntry'] = null;
+		$this->data['canView'] = false;
+		$this->data['canComment'] = false;
 		$this->data['error'] = "";
+		
 		$queryResults = $this->entryModel->getEntryById($this->uri->segment(3));
 		if(count($queryResults) == 1)
 		{
 			foreach($queryResults as $blogEntry)
 			{
 				$this->data['blogEntry'] = $blogEntry;
+				if($this->ion_auth->logged_in())
+				{
+					$user = $this->ion_auth->get_user();
+					if($user->group_id <= $blogEntry->tagGroup)
+					{
+						$this->data['canView'] = true;
+						$this->data['canComment'] = true;
+					}
+				}
+				else if($blogEntry->tagGroup == 3) //Public entry
+				{
+					$this->data['canView'] = true;
+				}
+				else 
+				{
+					$this->data['error'] = "You do not have permission to view this entry.";
+				}
 			}
 		}
 		else 
 		{
-			$this->data['title'] = "Entry not found";
 			$this->data['error'] = "Blog post not found";
 		}
 		
@@ -67,18 +109,30 @@ class Blog extends Controller {
 			$this->data['error'] = "There are no comments.";
 		}
 		
-		$this->template->load('blog/comments', $this->data);
+		$this->template->load('blog/entry', $this->data);
 	}
 	
 	function comment_insert()
 	{
 		$this->db->insert('blog_comments', $_POST);
-		redirect('blog/comments/'.$_POST['entry_id']);
+		redirect('blog/entry/'.$_POST['entry_id']);
 	}
 	
 	function entry_insert()
 	{
-		$this->db->insert('blog_entries', $_POST);
+		$blog_entry_data;
+		$entry_tag_data;
+		
+		$blog_entry_data['title'] = $_POST['title'];
+		$blog_entry_data['body'] = $_POST['body'];
+		$blog_entry_data['author_id'] = $_POST['author_id'];
+		$blog_entry_data['date'] = $_POST['date'];
+		$this->db->insert('blog_entries', $blog_entry_data);
+				
+		$blog_entry_tag_data['entry_id'] = $this->db->insert_id();
+		$blog_entry_tag_data['tag_id'] = $_POST['tag_id'];
+		$this->db->insert('blog_entry_tags', $blog_entry_tag_data);
+		
 		redirect('blog/'.$_POST['id']);
 	}
 }

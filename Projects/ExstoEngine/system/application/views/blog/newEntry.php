@@ -10,6 +10,7 @@ echo "<h1>$title</h1>"."<h2>$heading</h2>";
 	if ($this->ion_auth->logged_in())
 	{
 		$user = $this->ion_auth->get_user();
+		
 		echo "<p>".anchor('Blog','Back to Blog')."</p>";
 		
 		if($user->group_id == 1)
@@ -30,6 +31,8 @@ echo "<h1>$title</h1>"."<h2>$heading</h2>";
 				form_input('title','').
 				form_label('<br>Body:<br>', 'body').
 				form_textarea('body','').'<br>'.
+				form_label('Tag: ', 'tag_id').
+				form_dropdown('tag_id', $tagList).
 				 '<p><input type="submit" value="Submit Comment"/></p>';
 		}
 		else 

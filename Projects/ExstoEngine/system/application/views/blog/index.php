@@ -4,39 +4,32 @@
 </head>
 <body>
 <?php
-
-echo "<h1>$title</h1>"."<h2>$heading</h2>";
-
-	if ($this->ion_auth->logged_in())
+	echo "<h1>$title</h1>"."<h2>$heading</h2>";
+	echo 	"<p>Total entries: $entryCount</p>".
+			"<p>$error</p>";
+	
+	if ($canPost)
 	{
-		$user = $this->ion_auth->get_user();
-		echo 	"<p>Total entries: $entryCount</p>".
-				"<p>$error</p>";
-		
-		if ($user->group_id == 1)
-		{
-			echo "<p>".anchor('Blog/NewEntry/', 'New Blog Entry')."</p>";
-		}
-		else
-		{
-			echo "<p><strong>You do not have permission to create new blog entries.</strong></p>";
-		}
-		
-		if ($entryCount > 0)
-		{			
-			foreach($blogEntries as $entry)
-			{
-				echo 	"<h3>$entry->title</h3>".
-						"<p>By ". $entry->username ." on ".$entry->date."</p>".
-						"<p>$entry->body</p>".
-						"<p>".anchor('Blog/Comments/'.$entry->id,'Comments')."</p>".
-						"<hr>";
-			}
-		}
+		echo "<p>".anchor('Blog/NewEntry/', 'New Blog Entry')."</p>";
 	}
-	else
-	{
-		echo "<p><strong>You must login to view this page.</strong></p>";
+	
+	if ($entryCount > 0)
+	{	
+		$snippetLength = 100;		
+		foreach($blogEntries as $entry)
+		{
+			$snippet = mb_substr($entry->body, 0, $snippetLength);
+			if(strlen($snippet) == $snippetLength){
+				$snippet = $snippet."...";
+			}
+			
+			echo 	"<h3>$entry->title</h3>".
+					"<p>By ". $entry->username ." on ".$entry->date."</p>".
+					"<p>Viewable to ". $entry->tagName ."</p>".
+					"<p>$snippet</p>".
+					"<p>".anchor('Blog/Entry/'.$entry->entryID,'Read More')."</p>".
+					"<hr>";
+		}
 	}
 ?>
 </body>

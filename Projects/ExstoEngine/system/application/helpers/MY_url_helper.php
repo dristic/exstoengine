@@ -79,7 +79,7 @@ function check_secure_url($url)
 function secure_url($url)
 {
 	return $url;
-	//return str_replace('http://', 'https://', $url);
+	return str_replace('http://', 'https://', $url);
 }
 
 ?>
