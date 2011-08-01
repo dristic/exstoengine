@@ -6,9 +6,8 @@ class Blog extends Controller {
 	{
 		parent::Controller();
 		
-		$this->load->helper('url');
-		$this->load->helper('form');
-		$this->load->helper('date');
+		$this->load->helper(array('url', 'form', 'date'));
+		$this->load->library('form_validation');
 		
 		$this->load->model('blog/Entry_model', 'entryModel');
 		$this->load->model('blog/Comment_model', 'commentModel');
@@ -51,6 +50,7 @@ class Blog extends Controller {
 	{
 		$this->data['title'] = "ExstoEngine Blog";
 		$this->data['heading'] = "New Blog Entry";
+		$this->data['canPost'] = false;
 		$this->data['error'] = "";
 		
 		$tags = $this->tagModel->getAllTags();
@@ -61,7 +61,18 @@ class Blog extends Controller {
 		}
 		$this->data['tagList'] = $tagList;
 		
-		$this->template->load('blog/newEntry', $this->data);
+		
+		$this->form_validation->set_rules('title', 'Title', 'required|min_length[5]|max_length[100]|xss_clean');
+		$this->form_validation->set_rules('body', 'Body', 'required|xss_clean');
+		if($this->form_validation->run() == FALSE)
+		{
+			$this->data['formError'] = validation_errors();
+			$this->template->load('blog/newEntry', $this->data);
+		}
+		else
+		{
+			$this->template->load('blog');
+		}
 	}
 	
 	function Entry()
@@ -120,6 +131,8 @@ class Blog extends Controller {
 	
 	function entry_insert()
 	{
+		
+		
 		$blog_entry_data;
 		$entry_tag_data;
 		
