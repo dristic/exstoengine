@@ -112,6 +112,16 @@ class Blog extends Controller {
 			$this->data['error'] = "Blog post not found";
 		}
 		
+		// Comment form validation
+		$this->form_validation->set_rules('body', 'Body', 'required|xss_clean');
+		if($this->form_validation->run() == false) {
+			$this->data['formError'] = validation_errors();
+		} else {
+			$this->data['formError'] = "";
+			$this->comment_insert($_POST);
+		}
+		
+		// Get all comments for this post
 		$this->data['heading'] = "Comments";
 		$this->data['comments'] = $this->commentModel->getAllCommentsFor($this->uri->segment(3));
 		$this->data['commentCount'] = count($this->data['comments']);
@@ -123,10 +133,9 @@ class Blog extends Controller {
 		$this->template->load('blog/entry', $this->data);
 	}
 	
-	function comment_insert()
+	function comment_insert($post)
 	{
-		$this->db->insert('blog_comments', $_POST);
-		redirect('blog/entry/'.$_POST['entry_id']);
+		$this->db->insert('blog_comments', $post);
 	}
 	
 	function entry_insert()

@@ -1,8 +1,3 @@
-<html>
-<head>
-<title><?=$title?></title>
-</head>
-<body>
 <?php
 	if($canView)
 	{
@@ -41,9 +36,11 @@
 			'date'		=> date("Y-m-d H:i:s", now())
 		);
 		
+		echo '<h1> Submit a comment: </h1>';
 		
-		echo '<h1> Submit a comment: </h1>'.
-			 form_open('blog/comment_insert', $attributes, $hiddenFields).
+		echo "<p>$formError</p>";
+		
+		echo form_open(uri_string(), $attributes, $hiddenFields).
 			 form_label('<br>Body:<br>', 'body').
 			 form_textarea('body','').'<br>'.
 			 '<p><input type="submit" value="Submit Comment"/></p>';
@@ -55,8 +52,3 @@
 
 	echo "<p>".anchor('blog','Back to Blog')."</p>";
 ?>
-
-
-
-</body>
-</html>
