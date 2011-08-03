@@ -20,11 +20,10 @@
 	
 	// Setup base URL for includes
 	ex.config.baseUrl = "../js";
-	
+		
 	ex.using([
           "ex.Engine",
           "ex.world.World",
-          "ex.display.SpriteMap",
           "ex.simplex.LevelEditor",
           "ex.simplex.TileLayer",
           "ex.simplex.ImageLayer"
@@ -40,7 +39,7 @@
 		var _levelEditor = new ex.simplex.LevelEditor(1200, 675, _engine.imageRepository.img.simplexBG);
 
 		_levelEditor.addMapLayer(new ex.simplex.ImageLayer("background", 1000, 625, _engine.imageRepository.img.BG));
-		_levelEditor.addMapLayer(new ex.simplex.TileLayer("tile test", 32, 32, data, _engine.imageRepository.img.Tiles));
+		_levelEditor.addMapLayer(new ex.simplex.TileLayer("main tile layer", 32, 32, data, _engine.imageRepository.img.Tiles));
 		
 		//--Setup rendering
 		_engine.setupCanvas("#000000");
@@ -48,6 +47,4 @@
 		_engine.openWorld(ex.world.World);
 		_engine.currentWorld.addObject(_levelEditor);
 	});
-	
-	
 }());

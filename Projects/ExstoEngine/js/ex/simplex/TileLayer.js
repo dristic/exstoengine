@@ -1,10 +1,11 @@
-(function () {
+ex.using([
+	"ex.simplex.Layer"
+], function () {
 	ex.namespace("ex.simplex");
 	
-	var TileLayer = new ex.Class({
-		constructor: function($name, $tileWidth, $tileHeight, $map, $img){
-			this.name = $name;
-			this.frame = null;
+	var TileLayer = new ex.Class(ex.simplex.Layer, {
+		constructor: function($name, $frame, $tileWidth, $tileHeight, $map, $img){
+			this._super("constructor", [$name, null]);
 			this.spriteMap = new ex.display.SpriteMap($tileWidth, $tileHeight, $map, $img);
 			
 			this.renderBuffer = document.createElement('canvas');
@@ -13,11 +14,10 @@
 			this.bufferContext = this.renderBuffer.getContext('2d');
 		},
 		
-		update: function($dt){
-			
-		},
-		
 		render: function($context, $camX, $camY){
+			if(!this.isVisible())	// Don't render if it won't be seen
+				return;
+			
 			this.bufferContext.clearRect(0,0,this.renderBuffer.width, this.renderBuffer.height);
 			
 			if(!this.frame){
@@ -35,4 +35,4 @@
 	});
 	
 	window.ex.simplex.TileLayer = TileLayer;
-}());
+});

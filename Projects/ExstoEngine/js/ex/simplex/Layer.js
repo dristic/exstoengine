@@ -6,9 +6,14 @@
 			this.name = $name;
 			this.frame = $frame;
 			this.sublayers = new Array();
+			this.visible = true;
+			this.opacity = 1.0;
 		},
 		
 		addLayer: function($layer){
+			$layer.frame = this.frame;
+			$layer.visible = this.visible;
+			$layer.opacity = this.opacity;
 			this.sublayers.push($layer);
 		},
 		
@@ -16,17 +21,26 @@
 			
 		},
 		
-		render: function($context, $camX, $camY){
-			
+		isVisible: function(){
+			if(this.visible && this.opacity > 0.0){
+				return true;
+			} else {
+				return false;
+			}
 		},
 		
-		renderFrame: function($context, $camX, $camY){
-			// Renders the layer with a certain offset and crops the image
-			// at a specific size. (used to keep sublayers within their parent layers)
-			
-			// use this.frame
+		render: function($context, $camX, $camY){
+			if(!this.isVisible())	// Don't render if it won't be seen
+				return;
+		
+			var count = this.sublayers.length;
+			var currentLayer = 0;
+			while(count--){
+				this.sublayers[currentLayer].render($context, $camX, $camY);
+				currentLayer++;
+			}
 		}
 	});
 	
 	ex.simplex.Layer = Layer;
-});
+}());

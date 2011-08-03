@@ -1,5 +1,6 @@
 ex.using([
-	"ex.simplex.MapLayer",
+    "ex.simplex.ImageLayer",
+    "ex.simplex.MapLayer",
 	"ex.simplex.ToolLayer",
 	"ex.simplex.PopupLayer"
 ], function () {
@@ -43,8 +44,6 @@ ex.using([
 			this.mapLayer = new ex.simplex.MapLayer("Map", mapFrame);
 			this.toolLayer = new ex.simplex.ToolLayer("Tool Viewer", toolFrame);
 			this.popupLayer = new ex.simplex.PopupLayer("Popup", popupFrame);
-			
-			
 		},
 		
 		addMapLayer: function($layer){

@@ -96,12 +96,12 @@ ex.using([
 				lifespan: 2,
 				size: 15,
 				alpha: 1,
-				color: '#cef',
+				color: '#ff0',
 				onDraw: function(particle) {
 					var y = -this.age * 100;
 					y = Math.floor(y);
 					particle.size *= 0.98;
-					particle.color = 'rgb(255, ' + (y + 255) + ', 68)';
+					particle.color = this.color;
 					particle.alpha = 0.5 - (particle.age / particle.lifespan * 0.4);
 			    }
 			};
@@ -132,15 +132,11 @@ ex.using([
 			var index = this.particles.length;
 			var emitterMoved = false;
 			if(this.options.position != this.options.lastPosition) {
-				emitterMoved = true;
+				this.particleOptions.position = this.options.position.clone();
+				this.particleOptions.vector = this.options.particleVector.clone();
 				this.options.lastPosition = this.options.position.clone();
 			}
-			while(index--) {
-				if(emitterMoved){
-					this.particleOptions.position = this.options.position.clone();
-					// This does cool whip shit, try it out! (needs low particle velocity is too high)
-					//this.particles[index].position.add(vectorDifference(this.options.origin, this.options.position));
-				}
+			while(index--) {		
 				if(this.particles[index].age > this.particles[index].lifespan) {
 					this.particles.splice(index, 1);
 				} else {
@@ -152,6 +148,7 @@ ex.using([
 			for(var birthCount = 0; birthCount < this.options.spawnSpeed; birthCount++) {
 				if(this.particles.length >= this.options.maxParticles || this.options.active == false) {
 					// Do nothing, no room or emitter inactive
+					// break;
 				} else {
 					this.spawnParticle();
 				}

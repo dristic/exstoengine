@@ -1,20 +1,21 @@
-(function () {
+ex.using([
+    "ex.simplex.Layer"
+], function () {
 	ex.namespace("ex.simplex");
 	
-	var ImageLayer = new ex.Class({		
+	var ImageLayer = new ex.Class(ex.simplex.Layer, {		
 		constructor: function($name, $width, $height, $image){
-			this.name = $name;
+			this._super("constructor", [$name, null]);
+			
 			this.width = $width;
 			this.height = $height;
 			this.image = $image;
-			this.frame = null;
-		},
-		
-		update: function($dt){
-			
 		},
 		
 		render: function($context, $camX, $camY){
+			if(!this.isVisible())	// Don't render if it won't be seen
+				return;
+			
 			if(!this.image){
 				$context.fillStyle = '#888888';
 				if(!this.frame){
@@ -47,4 +48,4 @@
 	});
 	
 	window.ex.simplex.ImageLayer = ImageLayer;
-}());
+});

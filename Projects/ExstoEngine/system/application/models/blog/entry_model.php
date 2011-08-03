@@ -15,6 +15,7 @@ class Entry_model extends CI_Model
 			->join('User', 'User.id = blog_entries.author_id')
 			->join('blog_entry_tags', 'blog_entry_tags.entry_id = blog_entries.id')
 			->join('blog_tags', 'blog_tags.id = blog_entry_tags.tag_id')
+			->order_by('date', 'desc')
 			->get();
 			
 		return $query->result();
@@ -29,6 +30,7 @@ class Entry_model extends CI_Model
 			->join('blog_entry_tags', 'blog_entry_tags.entry_id = blog_entries.id')
 			->join('blog_tags', 'blog_tags.id = blog_entry_tags.tag_id')
 			->where('blog_tags.group_id >=', $group_id)
+			->order_by('date', 'desc')
 			->get();
 			
 		return $query->result();

@@ -22,7 +22,7 @@ echo "<h1>$title</h1>"."<h2>$heading</h2>";
 			
 			
 			echo '<h1> Submit a blog entry: </h1>'.
-				form_open('blog/entry_insert', $attributes, $hiddenFields).
+				form_open('blog/NewEntry', $attributes, $hiddenFields).
 				form_label('Title:','title').
 				form_input('title','').
 				form_label('<br>Body:<br>', 'body').

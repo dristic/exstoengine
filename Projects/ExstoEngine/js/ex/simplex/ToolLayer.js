@@ -1,25 +1,19 @@
-(function () {
+ex.using([
+    "ex.simplex.Layer"          
+], function () {
 	ex.namespace("ex.simplex");
 	
-	var ToolLayer = new ex.Class({
+	var ToolLayer = new ex.Class(ex.simplex.Layer, {
 		constructor: function($name, $frame){
-			this.name = $name;
-			this.frame = $frame;
-			this.sublayers = new Array();
+			this._super("constructor", [$name, $frame]);
 			
 			this.addLayer(new ex.simplex.ImageLayer("Tool Viewer BG", 800, 500, null));
 		},
 		
-		addLayer: function($layer){
-			$layer.frame = this.frame;
-			this.sublayers.push($layer);
-		},
-		
-		update: function($dt){
-			
-		},
-		
 		render: function($context, $camX, $camY){
+			if(!this.isVisible())
+				return;
+			
 			var count = this.sublayers.length;
 			var currentLayer = 0;
 			while(count--){
@@ -36,4 +30,4 @@
 	});
 	
 	window.ex.simplex.ToolLayer = ToolLayer;
-}());
+});

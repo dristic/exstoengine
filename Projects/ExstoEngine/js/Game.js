@@ -91,40 +91,39 @@
 		var collisionMap = new ex.world.CollisionMap(32, 32, colData);
 		
 		var jetPackOffset = new ex.base.Vector(5,20);
-		var jetPackEmitter = new ex.plugins.Emitter2({
-			position: player.position.clone().add(jetPackOffset),
-			particleVector: new ex.base.Vector(0, 100),
-			angleVariance: Math.PI / 8,
-			spawnSpeed: 30,
-			sizeVariance: 4
-		}, 
-		{	lifespan: 0.2,
-			size: 10 });
+		var jetPackBaseVector = new ex.base.Vector(0, 100);
+		var jetPackEmitter = new ex.plugins.Emitter2(
+			{   position: player.position.clone().add(jetPackOffset.clone()),
+				particleVector: jetPackBaseVector.clone(),
+				angleVariance: Math.PI / 12,
+				spawnSpeed: 30,
+				sizeVariance: 4
+			}, 
+			{	lifespan: 0.2,
+				size: 10,
+				color: '#fa0'
+			}
+		);
 		_engine.currentWorld.addObject(jetPackEmitter);
 		
 		player.onUpdate = function(dt) {
 			if(_engine.input.isKeyPressed(ex.util.Key.Spacebar)) {
 				//--Jump
 				this.velocity.y -= playerSpeed * 75;
+				jetPackEmitter.options.active = true;
 			}
 			
 			if(_engine.input.isKeyDown(ex.util.Key.S)) {
 				//--Crouch
 				this.velocity.y += playerSpeed;
-				this.play("Walk");
-				jetPackEmitter.options.active = true;
 			}
 			
 			if(_engine.input.isKeyDown(ex.util.Key.A)) {
 				this.velocity.x -= playerSpeed;
-				this.play("Walk");
-				jetPackEmitter.options.active = true;
 			}
 			
 			if(_engine.input.isKeyDown(ex.util.Key.D)) {
 				this.velocity.x += playerSpeed;
-				this.play("Walk");
-				jetPackEmitter.options.active = true;
 			}
 			
 			if(_engine.input.isKeyPressed(ex.util.Key.J)) {
@@ -133,10 +132,21 @@
 			
 			if(this.velocity.x < 0.5 && this.velocity.x > -0.5){
 				this.play("Stand");
+			} else {
+				this.play("Walk");
+			}
+			
+			if(this.velocity.y > 0){
+				jetPackEmitter.options.active = true;
+			} else if(this.velocity.y == 0) {
 				jetPackEmitter.options.active = false;
 			}
 			
+			
 			this.velocity.y += playerSpeed;
+			jetPackEmitter.options.position = player.position.clone().add(jetPackOffset);
+			jetPackEmitter.options.particleVector = jetPackBaseVector.clone();
+			jetPackEmitter.options.particleVector.add(new ex.base.Vector(this.velocity.x, this.velocity.y));
 			
 			var collision = collisionMap.collide(
 					dt, 

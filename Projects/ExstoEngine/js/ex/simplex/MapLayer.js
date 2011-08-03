@@ -1,31 +1,13 @@
-(function () {
+ex.using([
+   "ex.simplex.Layer"       
+], function () {
 	ex.namespace("ex.simplex");
 	
-	var MapLayer = new ex.Class({
+	var MapLayer = new ex.Class(window.ex.simplex.Layer, {
 		constructor: function($name, $frame){
-			this.name = $name;
-			this.frame = $frame;
-			this.sublayers = new Array();
-		},
-		
-		addLayer: function($layer){
-			$layer.frame = this.frame;
-			this.sublayers.push($layer);
-		},
-		
-		update: function($dt){
-			
-		},
-		
-		render: function($context, $camX, $camY){
-			var count = this.sublayers.length;
-			var currentLayer = 0;
-			while(count--){
-				this.sublayers[currentLayer].render($context, $camX, $camY);
-				currentLayer++;
-			}
+			this._super("constructor", [$name, $frame]);
 		}
 	});
 	
 	window.ex.simplex.MapLayer = MapLayer;
-}());
+});
