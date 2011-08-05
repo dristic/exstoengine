@@ -1,8 +1,5 @@
 ex.using([
     "ex.simplex.ImageLayer",
-    "ex.simplex.MapLayer",
-	"ex.simplex.ToolLayer",
-	"ex.simplex.PopupLayer"
 ], function () {
 	ex.namespace("ex.simplex");
 	
@@ -41,9 +38,9 @@ ex.using([
 			};
 			
 			this.backgroundLayer = new ex.simplex.ImageLayer("Background", $width, $height, $bgImage);
-			this.mapLayer = new ex.simplex.MapLayer("Map", mapFrame);
-			this.toolLayer = new ex.simplex.ToolLayer("Tool Viewer", toolFrame);
-			this.popupLayer = new ex.simplex.PopupLayer("Popup", popupFrame);
+			this.mapLayer = new ex.simplex.Layer("Map", mapFrame);
+			this.toolLayer = new ex.simplex.Layer("Tool Viewer", toolFrame);
+			this.popupLayer = new ex.simplex.Layer("Popup", popupFrame);
 		},
 		
 		addMapLayer: function($layer){

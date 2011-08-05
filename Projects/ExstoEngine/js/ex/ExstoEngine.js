@@ -54,31 +54,68 @@
 		},
 		
 		using: function (namespaces, func) {
-			if(ex.ready == true) {
-				var i = -1;
-				while(++i < namespaces.length)
-				{
-					var namespace = namespaces[i];
-					
-					// Check if namespaces are loaded
-					if(this._namespaces[namespace] != null) {
-						// Do nothing
-					} else {
-						// If they are not loaded, import them
-						this._importNamespace(namespace, func);
-					}
-				}
-				
-				ex.loader.startQueue(func);
-			} else {
+			if(!ex.ready) {
 				// Preload if not already
 				preload();
 				
-				ex.onReady(function () {
-					ex.using(namespaces, func);
+				ex.onReady(function () { 
+					ex.using(namespaces, func); 
 				});
+				return;
+			}
+			
+			if(namespaces == null){
+				func();
+				return;
+			}
+			
+			var i = -1;
+			var j = -1;
+			while(++i < namespaces.length){
+				// Break up namespace by '.'
+				var parts = namespaces[i].split(".");
+				// Build file url
+				var fileUrl = ex.config.baseUrl;
+				
+				j = -1;
+				while(++j < parts.length) {
+					fileUrl += "/" + parts[j];
+				}
+				fileUrl += '.js';
+				//alert(fileUrl + "\n\n" + func);
+				
+				// Write script object
+				var scriptTag = ex.helpers.createScriptTag(fileUrl);
+				scriptTag.onload = function(){func();};
 			}
 		},
+		
+//		using: function (namespaces, func) {
+//			if(ex.ready == true) {
+//				var i = -1;
+//				while(++i < namespaces.length)
+//				{
+//					var namespace = namespaces[i];
+//					
+//					// Check if namespaces are loaded
+//					if(this._namespaces[namespace] != null) {
+//						// Do nothing
+//					} else {
+//						// If they are not loaded, import them
+//						this._importNamespace(namespace, func);
+//					}
+//				}
+//				
+//				ex.loader.startQueue(func);
+//			} else {
+//				// Preload if not already
+//				preload();
+//				
+//				ex.onReady(function () {
+//					ex.using(namespaces, func);
+//				});
+//			}
+//		},
 		
 		_importNamespace: function(namespace, func) {
 			// Break up namespace by '.'

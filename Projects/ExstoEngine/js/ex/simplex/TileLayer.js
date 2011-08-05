@@ -1,5 +1,6 @@
 ex.using([
-	"ex.simplex.Layer"
+	"ex.simplex.Layer",
+	"ex.display.SpriteMap"
 ], function () {
 	ex.namespace("ex.simplex");
 	

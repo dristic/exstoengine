@@ -1,5 +1,5 @@
 ex.using([
-    "ex.simplex.Layer"          
+   "ex.simplex.Layer"          
 ], function () {
 	ex.namespace("ex.simplex");
 	
@@ -29,5 +29,5 @@ ex.using([
 		}
 	});
 	
-	window.ex.simplex.ToolLayer = ToolLayer;
+	ex.simplex.ToolLayer = ToolLayer;
 });
