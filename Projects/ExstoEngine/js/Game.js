@@ -165,25 +165,6 @@
 		
 		_engine.camera.follow(player);
 		
-		//var emitter = new ex.display.Emitter({});
-		//_engine.currentWorld.addObject(emitter);
-		
-		/**
-		 * The object function is at ExstoEngine.js:4, Array.prototype.contains
-		 * Uncaught TypeError: Object function (item) {
-					var i = this.length;
-					while(i--) {
-						if(this[i] === item) {
-							return true;
-						}
-					}
-					return false;
-				} has no method 'update'
-			Emitter.ex.Class.updateParticleSystem.js:195
-			World.ex.Class.updateWorld.js:13
-			window.ex.Engine.ex.Class.updateEngine.js:85
-			window.ex._ex.bindExstoEngine.js:24
-		 */
 		var newEmitter = new ex.plugins.Emitter2({}, {});
 		_engine.currentWorld.addObject(newEmitter);
 		

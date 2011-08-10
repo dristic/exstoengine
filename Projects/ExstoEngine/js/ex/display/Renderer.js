@@ -4,6 +4,7 @@
 	var Renderer = new ex.Class({
 		constructor: function (width, height, bgColor, canvas) {
 			this.canvas = canvas || document.createElement("canvas");
+			this.canvas.id = "mainCanvas";
 			this.canvas.width = width;
 			this.canvas.height = height;
 			this.canvas.style.backgroundColor = bgColor;

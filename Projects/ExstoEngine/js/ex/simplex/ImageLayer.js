@@ -44,6 +44,10 @@ ex.using([
 							this.frame.width, this.frame.height);
 				}
 			}
+			
+			for(var sublayer in this.sublayers){
+				sublayer.render($context, $camX, $camY);
+			}
 		}
 	});
 	

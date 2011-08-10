@@ -15,6 +15,10 @@ ex.using([
 			this.bufferContext = this.renderBuffer.getContext('2d');
 		},
 		
+		getTileAt: function($x, $y){
+			return this.spriteMap.getTile($x, $y);
+		},
+		
 		render: function($context, $camX, $camY){
 			if(!this.isVisible())	// Don't render if it won't be seen
 				return;

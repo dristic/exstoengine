@@ -64,7 +64,7 @@
 				return;
 			}
 			
-			if(namespaces == null){
+			if(typeof namespaces == 'undefined'){
 				func();
 				return;
 			}
@@ -85,9 +85,9 @@
 				//alert(fileUrl + "\n\n" + func);
 				
 				// Write script object
-				var scriptTag = ex.helpers.createScriptTag(fileUrl);
-				scriptTag.onload = function(){func();};
+				var scriptTag = ex.sjaxScript(fileUrl);
 			}
+			func();
 		},
 		
 //		using: function (namespaces, func) {
@@ -169,6 +169,28 @@
 					onLoad();
 				};
 			}
+		},
+		
+		sjaxScript: function(fileName) {
+			if (window.XMLHttpRequest) {              
+				var xmlhttp=new XMLHttpRequest();              
+			} else {                                  
+				xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+			}
+			if (xmlhttp) {
+				xmlhttp.open("GET", ex.config.baseUrl + fileName, false);                             
+				xmlhttp.send(null);
+				
+				var head = document.getElementsByTagName("head").item(0);
+				var script = document.createElement("script");
+				script.language = "javascript";
+				script.type = "text/javascript";
+				script.defer = true;
+				script.text = xmlhttp.responseText;
+				head.appendChild(script);                                        
+			} else {
+				alert("Could not load: " + ex.config.baseUrl + fileName);
+			}                                             
 		},
 		
 		ajaxScript: function (fileName) {

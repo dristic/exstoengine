@@ -8,6 +8,7 @@ ex.using([
 			this._super("constructor", [$name, $frame]);
 			
 			this.addLayer(new ex.simplex.ImageLayer("Tool Viewer BG", 800, 500, null));
+			
 		},
 		
 		render: function($context, $camX, $camY){
