@@ -19,7 +19,7 @@
 			];
 	
 	// Setup base URL for includes
-	ex.config.baseUrl = "../js";
+	ex.config.baseUrl = "../js/";
 		
 	ex.using([
           "ex.Engine",
@@ -39,12 +39,30 @@
 		var _levelEditor = new ex.simplex.LevelEditor(1200, 675, _engine.imageRepository.img.simplexBG);
 
 		_levelEditor.addMapLayer(new ex.simplex.ImageLayer("background", 1000, 625, _engine.imageRepository.img.BG));
-		_levelEditor.addMapLayer(new ex.simplex.TileLayer("main tile layer", 32, 32, data, _engine.imageRepository.img.Tiles));
+		_levelEditor.addMapLayer(new ex.simplex.TileLayer("main tile layer", _levelEditor.frame, 32, 32, data, _engine.imageRepository.img.Tiles));
 		
 		//--Setup rendering
 		_engine.setupCanvas("#000000");
 		_engine.enableDebugging();
 		_engine.openWorld(ex.world.World);
 		_engine.currentWorld.addObject(_levelEditor);
+		
+		_levelEditor.update = function(dt) {
+			if(_engine.input.isKeyPressed(ex.util.Key.Keyb1)) {
+				_levelEditor.toggleMapLayer(0);
+			}
+			if(_engine.input.isKeyPressed(ex.util.Key.Keyb2)) {
+				_levelEditor.toggleMapLayer(1);
+			}
+			
+			var mouseX = _engine.input.mouseX;
+			var mouseY = _engine.input.mouseY;
+			var mapFrame = _levelEditor.mapLayer.frame;
+			if(mouseX > mapFrame.topLeftX && mouseX < (mapFrame.topLeftX + mapFrame.width) &&
+					mouseY > mapFrame.topLeftY && mouseY < (mapFrame.topLeftY + mapFrame.height)){
+				console.log(_levelEditor.mapLayer.sublayers[1].spriteMap.getTile(mouseX - mapFrame.topLeftX, mouseY - mapFrame.topLeftY));
+			}
+			
+		};
 	});
 }());

@@ -26,6 +26,7 @@
 		},
 		
 		_namespaces: {},
+		_classes: {},
 		_listeners: {},
 		ready: false,
 		
@@ -54,67 +55,83 @@
 		},
 		
 		using: function (namespaces, func) {
+			// If ex is not setup, wait to rerun this function
 			if(!ex.ready) {
-				// Preload if not already
-				preload();
-				
-				ex.onReady(function () { 
-					ex.using(namespaces, func); 
+				ex.onReady(function() {
+					ex.using(namespaces, func);
 				});
 				return;
 			}
 			
+			// If the class has no dependencies, load it and return
 			if(typeof namespaces == 'undefined'){
-				func();
+				this.createClass(func);
 				return;
 			}
-			
-			var i = -1;
-			var j = -1;
-			while(++i < namespaces.length){
-				// Break up namespace by '.'
-				var parts = namespaces[i].split(".");
-				// Build file url
-				var fileUrl = ex.config.baseUrl;
-				
-				j = -1;
-				while(++j < parts.length) {
-					fileUrl += "/" + parts[j];
-				}
-				fileUrl += '.js';
-				//alert(fileUrl + "\n\n" + func);
-				
-				// Write script object
-				var scriptTag = ex.sjaxScript(fileUrl);
+			var index = namespaces.length;
+			while(index--){
+				var namespace = namespaces[index];
+				if(typeof this._namespaces[namespace] == 'undefined'){
+					this._importNamespace(namespace, func);
+					this.addRelationship(namespace, func);
+				}				
 			}
-			func();
+			ex.loader.startQueue(func);
+		},
+		
+		// Create relationship between the namespace and class (func)
+		// for forward and reverse lookup
+		addRelationship: function (namespace, func){
+			if(!this._namespaces[namespace])		// Add Namespace -> Class relation
+				this._namespaces[namespace] = [];
+			this._namespaces[namespace].push(func);
+			
+			if(!this._classes[func])				// Add Class -> Namespace relation
+				this._classes[func] = [];
+			this._classes[func].push(namespace);
+		},
+		
+		// Defines func and creates it if all dependencies are met.
+		// If dependencies are not met, it attempts to create those first.
+		createClass: function (func){
+			
 		},
 		
 //		using: function (namespaces, func) {
-//			if(ex.ready == true) {
-//				var i = -1;
-//				while(++i < namespaces.length)
-//				{
-//					var namespace = namespaces[i];
-//					
-//					// Check if namespaces are loaded
-//					if(this._namespaces[namespace] != null) {
-//						// Do nothing
-//					} else {
-//						// If they are not loaded, import them
-//						this._importNamespace(namespace, func);
-//					}
-//				}
-//				
-//				ex.loader.startQueue(func);
-//			} else {
+//			if(!ex.ready) {
 //				// Preload if not already
 //				preload();
 //				
-//				ex.onReady(function () {
-//					ex.using(namespaces, func);
+//				ex.onReady(function () { 
+//					ex.using(namespaces, func); 
 //				});
+//				return;
 //			}
+//			
+//			if(typeof namespaces == 'undefined'){
+//				func();
+//				return;
+//			}
+//			
+//			var i = -1;
+//			var j = -1;
+//			while(++i < namespaces.length){
+//				// Break up namespace by '.'
+//				var parts = namespaces[i].split(".");
+//				// Build file url
+//				var fileUrl = ex.config.baseUrl;
+//				
+//				j = -1;
+//				while(++j < parts.length) {
+//					fileUrl += "/" + parts[j];
+//				}
+//				fileUrl += '.js';
+//				//alert(fileUrl + "\n\n" + func);
+//				
+//				// Write script object
+//				var scriptTag = ex.sjaxScript(fileUrl);
+//			}
+//			func();
 //		},
 		
 		_importNamespace: function(namespace, func) {
@@ -171,28 +188,7 @@
 			}
 		},
 		
-		sjaxScript: function(fileName) {
-			if (window.XMLHttpRequest) {              
-				var xmlhttp=new XMLHttpRequest();              
-			} else {                                  
-				xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-			}
-			if (xmlhttp) {
-				xmlhttp.open("GET", ex.config.baseUrl + fileName, false);                             
-				xmlhttp.send(null);
-				
-				var head = document.getElementsByTagName("head").item(0);
-				var script = document.createElement("script");
-				script.language = "javascript";
-				script.type = "text/javascript";
-				script.defer = true;
-				script.text = xmlhttp.responseText;
-				head.appendChild(script);                                        
-			} else {
-				alert("Could not load: " + ex.config.baseUrl + fileName);
-			}                                             
-		},
-		
+		// AJAX: adds script tag to DOM
 		ajaxScript: function (fileName) {
 			//--Use ajax call to grab a script and append it to the document
 			var xmlhttp;
@@ -313,6 +309,17 @@
 	};
 	
 	function preload() {
+		var head = document.getElementsByTagName('head')[0];
+		var scripts = head.getElementsByTagName('script');
+		var pattern = new RegExp(/ExstoEngine\.js/);
+		var i = scripts.length;
+		while(i--){
+			var script = scripts[i];
+			if(pattern.test(script.src) == true){
+				ex.config.baseUrl = script.src.split("/ex/ExstoEngine.js", 1)[0];
+			}
+		}
+		
 		// Manually load base classes before anything else
 		ex._importNamespace("ex.Class", startEngine);
 		ex._importNamespace("ex.Helpers", startEngine);
@@ -324,5 +331,7 @@
 		ex.ready = true;
 		ex._fire("ready");
 	}
+	
+	preload();
 	
 })(window);
