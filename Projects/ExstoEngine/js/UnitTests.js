@@ -10,7 +10,7 @@ test("Class Definitions", function(){
 	ex.define("ex.DoobieSnack", {
 		constructor: function(){
 			this.doobieCount = 10;
-		},
+		}
 	});
 	ok(typeof ex.DoobieSnack != 'undefined', "ex.DoobieSnack included (base class)");
 	

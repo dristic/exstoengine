@@ -60,6 +60,7 @@
 		var _base = base.clone();
 		function NewClass() {
 			// empty function to hold new class
+			base.apply(this);
 		};
 
 		// Set constructor: Priority on extension, then base class
