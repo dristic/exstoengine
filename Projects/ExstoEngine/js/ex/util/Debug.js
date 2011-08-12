@@ -1,6 +1,6 @@
-(function() {
-	ex.namespace("ex.util");
-	
+ex.using([
+  'ex.base.Component'
+], function() {
 	function average(array) {
 		var ret = 0;
 		
@@ -14,7 +14,7 @@
 		return ret;
 	}
 	
-	var Debug = new ex.Class(ex.base.Component, {
+	ex.define("ex.util.Debug", ex.base.Component, {
 		constructor: function() {
 			this.domElement = document.createElement("div");
 			this.domElement.style.backgroundColor = "#222526";
@@ -82,7 +82,4 @@
 			}
 		}
 	});
-	
-	window.ex.util.Debug = Debug;
-	
-}());
+});

@@ -1,9 +1,7 @@
 ex.using([
   "ex.base.Vector"
 ], function () {
-	ex.namespace("ex.display");
-	
-    window.ex.display.Sprite = new ex.Class({
+	ex.define("ex.display.Sprite", {
         constructor: function (x, y, img) {
             this.x = x || 0;
             this.y = y || 0;

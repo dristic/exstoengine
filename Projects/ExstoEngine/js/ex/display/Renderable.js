@@ -1,7 +1,5 @@
 (function() {
-	ex.namespace("ex.display");
-	
-	var Renderable = new ex.Class({
+	ex.define("ex.display.Renderable", {
 		constructor: function() {
 			
 		},
@@ -14,7 +12,4 @@
 			
 		}
 	});
-	
-	window.ex.display.Renderable = Renderable;
-	
 }());

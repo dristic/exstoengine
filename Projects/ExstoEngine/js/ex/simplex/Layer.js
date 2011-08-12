@@ -1,7 +1,5 @@
 (function () {
-	ex.namespace("ex.simplex");
-	
-	var Layer = new ex.Class({
+	ex.define("ex.simplex.Layer", {
 		constructor: function($name, $frame){
 			this.name = $name;
 			this.frame = $frame;
@@ -41,6 +39,4 @@
 			}
 		}
 	});
-	
-	ex.simplex.Layer = Layer;
 }());

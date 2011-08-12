@@ -1,6 +1,5 @@
 (function () {
-	
-	var TileMap = new ex.Class({
+	ex.define("ex.world.TileMap", {
 		constructor: function(tileWidth, tileHeight, map) {
 			this.tileWidth = tileWidth;
 			this.tileHeight = tileHeight;
@@ -23,7 +22,4 @@
 			this.map[y][x] = value;
 		}
 	});
-	
-	window.ex.world.TileMap = TileMap;
-	
 }());

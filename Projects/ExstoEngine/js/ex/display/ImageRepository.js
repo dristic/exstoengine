@@ -1,7 +1,5 @@
 (function () {
-	ex.namespace("ex.display");
-	
-	var ImageRepository = new ex.Class({
+	ex.define("ex.display.ImageRepository", {
 		constructor: function () {
 			this.img = [];
 			this.ready = true;
@@ -26,8 +24,5 @@
 			this.img[$name].src = "";
 			this.img[$name].src = $dir;
 		}
-	});
-	
-	window.ex.display.ImageRepository = ImageRepository;
-	
+	});	
 }());

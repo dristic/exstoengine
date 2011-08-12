@@ -1,9 +1,7 @@
 ex.using([
   "ex.world.TileMap"
 ], function () {
-	ex.namespace("ex.simplex");
-	
-	var SpriteMap = new ex.Class(ex.world.TileMap, {
+	ex.define("ex.display.SpriteMap", ex.world.TileMap, {
 		constructor: function(tileWidth, tileHeight, map, img) {
 			this.img = img;
 			this.x = 0;
@@ -43,7 +41,4 @@ ex.using([
 			}
 		}
 	});
-	
-	window.ex.display.SpriteMap = SpriteMap;
-	
 });

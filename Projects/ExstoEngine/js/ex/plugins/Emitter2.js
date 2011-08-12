@@ -23,8 +23,6 @@ ex.using([
   "ex.base.Vector",
   "ex.plugins.Particle2"
 ], function () {
-	ex.namespace("ex.plugins");
-	
 	function vary(n) {
 		return (Math.random() * n) - n / 2;
 	};
@@ -70,7 +68,7 @@ ex.using([
 	/*
 	 * Emitter Class
 	 */
-	var Emitter = new ex.Class({
+	ex.define("ex.plugins.Emitter2", {
 		constructor: function(emitterOptions, particleOptions) {
 			/* Set Emitter default options and extend new options */
 			var defaults = {
@@ -172,5 +170,4 @@ ex.using([
 			}
 		}
 	});
-	window.ex.plugins.Emitter2 = Emitter;
 });

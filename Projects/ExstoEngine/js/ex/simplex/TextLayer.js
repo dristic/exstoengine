@@ -1,9 +1,7 @@
 ex.using([
    "ex.simplex.Layer"
 ], function () {
-	ex.namespace("ex.simplex");
-	
-	var TextLayer = new ex.Class(ex.simplex.Layer, {
+	ex.define("ex.simplex.TextLayer", ex.simplex.Layer, {
 		constructor: function($name, $frame, $text, $options){
 			this._super("constructor", [$name, $frame]);
 			this.text = $text;
@@ -27,6 +25,4 @@ ex.using([
 		    $context.fillText(this.text, x, y);
 		}
 	});
-	
-	ex.simplex.TextLayer = TextLayer;
 });

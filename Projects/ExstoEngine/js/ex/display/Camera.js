@@ -1,7 +1,5 @@
 (function () {
-	ex.namespace("ex.display");
-	
-	var Camera = new ex.Class({
+	ex.define("ex.display.Camera", {
 		constructor: function() {
 			this.x = 0;
 			this.y = 0;
@@ -20,7 +18,4 @@
 			this.following = object;
 		}
 	});
-	
-	window.ex.display.Camera = Camera;
-	
 }());

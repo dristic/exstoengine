@@ -4,9 +4,7 @@ ex.using([
     "ex.simplex.ToolLayer",
     "ex.simplex.PopupLayer"
 ], function () {
-	ex.namespace("ex.simplex");
-	
-	var LevelEditor = new ex.Class({
+	ex.define("ex.simplex.LevelEditor", {
 		constructor: function($width, $height, $bgImage){
 			this.xOffset = 0;
 			this.yOffset = 0;
@@ -66,6 +64,4 @@ ex.using([
 			this.popupLayer.render($context, $camX, $camY);
 		}
 	});
-	
-	window.ex.simplex.LevelEditor = LevelEditor;
 });

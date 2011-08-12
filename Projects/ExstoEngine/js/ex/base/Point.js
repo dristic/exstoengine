@@ -1,6 +1,5 @@
 (function () {
-	
-	var Point = new ex.Class({
+	ex.define("ex.base.Point", {
 		constructor: function(x, y) {
 			this.x = x;
 			this.y = y;
@@ -15,8 +14,5 @@
 			this.x -= other.x;
 			this.y -= other.y;
 		}
-	});
-	
-	window.ex.base.Point = Point;
-	
+	});	
 }());

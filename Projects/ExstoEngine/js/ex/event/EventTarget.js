@@ -32,7 +32,7 @@ ex.using([
 	};
 	
 	// The extendable event target object
-    window.ex.event.EventTarget = new ex.Class({
+    ex.define("ex.event.EventTarget", {
         constructor: function () {
         	this._listeners = [];
         },

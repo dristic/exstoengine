@@ -1,6 +1,5 @@
 (function () {
-	
-	var Rectangle = new ExstoEngine.Base.Class(null, {
+	ex.define("ex.base.Rectangle", {
 		constructor: function(x, y, width, height) {
 			this.x = x;
 			this.y = y;
@@ -32,7 +31,4 @@
 			return this;
 		}
 	});
-	
-	window.ExstoEngine.Base.Rectangle = Rectangle;
-	
 }());

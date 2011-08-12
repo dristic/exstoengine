@@ -1,7 +1,5 @@
 (function () {
-	ex.namespace("ex.util");
-	
-	var Logger = new ex.Class({
+	ex.define("ex.util.Logger", {
 		constructor: function() {
 			this.textLog = "--Logger Enabled \n";
 		},
@@ -10,7 +8,4 @@
 			this.textLog += "- " + message + "<br />";
 		}
 	});
-	
-	window.ex.util.Logger = Logger;
-	
 }());

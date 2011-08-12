@@ -1,8 +1,6 @@
 ex.using([
   "ex.base.Vector"
 ], function () {
-	ex.namespace("ex.display");
-	
 	function vary(n) {
 		return (Math.random() * n << 1) - n;
 	};
@@ -13,7 +11,7 @@ ex.using([
 		}
 	}
 	
-	var Particle = new ex.Class({
+	ex.define("ex.display.Particle", {
 		constructor: function(options) {
 			var defaults = {
 				position: new ex.base.Vector(0, 0),
@@ -70,8 +68,5 @@ ex.using([
 	        
 	        context.restore();
 		}
-	});
-	
-	window.ex.display.Particle = Particle;
-	
+	});	
 });

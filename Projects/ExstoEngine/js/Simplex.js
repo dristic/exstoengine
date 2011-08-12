@@ -19,7 +19,7 @@
 			];
 	
 	// Setup base URL for includes
-	ex.config.baseUrl = "../js/";
+	ex.config.baseUrl = "../js";
 		
 	ex.using([
           "ex.Engine",

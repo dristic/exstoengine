@@ -1,9 +1,7 @@
 ex.using([
   "ex.util.Key"
 ], function () {
-	ex.namespace("ex.util");
-	
-	var Input = ex.Class({
+	ex.define("ex.util.Input", {
 		constructor: function () {
 			this.keys = [];
 			this.pressed = [];
@@ -73,7 +71,4 @@ ex.using([
 			}
 		}
 	});
-	
-	window.ex.util.Input = Input;
-	
 });

@@ -1,9 +1,7 @@
 ex.using([
   "ex.display.Sprite"
 ], function () {
-	ex.namespace("ex.display");
-	
-	ex.display.AnimatedSprite = new ex.Class(ex.display.Sprite, {
+	ex.define("ex.display.AnimatedSprite", ex.display.Sprite, {
 		constructor: function(x, y, frameWidth, frameHeight, frameRate, img) {
 			this.timer = (1 / frameRate);
 			this.frameRate = frameRate;

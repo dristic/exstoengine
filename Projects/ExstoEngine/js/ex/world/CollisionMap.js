@@ -2,9 +2,7 @@ ex.using([
   "ex.base.Point",
   "ex.world.TileMap"
 ], function () {
-	ex.namespace("ex.world");
-	
-	var CollisionMap = new ex.Class(ex.world.TileMap, {
+	ex.define("ex.world.CollisionMap", ex.world.TileMap, {
 		constructor: function(tileWidth, tileHeight, data) {
 			this._super("constructor", [tileWidth, tileHeight, data]);
 		},
@@ -107,7 +105,4 @@ ex.using([
 			}
 		}
 	});
-	
-	window.ex.world.CollisionMap = CollisionMap;
-	
 });

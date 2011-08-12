@@ -27,6 +27,8 @@
 			extendBaseClass(namespace, base, extension);
 		}
 		
+		this._defined.push(namespace);
+		
 		// Load all classes that require this class
 		if(typeof this._namespaces[namespace] != 'undefined') {
 			var functions = this._namespaces[namespace];
@@ -37,6 +39,11 @@
 				if(this._classes[func].length == 0) {
 					func();
 					delete this._classes[func];
+				}
+				
+				ex.Array.remove(this._namespaces[namespace], func);
+				if(this._namespaces[namespace].length == 0) {
+					delete this._namespaces[namespace];
 				}
 			}
 		}

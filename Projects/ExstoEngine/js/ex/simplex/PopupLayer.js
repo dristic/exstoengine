@@ -1,9 +1,7 @@
 ex.using([
    "ex.simplex.Layer"
 ], function () {
-	ex.namespace("ex.simplex");
-	
-	var PopupLayer = new ex.Class(ex.simplex.Layer, {
+	ex.define("ex.simplex.PopupLayer", ex.simplex.Layer, {
 		constructor: function($name, $frame){
 			this._super("constructor", [$name, $frame]);
 		},
@@ -18,6 +16,4 @@ ex.using([
 		    $context.fillText("Simplex Tile Editor", x, y);
 		}
 	});
-	
-	ex.simplex.PopupLayer = PopupLayer;
 });

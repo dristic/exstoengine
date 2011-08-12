@@ -1,9 +1,7 @@
 ex.using([
     "ex.simplex.Layer"
 ], function () {
-	ex.namespace("ex.simplex");
-	
-	var ImageLayer = new ex.Class(ex.simplex.Layer, {		
+	ex.define("ex.simplex.ImageLayer", ex.simplex.Layer, {		
 		constructor: function($name, $width, $height, $image){
 			this._super("constructor", [$name, null]);
 			
@@ -46,6 +44,4 @@ ex.using([
 			}
 		}
 	});
-	
-	window.ex.simplex.ImageLayer = ImageLayer;
 });

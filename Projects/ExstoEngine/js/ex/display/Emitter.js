@@ -2,8 +2,6 @@ ex.using([
   "ex.base.Vector",
   "ex.display.Particle"
 ], function () {
-	ex.namespace("ex.display");
-	
 	/*
 	 * Requirements:
 	 * - Support for animated sprites as particles
@@ -18,7 +16,7 @@ ex.using([
 	 */
 	
 	
-	var Emitter = new ex.Class({
+	ex.define("ex.display.Emitter", {
 		constructor: function(options) {
 			var defaults = {
 				position: new ex.base.Vector(150, 150),
@@ -89,8 +87,5 @@ ex.using([
 				this.particles[i].render(context, camX, camY);
 			}
 		}
-	});
-	
-	window.ex.display.Emitter = Emitter;
-	
+	});	
 });

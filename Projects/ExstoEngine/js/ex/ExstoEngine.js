@@ -99,18 +99,12 @@ var ex = {};
 				return;
 			}
 			
-			if(namespaces.length > 0) {
-				loaded = false;
-			}
-			
 			for(; i < namespaces.length; i++) {
 				namespace = namespaces[i];
-				if(!(namespace in this._defined)) {
+				if(ex.Array.contains(this._defined, namespace) == false) {
 					loaded = false;
-					if(typeof this._namespaces[namespace] == 'undefined'){
-						this.require(namespace);
-						this.addRelationship(namespace, func);
-					}
+					this.addRelationship(namespace, func);
+					this.require(namespace);
 				}
 			}
 			
@@ -168,6 +162,10 @@ var ex = {};
 		_callbacks: {},
 		
 		asyncFile: function (url, callback) {
+			if(typeof this._urls[url] != 'undefined') {
+				return;
+			}
+			
 			// Add url to list
 			this._urls[url] = false;
 			

@@ -1,7 +1,5 @@
 (function() {
-	ex.namespace("ex.display");
-	
-	var Renderer = new ex.Class({
+	ex.define("ex.display.Renderer", {
 		constructor: function (width, height, bgColor, canvas) {
 			this.canvas = canvas || document.createElement("canvas");
 			this.canvas.id = "mainCanvas";
@@ -27,7 +25,4 @@
 			}
 		}
 	});
-	
-	window.ex.display.Renderer = Renderer;
-	
 }());

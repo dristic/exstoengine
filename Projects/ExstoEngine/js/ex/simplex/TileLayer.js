@@ -2,9 +2,7 @@ ex.using([
 	"ex.simplex.Layer",
 	"ex.display.SpriteMap"
 ], function () {
-	ex.namespace("ex.simplex");
-	
-	var TileLayer = new ex.Class(ex.simplex.Layer, {
+	ex.define("ex.simplex.TileLayer", ex.simplex.Layer, {
 		constructor: function($name, $frame, $tileWidth, $tileHeight, $map, $img){
 			this._super("constructor", [$name, null]);
 			this.spriteMap = new ex.display.SpriteMap($tileWidth, $tileHeight, $map, $img);
@@ -38,6 +36,4 @@ ex.using([
 			}
 		}
 	});
-	
-	window.ex.simplex.TileLayer = TileLayer;
 });

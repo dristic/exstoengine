@@ -1,6 +1,5 @@
 (function () {
-	
-	var Key = {
+	ex.define("ex.util.Key", {
 		 Backspace:		8,
 		 Tab:			9,
 		 Enter:			13,
@@ -109,8 +108,5 @@
 		 Pipe:								220,
 		 RightBrace:							221,
 		 SingleQuote:						222
-	};
-	
-	window.ex.util.Key = Key;
-	
+	});
 }());

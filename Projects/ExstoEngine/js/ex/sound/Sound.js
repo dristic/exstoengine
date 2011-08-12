@@ -1,9 +1,7 @@
 ex.using([
    
 ], function () {
-	ex.namespace("ex.sound");
-	
-	ex.sound.Sound = new ex.Class({
+	ex.define("ex.sound.Sound", {
 		constructor: function (url, numChannels) {
 			var _audio = new Audio(),
 				_this = this;

@@ -1,12 +1,7 @@
 ex.using([
   "ex.base.Vector",
 ], function () {
-	ex.namespace("ex.plugins");
-	
-	/*
-	 * Particle Class
-	 */
-	var Particle = new ex.Class({
+	ex.define("ex.plugins.Particle2", {
 		constructor: function (options) {
 			var defaults = {
 				position: new ex.base.Vector(0,0),
@@ -75,5 +70,4 @@ ex.using([
 	        context.restore();
 		}
 	});
-	window.ex.plugins.Particle2 = Particle;
 });

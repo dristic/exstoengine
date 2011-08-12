@@ -1,7 +1,5 @@
 (function() {
-	ex.namespace("ex.world");
-	
-	var World = new ex.Class({
+	ex.define("ex.world.World", {
 		constructor: function(renderer) {
 			this.renderer = renderer;
 			this.objects = [];
@@ -23,7 +21,4 @@
 			
 		}
 	});
-	
-	window.ex.world.World = World;
-	
 }());

@@ -1,9 +1,7 @@
 ex.using([ 
     "ex.event.EventTarget" 
 ], function () {
-	ex.namespace("ex.simplex");
-	
-	var Entity = new ex.Class(ex.event.EventTarget, {
+	ex.define("ex.simplex.Entity", ex.event.EventTarget, {
 		constructor: function($name, $position){
 			this.name = $name;
 			this.position = $position;
@@ -30,6 +28,4 @@ ex.using([
 			// Render code
 		}
 	});
-	
-	ex.simplex.Entity = Entity;
 });

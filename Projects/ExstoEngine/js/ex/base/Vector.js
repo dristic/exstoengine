@@ -1,7 +1,5 @@
 (function () {
-	ex.namespace("ex.base");
-	
-	var Vector = new ex.Class({
+	ex.define("ex.base.Vector", {
 		constructor: function(x, y) {
 			this.x = x || 0;
 			this.y = y || 0;
@@ -49,7 +47,4 @@
 		    return this;
 	  	}
 	});
-	
-	window.ex.base.Vector = Vector;
-	
 }());
