@@ -37,58 +37,46 @@
 		function NewClass() {
 			// empty function to hold new class
 		};
-
 		// --If a constructor is supplied call it
 		if (typeof base.constructor == "function" && base.constructor != Object) {
 			NewClass = base.constructor;
 		}
-
 		NewClass.prototype = base;
-
-		// Generates namespace tree if necessary
 		generateNamespace(namespace, NewClass);
-
-	}
-	;
+	};
 	
 	/**
 	 * creates a new class with inheritance
 	 * @param namespace {string} namespace of new class
 	 * @param base {Object} base class
 	 * @param extension {Object} base class extension (new class)
-	 * 
 	 */
 	function extendBaseClass(namespace, base, extension) {
-		// Check for passing in null base class
 		if (base == null) {
 			throw new Error("The base class has not been defined: "
-					+ proto.constructor);
+					+ extension.constructor);
 		}
 
-		var _base = base.prototype.clone();
-
+		var _base = base.clone();
 		function NewClass() {
+			// empty function to hold new class
+		};
 
-		}
-		;
-
-		if (typeof proto.constructor == "function"
-				&& proto.constructor != Object) {
-			NewClass = proto.constructor;
+		// Set constructor: Priority on extension, then base class
+		if (typeof extension.constructor == "function"
+				&& extension.constructor != Object) {
+			NewClass = extension.constructor;
 		} else if (typeof _base.constructor == "function") {
-			newClass.constructor = _base.constructor;
+			NewClass.constructor = _base.constructor;
 		}
 
-		// --Chain the base prototype
-		NewClass.prototype = base.prototype.clone();
-
-		// --Mix in the supplied prototype
-		NewClass.prototype.mixInto(proto);
-
-		// --Add super() for constructor and base properties
+		// clone, mix-in, set _super call, and add to namespace
+		NewClass.prototype = _base;
+		NewClass.prototype.mixInto(extension);
 		NewClass.prototype._super = function(func, args) {
 			_base[func].apply(this, args);
 		};
+		generateNamespace(namespace, NewClass);
 	};
 	
 	/**
