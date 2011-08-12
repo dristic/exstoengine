@@ -26,6 +26,20 @@
 		} else {
 			extendBaseClass(namespace, base, extension);
 		}
+		
+		// Load all classes that require this class
+		if(typeof this._namespaces[namespace] != 'undefined') {
+			var functions = this._namespaces[namespace];
+			var i = 0;
+			for(; i < functions.length; i++) {
+				var func = functions[i];
+				ex.Array.remove(this._classes[func], namespace);
+				if(this._classes[func].length == 0) {
+					func();
+					delete this._classes[func];
+				}
+			}
+		}
 	};
 
 	/**
@@ -57,7 +71,7 @@
 					+ extension.constructor);
 		}
 
-		var _base = base.clone();
+		var _base = ex.clone(base);
 		function NewClass() {
 			// empty function to hold new class
 			base.apply(this);
@@ -73,10 +87,11 @@
 
 		// clone, mix-in, set _super call, and add to namespace
 		NewClass.prototype = _base;
-		NewClass.prototype.mixInto(extension);
+		ex.extend(NewClass.prototype, extension);
 		NewClass.prototype._super = function(func, args) {
 			_base[func].apply(this, args);
 		};
+		
 		generateNamespace(namespace, NewClass);
 	};
 	
@@ -91,15 +106,13 @@
 		var parts = namespace.split('.');
 		for ( var index = 0; index < parts.length; index++) {
 			var part = parts[index];
-			// Step down to index
-			for ( var subIndex = 0; subIndex < index; subIndex++) {
-				context = context[parts[subIndex]];
-			}
-			// Create empty object if it doesn't exist already
+			
 			context[part] = context[part] || {};
 			if (index == parts.length - 1) {
 				context[part] = newClass;
 			}
+			
+			context = context[part];
 		}
 	}
 

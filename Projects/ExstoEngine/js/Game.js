@@ -41,7 +41,7 @@
 	   		];
 	
 	// Setup base url for the engine
-	ex.config.baseUrl = "../js/";
+	ex.config.baseUrl = "../js";
 	
 	ex.using([
           "ex.Engine",
