@@ -82,7 +82,7 @@ ex.using([
 				lifeVariance: 20,								// randomness of lifespan
 				active: true									// is emitter emitting?
 			};
-			defaults.extend(emitterOptions);
+			ex.extend(defaults, emitterOptions);
 			this.options = defaults;
 			this.options.origin = this.options.position.clone();		//remembers start for movement
 			this.options.lastPosition = this.options.origin.clone();	//used to detect movement
@@ -103,7 +103,7 @@ ex.using([
 					particle.alpha = 0.5 - (particle.age / particle.lifespan * 0.4);
 			    }
 			};
-			particleDefaults.extend(particleOptions);
+			ex.extend(particleDefaults, particleOptions);
 			this.particleOptions = particleDefaults;
 			
 			this.particles = [];
@@ -156,7 +156,7 @@ ex.using([
 		spawnParticle: function() {
 			var optionsWithVariance = {};
 			//MUST use .clone(), will pass by reference otherwise
-			optionsWithVariance.extend(this.particleOptions.clone());	
+			ex.extend(optionsWithVariance, ex.clone(this.particleOptions));
 			//optionsWithVariance.lifespan += vary(this.options.lifeVariance);
 			optionsWithVariance.vector = varyVector(optionsWithVariance.vector, this.options.angleVariance, this.options.magnitudeVariance);
 			optionsWithVariance.size += vary(this.options.sizeVariance);

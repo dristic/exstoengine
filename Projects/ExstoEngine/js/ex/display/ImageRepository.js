@@ -13,10 +13,12 @@
 			//--Image loading checking
 			this.ready = false;
 			this.imagesToLoad++;
+			
+			var that = this;
 			this.img[$name].onload = function () {
-				ImageRepository.imagesLoaded++;
-				if(ImageRepository.imagesLoaded == ImageRepository.imagesToLoad) {
-					ImageRepository.ready = true;
+				that.imagesLoaded++;
+				if(that.imagesLoaded == that.imagesToLoad) {
+					that.ready = true;
 				}
 			};
 			

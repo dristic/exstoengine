@@ -15,10 +15,10 @@ ex.using([
 				scrollFactorY: 1
 			};
 			
-			defaults.extend(options);
+			ex.extend(defaults, options);
 			defaults.position = options.position.clone();
 			
-			this.extend(defaults);
+			ex.extend(this, defaults);
 			
 			// Execute birth event
 			this.onBirth();

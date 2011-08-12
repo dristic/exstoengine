@@ -54,8 +54,8 @@ var ex = {};
 	 */
 	ex.Array = {
 		contains: function (array, item) {
-			var i = array.length;
-			while(i--) {
+			var i = 0;
+			for(; i < array.length; i++) {
 				if(array[i] == item) {
 					return true;
 				}
@@ -105,6 +105,8 @@ var ex = {};
 					loaded = false;
 					this.addRelationship(namespace, func);
 					this.require(namespace);
+				} else {
+					console.log('Exists: ' + namespace);
 				}
 			}
 			

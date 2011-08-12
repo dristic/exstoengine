@@ -32,8 +32,8 @@
 		// Load all classes that require this class
 		if(typeof this._namespaces[namespace] != 'undefined') {
 			var functions = this._namespaces[namespace];
-			var i = 0;
-			for(; i < functions.length; i++) {
+			var i = functions.length;
+			while(i--) {
 				var func = functions[i];
 				ex.Array.remove(this._classes[func], namespace);
 				if(this._classes[func].length == 0) {
@@ -78,7 +78,7 @@
 					+ extension.constructor);
 		}
 
-		var _base = ex.clone(base);
+		var _base = ex.clone(base.prototype);
 		function NewClass() {
 			// empty function to hold new class
 			base.apply(this);
@@ -96,7 +96,7 @@
 		NewClass.prototype = _base;
 		ex.extend(NewClass.prototype, extension);
 		NewClass.prototype._super = function(func, args) {
-			_base[func].apply(this, args);
+			base.prototype[func].apply(this, args);
 		};
 		
 		generateNamespace(namespace, NewClass);

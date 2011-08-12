@@ -57,8 +57,8 @@ ex.using([
 			
 			this.loadComponent(new ex.util.Debug());
 			
-			this.getComponent("Debug").renderer = this.renderer;
-			this.getComponent("Debug").logger = this.logger;
+			//this.getComponent("Debug").renderer = this.renderer;
+			//this.getComponent("Debug").logger = this.logger;
 		},
 		
 		setupCanvas: function (bgColor, canvas) {
