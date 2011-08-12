@@ -19,14 +19,22 @@
 	var _ex;
 	
 	window.ex = _ex = {
+		
+		/**
+		 * 
+		 * @param object {Object} object to be bound
+		 * @param func {Function} function to receive object
+		 * @returns {Function} function with object bound
+		 */
 		bind: function (object, func) {
 			return function() {
 				return func.apply(object, arguments);
 			};
 		},
 		
-		_namespaces: {},
-		_classes: {},
+		_namespaces: {},		// registered namespace -> class relations
+		_classes: {},			// registered class -> namespace relations
+		_loaded: {},			// loaded namespaces
 		_listeners: {},
 		ready: false,
 		
@@ -54,6 +62,12 @@
 			}
 		},
 		
+		/**
+		 * prepares all dependencies for loading then starts
+		 * the loader queue
+		 * @param namespaces {String} dependencies to be loaded
+		 * @param func {Function} the class being defined
+		 */
 		using: function (namespaces, func) {
 			// If ex is not setup, wait to rerun this function
 			if(!ex.ready) {
@@ -65,7 +79,7 @@
 			
 			// If the class has no dependencies, load it and return
 			if(typeof namespaces == 'undefined'){
-				this.createClass(func);
+				func();
 				return;
 			}
 			var index = namespaces.length;
@@ -79,8 +93,13 @@
 			ex.loader.startQueue(func);
 		},
 		
-		// Create relationship between the namespace and class (func)
-		// for forward and reverse lookup
+		/**
+		 * Create relationship between the namespace and class
+		 * for forward and reverse lookup. Saves forward lookup in
+		 * _namespaces and reverse in _classes.
+		 * @param namespace {String or String[]} namespace in relationship
+		 * @param func {Function} class in relationship
+		 */
 		addRelationship: function (namespace, func){
 			if(!this._namespaces[namespace])		// Add Namespace -> Class relation
 				this._namespaces[namespace] = [];
@@ -91,49 +110,12 @@
 			this._classes[func].push(namespace);
 		},
 		
-		// Defines func and creates it if all dependencies are met.
-		// If dependencies are not met, it attempts to create those first.
-		createClass: function (func){
-			
-		},
-		
-//		using: function (namespaces, func) {
-//			if(!ex.ready) {
-//				// Preload if not already
-//				preload();
-//				
-//				ex.onReady(function () { 
-//					ex.using(namespaces, func); 
-//				});
-//				return;
-//			}
-//			
-//			if(typeof namespaces == 'undefined'){
-//				func();
-//				return;
-//			}
-//			
-//			var i = -1;
-//			var j = -1;
-//			while(++i < namespaces.length){
-//				// Break up namespace by '.'
-//				var parts = namespaces[i].split(".");
-//				// Build file url
-//				var fileUrl = ex.config.baseUrl;
-//				
-//				j = -1;
-//				while(++j < parts.length) {
-//					fileUrl += "/" + parts[j];
-//				}
-//				fileUrl += '.js';
-//				//alert(fileUrl + "\n\n" + func);
-//				
-//				// Write script object
-//				var scriptTag = ex.sjaxScript(fileUrl);
-//			}
-//			func();
-//		},
-		
+		/**
+		 * Generates the url for the namespace and adds it
+		 * with the class to the loader queue
+		 * @param namespace {String} used to parse file URL
+		 * @param func {Function} the class definition
+		 */
 		_importNamespace: function(namespace, func) {
 			// Break up namespace by '.'
 			var parts = namespace.split(".");
@@ -147,7 +129,6 @@
 			fileUrl += '.js';
 			
 			// Include file
-			//document.write('<script type="text/javascript" src="' + fileUrl + '"></script>');
 			ex.loader.queue(fileUrl, func);
 		},
 		
@@ -170,7 +151,11 @@
 			}
 		},
 		
-		//--Includes an external JS file
+		/**
+		 * Includes an external javascript file
+		 * @param namespace {String} a single namespace or array of namespaces
+		 * @param onLoad {Function} function to call when inclusion is complete
+		 */
 		include: function (namespace, onLoad) {
 			//--If were passing in a list of includes, iterate through them
 			if(typeof namespace == "object") {
@@ -188,7 +173,10 @@
 			}
 		},
 		
-		// AJAX: adds script tag to DOM
+		/**
+		 * Adds script tag to DOM
+		 * @param fileName {String} script tag's src parameter
+		 */
 		ajaxScript: function (fileName) {
 			//--Use ajax call to grab a script and append it to the document
 			var xmlhttp;
@@ -227,6 +215,11 @@
 	};
 	
 	window.ex.helpers = {
+		/**
+		 * Creates script DOM object and appends to DOM head
+		 * @param url src value for script tag
+		 * @returns {___script0} DOM object
+		 */
 		createScriptTag: function(url) {
 			// Create a script tag and add it to the html
 			var head = document.getElementsByTagName("head").item(0);
@@ -296,7 +289,8 @@
 				var runFunc = this._queue[i];
 				
 				if(this._requests[runFunc]._loaded == this._requests[runFunc]._toLoad) {
-					runFunc();
+					//runFunc();
+					func();
 					
 					// Cleanup
 					this._requests[runFunc] = null;

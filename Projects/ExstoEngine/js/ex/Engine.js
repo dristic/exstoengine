@@ -16,7 +16,7 @@ ex.using([
 	 * @param height: The height of the canvas
 	 * @param frameRate: The frame rate of the game
 	 */
-	window.ex.Engine = new ex.Class({
+	ex.define("ex.Engine", {
 		constructor: function (width, height, frameRate) {
 			//--Check for canvas support
 			if(document.createElement("canvas").getContext) {
