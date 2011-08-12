@@ -117,6 +117,9 @@
 			context[part] = context[part] || {};
 			if (index == parts.length - 1) {
 				context[part] = newClass;
+				if('statics' in newClass.prototype) {
+					ex.extend(context[part], newClass.prototype.statics);
+				}
 			}
 			
 			context = context[part];
