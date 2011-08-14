@@ -17,9 +17,6 @@
 				[10, 12, 0, 10, 11, 11, 66, 66, 11,  8, 8, 8, 8, 8, 8, 9, 0, 10, 11, 12, 0, 0, 0, 10, 11],
 				[10, 12, 0, 10, 11, 11, 66, 66,  8,  8, 8, 8, 8, 8, 8, 9, 0, 10, 11, 12, 0, 0, 0, 10, 11],
 			];
-	
-	// Setup base URL for includes
-	ex.config.baseUrl = "../js";
 		
 	ex.using([
           "ex.Engine",
@@ -32,9 +29,9 @@
 		//--Startup new engine
 		var _engine = new ex.Engine(1200, 570, 60);
 		
-		_engine.imageRepository.loadImage("simplexBG", "../assets/world/simplexBG.png");
-		_engine.imageRepository.loadImage("Tiles", "../assets/world/tileset-platformer.png");
-		_engine.imageRepository.loadImage("BG", "../assets/world/bg.png");
+		_engine.imageRepository.loadImage("simplexBG", "../../lib/exstoengine/examples/assets/world/simplexBG.png");
+		_engine.imageRepository.loadImage("Tiles", "../../lib/exstoengine/examples/assets/world/tileset-platformer.png");
+		_engine.imageRepository.loadImage("BG", "../../lib/exstoengine/examples/assets/world/bg.png");
 		
 		var _levelEditor = new ex.simplex.LevelEditor(1200, 675, _engine.imageRepository.img.simplexBG);
 

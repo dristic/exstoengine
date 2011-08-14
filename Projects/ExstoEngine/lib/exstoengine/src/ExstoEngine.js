@@ -151,6 +151,7 @@ var ex = {};
 			var fileUrl = ex.config.baseUrl;
 			var i = -1;
 			while(++i < parts.length) {
+				// If we are loading ex files, they are located in a src folder so don't include the 'ex'
 				if(parts[i] != 'ex') {
 					fileUrl += "/" + parts[i];
 				}
@@ -224,7 +225,7 @@ var ex = {};
 		while(i--){
 			var script = scripts[i];
 			if(pattern.test(script.src) == true){
-				ex.config.baseUrl = script.src.split("/ex/ExstoEngine.js", 1)[0];
+				ex.config.baseUrl = script.src.split("/ExstoEngine.js", 1)[0];
 			}
 		}
 		

@@ -40,9 +40,6 @@
 	   			[10, 12, 0, 10, 11, 11, 66, 66,  8,  8, 8, 8, 8, 8, 8, 9, 0, 10, 11, 12, 0, 0, 0, 10, 11],
 	   		];
 	
-	// Setup base url for the engine
-	ex.config.baseUrl = "../js";
-	
 	ex.using([
           "ex.Engine",
           "ex.display.AnimatedSprite",
