@@ -151,7 +151,9 @@ var ex = {};
 			var fileUrl = ex.config.baseUrl;
 			var i = -1;
 			while(++i < parts.length) {
-				fileUrl += "/" + parts[i];
+				if(parts[i] != 'ex') {
+					fileUrl += "/" + parts[i];
+				}
 			}
 			fileUrl += '.js';
 			
