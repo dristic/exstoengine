@@ -18,6 +18,9 @@ Ext.application({
 		        }, {
 		        	xtype: 'editor',
 		        	region: 'center'
+		        }, {
+		        	xtype: 'status',
+		        	region: 'south'
 		        }
 	        ]
 		});
