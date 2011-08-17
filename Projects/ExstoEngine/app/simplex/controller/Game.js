@@ -2,7 +2,8 @@ Ext.define('Simplex.controller.Game', {
 	extend: 'Ext.app.Controller',
 	
 	views: [
-        'game.Editor'
+        'game.Editor',
+        'game.Game'
     ],
     
 	init: function() {

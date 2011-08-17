@@ -6,7 +6,8 @@ Ext.application({
 	controllers: [
       	'Menu',
       	'Game',
-      	'Status'
+      	'Status',
+      	'Toolbar'
   	],
 	
 	launch: function () {
@@ -14,6 +15,9 @@ Ext.application({
 			layout: 'border',
 			items: [
 		        {
+		        	xtype: 'toolbarpanel',
+		        	region: 'north'
+		        }, {
 		        	xtype: 'menu',
 		        	region: 'east'
 		        }, {

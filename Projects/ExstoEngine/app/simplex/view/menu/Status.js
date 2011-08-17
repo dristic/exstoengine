@@ -3,7 +3,8 @@ Ext.define('Simplex.view.menu.Status', {
 	alias: 'widget.status',
 	
 	title: 'Status',
-	height: 150,
+	height: 100,
 	collapsible: true,
-	html: 'Alerts go here'
+	bodyPadding: 5,
+	html: '50 fps | 16 ms'
 });
