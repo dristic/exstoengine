@@ -13,17 +13,17 @@ Ext.define('Simplex.view.game.Editor', {
             xtype: 'button',
             text: 'Save',
             tooltip: 'Save Button',
-            icon: '../../Content/Images/Save.png'
+            icon: 'resources/icons/16x16/Save.png'
         }, {
             xtype: 'button',
             text: 'Add',
             tooltip: 'Add Button',
-            icon: '../../Content/Images/Add.png'
+            icon: 'resources/icons/16x16/Plus.png'
         }, {
             xtype: 'button',
             text: 'Close',
             tooltip: 'Close Button',
-            icon: '../../Content/Images/Erase.png'
+            icon: 'resources/icons/16x16/Trash.png'
         }, '-', {
             xtype: 'splitbutton',
             text: 'Split Button'

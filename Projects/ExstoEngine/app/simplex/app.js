@@ -5,7 +5,8 @@ Ext.application({
 	
 	controllers: [
       	'Menu',
-      	'Game'
+      	'Game',
+      	'Status'
   	],
 	
 	launch: function () {

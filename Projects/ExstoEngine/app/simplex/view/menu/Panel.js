@@ -4,7 +4,5 @@ Ext.define('Simplex.view.menu.Panel', {
 	
 	title: 'Toolbox',
 	width: 250,
-	html: 'hey'
-	
-	
+	html: '<canvas id="tileView"></canvas>'
 });
