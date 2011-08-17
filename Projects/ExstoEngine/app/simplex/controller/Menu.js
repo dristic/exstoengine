@@ -4,9 +4,15 @@ Ext.define('Simplex.controller.Menu', {
 	views: [
         'menu.Panel'
     ],
-    
-	init: function() {
-		initTileViewer("../resources/images/tileset.png");
+
+	init: function () {
+		this.control({
+			'menu': {
+				afterrender: function () {
+					initTileViewer("../resources/images/tileset.png");
+				}
+			}
+		});
 	}
 });
 
