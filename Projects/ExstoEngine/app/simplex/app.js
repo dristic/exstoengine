@@ -16,13 +16,13 @@ Ext.application({
 			items: [
 		        {
 		        	xtype: 'toolbarpanel',
-		        	region: 'north',
+		        	region: 'north'
+		        }, {
+		        	xtype: 'menu',
+		        	region: 'east',
 		        	items: {
 		        		xtype: 'tileview'
 		        	}
-		        }, {
-		        	xtype: 'menu',
-		        	region: 'east'
 		        }, {
 		        	xtype: 'editor',
 		        	region: 'center'

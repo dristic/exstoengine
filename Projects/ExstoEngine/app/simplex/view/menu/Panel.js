@@ -8,12 +8,12 @@ Ext.define('Simplex.view.menu.Panel', {
 	
 	views: ['menu.tileview'],
 	
-	layout: 'border',
+	layout: 'fit',
 	title: 'Toolbox',
 	width: 250,
 	
 	initComponent: function() {
-		
+		this.callParent(arguments);
 	}
 
 });
