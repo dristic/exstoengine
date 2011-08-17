@@ -7,7 +7,13 @@ Ext.define('Simplex.controller.Game', {
     ],
     
 	init: function() {
-		initGame();
+		this.control({
+			'editor': {
+				afterrender: function () {
+					initGame();
+				}
+			}
+		});
 	}
 });
 

@@ -1,5 +1,18 @@
 var ex = {};
 
+// Array indexOf fix for IE because IE is lame
+// Source: http://soledadpenades.com/2007/05/17/arrayindexof-in-internet-explorer/
+if(!Array.indexOf){
+    Array.prototype.indexOf = function(obj){
+        for(var i=0; i<this.length; i++){
+            if(this[i]==obj){
+                return i;
+            }
+        }
+        return -1;
+    };
+}
+
 (function () {
 	"use strict";
 	
@@ -110,6 +123,8 @@ var ex = {};
 				}
 			}
 			
+			ex.Loader.startQueue();
+			
 			if(loaded == true) {
 				func();
 				return;
@@ -165,6 +180,7 @@ var ex = {};
 	ex.Loader = {
 		_urls: {},
 		_callbacks: {},
+		_queue: [],
 		
 		asyncFile: function (url, callback) {
 			if(typeof this._urls[url] != 'undefined') {
@@ -179,11 +195,21 @@ var ex = {};
 				this._callbacks[url] = callback;
 			}
 			
-			// Add script tag with on load parameter
-			this.addScriptTag(url, function () {
-				ex.Loader.onScriptLoad(url);
-				delete this.onload;
-			});
+			this._queue.push(url);
+		},
+		
+		startQueue: function () {
+			for(var i = 0; i < this._queue.length; i++) {
+				var url = this._queue[i];
+				
+				// Add script tag with on load parameter
+				this.addScriptTag(url, function () {
+					ex.Loader.onScriptLoad(url);
+					delete this.onload;
+				});
+			}
+			
+			this._queue = [];
 		},
 		
 		onScriptLoad: function (url) {
