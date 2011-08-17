@@ -16,7 +16,10 @@ Ext.application({
 			items: [
 		        {
 		        	xtype: 'toolbarpanel',
-		        	region: 'north'
+		        	region: 'north',
+		        	items: {
+		        		xtype: 'tileview'
+		        	}
 		        }, {
 		        	xtype: 'menu',
 		        	region: 'east'
