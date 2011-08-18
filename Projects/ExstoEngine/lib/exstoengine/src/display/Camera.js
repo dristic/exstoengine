@@ -14,6 +14,16 @@
 			}
 		},
 		
+		move: function(x, y) {
+			this.x += x;
+			this.y += y;
+		},
+		
+		moveTo: function (x, y) {
+			this.x = x;
+			this.y = y;
+		},
+		
 		follow: function (object) {
 			this.following = object;
 		}

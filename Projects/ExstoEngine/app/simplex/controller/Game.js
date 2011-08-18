@@ -6,12 +6,25 @@ Ext.define('Simplex.controller.Game', {
         'game.Game'
     ],
     
+    refs: [
+       { ref:'game', selector:'game' }
+    ],
+    
 	init: function() {
 		this.control({
 			'editor': {
 				afterrender: this.createGame
+			},
+			'game': {
+				resize: this.resizeCanvas
 			}
 		});
+	},
+	
+	resizeCanvas: function (panel, newWidth, newHeight) {
+		if(this.engine && this.engine.renderer) {
+			this.engine.renderer.resizeCanvas(newWidth, newHeight);
+		}
 	},
 	
 	createGame: function () {
@@ -22,14 +35,14 @@ Ext.define('Simplex.controller.Game', {
 	        ], 
 	        ex.bind(this, function () {
 				//--Startup new engine
-				this.engine = new ex.Engine(1000, 500, 60);
+				this.engine = new ex.Engine(this.getGame().getWidth(), this.getGame().getHeight(), 60);
 				
 				//--Setup rendering
 				this.engine.setupCanvas("#000000", document.getElementById('game'));
 				this.engine.openWorld(ex.world.World);
 				
 				// Listen to update
-				this.engine.onUpdate = this.onEngineUpdate;
+				this.engine.onUpdate = ex.bind(this, this.onEngineUpdate);
 				
 				this.loadMap(platformer);
 			})
@@ -37,15 +50,22 @@ Ext.define('Simplex.controller.Game', {
 	},
 	
 	onEngineUpdate: function (dt) {
-		if(this.input.isKeyPressed(ex.util.Key.Keyb1)) {
+		var engine = this.engine;
+		
+		if(engine.input.isKeyPressed(ex.util.Key.Keyb1)) {
 			alert("One pressed");
 		}
-		if(this.input.isKeyPressed(ex.util.Key.Keyb2)) {
+		if(engine.input.isKeyPressed(ex.util.Key.Keyb2)) {
 			alert("Two pressed");
 		}
 		
-		var mouseX = this.input.mouseX;
-		var mouseY = this.input.mouseY;
+		var mouseX = engine.input.mouseX;
+		var mouseY = engine.input.mouseY;
+		
+		if(engine.input.dragging) {
+			var delta = engine.input.getMouseDelta();
+			engine.camera.move(-delta[0], -delta[1]);
+		}
 	},
 	
 	loadMap: function (map) {

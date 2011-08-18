@@ -11,6 +11,11 @@ ex.using([
 			this.mouseDown = false;
 			this.mouseUp = false;
 			
+			this.lastMouseX = 0;
+			this.lastMouseY = 0;
+			this.dragging = false;						// If the mouse is dragging or not
+			this._beginDrag = false;					// Buffer so dragging does not always happen instantly
+			
 			document.addEventListener("keydown", ex.bind(this, this.onKeyDown));
 			document.addEventListener("keyup", ex.bind(this, this.onKeyUp));
 			document.addEventListener("mousedown", ex.bind(this, this.onMouseDown));
@@ -25,16 +30,30 @@ ex.using([
 				this.pressed[i]--;
 			}
 			
+			if(this._beginDrag == true && this.mouseUp == false) {
+				this.dragging = true;
+			}
+			
 			this.mouseDown = false;
 			this.mouseUp = false;
+			
+			this.lastMouseX = this.mouseX;
+			this.lastMouseY = this.mouseY;
+		},
+		
+		getMouseDelta: function () {
+			return [(this.mouseX - this.lastMouseX), (this.mouseY - this.lastMouseY)];
 		},
 		
 		onMouseDown: function(event) {
 			this.mouseDown = true;
+			this._beginDrag = true;
 		},
 		
 		onMouseUp: function(event) {
 			this.mouseUp = true;
+			this._beginDrag = false;
+			this.dragging = false;
 		},
 		
 		onMouseMove: function(event) {

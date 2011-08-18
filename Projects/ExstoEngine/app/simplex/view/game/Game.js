@@ -9,13 +9,5 @@ Ext.define('Simplex.view.game.Game', {
 	
 	border: 0,
 	
-	html: '<canvas id="game"></canvas>',
-	
-	initEvents: function () {
-		this.dd = Ext.create('Simplex.view.game.GameDDProxy', 'game', 'game', {
-			
-		});
-		
-		this.callParent(arguments);
-	}
+	html: '<canvas id="game"></canvas>'
 });
