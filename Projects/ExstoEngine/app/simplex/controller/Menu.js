@@ -3,7 +3,8 @@ Ext.define('Simplex.controller.Menu', {
 	
 	views: [
         'menu.Panel',
-        'menu.TileView'
+        'menu.TileView',
+        'menu.LayerPanel'
     ],
 
 	init: function () {		

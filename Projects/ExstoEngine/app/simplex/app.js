@@ -21,9 +21,12 @@ Ext.application({
 		        }, {
 		        	xtype: 'menu',
 		        	region: 'east',
-		        	items: {
-		        		xtype: 'tileview'
-		        	}
+		        	items: [{
+	        			xtype: 'layerpanel'
+	        		}, {
+	        			title: 'Tiles',
+	        			items: [{ xtype: 'tileview' }]
+	        		}]
 		        }, {
 		        	xtype: 'editor',
 		        	region: 'center'

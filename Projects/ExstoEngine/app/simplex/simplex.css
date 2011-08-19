@@ -34,3 +34,33 @@ body
 	bottom: 0px;
 	right: 0px;
 }
+
+//================================
+// Layer View
+// =========================================
+.x-layer-list {
+    padding: 5px;
+}
+
+.x-layer-list div {
+	padding: 5px;
+	cursor: pointer;
+	font-family: 'Droid Sans', sans-serif;
+	border-bottom: 1px solid #777;
+	height: 35px;
+	line-height: 25px;
+}
+
+.x-layer-list .x-item-selected {
+	font-weight: bold;
+	background-color: #ccc;
+}
+
+.x-layer-list div img {
+	vertical-align: middle;
+	margin-right: 5px;
+}
+
+.x-layer-list div input[type="checkbox"] {
+	margin-right: 5px;
+}

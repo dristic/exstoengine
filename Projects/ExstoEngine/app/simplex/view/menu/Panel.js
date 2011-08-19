@@ -6,10 +6,6 @@ Ext.define('Simplex.view.menu.Panel', {
 	    'Ext.layout.container.Border'
 	],
 	
-	views: ['menu.tileview'],
-	
-	layout: 'fit',
-	title: 'Toolbox',
 	width: 250,
 	
 	initComponent: function() {
