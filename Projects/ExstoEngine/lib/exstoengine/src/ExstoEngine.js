@@ -119,7 +119,7 @@ if(!Array.indexOf){
 					this.addRelationship(namespace, func);
 					this.require(namespace);
 				} else {
-					console.log('Exists: ' + namespace);
+					//console.log('Exists: ' + namespace);
 				}
 			}
 			

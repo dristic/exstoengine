@@ -5,6 +5,7 @@ Ext.application({
 	
 	controllers: [
       	'Menu',
+      	//'Editor',
       	'Game',
       	'Status',
       	'Toolbar'
