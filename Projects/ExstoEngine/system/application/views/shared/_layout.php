@@ -1,8 +1,8 @@
-<!doctype>
+<!doctype html>
 <html lang="en">
 
 <head>
-	<meta charset="utf-8" />
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<title>Exsto Engine - HTML 5 and Javascript Game Engine</title>
 	
 	<!-- Favicon -->

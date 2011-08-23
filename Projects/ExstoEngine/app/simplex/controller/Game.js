@@ -43,8 +43,6 @@ Ext.define('Simplex.controller.Game', {
 				
 				// Listen to update
 				this.engine.onUpdate = ex.bind(this, this.onEngineUpdate);
-				
-				this.loadMap(platformer);
 			})
 		);
 	},
@@ -57,6 +55,10 @@ Ext.define('Simplex.controller.Game', {
 		}
 		if(engine.input.isKeyPressed(ex.util.Key.Keyb2)) {
 			alert("Two pressed");
+		}
+		
+		if(engine.input.isKeyPressed(ex.util.Key.Enter)) {
+			this.loadMap(platformer);
 		}
 		
 		var mouseX = engine.input.mouseX;
