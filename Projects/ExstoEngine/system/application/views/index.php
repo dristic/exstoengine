@@ -1,4 +1,10 @@
 <div style="display: table; margin-top: 20px;">
+	<div style="padding: 0px 0px 0px 5px; display: table-cell; width: 500px; vertical-align: top;">
+		<img src="<?=base_url()?>/system/application/views/content/images/slideshowPlaceholder.png"/>
+	</div>
+</div>
+
+<div style="display: table; margin-top: 20px;">
     <div style="padding: 0px 0px 0px 20px; display: table-cell; width: 500px; vertical-align: top;">
         <h1>What is Exsto Engine?</h1>
 
@@ -8,7 +14,7 @@
     </div>
     <div style="padding: 0px 0px 0px 20px; display: table-cell; width: 500px; text-align: center; vertical-align: bottom">
         <p style="width: 450px; font-size: 1.0em; line-height: 1.5em;">
-			Insert sexy logo here!
+			Sign up link here!
         </p>
     </div>
 </div>
@@ -18,6 +24,7 @@
         <h1>Features</h1>
 
 		<div style="padding: 0px 0px 0px 20px; display: table-cell; width: 200px; vertical-align: top;">
+	        <img src="<?=base_url()?>/system/application/views/content/images/crossPlatform.png" width="64" height="64"/>
 	        <h3>Cross-Browser & Cross-Platform</h3>
 	
 	        <p style="width: 200px; font-size: 1.0em; line-height: 1.5em;">
@@ -25,6 +32,7 @@
 	        </p>
 	    </div>
 	    <div style="padding: 0px 0px 0px 20px; display: table-cell; width: 200px; vertical-align: top;">
+	        <img src="<?=base_url()?>/system/application/views/content/images/network.png" width="64" height="64"/>
 	        <h3>Integrated Network Capabilities</h3>
 	
 	        <p style="width: 200px; font-size: 1.0em; line-height: 1.5em;">
@@ -32,6 +40,7 @@
 	        </p>
 	    </div> 
 	    <div style="padding: 0px 0px 0px 20px; display: table-cell; width: 200px; vertical-align: top;">
+	        <img src="<?=base_url()?>/system/application/views/content/images/layers.png" width="64" height="64"/>
 	        <h3>Simplex IDE</h3>
 	
 	        <p style="width: 200px; font-size: 1.0em; line-height: 1.5em;">
@@ -39,6 +48,7 @@
 	        </p>
 	    </div> 
 	    <div style="padding: 0px 0px 0px 20px; display: table-cell; width: 200px; vertical-align: top;">
+	        <img src="<?=base_url()?>/system/application/views/content/images/hamster.png" width="64" height="64"/>
 	        <h3>Last 20 Users Get A Free Gerbil</h3>
 	
 	        <p style="width: 200px; font-size: 1.0em; line-height: 1.5em;">
