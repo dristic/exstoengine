@@ -4,7 +4,7 @@
 
 #slides {
 	position:relative;
-	width: 570px;
+	width: 850px;
 	z-index:100;
 }
 
@@ -16,7 +16,7 @@
 */
 
 .slides_container {
-	width:570px;
+	width:850px;
 	overflow:hidden;
 	position:relative;
 	display:none;
@@ -31,8 +31,8 @@
 */
 
 .slides_container a {
-	width:570px;
-	height:270px;
+	width:850px;
+	height:300px;
 	display:block;
 }
 
@@ -55,7 +55,7 @@
 }
 
 #slides .next {
-	left:570px;
+	left:850px;
 }
 
 /*
