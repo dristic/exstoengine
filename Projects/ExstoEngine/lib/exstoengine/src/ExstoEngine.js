@@ -207,7 +207,7 @@ if(!Array.indexOf){
 				this._callbacks[url] = callback;
 			}
 			
-			this._queue.push(url + "?" + this._date.getTime());
+			this._queue.push(url + "? ex=" + this._date.getTime());
 		},
 		
 		startQueue: function () {
@@ -285,6 +285,8 @@ if(!Array.indexOf){
 				ex.config.baseUrl = script.src.split("/ExstoEngine.js", 1)[0];
 			}
 		}
+		
+		ex.using([ 'ex.event.EventTarget' ], function () {});
 	}
 	
 	preload();

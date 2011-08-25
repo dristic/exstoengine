@@ -1,87 +1,3 @@
-Ext.define('Simplex.controller.Game', {
-	extend: 'Ext.app.Controller',
-	
-	views: [
-        'game.Editor',
-        'game.Game'
-    ],
-    
-    refs: [
-       { ref:'game', selector:'game' }
-    ],
-    
-	init: function() {
-		this.control({
-			'editor': {
-				afterrender: this.createGame
-			},
-			'game': {
-				resize: this.resizeCanvas
-			}
-		});
-	},
-	
-	resizeCanvas: function (panel, newWidth, newHeight) {
-		if(this.engine && this.engine.renderer) {
-			this.engine.renderer.resizeCanvas(newWidth, newHeight);
-		}
-	},
-	
-	createGame: function () {
-		ex.using(
-			[
-	          'ex.Engine',
-	          'ex.world.World'
-	        ], 
-	        ex.bind(this, function () {
-				//--Startup new engine
-				this.engine = new ex.Engine(this.getGame().getWidth(), this.getGame().getHeight(), 60);
-				
-				//--Setup rendering
-				this.engine.setupCanvas("#000000", document.getElementById('game'));
-				this.engine.openWorld(ex.world.World);
-				
-				//--Setup input
-				this.engine.input.listenOn(this.engine.renderer.canvas);
-				
-				// Listen to update
-				this.engine.onUpdate = ex.bind(this, this.onEngineUpdate);
-			})
-		);
-	},
-	
-	onEngineUpdate: function (dt) {
-		var engine = this.engine;
-		
-		if(engine.input.isKeyPressed(ex.util.Key.Keyb1)) {
-			alert("One pressed");
-		}
-		if(engine.input.isKeyPressed(ex.util.Key.Keyb2)) {
-			alert("Two pressed");
-		}
-		
-		if(engine.input.isKeyPressed(ex.util.Key.Enter)) {
-			this.loadMap(platformer);
-		}
-		
-		var mouseX = engine.input.mouseX;
-		var mouseY = engine.input.mouseY;
-		//var tileNumber = engine.mapEditor.layers[1].items[0].getTile(mouseX, mouseY);
-		//if(typeof tileNumber != 'undefined'){
-			//console.log("Tile #: " + tileNumber);
-		//}
-		
-		if(engine.input.dragging) {
-			var delta = engine.input.getMouseDelta();
-			engine.camera.move(-delta[0], -delta[1]);
-		}
-	},
-	
-	loadMap: function (map) {
-		map(this.engine);
-	}
-});
-
 // Map file data
 function platformer(engine) {
 	var data = [
@@ -143,4 +59,6 @@ function platformer(engine) {
 			// Add the map
 			engine.currentWorld.addObject(_mapEditor);
 		});
-}
+};
+
+window.loadMap(platformer);

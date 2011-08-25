@@ -24,7 +24,7 @@
 			
 			//--Image caching fix
 			this.img[$name].src = "";
-			this.img[$name].src = $dir;
+			this.img[$name].src = $dir + '? ex=' + (new Date()).getTime();
 		}
 	});	
 }());

@@ -12,13 +12,10 @@ Ext.define('Simplex.view.toolbar.Panel', {
 		}, {
 			xtype: 'filefield',
 			buttonOnly: true,
-			text: 'Load'
-		}
-		
-		/*{
-		    xtype: 'button',
-		    text: 'Load',
-		    icon: 'resources/icons/16x16/Folder3.png'
-		}*/]
+			buttonConfig: {
+				text: 'Load',
+			    icon: 'resources/icons/16x16/Folder3.png'
+			}
+		}]
 	}]
 });

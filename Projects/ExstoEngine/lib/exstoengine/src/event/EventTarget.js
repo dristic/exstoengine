@@ -1,10 +1,7 @@
-ex.using([
-   "ex.Class"
-], function () {
-	ex.namespace("ex.event");
+ex.using([], function () {
 	
 	// Static functions for listening and unlistening to events
-	window.ex.event = {
+	ex.event = {
 		/*
 		 * Listens to an event on a javascript object
 		 * or a DOM object
@@ -18,10 +15,28 @@ ex.using([
 			// Figure out what event handling the object supports
 			// and use it to listen on
 			if(target.attachEvent) {
-				target.attachEvent(event, func);
+				target.attachEvent('on' + event, func);
 			} else if(target.addEventListener) {
 				target.addEventListener(event, func);
 			}
+		},
+		
+		/**
+		 * Automatically unlistens to an event after it has been fired
+		 * 
+		 * @param target {Object} The object to listen on.
+		 * @param event {String} The event to listen to.
+		 * @param func {Function} The function to call when the event happens.
+		 * @param handler {Object} [Optional] The object to bind to when calling the function.
+		 */
+		listenOnce: function (target, event, func, handler) {
+			var newFunc = function () {
+				ex.event.unlisten(target, event, func);
+				
+				func.call(this, arguments);
+			};
+			
+			ex.event.listen(target, event, newFunc, handler);
 		},
 		
 		unlisten: function (target, event, func) {

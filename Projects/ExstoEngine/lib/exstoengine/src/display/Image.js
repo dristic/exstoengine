@@ -26,6 +26,23 @@ ex.using([ 'ex.base.Point', 'ex.base.Vector' ], function() {
 			this.size = $size
 					|| new ex.base.Vector($image.width, $image.height);
 			this.image = $image;
+			
+			// If the image is not loaded reset size when it loads
+			if(this.image.complete == false) {
+				ex.event.listenOnce(this.image, 'load', this.autoSize, this);
+			}
+		},
+		
+		/**
+		 * Auto sizes this object's width and height to the image supplied, and removes
+		 * any event listeners on the image for loading
+		 * 
+		 * @return {ex.base.Vector} The new size
+		 */
+		autoSize: function () {
+			this.size = new ex.base.Vector(this.image.width, this.image.height);
+			console.log(this.size.x + " : " + this.size.y);
+			return this.size;
 		},
 
 		/**
