@@ -38,7 +38,7 @@ if(!Array.indexOf){
 		 * that function to the object specified.
 		 * @param {Object} object Object to be bound
 		 * @param {Function} func Function to receive object
-		 * @return {Function} Function with object bound
+		 * @returns {Function} Function with object bound
 		 */
 		bind: function (object, func) {
 			return function() {
@@ -46,12 +46,23 @@ if(!Array.indexOf){
 			};
 		},
 		
+		/**
+		 * Makes a copy of an object by placing it in a new object's constructor
+		 * @param object {Object} object to be cloned
+		 * @returns {Object} cloned object constructor
+		 */
 		clone: function (object) {
 			function Constructor() { }
 		    Constructor.prototype = object;
 		    return new Constructor();
 		},
 		
+		/**
+		 * Equivalent to a foreach loop in other languages, 
+		 * iterates through object and runs func on each property.
+		 * @param object {Object} the array or object being passed in
+		 * @param func {Function} function to run on each property of object
+		 */
 		each: function (object, func) {
 			for (var property in object) {
 		        if (Object.prototype.propertyIsEnumerable.call(object, property)) {

@@ -15,15 +15,17 @@ ex.using([
 			this.lastMouseY = 0;
 			this.dragging = false;						// If the mouse is dragging or not
 			this._beginDrag = false;					// Buffer so dragging does not always happen instantly
-			
-			document.addEventListener("keydown", ex.bind(this, this.onKeyDown));
-			document.addEventListener("keyup", ex.bind(this, this.onKeyUp));
-			document.addEventListener("mousedown", ex.bind(this, this.onMouseDown));
-			document.addEventListener("mouseup", ex.bind(this, this.onMouseUp));
-			document.addEventListener("mousemove", ex.bind(this, this.onMouseMove));
 		},
 		
-		update: function(dt) {
+		listenOn: function(element) {
+			document.addEventListener("keydown", ex.bind(this, this.onKeyDown));
+			document.addEventListener("keyup", ex.bind(this, this.onKeyUp));
+			element.addEventListener("mousedown", ex.bind(this, this.onMouseDown));
+			element.addEventListener("mouseup", ex.bind(this, this.onMouseUp));
+			element.addEventListener("mousemove", ex.bind(this, this.onMouseMove));
+		},
+		
+		update: function(dt) {			
 			var i = this.pressed.length;
 			while(i--) {
 				if(this.pressed[i] > 0)
@@ -39,6 +41,26 @@ ex.using([
 			
 			this.lastMouseX = this.mouseX;
 			this.lastMouseY = this.mouseY;
+		},
+		
+		getMousePosition: function(event) {
+			// Firefox, IE9, & Chrome
+			if(event.layerX || event.layerX == 0) {
+				event._x = event.layerX;
+				event._y = event.layerY;
+			}
+			// Opera
+			else if(event.offsetX || event.offsetX == 0) {
+				event._x = event.offsetX;
+				event._y = event.offsetY;
+			}
+			// Unsupported
+			else {
+				event._x = -1;
+				event._y = -1;
+			}
+			
+			return event;
 		},
 		
 		getMouseDelta: function () {
@@ -57,14 +79,9 @@ ex.using([
 		},
 		
 		onMouseMove: function(event) {
-			if(!event) event = window.event;
-			if(event.pageX || event.pageY) {
-				this.mouseX = event.pageX;
-				this.mouseY = event.pageY;
-			} else if(event.clientX || event.clientY) {
-				this.mouseX = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-				this.mouseY = event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-			}
+			event = this.getMousePosition(event);
+			this.mouseX = event._x;
+			this.mouseY = event._y;
 		},
 		
 		onKeyDown: function(event) {

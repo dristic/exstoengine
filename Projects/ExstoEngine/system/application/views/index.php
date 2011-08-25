@@ -1,9 +1,8 @@
-<div style="display: table; margin-top: 20px;">
-	<div style="padding: 0px 0px 0px 5px; display: table-cell; width: 500px; vertical-align: top;">
+<div style="display: table; margin: 20px auto 0 auto">
+	<div style="padding: 0px 0px 0px 5px; display: table-cell; width: 570px; vertical-align: top;">
 		<link href="<?=base_url().'system/application/views/style/slideshow.css'?>" rel="stylesheet" type="text/css" />
-		<script src="<?=base_url()?>/lib/jquery-1.4.4.min.js"></script> 
-		<script src="http://gsgd.co.uk/sandbox/jquery/easing/jquery.easing.1.3.js"></script> 
-		<script src="<?=base_url()?>/lib/slides.min.jquery.js"></script> 
+		<script src="<?=base_url().'lib/jquery-1.4.4.min.js'?>"></script>
+		<script src="<?=base_url().'lib/slides.min.jquery.js'?>"></script> 
 		<script> 
 			$(function(){
 				$('#slides').slides({

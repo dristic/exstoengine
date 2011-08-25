@@ -4,8 +4,7 @@
 
 #slides {
 	position:relative;
-	top:15px;
-	left:4px;
+	width: 570px;
 	z-index:100;
 }
 

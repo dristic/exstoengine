@@ -61,6 +61,9 @@
 		_engine.setupCanvas("#000000");
 		_engine.enableDebugging();
 		
+		//--Setup input
+		_engine.input.listenOn(_engine.renderer.canvas);
+		
 		// Images
 		_engine.imageRepository.loadImage("Ship", "../assets/units/ship1.png");
 		_engine.imageRepository.loadImage("Base", "../assets/units/base2.png");

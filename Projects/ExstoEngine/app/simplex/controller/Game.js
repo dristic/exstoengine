@@ -41,6 +41,11 @@ Ext.define('Simplex.controller.Game', {
 				this.engine.setupCanvas("#000000", document.getElementById('game'));
 				this.engine.openWorld(ex.world.World);
 				
+				//--Setup input
+				this.engine.input.listenOn(this.engine.renderer.canvas);
+				
+				this.loadMap(platformer);
+				
 				// Listen to update
 				this.engine.onUpdate = ex.bind(this, this.onEngineUpdate);
 			})
@@ -63,6 +68,10 @@ Ext.define('Simplex.controller.Game', {
 		
 		var mouseX = engine.input.mouseX;
 		var mouseY = engine.input.mouseY;
+		var tileNumber = engine.mapEditor.layers[1].items[0].getTile(mouseX, mouseY);
+		if(typeof tileNumber != 'undefined'){
+			console.log("Tile #: " + tileNumber);
+		}
 		
 		if(engine.input.dragging) {
 			var delta = engine.input.getMouseDelta();
@@ -111,6 +120,7 @@ function platformer(engine) {
 			
 			// Create map editor
 			var _mapEditor = new ex.simplex.Map("Map");
+			engine.mapEditor = _mapEditor;
 			_mapEditor.addLayer("foreground", 
 					[
 					 	new ex.display.Image(engine.imageRepository.img.Asteroid, new ex.base.Point(Math.floor(Math.random()*800), Math.floor(Math.random()*500))),
