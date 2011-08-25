@@ -255,6 +255,25 @@ if(!Array.indexOf){
 		}
 	};
 	
+	ex.Element = {
+		defaults: {
+			SCRIPT: {
+				language: 'javascript',
+				type: 'text/javascript'
+			}
+		},
+			
+		createTag: function (tag, params) {
+			var tag = document.createElement(tag);
+			tag = ex.extend(tag, params);
+			return tag;
+		},
+		
+		getByTagName: function (name) {
+			return document.getElementsByTagName(name)[0];
+		}
+	};
+	
 	function preload() {
 		var head = document.getElementsByTagName('head')[0];
 		var scripts = head.getElementsByTagName('script');
