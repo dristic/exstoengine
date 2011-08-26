@@ -81,5 +81,13 @@ Ext.define('Simplex.controller.Game', {
 	
 	toggleLayer: function(layerId) {
 		this.engine.currentWorld.objects[0].layers[layerId].toggleVisibility();
+	},
+	
+	showLayer: function(layerId) {
+		this.engine.currentWorld.objects[0].layers[layerId].show();
+	},
+	
+	hideLayer: function(layerId) {
+		this.engine.currentWorld.objects[0].layers[layerId].hide();
 	}
 });

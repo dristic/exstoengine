@@ -9,7 +9,7 @@ Ext.define('Simplex.view.menu.LayerList', {
    	tpl: [
    	    '<tpl for=".">',
    	    	'<div class="layer">',
-   	    		'<input type="checkbox" name="{name}" />{name}',
+   	    		'<input type="checkbox" name={layerId} />{name}',
    	    	'</div>',
    	    '</tpl>'
    	],

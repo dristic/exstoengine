@@ -11,20 +11,23 @@ Ext.define('Simplex.controller.Menu', {
        { ref: 'layerList', selector: 'layerlist' }
     ],
     
-	init: function () {		
+	init: function () {
+		this.activeLayer = null;	// keeps track of which layer is active
 		this.control({
-			"layerlist": {
-				// Set active layer
-				selectionchange: this.onSelectionChange,
-		
-				check: function(){		//FIXME: this doesn't work because the checkbox is in the template
-					alert("checked!");
-				}
-		
-				//Layer checkbox checked show layer
-				//Layer checkbox checked hide layer
-			}
+//			"layerlist": {
+//				// Set active layer
+//				selectionchange: this.onSelectionChange
+//			},
 			
+			"layerlist": {
+				itemclick: function(view, record, item, index, e, eOpts){
+					if(e.target.type == 'checkbox') {
+						this.onCheckboxClick(e.target);
+					}
+				},
+				
+				selectionchange: this.onSelectionChange
+			}
 		});
 	},
 	
@@ -35,6 +38,14 @@ Ext.define('Simplex.controller.Menu', {
 		for(index; index < records.length; index++){
 			editor.toggleLayer(records[index].get('layerId'));
 		}
-		
+	},
+	
+	onCheckboxClick: function (checkbox) {
+		var editor = this.getController('Game');
+		if(checkbox.checked){
+			editor.showLayer(checkbox.name);
+		} else {
+			editor.hideLayer(checkbox.name);
+		}
 	}
 });
