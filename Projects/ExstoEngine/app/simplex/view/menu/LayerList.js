@@ -8,13 +8,13 @@ Ext.define('Simplex.view.menu.LayerList', {
    	width: 250,
    	tpl: [
    	    '<tpl for=".">',
-   	    	'<div class="tile">',
+   	    	'<div class="layer">',
    	    		'<input type="checkbox" name="{name}" />{name}',
    	    	'</div>',
    	    '</tpl>'
    	],
    	
-   	itemSelector: 'div.tile',
+   	itemSelector: 'div.layer',
    	singleSelect: true,
    	multiSelect: false,
    	cls: 'x-layer-list',
@@ -23,10 +23,11 @@ Ext.define('Simplex.view.menu.LayerList', {
    	initComponent: function() {
    		this.store = Ext.create('Ext.data.Store', {
    			autoLoad: true,
-   			fields	: ['name'],
+   			fields	: ['name', 'layerId'],
    			data	: [
-   			    {name: 'Layer 1' },
-   			    {name: 'Layer 2' }
+   			    {name: 'Layer 1' , layerId: 0},
+   			    {name: 'Layer 2' , layerId: 1},
+   			    {name: 'Layer 3' , layerId: 2}
    			]
    		});
    		this.callParent();

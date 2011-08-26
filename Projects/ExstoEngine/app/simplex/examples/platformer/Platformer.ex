@@ -34,7 +34,6 @@ function platformer(engine) {
 			
 			// Create map editor
 			var _mapEditor = new ex.simplex.Map("Map");
-			engine.mapEditor = _mapEditor;
 			_mapEditor.addLayer("foreground", 
 					[
 					 	new ex.display.Image(engine.imageRepository.img.Asteroid, new ex.base.Point(Math.floor(Math.random()*800), Math.floor(Math.random()*500))),

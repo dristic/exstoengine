@@ -88,6 +88,16 @@ ex.using([ 'ex.base.Point', 'ex.base.Vector' ], function() {
 		},
 
 		/**
+		 * toggles visibility of the layer
+		 */
+		toggleVisibility: function() {
+			if(this.visible)
+				this.hide();
+			else
+				this.show();
+		},
+		
+		/**
 		 * sets visible property to true, does not affect opacity.
 		 */
 		show : function() {
