@@ -7,7 +7,8 @@ Ext.define('Simplex.controller.Game', {
     ],
     
     refs: [
-       { ref:'game', selector:'game' }
+       { ref: 'game', 		selector: 'game' },
+       { ref: 'layerList', 	selector: 'layerlist' }
     ],
     
 	init: function() {
@@ -75,18 +76,51 @@ Ext.define('Simplex.controller.Game', {
 		}
 	},
 	
+	/**
+	 * Loads a map into the editor and sets up the appropriate
+	 * data stores for the menu panels
+	 * @param map
+	 */
 	loadMap: function (map) {
-		map(this.engine);
+		// Load the map into the engine
+		map(this);
 	},
 	
+	onMapLoad: function(){
+		// Clear and populate layer list store
+		var layerListStore = this.getLayerList().store;
+		layerListStore.removeAll();
+		var index = 0;
+		var layers = this.engine.currentWorld.objects[0].layers;
+		for(index; index < layers.length; index++){
+			layerListStore.add({
+				layerId	: index,
+				name	: layers[index].name,
+				visible	: layers[index].visible
+			});
+		}
+	},
+	
+	/**
+	 * Toggles layer visibility (does not affect opacity)
+	 * @param layerId
+	 */
 	toggleLayer: function(layerId) {
 		this.engine.currentWorld.objects[0].layers[layerId].toggleVisibility();
 	},
 	
+	/**
+	 * Sets layer visibility to true (does not affect opacity)
+	 * @param layerId
+	 */
 	showLayer: function(layerId) {
 		this.engine.currentWorld.objects[0].layers[layerId].show();
 	},
 	
+	/**
+	 * Sets layer visibility to false (does not affect opacity)
+	 * @param layerId
+	 */
 	hideLayer: function(layerId) {
 		this.engine.currentWorld.objects[0].layers[layerId].hide();
 	}

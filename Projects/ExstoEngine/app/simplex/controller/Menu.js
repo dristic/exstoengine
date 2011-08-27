@@ -13,12 +13,7 @@ Ext.define('Simplex.controller.Menu', {
     
 	init: function () {
 		this.activeLayer = null;	// keeps track of which layer is active
-		this.control({
-//			"layerlist": {
-//				// Set active layer
-//				selectionchange: this.onSelectionChange
-//			},
-			
+		this.control({			
 			"layerlist": {
 				itemclick: function(view, record, item, index, e, eOpts){
 					if(e.target.type == 'checkbox') {
@@ -31,15 +26,24 @@ Ext.define('Simplex.controller.Menu', {
 		});
 	},
 	
+	/**
+	 * Sets the active layer to the current selection
+	 * @param e
+	 */
 	onSelectionChange: function (e) {
-		var editor = this.getController('Game');
-		var records = this.getLayerList().getSelectionModel().getSelection();
-		var index = 0;
-		for(index; index < records.length; index++){
-			editor.toggleLayer(records[index].get('layerId'));
-		}
+//		var editor = this.getController('Game');
+//		var records = this.getLayerList().getSelectionModel().getSelection();
+//		var index = 0;
+//		for(index; index < records.length; index++){
+//			editor.toggleLayer(records[index].get('layerId'));
+//		}
 	},
 	
+	/**
+	 * Enables and disables visiblity of the layer associated with
+	 * the checkbox based on its value.
+	 * @param checkbox
+	 */
 	onCheckboxClick: function (checkbox) {
 		var editor = this.getController('Game');
 		if(checkbox.checked){

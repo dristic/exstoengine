@@ -1,5 +1,5 @@
 // Map file data
-function platformer(engine) {
+function platformer(editor) {
 	var data = [
 		[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 		[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -26,6 +26,7 @@ function platformer(engine) {
           "ex.base.Vector"
           	], 
 	  	function () {
+	  		var engine = editor.engine;
 			// Load images
 			engine.imageRepository.loadImage("simplexBG", "../../lib/exstoengine/examples/assets/world/simplexBG.png");
 			engine.imageRepository.loadImage("Tiles", "../../lib/exstoengine/examples/assets/world/tileset-platformer.png");
@@ -57,6 +58,9 @@ function platformer(engine) {
 			
 			// Add the map
 			engine.currentWorld.addObject(_mapEditor);
+			
+			// Run editor setup event
+			editor.onMapLoad();
 		});
 };
 
