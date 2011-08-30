@@ -11,6 +11,9 @@ Ext.define('Simplex.controller.Game', {
        { ref: 'layerList', 	selector: 'layerlist' }
     ],
     
+    activeTool: null,
+    activeLayer: null,
+    
 	init: function() {
 		this.control({
 			'editor': {
@@ -53,22 +56,25 @@ Ext.define('Simplex.controller.Game', {
 	
 	onEngineUpdate: function (dt) {
 		var engine = this.engine;
-		
-		if(engine.input.isKeyPressed(ex.util.Key.Keyb1)) {
-			alert("One pressed");
-		}
-		if(engine.input.isKeyPressed(ex.util.Key.Keyb2)) {
-			alert("Two pressed");
+		if(this.activeTool && this.activeLayer){
+			this.activeTool.update(dt);
 		}
 		
-		var mapX = engine.input.mouseX + engine.camera.x;
-		var mapY = engine.input.mouseY + engine.camera.y;
-		if(engine.input.mouseDown){
-			tileNumber = engine.currentWorld.objects[0].layers[1].items[0].getTile(mapX, mapY);
-			if(typeof tileNumber != 'undefined'){
-				engine.currentWorld.objects[0].layers[1].items[0].setTile(mapX, mapY, Math.floor(Math.random()*93));
-			}
-		}
+//		if(engine.input.isKeyPressed(ex.util.Key.Keyb1)) {
+//			alert("One pressed");
+//		}
+//		if(engine.input.isKeyPressed(ex.util.Key.Keyb2)) {
+//			alert("Two pressed");
+//		}
+//		
+//		var mapX = engine.input.mouseX + engine.camera.x;
+//		var mapY = engine.input.mouseY + engine.camera.y;
+//		if(engine.input.mouseDown){
+//			tileNumber = engine.currentWorld.objects[0].layers[1].items[0].getTile(mapX, mapY);
+//			if(typeof tileNumber != 'undefined'){
+//				engine.currentWorld.objects[0].layers[1].items[0].setTile(mapX, mapY, Math.floor(Math.random()*93));
+//			}
+//		}
 		
 		if(engine.input.dragging) {
 			var delta = engine.input.getMouseDelta();
@@ -123,5 +129,87 @@ Ext.define('Simplex.controller.Game', {
 	 */
 	hideLayer: function(layerId) {
 		this.engine.currentWorld.objects[0].layers[layerId].hide();
+	},
+	
+	setActiveLayer: function(layerId) {
+		this.activeLayer = this.engine.currentWorld.objects[0].layers[layerId];
+		if(this.activeLayer.name == "platforms"){
+			this.activeTool = tilePlacer(this.engine, this.activeLayer);
+		} else if (this.activeLayer.name == "foreground") {
+			this.activeTool = imagePlacer(this.engine, this.activeLayer);
+		} else {
+			this.activeTool = null;
+		}
+		if(this.activeTool)
+			alert("active tool is " + this.activeTool.name + " on " + this.activeLayer.name);
+		else
+			alert("There is no tool for " + this.activeLayer.name);
 	}
 });
+
+function tilePlacer (engine, $target) {
+	return {
+		name: "Tile Editor",
+		edits: ["TileMap"],
+		selectedTile: 0,
+		target: $target,
+		update: function(dt){
+			if(engine.input.isKeyPressed(ex.util.Key.Keyb1)) {
+				this.selectedTile = 1;
+			}
+			else if(engine.input.isKeyPressed(ex.util.Key.Keyb2)) {
+				this.selectedTile = 2;
+			}
+			else if(engine.input.isKeyPressed(ex.util.Key.Keyb3)) {
+				this.selectedTile = 3;
+			}
+			else if(engine.input.isKeyPressed(ex.util.Key.Keyb4)) {
+				this.selectedTile = 4;
+			}
+			else if(engine.input.isKeyPressed(ex.util.Key.Keyb5)) {
+				this.selectedTile = 5;
+			}
+			else if(engine.input.isKeyPressed(ex.util.Key.Keyb6)) {
+				this.selectedTile = 6;
+			}
+			else if(engine.input.isKeyPressed(ex.util.Key.Keyb7)) {
+				this.selectedTile = 7;
+			}
+			else if(engine.input.isKeyPressed(ex.util.Key.Keyb8)) {
+				this.selectedTile = 8;
+			}
+			else if(engine.input.isKeyPressed(ex.util.Key.Keyb9)) {
+				this.selectedTile = 9;
+			}
+			
+			var mapX = engine.input.mouseX + engine.camera.x;
+			var mapY = engine.input.mouseY + engine.camera.y;
+			if(engine.input.mouseDown){
+				tileNumber = engine.currentWorld.objects[0].layers[1].items[0].getTile(mapX, mapY);
+				if(typeof tileNumber != 'undefined'){
+					engine.currentWorld.objects[0].layers[1].items[0].setTile(mapX, mapY, this.selectedTile);
+				}
+			}
+		}
+		
+	};
+}
+
+function imagePlacer (engine, $target) {
+	return {
+		name: "Image Editor",
+		edits: ["Image"],
+		selectedTile: 0,
+		target: $target,
+		update: function(dt){
+			var mapX = engine.input.mouseX + engine.camera.x;
+			var mapY = engine.input.mouseY + engine.camera.y;
+			if(engine.input.mouseDown){
+				engine.currentWorld.objects[0].layers[0].items.push(
+						new ex.display.Image(engine.imageRepository.img.Asteroid, new ex.base.Point(mapX, mapY))
+				);
+			}
+		}
+		
+	};
+}

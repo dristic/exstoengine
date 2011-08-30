@@ -12,7 +12,6 @@ Ext.define('Simplex.controller.Menu', {
     ],
     
 	init: function () {
-		this.activeLayer = null;	// keeps track of which layer is active
 		this.control({			
 			"layerlist": {
 				itemclick: function(view, record, item, index, e, eOpts){
@@ -31,12 +30,9 @@ Ext.define('Simplex.controller.Menu', {
 	 * @param e
 	 */
 	onSelectionChange: function (e) {
-//		var editor = this.getController('Game');
-//		var records = this.getLayerList().getSelectionModel().getSelection();
-//		var index = 0;
-//		for(index; index < records.length; index++){
-//			editor.toggleLayer(records[index].get('layerId'));
-//		}
+		var editor = this.getController('Game');
+		var records = this.getLayerList().getSelectionModel().getSelection();
+		editor.setActiveLayer(records[0].get('layerId'));
 	},
 	
 	/**

@@ -6,5 +6,9 @@ Ext.define("Simplex.controller.Status",{
 	
 	init: function() {
 		
+	},
+	
+	log: function(message){
+		
 	}
 });
