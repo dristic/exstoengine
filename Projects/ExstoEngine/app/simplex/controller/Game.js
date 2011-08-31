@@ -76,7 +76,7 @@ Ext.define('Simplex.controller.Game', {
 //			}
 //		}
 		
-		if(engine.input.dragging) {
+		if(engine.input.dragging && engine.input.isKeyDown(ex.util.Key.Shift)) {
 			var delta = engine.input.getMouseDelta();
 			engine.camera.move(-delta[0], -delta[1]);
 		}

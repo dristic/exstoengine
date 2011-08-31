@@ -10,6 +10,7 @@ ex.using([
 			this.mouseY = 0;
 			this.mouseDown = false;
 			this.mouseUp = false;
+			this.rightButton = false;
 			
 			this.lastMouseX = 0;
 			this.lastMouseY = 0;
@@ -70,12 +71,16 @@ ex.using([
 		onMouseDown: function(event) {
 			this.mouseDown = true;
 			this._beginDrag = true;
+			
+			if (event.which) this.rightButton = (event.which == 3);
+			else if (event.button) this.rightButton = (event.button == 2);
 		},
 		
 		onMouseUp: function(event) {
 			this.mouseUp = true;
 			this._beginDrag = false;
 			this.dragging = false;
+			this.rightButton = false;
 		},
 		
 		onMouseMove: function(event) {
