@@ -21,7 +21,10 @@ ex.using([ 'ex.base.Point', 'ex.base.Vector' ], function() {
 		 *            {ex.base.Vector}: starting size of image
 		 * @constructor
 		 */
-		constructor : function($image, $position, $size) {
+		constructor : function($image, $position, $size, $name) {
+			this.visible = true;
+			this.type = "Image";
+			this.name = $name;
 			this.position = $position || new ex.base.Point(0, 0);
 			this.size = $size
 					|| new ex.base.Vector($image.width, $image.height);
@@ -41,10 +44,25 @@ ex.using([ 'ex.base.Point', 'ex.base.Vector' ], function() {
 		 */
 		autoSize: function () {
 			this.size = new ex.base.Vector(this.image.width, this.image.height);
-			console.log(this.size.x + " : " + this.size.y);
+			//console.log(this.size.x + " : " + this.size.y);
 			return this.size;
 		},
 
+		/**
+		 * Retrieves an object containing the position an dsize of the rendered
+		 * 		SpriteMap
+		 * @returns {___anonymous479_619} the position and size of the rendered
+		 * 				SpriteMap
+		 */
+		getBounds: function() {
+			return {
+				x		: this.x,
+				y		: this.y,
+				width	: this.size.x,
+				height	: this.size.y
+			};
+		},
+		
 		/**
 		 * performs actions every time period dt
 		 * 
@@ -67,6 +85,10 @@ ex.using([ 'ex.base.Point', 'ex.base.Vector' ], function() {
 		 *            {Number}: camera offset on y
 		 */
 		render : function($context, $camX, $camY) {
+			if(!this.visible){
+				return;
+			}
+			
 			if (this.image == null) {
 				$context.fillStyle = '#888888';
 				$context.fillRect(

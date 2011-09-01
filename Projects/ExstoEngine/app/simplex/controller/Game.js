@@ -8,11 +8,13 @@ Ext.define('Simplex.controller.Game', {
     
     refs: [
        { ref: 'game', 		selector: 'game' },
-       { ref: 'layerList', 	selector: 'layerlist' }
+       { ref: 'layerList', 	selector: 'layerlist' },
+       { ref: 'itemList' ,  selector: 'itemlist' }
     ],
     
     activeTool: null,
     activeLayer: null,
+    activeItem: null,
     
 	init: function() {
 		this.control({
@@ -59,22 +61,6 @@ Ext.define('Simplex.controller.Game', {
 		if(this.activeTool && this.activeLayer){
 			this.activeTool.update(dt);
 		}
-		
-//		if(engine.input.isKeyPressed(ex.util.Key.Keyb1)) {
-//			alert("One pressed");
-//		}
-//		if(engine.input.isKeyPressed(ex.util.Key.Keyb2)) {
-//			alert("Two pressed");
-//		}
-//		
-//		var mapX = engine.input.mouseX + engine.camera.x;
-//		var mapY = engine.input.mouseY + engine.camera.y;
-//		if(engine.input.mouseDown){
-//			tileNumber = engine.currentWorld.objects[0].layers[1].items[0].getTile(mapX, mapY);
-//			if(typeof tileNumber != 'undefined'){
-//				engine.currentWorld.objects[0].layers[1].items[0].setTile(mapX, mapY, Math.floor(Math.random()*93));
-//			}
-//		}
 		
 		if(engine.input.dragging && engine.input.isKeyDown(ex.util.Key.Shift)) {
 			var delta = engine.input.getMouseDelta();
@@ -131,63 +117,90 @@ Ext.define('Simplex.controller.Game', {
 		this.engine.currentWorld.objects[0].layers[layerId].hide();
 	},
 	
+	toggleItem: function(itemId) {
+		this.activeLayer.items[itemId].visible = !this.activeLayer.items[itemId].visible;
+	},
+	
+	showItem: function(itemId) {
+		this.activeLayer.items[itemId].visible = true;
+	},
+	
+	hideItem: function(itemId) {
+		this.activeLayer.items[itemId].visible = false;
+	},
+	
 	setActiveLayer: function(layerId) {
 		this.activeLayer = this.engine.currentWorld.objects[0].layers[layerId];
-		if(this.activeLayer.name == "platforms"){
-			this.activeTool = tilePlacer(this.engine, this.activeLayer);
-		} else if (this.activeLayer.name == "foreground") {
+		this.activeItem = null;
+		this.activeTool = null;
+		
+		var itemListStore = this.getItemList().store;
+		itemListStore.removeAll();
+		var index = 0;
+		var items = this.activeLayer.items;
+		for(index; index < items.length; index++){
+			itemListStore.add({
+				itemId	: index,
+				name	: items[index].name || (items[index].type + " " + index),
+				visible	: items[index].visible
+			});
+		}
+	},
+	
+	setActiveItem: function(itemId) {
+		if(!this.activeLayer){
+			this.activeItem = null;
+			alert("This item does not exist.");
+		}
+		this.activeItem = this.activeLayer.items[itemId];
+	},
+	
+	setActiveTool: function(toolName) {
+		if(toolName == 'imagePlacer'){
 			this.activeTool = imagePlacer(this.engine, this.activeLayer);
+		} else if (toolName == 'tilePlacer') {
+			this.activeTool = tilePlacer(this.engine, this.activeLayer);
 		} else {
 			this.activeTool = null;
 		}
-		if(this.activeTool)
-			alert("active tool is " + this.activeTool.name + " on " + this.activeLayer.name);
-		else
-			alert("There is no tool for " + this.activeLayer.name);
 	}
 });
 
 function tilePlacer (engine, $target) {
 	return {
 		name: "Tile Editor",
-		edits: ["TileMap"],
+		edits: ["SpriteMap"],
 		selectedTile: 0,
 		target: $target,
 		update: function(dt){
-			if(engine.input.isKeyPressed(ex.util.Key.Keyb1)) {
+			if(engine.input.isKeyPressed(ex.util.Key.Keyb0)){
+				this.selectedTile = 0;
+			} else if(engine.input.isKeyPressed(ex.util.Key.Keyb1)) {
 				this.selectedTile = 1;
-			}
-			else if(engine.input.isKeyPressed(ex.util.Key.Keyb2)) {
+			} else if(engine.input.isKeyPressed(ex.util.Key.Keyb2)) {
 				this.selectedTile = 2;
-			}
-			else if(engine.input.isKeyPressed(ex.util.Key.Keyb3)) {
+			} else if(engine.input.isKeyPressed(ex.util.Key.Keyb3)) {
 				this.selectedTile = 3;
-			}
-			else if(engine.input.isKeyPressed(ex.util.Key.Keyb4)) {
+			} else if(engine.input.isKeyPressed(ex.util.Key.Keyb4)) {
 				this.selectedTile = 4;
-			}
-			else if(engine.input.isKeyPressed(ex.util.Key.Keyb5)) {
+			} else if(engine.input.isKeyPressed(ex.util.Key.Keyb5)) {
 				this.selectedTile = 5;
-			}
-			else if(engine.input.isKeyPressed(ex.util.Key.Keyb6)) {
+			} else if(engine.input.isKeyPressed(ex.util.Key.Keyb6)) {
 				this.selectedTile = 6;
-			}
-			else if(engine.input.isKeyPressed(ex.util.Key.Keyb7)) {
+			} else if(engine.input.isKeyPressed(ex.util.Key.Keyb7)) {
 				this.selectedTile = 7;
-			}
-			else if(engine.input.isKeyPressed(ex.util.Key.Keyb8)) {
+			} else if(engine.input.isKeyPressed(ex.util.Key.Keyb8)) {
 				this.selectedTile = 8;
-			}
-			else if(engine.input.isKeyPressed(ex.util.Key.Keyb9)) {
+			} else if(engine.input.isKeyPressed(ex.util.Key.Keyb9)) {
 				this.selectedTile = 9;
 			}
 			
 			var mapX = engine.input.mouseX + engine.camera.x;
 			var mapY = engine.input.mouseY + engine.camera.y;
-			if(engine.input.mouseDown){
-				tileNumber = engine.currentWorld.objects[0].layers[1].items[0].getTile(mapX, mapY);
+			if((engine.input.mouseDown || engine.input.dragging) && !engine.input.isKeyDown(ex.util.Key.Shift)){
+				tileNumber = this.target.items[0].getTile(mapX, mapY);
 				if(typeof tileNumber != 'undefined'){
-					engine.currentWorld.objects[0].layers[1].items[0].setTile(mapX, mapY, this.selectedTile);
+					this.target.items[0].setTile(mapX, mapY, this.selectedTile);
 				}
 			}
 		}
@@ -202,10 +215,11 @@ function imagePlacer (engine, $target) {
 		selectedTile: 0,
 		target: $target,
 		update: function(dt){
-			var mapX = engine.input.mouseX + engine.camera.x;
-			var mapY = engine.input.mouseY + engine.camera.y;
-			if(engine.input.mouseDown){
-				engine.currentWorld.objects[0].layers[0].items.push(
+			var imageName = "";
+			var mapX = engine.input.mouseX + (engine.camera.x * this.target.scrollFactor.x);
+			var mapY = engine.input.mouseY + (engine.camera.y * this.target.scrollFactor.y);
+			if(engine.input.mouseDown && !engine.input.isKeyDown(ex.util.Key.Shift)){
+				this.target.items.push(
 						new ex.display.Image(engine.imageRepository.img.Asteroid, new ex.base.Point(mapX, mapY))
 				);
 			}

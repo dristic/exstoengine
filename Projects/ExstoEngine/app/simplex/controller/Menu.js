@@ -4,11 +4,13 @@ Ext.define('Simplex.controller.Menu', {
 	views: [
         'menu.Panel',
         'menu.TileView',
-        'menu.LayerPanel'
+        'menu.LayerPanel',
+        'menu.ItemPanel'
     ],
     
     refs: [
-       { ref: 'layerList', selector: 'layerlist' }
+       { ref: 'layerList', selector: 'layerlist' },
+       { ref: 'itemList', selector: 'itemlist' }
     ],
     
 	init: function () {
@@ -16,11 +18,21 @@ Ext.define('Simplex.controller.Menu', {
 			"layerlist": {
 				itemclick: function(view, record, item, index, e, eOpts){
 					if(e.target.type == 'checkbox') {
-						this.onCheckboxClick(e.target);
+						this.onLayerCheckboxClick(e.target);
 					}
 				},
 				
-				selectionchange: this.onSelectionChange
+				selectionchange: this.onLayerSelectionChange
+			},
+			
+			"itemlist": {
+				itemclick: function(view, record, item, index, e, eOpts){
+					if(e.target.type == 'checkbox') {
+						this.onItemCheckboxClick(e.target);
+					}
+				},
+				
+				selectionchange: this.onItemSelectionChange,
 			}
 		});
 	},
@@ -29,7 +41,7 @@ Ext.define('Simplex.controller.Menu', {
 	 * Sets the active layer to the current selection
 	 * @param e
 	 */
-	onSelectionChange: function (e) {
+	onLayerSelectionChange: function () {
 		var editor = this.getController('Game');
 		var records = this.getLayerList().getSelectionModel().getSelection();
 		editor.setActiveLayer(records[0].get('layerId'));
@@ -40,12 +52,26 @@ Ext.define('Simplex.controller.Menu', {
 	 * the checkbox based on its value.
 	 * @param checkbox
 	 */
-	onCheckboxClick: function (checkbox) {
+	onLayerCheckboxClick: function (checkbox) {
 		var editor = this.getController('Game');
 		if(checkbox.checked){
 			editor.showLayer(checkbox.name);
 		} else {
 			editor.hideLayer(checkbox.name);
 		}
+	},
+	
+	onItemSelectionChange: function() {
+		var editor = this.getController('Game');
+		var records = this.getItemList().getSelectionModel().getSelection();
+		editor.setActiveItem(records[0].get('itemId'));
+	},
+	
+	onItemCheckboxClick: function(checkbox){
+		var editor = this.getController('Game');
+		if(checkbox.checked)
+			editor.showItem(checkbox.name);
+		else
+			editor.hideItem(checkbox.name);
 	}
 });

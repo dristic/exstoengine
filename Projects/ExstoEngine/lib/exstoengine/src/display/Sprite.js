@@ -2,7 +2,9 @@ ex.using([
   "ex.base.Vector"
 ], function () {
 	ex.define("ex.display.Sprite", {
-        constructor: function (x, y, img) {
+        constructor: function (x, y, img, name) {
+        	this.name = name;
+        	this.type = "Sprite";
             this.x = x || 0;
             this.y = y || 0;
             this.position = new ex.base.Vector(x, y);
@@ -42,25 +44,27 @@ ex.using([
         },
 
         render: function (context, camX, camY) {
-            if (this.visible == true) {
-                if (this.rotationEnabled == false) {
-                    context.drawImage(this.img, this.x - (camX * this.scrollFactorX), this.y - (camY * this.scrollFactorY));
-                } else {
-                    var rContext = this.rotationCanvas.getContext("2d");
+            if (!this.visible){
+            	return;
+            }
+            
+            if (this.rotationEnabled == false) {
+                context.drawImage(this.img, this.x - (camX * this.scrollFactorX), this.y - (camY * this.scrollFactorY));
+            } else {
+                var rContext = this.rotationCanvas.getContext("2d");
 
-                    //--Ensure width and height are not 0 to avoid INVALID_STATE_ERR
-                    this.rotationCanvas.width = this.img.width || 1;
-                    this.rotationCanvas.height = this.img.height || 1;
+                //--Ensure width and height are not 0 to avoid INVALID_STATE_ERR
+                this.rotationCanvas.width = this.img.width || 1;
+                this.rotationCanvas.height = this.img.height || 1;
 
-                    rContext.save();
-                    rContext.translate(this.halfWidth(), this.halfHeight());
-                    rContext.rotate(this.rotation);
-                    rContext.translate(-this.halfWidth(), -this.halfHeight());
-                    rContext.drawImage(this.img, 0, 0);
-                    rContext.restore();
+                rContext.save();
+                rContext.translate(this.halfWidth(), this.halfHeight());
+                rContext.rotate(this.rotation);
+                rContext.translate(-this.halfWidth(), -this.halfHeight());
+                rContext.drawImage(this.img, 0, 0);
+                rContext.restore();
 
-                    context.drawImage(this.rotationCanvas, this.x - (camX * this.scrollFactorX), this.y - (camY * this.scrollFactorY));
-                }
+                context.drawImage(this.rotationCanvas, this.x - (camX * this.scrollFactorX), this.y - (camY * this.scrollFactorY));
             }
         },
 

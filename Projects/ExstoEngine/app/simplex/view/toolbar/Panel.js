@@ -16,6 +16,10 @@ Ext.define('Simplex.view.toolbar.Panel', {
 				text: 'Load',
 			    icon: 'resources/icons/16x16/Folder3.png'
 			}
+		}, {
+			xtype: 'button',
+			text: 'Image',
+			icon: 'resources/icons/16x16/Photo.png'
 		}]
 	}]
 });

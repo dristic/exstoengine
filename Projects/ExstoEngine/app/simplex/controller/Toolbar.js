@@ -10,6 +10,7 @@ Ext.define('Simplex.controller.Toolbar', {
     ],
     
     init: function () {
+    	var editor = this.getController('Game');
     	this.control({
     		'toolbar button[text="Save"]': {
     			click: this.save
@@ -19,6 +20,12 @@ Ext.define('Simplex.controller.Toolbar', {
     			change: {
     				fn: this.load,
     				scope: this
+    			}
+    		},
+    		
+    		'toolbar button[text="Image"]': {
+    			click: function(){
+    				editor.setActiveTool('imagePlacer');
     			}
     		}
     	});

@@ -5,7 +5,6 @@ Ext.application({
 	
 	controllers: [
       	'Menu',
-      	//'Editor',
       	'Game',
       	'Status',
       	'Toolbar'
@@ -24,8 +23,7 @@ Ext.application({
 		        	items: [{
 	        			xtype: 'layerpanel'
 	        		}, {
-	        			title: 'Tiles',
-	        			items: [{ xtype: 'tileview' }]
+	        			xtype: 'itempanel'
 	        		}]
 		        }, {
 		        	xtype: 'editor',

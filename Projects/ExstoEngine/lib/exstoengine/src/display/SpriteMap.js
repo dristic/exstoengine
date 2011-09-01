@@ -2,7 +2,10 @@ ex.using([
   "ex.world.TileMap"
 ], function () {
 	ex.define("ex.display.SpriteMap", ex.world.TileMap, {
-		constructor: function(tileWidth, tileHeight, map, img) {
+		constructor: function(tileWidth, tileHeight, map, img, name) {
+			this.visible = true;
+			this.name = name;
+			this.type = "SpriteMap";
 			this.img = img;
 			this.x = 0;
 			this.y = 0;
@@ -11,11 +14,30 @@ ex.using([
 			this._super("constructor", [tileWidth, tileHeight, map]);
 		},
 		
+		/**
+		 * Retrieves an object containing the position an dsize of the rendered
+		 * 		SpriteMap
+		 * @returns {___anonymous479_619} the position and size of the rendered
+		 * 				SpriteMap
+		 */
+		getBounds: function() {
+			return {
+				x		: this.x,
+				y		: this.y,
+				width	: this.tileWidth * this.map[0].length,
+				height	: this.tileHeight * this.map.length
+			};
+		},
+		
 		update: function(dt) {
 			
 		},
 		
 		render: function(context, camX, camY) {
+			if(!this.visible){
+				return;
+			}
+			
 			for(var y = 0; y < this.map.length; y++) {
 				for(var x = 0; x < this.map[y].length; x++) {
 					var tile = this.map[y][x], sx = 0, sy = 0;
