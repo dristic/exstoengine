@@ -1,0 +1,309 @@
+@charset "utf-8";
+/* CSS Document */
+
+html
+{
+	height: 100%;
+}
+
+body {
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: #232627;
+    margin: 0px;
+    padding: 0px;
+    font-size: 14px;
+    color: #4F5155;
+}
+
+#bg
+{
+    background: url(../content/images/bg.png) repeat-x;
+    width: 814px;
+    height: 356px;
+    position: fixed;
+    top: 0px;
+    left: 15%;
+    z-index: -1;
+}
+
+header
+{
+	background: rgba(0, 0, 0, 0.5) url(../content/images/bg_header.png);
+	border-bottom: 2px solid #000;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+    margin: 0px auto 0px auto;
+    padding: 20px 50px 0 50px;
+    height: 80px;
+}
+
+#logo
+{
+    background: url(../content/images/logo.png) no-repeat;
+    height: 73px;
+}
+
+nav ul
+{
+	list-style: none;
+	height: 46px;
+	float: right;
+	margin-top: 25px;
+}
+
+nav ul li
+{
+	display: inline-block;
+	padding: 0;
+	margin: 0 2px 0 2px;
+}
+
+nav a
+{
+	height:30px;
+	padding: 0px 8px 0px 8px;
+	color: #fdbb6e;
+	font-weight: bold;
+	text-transform: uppercase;
+	text-decoration: none;
+	display: block;
+	line-height: 30px;
+	-moz-border-radius: 5px 5px 5px 5px;
+	-khtml-border-radius: 5px 5px 5px 5px;
+	-webkit-border-radius: 5px 5px 5px 5px;
+	border-radius: 5px 5px 5px 5px;
+}
+
+nav a:hover
+{
+	background: #2a2a2a;
+}
+
+a.button
+{
+	background: #f18e20 url(../content/images/bg_button.png) repeat-x;
+	color: #333;
+}
+
+a.button:hover
+{
+	background: #fb982a url(../content/images/bg_button.png) repeat-x;
+}
+
+#main
+{
+    background-color: #FFFFFF;
+    width: 100%;
+    z-index: 1;
+}
+
+#banner
+{
+	background: rgba(0, 0, 0, 0.8);
+	width: 100%;
+}
+
+#main-footer
+{
+	border-top: 3px solid rgb(100, 100, 100);
+	width: 920px;
+	margin: 0px auto 0px auto;
+	height: 40px;
+	padding: 20px;
+	background: rgb(150, 150, 150);
+	-moz-border-radius: 0 0 5px 5px;
+	-khtml-border-radius: 0 0 5px 5px;
+	-webkit-border-radius: 0 0 5px 5px;
+	border-radius: 0 0 5px 5px;
+}
+
+footer
+{
+	padding-top: 7px;
+	width: 920px;
+	margin: 0px auto 0px auto;
+	height: 23px;
+	color: #9e9586;
+	font-family: Tahoma, Geneva, sans-serif;
+	font-size: 0.8em;
+	text-align: right;
+}
+
+footer a
+{
+	color: #9e9586;
+}
+
+a {
+ color: #003399;
+ background-color: transparent;
+ font-weight: normal;
+}
+
+h1 
+{
+ color: #cc3910;
+ background-color: transparent;
+ font-size: 24px;
+ font-weight: bold;
+ margin: 24px 0 2px 0;
+ padding: 5px 0 6px 0;
+}
+
+h2 
+{
+    margin-top: 0px;
+    color: #cc3910;
+    font-size: 24px;
+ 	font-weight: bold;
+ 	font-family: Arial, Helvetica, sans-serif;
+}
+
+#h2
+{
+	display: table;
+}
+
+#h2 h2 
+{
+	display: table-cell;
+}
+
+#h2-horizontal-rule
+{
+	background: #332f29;
+	float: right;
+	height: 10px;
+	width: 710px;
+	margin-left: 20px;
+}
+
+h3
+{
+	margin-top: 0px;
+}
+
+code {
+ font-family: Monaco, Verdana, Sans-serif;
+ font-size: 12px;
+ background-color: #f9f9f9;
+ border: 1px solid #D0D0D0;
+ color: #002166;
+ display: block;
+ margin: 14px 0 14px 0;
+ padding: 12px 10px 12px 10px;
+}
+
+/*
+ * Forms
+ * --------------------------------------
+ */
+#infoMessage
+{
+    color: #cc3910;
+    padding-left: 20px;
+}
+
+.form-header {
+	color: #cc3910;
+	font-size: 1.5em;
+	padding: 5px;
+}
+.form-field {
+	display: table-row;
+	padding: 5px;
+}
+
+.form-label {
+	display: table-cell;
+	padding: 5px;
+	text-align: right;
+}
+
+.form-input {
+	display: table-cell;
+	padding: 5px;
+}
+
+.form-input input[type="submit"] {
+	font-family: Monaco, Verdana, Sans-serif;
+	background-color: #cc3910;
+	border: none;
+	padding: 3px 10px 3px 10px;
+	color: #FFF;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+/*
+ * Home Page
+ */
+span
+{
+     display: none;
+}
+
+#header_banner
+{
+    background: url(../content/images/homeBanner.png) no-repeat;
+    width: 833px;
+    height: 266px;
+    display: block;
+    margin-left: -30px;
+    margin-top: -31px;
+}
+
+#sign-up
+{
+    display: table-cell;
+    padding: 50px 0px 0px 55px;
+}
+
+#sign-up a
+{
+    background: url(../content/images/signUpBtn.png) no-repeat;
+    width: 168px;
+    height: 65px;
+    display: table;
+}
+
+.vr
+{
+    background: #4F5155;
+    width: 2px;
+    display: table-cell;
+}
+
+.create-link
+{
+	line-height: 30px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12pt;
+	font-weight: bold;
+	color: #332f29;
+	text-decoration: none;
+}
+
+/*
+ * Tables
+ */
+table
+{
+	border: 1px solid #CCC;
+	border-collapse: collapse;
+}
+
+table th
+{
+	background: #CCC;
+}
+
+table th, td
+{
+	border: 1px solid #CCC;
+	padding: 4px;
+}
