@@ -8,17 +8,18 @@
 	<!-- Favicon -->
 	<link href="<?=base_url()?>/favicon.png" rel="icon" type="image/png" />
 	
-	<!-- Main stylesheet -->
-	<link href="<?=base_url().'system/application/views/style/main2.css'?>" rel="stylesheet" type="text/css" />
-	
+	<!-- 960 Grid -->
 	<link href="<?=base_url().'system/application/views/style/reset.css'?>" rel="stylesheet" type="text/css" />
 	<link href="<?=base_url().'system/application/views/style/text.css'?>" rel="stylesheet" type="text/css" />
 	<link href="<?=base_url().'system/application/views/style/960_12_col.css'?>" rel="stylesheet" type="text/css" />
 	
+	<!-- Main stylesheet -->
+	<link href="<?=base_url().'system/application/views/style/main2.css'?>" rel="stylesheet" type="text/css" />
+	
 	<!-- jQuery library + UI -->
-	<link href="<?=base_url().'system/application/views/style/slideshow.css'?>" rel="stylesheet" type="text/css" />
-	<script src="<?=base_url().'lib/jquery-1.4.4.min.js'?>"></script>
-	<script src="<?=base_url().'lib/slides.min.jquery.js'?>"></script> 
+	<!--<link href="<?=base_url().'system/application/views/style/slideshow.css'?>" rel="stylesheet" type="text/css" />-->
+	<!--<script src="<?=base_url().'lib/jquery-1.4.4.min.js'?>"></script>-->
+	<!--<script src="<?=base_url().'lib/slides.min.jquery.js'?>"></script>-->
 	
 	<!--[if IE]>
     	<script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -66,8 +67,38 @@
 		<?= $content ?>
 	</section>
 	
-	<footer class="grid_5 prefix_7">
-		&copy; 2011 Shadow Rule LLC. <?= anchor("legal", "Terms of Service / Privacy Policy") ?>
+	<footer class="container_12">
+		<div class="grid_4">
+			<h2>Heading</h2>
+			<ul>
+				<li>Link 1</li>
+				<li>Link 2</li>
+				<li>Link 3</li>
+			</ul>
+		</div>
+		
+		<div class="grid_4">
+			<h2>Heading</h2>
+			<ul>
+				<li>Link 1</li>
+				<li>Link 2</li>
+				<li>Link 3</li>
+			</ul>
+		</div>
+		
+		<div class="grid_4">
+			<h2>Heading</h2>
+			<ul>
+				<li>Link 1</li>
+				<li>Link 2</li>
+				<li>Link 3</li>
+			</ul>
+		</div>
+		
+		<div class="grid_12" id="legal">
+			<img src="<?=base_url().'system/application/views/content/images/watermark_logo.png'?>" alt="Exsto Engine Watermark" />
+			&copy; 2011 Shadow Rule LLC. All rights reserved. <?= anchor("legal", "Terms of Service / Privacy Policy") ?>
+		</div>
 	</footer>
 
 </body>
