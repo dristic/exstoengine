@@ -31,7 +31,7 @@
 		<div class="clear"></div>
 		
 		<div class="grid_4">
-			<img src="<?=base_url()?>/system/application/views/content/images/icons/performance.png" width="64" height="64"/>
+			<img src="<?=base_url()?>system/application/views/content/images/icons/performance.png" width="64" height="64"/>
 			<h3>Cross-Browser & Cross-Platform</h3>
 		
 			<p>
@@ -40,7 +40,7 @@
 		</div>
 		
 		<div class="grid_4">
-			<img src="<?=base_url()?>/system/application/views/content/images/icons/connectivity.png" width="64" height="64"/>
+			<img src="<?=base_url()?>system/application/views/content/images/icons/connectivity.png" width="64" height="64"/>
 			<h3>Integrated Network Capabilities</h3>
 		
 			<p>
@@ -49,7 +49,7 @@
 		</div> 
 		
 		<div class="grid_4">
-			<img src="<?=base_url()?>/system/application/views/content/images/icons/styling.png" width="64" height="64"/>
+			<img src="<?=base_url()?>system/application/views/content/images/icons/styling.png" width="64" height="64"/>
 			<h3>Simplex IDE</h3>
 		
 			<p>
