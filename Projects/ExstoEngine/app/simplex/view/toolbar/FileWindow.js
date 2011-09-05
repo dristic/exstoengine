@@ -15,6 +15,7 @@ Ext.define('Simplex.view.toolbar.FileWindow', {
 			tbar: [{
 				xtype: 'button',
 				text: 'Up',
+				icon: 'resources/icons/16x16/Arrow2%20Up.png',
 				listeners: {
 					click: this.dirUp,
 					scope: this
@@ -31,6 +32,13 @@ Ext.define('Simplex.view.toolbar.FileWindow', {
 		        },
 		        
 		        columns: [
+		          { text: 'Type', sortable: true, dataIndex: 'isDir', width: 26, renderer: function (value) {
+		        	  if(value == true) {
+		        		  return '<img src="resources/icons/16x16/Folder.png" alt="Folder" />';
+		        	  } else {
+		        		  return '<img src="resources/icons/16x16/Document.png" alt="File" />';
+		        	  }
+		          } },
 		          { text: 'Name', sortable: true, dataIndex: 'name' }
 		        ]
 		    }]
