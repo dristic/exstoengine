@@ -10,12 +10,9 @@ Ext.define('Simplex.view.toolbar.Panel', {
 		    text: 'Save',
 		    icon: 'resources/icons/16x16/Save.png'
 		}, {
-			xtype: 'filefield',
-			buttonOnly: true,
-			buttonConfig: {
-				text: 'Load',
-			    icon: 'resources/icons/16x16/Folder3.png'
-			}
+			xtype: 'button',
+			text: 'Load',
+		    icon: 'resources/icons/16x16/Folder3.png'
 		}, {
 			xtype: 'button',
 			text: 'Image',

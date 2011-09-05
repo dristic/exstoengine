@@ -2,22 +2,29 @@ Ext.define('Simplex.controller.Toolbar', {
 	extend: 'Ext.app.Controller',
 	
 	views: [
-        'toolbar.Panel'
+        'toolbar.Panel',
+        'toolbar.FileWindow'
     ],
+    
+    stores: [ 'FileList' ],
+    
+    models: [ 'File' ],
     
     refs: [
        { ref: 'fileField', selector: 'filefield' }
     ],
     
     init: function () {
+    	this.fileWindow = Ext.create('Simplex.view.toolbar.FileWindow');
+    	
     	var editor = this.getController('Game');
     	this.control({
     		'toolbar button[text="Save"]': {
     			click: this.save
     		},
     		
-    		'toolbar filefield': {
-    			change: {
+    		'toolbar button[text="Load"]': {
+    			click: {
     				fn: this.load,
     				scope: this
     			}
@@ -40,20 +47,8 @@ Ext.define('Simplex.controller.Toolbar', {
     },
     
     load: function (field, value) {
-    	var file = field.fileInputEl.dom.files[0];
-    	var reader = new FileReader();
-    	
     	window.loadMap = ex.bind(this.getController('Game'), this.getController('Game').loadMap);
     	
-    	reader.onload = this.onloaded;
-    	reader.readAsText(file);
-    },
-    
-    onloaded: function (event) {
-    	var fileString = event.target.result;
-    	
-    	var script = ex.Element.createTag("script", ex.Element.defaults.SCRIPT);
-    	script.innerHTML = fileString;
-    	ex.Element.getByTagName('head').appendChild(script);
+    	this.fileWindow.show();
     }
 });
