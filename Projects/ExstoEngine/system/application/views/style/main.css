@@ -10,24 +10,12 @@ body {
     position: absolute;
     top: 0px;
     width: 100%;
-    background-color: #232627;
+    height: 100%;
+    background-color: #151617;
     margin: 0px;
     padding: 0px;
-    font-family: Trebuchet MS, Vrinda, Verdana, sans-sarif;
     font-size: 14px;
     color: #4F5155;
-    height: 100%;
-}
-
-#bar
-{
-	background: rgba(0, 0, 0, 0.5);
-	width: 100%;
-	height: 10px;
-	position: fixed;
-	top: 0px;
-	left: 0px;
-	z-index: 0;
 }
 
 #bg
@@ -43,75 +31,109 @@ body {
 
 header
 {
-    width: 920px;
+	background: rgba(0, 0, 0, 0.5) url(../content/images/bg_header.png);
+	border-bottom: 2px solid #000;
+    width: 100%;
     position: relative;
     z-index: 2;
     margin: 0px auto 0px auto;
-    padding: 20px 50px 0 50px;
     height: 80px;
 }
 
 #logo
 {
     background: url(../content/images/logo.png) no-repeat;
-    width: 305px;
     height: 73px;
-    display: inline-block;
-}
-
-nav
-{
-	display: inline-block;
-	height: 46px;
-	vertical-align: top;
-	margin: 19px 0 0 0;
-	float: right;
 }
 
 nav ul
 {
 	list-style: none;
 	height: 46px;
+	float: right;
+	margin-top: 25px;
 }
 
 nav ul li
 {
-	background: rgba(0, 0, 0, 0.3);
-	height: 46px;
 	display: inline-block;
-	padding: 0px 5px 0px 5px;
-	margin: 0px;
-	line-height: 42px;
-	color: #fdbb6e;
-	-moz-border-radius: 5px 5px 0 0;
-	-khtml-border-radius: 5px 5px 0 0;
-	-webkit-border-radius: 5px 5px 0 0;
-	border-radius: 5px 5px 0 0;
+	padding: 0;
+	margin: 0 2px 0 2px;
 }
 
-nav ul li:hover
+nav a
 {
-	background: rgba(0, 0, 0, 1);
-}
-
-nav ul li a
-{
+	height:30px;
+	padding: 0px 8px 0px 8px;
 	color: #fdbb6e;
 	font-weight: bold;
+	text-transform: uppercase;
 	text-decoration: none;
+	display: block;
+	line-height: 30px;
+	-moz-border-radius: 5px 5px 5px 5px;
+	-khtml-border-radius: 5px 5px 5px 5px;
+	-webkit-border-radius: 5px 5px 5px 5px;
+	border-radius: 5px 5px 5px 5px;
+}
+
+nav a:hover
+{
+	background: #2a2a2a;
+}
+
+a.button
+{
+	background: #f18e20 url(../content/images/bg_button.png) repeat-x;
+	color: #333;
+	border: 1px solid #414a4d;
+	text-transform: uppercase;
+}
+
+a.button:hover
+{
+	background: #fb982a url(../content/images/bg_button.png) repeat-x;
+}
+
+a.button-large
+{
+	text-align: center;
+	font-size: 1em;
+	font-weight: bold;
+	line-height: 30px;
+	text-decoration: none;
+	display: block;
+	height: 30px;
+	-moz-border-radius: 5px 5px 5px 5px;
+	-khtml-border-radius: 5px 5px 5px 5px;
+	-webkit-border-radius: 5px 5px 5px 5px;
+	border-radius: 5px 5px 5px 5px;
 }
 
 #main
 {
-    background-color: #FFFFFF;
-    width: 920px;
-    margin: 0px auto 0px auto;
-    padding: 20px;
+    background: #FFFFFF url(../content/images/bg_content.png) repeat-x;
+    width: 100%;
     z-index: 1;
-    -moz-border-radius: 5px 5px 0 0;
-	-khtml-border-radius: 5px 5px 0 0;
-	-webkit-border-radius: 5px 5px 0 0;
-	border-radius: 5px 5px 0 0;
+}
+
+#banner
+{
+	background: rgba(0, 0, 0, 0.8) url(../content/images/bg_banner.png) repeat-x;
+	border-bottom: 5px solid #aaa;
+	width: 100%;
+}
+
+#banner img
+{
+	border-top: 1px solid #aaa;
+	border-left: 1px solid #aaa;
+	border-right: 1px solid #aaa;
+}
+
+#content
+{
+	
 }
 
 #main-footer
@@ -130,41 +152,72 @@ nav ul li a
 
 footer
 {
-	padding-top: 7px;
+	padding: 12px 0 0 0;
 	width: 920px;
 	margin: 0px auto 0px auto;
 	height: 23px;
-	color: #9e9586;
-	font-family: Tahoma, Geneva, sans-serif;
-	font-size: 0.8em;
-	text-align: right;
+	color: #696969;
+	font-size: 0.9em;
+}
+
+footer div h2
+{
+	font-size: 1.2em;
+	padding-bottom: 5px;
+	margin-bottom: 0px;
+}
+
+footer ul
+{
+	list-style: none;
+}
+
+footer ul li
+{
+	padding-left: 0;
+	margin-left: 0;
 }
 
 footer a
 {
-	color: #9e9586;
+	color: #656565;
+	text-decoration: none;
+}
+
+#legal
+{
+	border-top: 1px solid #333;
+	padding: 10px;
+	font-size: 0.9em;
+	color: #505050;
+	text-align: right;
+}
+
+#legal img
+{
+	vertical-align: middle;
+	position: relative;
+	top: -3px;
 }
 
 a {
- color: #003399;
- background-color: transparent;
- font-weight: normal;
+	 color: #003399;
+	 background-color: transparent;
+	 font-weight: normal;
 }
 
 h1 
 {
- color: #cc3910;
- background-color: transparent;
- font-size: 24px;
- font-weight: bold;
- margin: 24px 0 2px 0;
- padding: 5px 0 6px 0;
+	 color: #232627;
+	 background-color: transparent;
+	 font-size: 24px;
+	 font-weight: bold;
 }
 
 h2 
 {
     margin-top: 0px;
-    color: #cc3910;
+    color: #f18e21;
     font-size: 24px;
  	font-weight: bold;
  	font-family: Arial, Helvetica, sans-serif;
@@ -191,6 +244,7 @@ h2
 
 h3
 {
+	color: #222526;
 	margin-top: 0px;
 }
 

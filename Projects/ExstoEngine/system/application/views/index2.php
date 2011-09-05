@@ -1,7 +1,7 @@
 <div id="banner">
 	<div class="container_12">
 		<div class="grid_6">
-			<a href="http://www.flickr.com/photos/jliba/4665625073/" title="145.365 - Happy Bokeh Thursday! | Flickr - Photo Sharing!" target="_blank"><img src="http://slidesjs.com/examples/standard/img/slide-1.jpg" width="460" height="300" alt="Slide 1"></a>
+			<img style="border: 1px solid #000" src="<?=base_url()?>system/application/views/content/images/simplex_capture.png" width="460" height="300" alt="Simplex Editor">
 		</div>
 		<div class="grid_6">
 			<h1 style="color: #FFF; text-shadow: 0 -1px rgba(0,0,0,0.3); font-size: 34px;">Welcome</h1>
