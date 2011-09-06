@@ -2,6 +2,16 @@ ex.using([
   "ex.base.Vector"
 ], function () {
 	ex.define("ex.display.Sprite", {
+		/**
+		 * Sprite object that contains a single image to draw on the canvas.
+		 * @name ex.display.Sprite
+		 * 
+		 * @param {Number} x The sprite's x position.
+		 * @param {Number} y The sprite's y position.
+		 * @param {Image} img The img to use to render the sprite.
+		 * @param {String} name The sprite's name.
+		 * @constructor
+		 */
         constructor: function (x, y, img, name) {
         	this.name = name;
         	this.type = "Sprite";

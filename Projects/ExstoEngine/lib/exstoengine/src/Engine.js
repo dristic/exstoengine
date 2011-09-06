@@ -9,14 +9,16 @@ ex.using([
           ],
 	function () {
 	
-	/**
-	 * The base engine class for loading games and drawing to the canvas
-	 * 
-	 * @param width: The width of the canvas
-	 * @param height: The height of the canvas
-	 * @param frameRate: The frame rate of the game
-	 */
 	ex.define("ex.Engine", {
+		/**
+		 * The base engine class for loading games and drawing to the canvas
+		 * @name ex.Engine
+		 * 
+		 * @param {Int} width The width of the canvas
+		 * @param {Int} height The height of the canvas
+		 * @param {Int} frameRate The frame rate of the game
+		 * @constructor
+		 */
 		constructor: function (width, height, frameRate) {
 			//--Check for canvas support
 			if(document.createElement("canvas").getContext) {
