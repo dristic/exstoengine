@@ -287,6 +287,12 @@ if(!Array.indexOf){
 	 * @class ex.Math
 	 */
 	ex.Math = {
+		/**
+		 * Returns the average of an array of numbers.
+		 * 
+		 * @param {Array} array An array of numbers.
+		 * @return {Number} The result of the average.
+		 */
 		average: function (array) {
 			var ret = 0;
 			
@@ -298,6 +304,16 @@ if(!Array.indexOf){
 			ret = ret / array.length;
 			
 			return ret;
+		},
+		
+		/**
+		 * Floors a number using bitwise operators (faster).
+		 * 
+		 * @param {Number} num The number to floor.
+		 * @return {Int} The resulting integer value.
+		 */
+		floor: function (num) {
+			return num >> 0;
 		}
 	};
 	
