@@ -188,6 +188,10 @@ if(!Array.indexOf){
 		}
 	});
 	
+	/**
+	 * Loader class for async loading javascript files.
+	 * @class ex.Loader
+	 */
 	ex.Loader = {
 		_urls: {},
 		_callbacks: {},
@@ -255,6 +259,10 @@ if(!Array.indexOf){
 		}
 	};
 	
+	/**
+	 * Element helper for creating and getting DOM elements.
+	 * @class ex.Element
+	 */
 	ex.Element = {
 		defaults: {
 			SCRIPT: {
@@ -271,6 +279,25 @@ if(!Array.indexOf){
 		
 		getByTagName: function (name) {
 			return document.getElementsByTagName(name)[0];
+		}
+	};
+	
+	/**
+	 * Helper math functions
+	 * @class ex.Math
+	 */
+	ex.Math = {
+		average: function (array) {
+			var ret = 0;
+			
+			var i = array.length;
+			while(i--) {
+				ret += array[i];
+			}
+			
+			ret = ret / array.length;
+			
+			return ret;
 		}
 	};
 	

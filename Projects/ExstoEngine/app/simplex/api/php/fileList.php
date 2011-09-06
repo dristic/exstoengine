@@ -5,7 +5,7 @@
 
 	$list = array();
 
-	// Define the full path to your folder from root
+	// Change to a different root directory if needed
 	$rootDir = $_GET['dir'];
 	if($rootDir != '') {
 		chdir($rootDir);
@@ -27,9 +27,11 @@
     // Close 
     closedir($dir_handle);
     
+    // Format response
     $response = new AjaxResponse();
     $response->data = $list;
 
+   	// JSON encode and send
     echo json_encode($response);
 
 ?>

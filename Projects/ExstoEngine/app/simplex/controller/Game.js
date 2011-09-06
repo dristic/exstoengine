@@ -9,7 +9,8 @@ Ext.define('Simplex.controller.Game', {
     refs: [
        { ref: 'game', 		selector: 'game' },
        { ref: 'layerList', 	selector: 'layerlist' },
-       { ref: 'itemList' ,  selector: 'itemlist' }
+       { ref: 'itemList' ,  selector: 'itemlist' },
+       { ref: 'status', 	selector: 'status' }
     ],
     
     activeTool: null,
@@ -17,6 +18,8 @@ Ext.define('Simplex.controller.Game', {
     activeItem: null,
     
 	init: function() {
+		this.fpsLog = [];
+		
 		this.control({
 			'editor': {
 				afterrender: this.createGame
@@ -66,6 +69,13 @@ Ext.define('Simplex.controller.Game', {
 			var delta = engine.input.getMouseDelta();
 			engine.camera.move(-delta[0], -delta[1]);
 		}
+		
+		this.fpsLog.push(dt);
+		if(this.fpsLog.length > 20) {
+			this.fpsLog.shift();
+		}
+		var ms = ex.Math.average(this.fpsLog);
+		this.getStatus().update('FPS: ' + Math.floor(1 / ms) + " | MS: " + Math.floor(ms * 1000));
 	},
 	
 	/**

@@ -93,7 +93,7 @@ ex.using([
 				this.renderer.update(dt, this.camera.x, this.camera.y);
 			}
 			
-			this.onUpdate();
+			this.onUpdate(dt);
 			
 			this.input.update(dt);
 		},
