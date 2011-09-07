@@ -1,0 +1,79 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/**
+<span class='line'>  2</span>  * @class A single environment that can be loaded into the world. In most cases,
+<span class='line'>  3</span>  *        can be considered one game level or zone.
+<span class='line'>  4</span>  * @param name
+<span class='line'>  5</span>  *            {String}: name of map
+<span class='line'>  6</span>  * @param layers
+<span class='line'>  7</span>  *            {Array}: contains all layers in order of z-index
+<span class='line'>  8</span>  */</span><span class="WHIT">
+<span class='line'>  9</span> </span><span class="NAME">ex.using</span><span class="PUNC">(</span><span class="PUNC">[</span><span class="WHIT"> </span><span class="STRN">'ex.simplex.Layer'</span><span class="WHIT"> </span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 10</span> </span><span class="WHIT">	</span><span class="NAME">ex.define</span><span class="PUNC">(</span><span class="STRN">"ex.simplex.Map"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 11</span> </span><span class="WHIT">		</span><span class="NAME">constructor</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">$name</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 12</span> </span><span class="WHIT">			</span><span class="NAME">this.name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$name</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 13</span> </span><span class="WHIT">			</span><span class="NAME">this.layers</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 14</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 15</span> 
+<span class='line'> 16</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'> 17</span> 		 * Adds a layer to the map with the supplied items
+<span class='line'> 18</span> 		 * 
+<span class='line'> 19</span> 		 * @param $name
+<span class='line'> 20</span> 		 *            {String}: name of the layer
+<span class='line'> 21</span> 		 * @param $items
+<span class='line'> 22</span> 		 *            {Array}: array of items to be included in the layer
+<span class='line'> 23</span> 		 * @constructor
+<span class='line'> 24</span> 		 */</span><span class="WHIT">
+<span class='line'> 25</span> </span><span class="WHIT">		</span><span class="NAME">addLayer</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">$name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">$items</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 26</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">$name</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">$items</span><span class="WHIT"> </span><span class="PUNC">!=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 27</span> </span><span class="WHIT">				</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">newLayer</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ex.simplex.Layer</span><span class="PUNC">(</span><span class="NAME">$name</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 28</span> </span><span class="WHIT">				</span><span class="NAME">newLayer.items</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">$items</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 29</span> </span><span class="WHIT">				</span><span class="NAME">this.layers.push</span><span class="PUNC">(</span><span class="NAME">newLayer</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 30</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 31</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 32</span> 
+<span class='line'> 33</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'> 34</span> 		 * toggles layer visiblity
+<span class='line'> 35</span> 		 * 
+<span class='line'> 36</span> 		 * @param $layerId
+<span class='line'> 37</span> 		 *            {Number}: index of layer to toggle
+<span class='line'> 38</span> 		 */</span><span class="WHIT">
+<span class='line'> 39</span> </span><span class="WHIT">		</span><span class="NAME">toggleLayer</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">$layerId</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 40</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">layer</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.layers</span><span class="PUNC">[</span><span class="NAME">$layerId</span><span class="PUNC">]</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 41</span> </span><span class="WHIT">			</span><span class="NAME">layer.visible</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">!</span><span class="NAME">layer.visible</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 42</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 43</span> 
+<span class='line'> 44</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'> 45</span> 		 * performs actions every time period dt
+<span class='line'> 46</span> 		 * 
+<span class='line'> 47</span> 		 * @param $dt
+<span class='line'> 48</span> 		 *            {Number}: delta time, length of each time cycle
+<span class='line'> 49</span> 		 */</span><span class="WHIT">
+<span class='line'> 50</span> </span><span class="WHIT">		</span><span class="NAME">update</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">$dt</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 51</span> 
+<span class='line'> 52</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 53</span> 
+<span class='line'> 54</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'> 55</span> 		 * Supplies a canvas context and camera offset to each layer and calls
+<span class='line'> 56</span> 		 * their render functions
+<span class='line'> 57</span> 		 * 
+<span class='line'> 58</span> 		 * @param $context
+<span class='line'> 59</span> 		 *            {Context}: canvas context to draw with
+<span class='line'> 60</span> 		 * @param $camX
+<span class='line'> 61</span> 		 *            {Number}: camera offset on x
+<span class='line'> 62</span> 		 * @param $camY
+<span class='line'> 63</span> 		 *            {Number}: camera offset on y
+<span class='line'> 64</span> 		 */</span><span class="WHIT">
+<span class='line'> 65</span> </span><span class="WHIT">		</span><span class="NAME">render</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">$context</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">$camX</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">$camY</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 66</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.layers.length</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 67</span> </span><span class="WHIT">			</span><span class="KEYW">while</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">--</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 68</span> </span><span class="WHIT">				</span><span class="NAME">this.layers</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">render</span><span class="PUNC">(</span><span class="NAME">$context</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">$camX</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">$camY</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 69</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 70</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 71</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 72</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre></body></html>
