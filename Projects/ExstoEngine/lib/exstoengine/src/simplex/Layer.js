@@ -63,6 +63,19 @@ ex.using([ 'ex.base.Point', 'ex.base.Vector' ], function() {
 			$item.opacity = this.opacity;
 			this.items.push($item);
 		},
+		
+		/**
+		 * removes an item from the layer
+		 * 
+		 * @param $index
+		 * 			{Number}: index of the item to remove
+		 */
+		removeItem: function($index) {
+			if ($index < 0 || $index >= this.items.length) {
+				return;
+			}
+			this.items.splice($index, 1);
+		},
 
 		/**
 		 * performs actions every time period dt
@@ -90,13 +103,13 @@ ex.using([ 'ex.base.Point', 'ex.base.Vector' ], function() {
 		/**
 		 * toggles visibility of the layer
 		 */
-		toggleVisibility: function() {
-			if(this.visible)
+		toggleVisibility : function() {
+			if (this.visible)
 				this.hide();
 			else
 				this.show();
 		},
-		
+
 		/**
 		 * sets visible property to true, does not affect opacity.
 		 */
@@ -128,7 +141,8 @@ ex.using([ 'ex.base.Point', 'ex.base.Vector' ], function() {
 
 			var count = this.items.length;
 			while (count--) {
-				this.items[count].render($context, $camX * this.scrollFactor.x, $camY * this.scrollFactor.y);
+				this.items[count].render($context, $camX * this.scrollFactor.x,
+						$camY * this.scrollFactor.y);
 			}
 		}
 	});

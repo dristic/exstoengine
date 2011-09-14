@@ -26,7 +26,7 @@ ex.using([ "ex.event.EventTarget" ], function() {
 			this.position = $position;
 			this.actions = {};
 			this.bindings = {};
-		},	
+		},
 
 		/**
 		 * performs actions every time period dt

@@ -13,6 +13,7 @@ Ext.define('Simplex.controller.Game', {
        { ref: 'status', 	selector: 'status' }
     ],
     
+    map: null,
     activeTool: null,
     activeLayer: null,
     activeItem: null,
@@ -30,12 +31,26 @@ Ext.define('Simplex.controller.Game', {
 		});
 	},
 	
+	/**
+	 * Resizes the canvas to a new width and height. This is called
+	 * automatically when the browser window is resized.
+	 * 
+	 * @param panel
+	 * 			{Object}: view panel
+	 * @param newWidth
+	 * 			{Number}: 
+	 * @param newHeight
+	 * 			{Number}: 
+	 */
 	resizeCanvas: function (panel, newWidth, newHeight) {
 		if(this.engine && this.engine.renderer) {
 			this.engine.renderer.resizeCanvas(newWidth, newHeight);
 		}
 	},
 	
+	/**
+	 * Creates a minimal game engine in the editor to which maps can be loaded.
+	 */
 	createGame: function () {
 		ex.using(
 			[
@@ -59,6 +74,12 @@ Ext.define('Simplex.controller.Game', {
 		);
 	},
 	
+	/**
+	 * Update routine for the engine.
+	 * 
+	 * @param dt
+	 * 			{Number}: time interval
+	 */
 	onEngineUpdate: function (dt) {
 		var engine = this.engine;
 		if(this.activeTool && this.activeLayer){
@@ -88,10 +109,26 @@ Ext.define('Simplex.controller.Game', {
 		map(this);
 	},
 	
+	/**
+	 * Populates the editor with map data.
+	 */
 	onMapLoad: function(){
-		// Clear and populate layer list store
+		this.updateLayerList();
+		this.map = this.engine.currentWorld.objects[0];
+	},
+	
+	/**
+	 * Clears and updates the layer list
+	 */
+	updateLayerList: function(){
+		// Clear layerList store
 		var layerListStore = this.getLayerList().store;
 		layerListStore.removeAll();
+		// Finish if there is no map
+		if(!this.map){
+			return;
+		}
+		// Populate layerList store
 		var index = 0;
 		var layers = this.engine.currentWorld.objects[0].layers;
 		for(index; index < layers.length; index++){
@@ -101,51 +138,19 @@ Ext.define('Simplex.controller.Game', {
 				visible	: layers[index].visible
 			});
 		}
+		// Update itemList
+		this.updateItemList();
 	},
 	
-	/**
-	 * Toggles layer visibility (does not affect opacity)
-	 * @param layerId
-	 */
-	toggleLayer: function(layerId) {
-		this.engine.currentWorld.objects[0].layers[layerId].toggleVisibility();
-	},
-	
-	/**
-	 * Sets layer visibility to true (does not affect opacity)
-	 * @param layerId
-	 */
-	showLayer: function(layerId) {
-		this.engine.currentWorld.objects[0].layers[layerId].show();
-	},
-	
-	/**
-	 * Sets layer visibility to false (does not affect opacity)
-	 * @param layerId
-	 */
-	hideLayer: function(layerId) {
-		this.engine.currentWorld.objects[0].layers[layerId].hide();
-	},
-	
-	toggleItem: function(itemId) {
-		this.activeLayer.items[itemId].visible = !this.activeLayer.items[itemId].visible;
-	},
-	
-	showItem: function(itemId) {
-		this.activeLayer.items[itemId].visible = true;
-	},
-	
-	hideItem: function(itemId) {
-		this.activeLayer.items[itemId].visible = false;
-	},
-	
-	setActiveLayer: function(layerId) {
-		this.activeLayer = this.engine.currentWorld.objects[0].layers[layerId];
-		this.activeItem = null;
-		this.activeTool = null;
-		
+	updateItemList: function(){
+		// Clear itemList store
 		var itemListStore = this.getItemList().store;
 		itemListStore.removeAll();
+		// Finish if there is no active layer
+		if(!this.activeLayer){
+			return;
+		}
+		// Populate itemlist store
 		var index = 0;
 		var items = this.activeLayer.items;
 		for(index; index < items.length; index++){
@@ -157,6 +162,129 @@ Ext.define('Simplex.controller.Game', {
 		}
 	},
 	
+	/**
+	 * Toggles layer visibility (does not affect opacity)
+	 * @param layerId
+	 */
+	toggleLayer: function(layerId) {
+		this.map.layers[layerId].toggleVisibility();
+	},
+	
+	/**
+	 * Sets layer visibility to true (does not affect opacity)
+	 * @param layerId
+	 */
+	showLayer: function(layerId) {
+		this.map.layers[layerId].show();
+	},
+	
+	/**
+	 * Sets layer visibility to false (does not affect opacity)
+	 * @param layerId
+	 */
+	hideLayer: function(layerId) {
+		this.map.layers[layerId].hide();
+	},
+	
+	/**
+	 * Adds a layer with a given name to the end of the layer array
+	 * 
+	 * @param name
+	 * 			{String}: name of layer
+	 */
+	addLayer: function(name) {
+		this.map.addLayer(name, []);
+		this.updateLayerList();
+	},
+	
+	/**
+	 * Removes the active layer from the layer list
+	 */
+	removeActiveLayer: function() {
+		if(!this.activeLayer){
+			return;
+		}
+		var index = this.map.layers.length;
+		while(index--){
+			if(this.map.layers[index] === this.activeLayer){
+				this.map.removeLayer(index);
+				this.activeLayer = null;
+				this.updateLayerList();
+				return;
+			}
+		}
+	},
+	
+	/**
+	 * Toggles visiblity of an item on the active layer
+	 * 
+	 * @param itemId
+	 * 			{Number}: position of item in the array
+	 */
+	toggleItem: function(itemId) {
+		this.activeLayer.items[itemId].visible = !this.activeLayer.items[itemId].visible;
+	},
+	
+	/**
+	 * Sets item visibility to true on the active layer
+	 * 
+	 * @param itemId
+	 * 			{Number}: position of item in the array
+	 */
+	showItem: function(itemId) {
+		this.activeLayer.items[itemId].visible = true;
+	},
+	
+	/**
+	 * Sets item visibility to false on the active layer
+	 * 
+	 * @param itemId
+	 * 			{Number}: position of item in the array
+	 */
+	hideItem: function(itemId) {
+		this.activeLayer.items[itemId].visible = false;
+	},
+	
+	addItem: function(object) {
+		this.activeLayer.addItem(object);
+		this.updateItemList();
+	},
+	
+	removeActiveItem: function() {
+		if(!this.activeItem){
+			return;
+		}
+		var index = this.activeLayer.items.length;
+		while(index--){
+			if(this.activeLayer.items[index] === this.activeItem){
+				this.activeLayer.removeItem(index);
+				this.activeItem = null;
+				this.updateItemList();
+				return;
+			}
+		}
+	},
+	
+	/**
+	 * Sets the active layer in the editor
+	 * 
+	 * @param layerId
+	 * 			{Number}: position of the layer in the array
+	 */
+	setActiveLayer: function(layerId) {
+		this.activeLayer = this.engine.currentWorld.objects[0].layers[layerId];
+		this.activeItem = null;
+		this.activeTool = null;
+		
+		this.updateItemList();
+	},
+	
+	/**
+	 * Sets the active item of the current layer in the editor
+	 * 
+	 * @param itemId
+	 * 			{Number}: position of the item in the array
+	 */
 	setActiveItem: function(itemId) {
 		if(!this.activeLayer){
 			this.activeItem = null;
@@ -165,17 +293,33 @@ Ext.define('Simplex.controller.Game', {
 		this.activeItem = this.activeLayer.items[itemId];
 	},
 	
+	/**
+	 * Sets the active tool in the editor
+	 * 
+	 * @param toolName
+	 * 			{String}: tool selector
+	 */
 	setActiveTool: function(toolName) {
 		if(toolName == 'imagePlacer'){
-			this.activeTool = imagePlacer(this.engine, this.activeLayer);
+			this.activeTool = imagePlacer(this);
 		} else if (toolName == 'tilePlacer') {
-			this.activeTool = tilePlacer(this.engine, this.activeLayer);
+			this.activeTool = tilePlacer(this);
 		} else {
 			this.activeTool = null;
 		}
 	}
 });
 
+/**
+ * Tile placement tool
+ * 
+ * @param engine
+ * 			{Engine}: game engine reference
+ * @param $target
+ * 			{Object}: target object to edit
+ * @returns {___anonymous5412_6838}
+ * 			{Tool}: the entire tool object
+ */
 function tilePlacer (engine, $target) {
 	return {
 		name: "Tile Editor",
@@ -218,18 +362,27 @@ function tilePlacer (engine, $target) {
 	};
 }
 
-function imagePlacer (engine, $target) {
+/**
+ * Image placement tool
+ * 
+ * @param engine
+ * 			{Engine}: game engine reference
+ * @param $target
+ * 			{Object}: target layer
+ * @returns {___anonymous5412_6838}
+ * 			{Tool}: the entire tool object
+ */
+function imagePlacer (game) {
 	return {
 		name: "Image Editor",
-		edits: ["Image"],
 		selectedTile: 0,
-		target: $target,
 		update: function(dt){
+			var engine = game.engine;
 			var imageName = "";
-			var mapX = engine.input.mouseX + (engine.camera.x * this.target.scrollFactor.x);
-			var mapY = engine.input.mouseY + (engine.camera.y * this.target.scrollFactor.y);
+			var mapX = engine.input.mouseX + (engine.camera.x * game.activeLayer.scrollFactor.x);
+			var mapY = engine.input.mouseY + (engine.camera.y * game.activeLayer.scrollFactor.y);
 			if(engine.input.mouseDown && !engine.input.isKeyDown(ex.util.Key.Shift)){
-				this.target.items.push(
+				game.addItem(
 						new ex.display.Image(engine.imageRepository.img.Asteroid, new ex.base.Point(mapX, mapY))
 				);
 			}

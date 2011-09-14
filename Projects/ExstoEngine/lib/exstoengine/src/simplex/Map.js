@@ -8,6 +8,13 @@
  */
 ex.using([ 'ex.simplex.Layer' ], function() {
 	ex.define("ex.simplex.Map", {
+		/**
+		 * Builds the map with a name and an empty set of layers
+		 * 
+		 * @param $name
+		 *            {String}: name of map
+		 * @constructor
+		 */
 		constructor : function($name) {
 			this.name = $name;
 			this.layers = [];
@@ -20,7 +27,6 @@ ex.using([ 'ex.simplex.Layer' ], function() {
 		 *            {String}: name of the layer
 		 * @param $items
 		 *            {Array}: array of items to be included in the layer
-		 * @constructor
 		 */
 		addLayer : function($name, $items) {
 			if ($name != null && $items != null) {
@@ -28,6 +34,19 @@ ex.using([ 'ex.simplex.Layer' ], function() {
 				newLayer.items = $items;
 				this.layers.push(newLayer);
 			}
+		},
+
+		/**
+		 * Removes the layer at the specified index
+		 * 
+		 * @param $index
+		 *            {Number}: location of layer in array
+		 */
+		removeLayer : function($index) {
+			if ($index < 0 || $index >= this.layers.length) {
+				return;
+			}
+			this.layers.splice($index, 1);
 		},
 
 		/**
