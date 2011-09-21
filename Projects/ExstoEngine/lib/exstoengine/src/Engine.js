@@ -4,6 +4,7 @@ ex.using([
           "ex.util.Input",
           "ex.util.Debug",
           "ex.display.ImageRepository",
+          "ex.util.CollisionManager",
           "ex.display.Camera",
           "ex.display.Renderer"
           ],
@@ -41,6 +42,8 @@ ex.using([
 				
 				//--Load new image repository
 				this.imageRepository = new ex.display.ImageRepository();
+				
+				this.collisionManager = new ex.util.CollisionManager(false);
 				
 				//--Load new camera
 				this.camera = new ex.display.Camera();
@@ -80,6 +83,11 @@ ex.using([
 			var i = this.components.length;
 			while(i--) {
 				this.components[i].update(dt);
+			}
+			
+			//--Step collision manager
+			if(this.collisionManager != null) {
+				this.collisionManager.update(dt);
 			}
 			
 			//--Step world

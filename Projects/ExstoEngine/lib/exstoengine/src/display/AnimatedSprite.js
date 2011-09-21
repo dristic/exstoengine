@@ -5,6 +5,7 @@ ex.using([
 		constructor: function(x, y, frameWidth, frameHeight, frameRate, img) {
 			this.timer = (1 / frameRate);
 			this.frameRate = frameRate;
+			this.type = "Sprite";
 			
 			//--Animation definitions
 			this.animations = {};
@@ -15,14 +16,28 @@ ex.using([
 			this._super("constructor", [x, y, img]);
 			
 			this.renderingRect = {
-				x: 0, 
-				y: 0, 
-				width: frameWidth, 
-				height: frameHeight
+				x		: 0, 
+				y		: 0, 
+				width	: frameWidth, 
+				height	: frameHeight
 			};
 			
 			this.width = frameWidth;
 			this.height = frameHeight;
+		},
+		
+		/**
+		 * Returns the bounds of the image in x, y, widht, height format.
+		 * 
+		 * @returns {___anonymous680_785} the bounds object
+		 */
+		getBounds: function(){
+			return {
+				x: this.position.x,
+				y: this.position.y,
+				width: this.width,
+				height: this.height
+			};
 		},
 		
 		createAnimation: function(name, frames) {
@@ -42,6 +57,10 @@ ex.using([
 		
 		stop: function() {
 			this.playing = false;
+		},
+		
+		resume: function() {
+			this.playing = true;
 		},
 		
 		update: function(dt) {

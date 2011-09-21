@@ -15,7 +15,7 @@ ex.using([
 		},
 		
 		/**
-		 * Retrieves an object containing the position an dsize of the rendered
+		 * Retrieves an object containing the position and size of the rendered
 		 * 		SpriteMap
 		 * @returns {___anonymous479_619} the position and size of the rendered
 		 * 				SpriteMap

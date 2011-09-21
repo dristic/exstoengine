@@ -24,8 +24,9 @@
 		 * Registers new collidable objects
 		 * @param {Array} $newCollidables
 		 */
-		addCollidable: function($newCollidables){
-			this.collidables.extend($newCollidables);
+		addCollidable: function($newCollidable){
+			this.collidables.push($newCollidable);
+			console.log(this.collidables);
 		},
 		
 		/**
@@ -45,7 +46,7 @@
 			this.collisions = [];
 			
 			// If there are none or one collidables, do nothing
-			if(this.collidables.length < 2){
+			if(this.collidables.length < 2) {
 				return;
 			}
 			
@@ -54,35 +55,37 @@
 			var target = 0;
 			for(source; source < this.collidables.length - 1; source++) {
 				for(target = source + 1; target < this.collidables.length; target++) {					
-					this.performCollisionCheckOn(source, target);
+					if(this.checkCollisionBetween(
+							this.collidables[source], 
+							this.collidables[target])){
+						this.collisions.push({
+							source: this.collidables[source],
+							target: this.collidables[target]
+						});
+					}
 				}
 			}
-			
-			// Act on collisions
 		},
 		
 		/**
 		 * The main collision check function. Performs a bounding box collision
-		 * test first. If successful, it will perform a per pixel collision
-		 * check if per pixel checks are enabled
+		 * test.
+		 * 
+		 * Future:
+		 *  - Bounding circles (maybe?)
+		 *  - Quad Tree support
+		 *  - Per Pixel collision check support
+		 * 
 		 * @param $source {Collidable} first collidable object
 		 * @param $target {Collidable} second collidable object
-		 * @returns {null} if a collision is found, it gets pushed to
+		 * @returns {Boolean} true if collision is found
 		 * CollisionManager's collisions property.
 		 */
-		performCollisionCheckOn: function($source, $target) {
+		checkCollisionBetween: function($source, $target) {
 			if(boundingBoxCollision($source,$target)) {
-				if(this.usingPerPixel && perPixelCollision($source, $target)){
-					this.collisions.push({
-						source: $source,
-						target: $target
-					});
-				} else {
-					this.collisions.push({
-						source: $source,
-						target: $target
-					});
-				}
+				return true;
+			} else {
+				return false;
 			}
 		}
 	});
@@ -106,10 +109,39 @@
 	function boundingBoxCollision($source, $target) {
 		var sourceBounds = $source.getBounds();
 		var targetBounds = $target.getBounds();
+//		var sourceBoxes	 = [];
+//		var targetBoxes  = [];
+//
+//		if($source.type == "SpriteMap"){
+//			sourceBoxes = $source.map;
+//		}
+//		if($target.type == "SpriteMap"){
+//			targetBoxes = $target.map;
+//		}
 		
-		// check for intersection
-		// if intersected return true
-		// else return false
+		// check for x intersection
+		if(sourceBounds.x <= targetBounds.x) {
+			if((sourceBounds.x + sourceBounds.width) < targetBounds.x) {
+				return false;
+			}
+		} else {
+			if((targetBounds.x + targetBounds.width) < sourceBounds.x) {
+				return false;
+			}
+		}
+		// check for y intersection
+		if(sourceBounds.y <= targetBounds.y) {
+			if((sourceBounds.y + sourceBounds.height) < targetBounds.y) {
+				return false;
+			}
+		} else {
+			if((targetBounds.y + targetBounds.height) < sourceBounds.y) {
+				return false;
+			}
+		}
+		
+		// If this line is reached, an intersection was found
+		return true;
 	};
 	
 	/**
