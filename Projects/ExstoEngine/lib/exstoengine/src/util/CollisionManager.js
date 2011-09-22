@@ -18,6 +18,43 @@
 			this.usingPerPixel = $usePerPixel;
 			this.collidables = [];
 			this.collisions = [];
+			this.events = [];
+			
+			this.algorithms = {
+				SpriteToSpriteMap: 	boxToSpriteMapCheck,
+				SpriteMapToSprite: 	boxToSpriteMapCheck,
+				SpriteToSprite: 	boxToBoxCheck,
+			};
+			
+			this.benchmarkData = [];
+			this.benchmarkAverage = {
+					time: 0,
+					collisions: 0
+			};
+		},
+		
+		updateBenchmark: function(newTime, newCollisionCount) {
+			if(this.benchmarkData.length > 200){
+				this.updateBenchmarkAverage();
+				this.benchmarkData = [];
+			}
+			this.benchmarkData.push({ 
+				time: newTime,
+				collisions: newCollisionCount
+			});
+		},
+		
+		updateBenchmarkAverage: function() {
+			var index = 0;
+			var sumTime = 0;
+			var sumCollisions = 0;
+			var dataCount = this.benchmarkData.length;
+			for(index; index < dataCount; index++){
+				sumTime += this.benchmarkData[index].time;
+				sumCollisions += this.benchmarkData[index].collisions;
+			}
+			this.benchmarkAverage.time = sumTime / dataCount;
+			this.benchmarkAverage.collisions = sumCollisions / dataCount;
 		},
 		
 		/**
@@ -36,35 +73,53 @@
 			this.collidables = [];
 		},
 		
+		callCollisionEventFor: function(collision) {
+			var index = 0;
+			for(index; index < this.events.length; index++){
+				if(collision.source === this.events[index].source &&
+						collision.target === this.events[index].target){
+					this.events[index].event(collision);
+				}
+			}
+		},
+		
 		/**
 		 * clears the collisions array, checks for new collisions, and runs
 		 * each collision's actions.
 		 * @param dt
 		 */
 		update: function(dt) {
+			var startTime = new Date();
 			// Clear collisions from last update
 			this.collisions = [];
-			
-			// If there are none or one collidables, do nothing
-			if(this.collidables.length < 2) {
-				return;
-			}
 			
 			// Else, check for collisions
 			var source = 0;
 			var target = 0;
+			var collisionResult = {};
 			for(source; source < this.collidables.length - 1; source++) {
 				for(target = source + 1; target < this.collidables.length; target++) {					
-					if(this.checkCollisionBetween(
-							this.collidables[source], 
-							this.collidables[target])){
-						this.collisions.push({
-							source: this.collidables[source],
-							target: this.collidables[target]
-						});
+					collisionResult = this.checkCollisionBetween(
+							this.collidables[source],
+							this.collidables[target]
+					);
+					if(collisionResult){
+						this.collisions.push(collisionResult);
 					}
 				}
 			}
+			
+			// Act on collisions
+			var index = 0;
+			for(index; index < this.collisions.length; index++){
+				this.callCollisionEventFor(this.collisions[index]);
+			}
+			var endTime = new Date();
+			this.updateBenchmark(endTime - startTime, this.collisions.length);
+			document.getElementById("debug").innerHTML += 
+				'<br>Collision Loop Benchmark: ' + 
+				'<br>' + this.benchmarkAverage.time + 'ms' +
+				'<br>' + this.benchmarkAverage.collisions + ' collisions';
 		},
 		
 		/**
@@ -76,19 +131,88 @@
 		 *  - Quad Tree support
 		 *  - Per Pixel collision check support
 		 * 
-		 * @param $source {Collidable} first collidable object
-		 * @param $target {Collidable} second collidable object
+		 * @param source {Collidable} first collidable object
+		 * @param target {Collidable} second collidable object
 		 * @returns {Boolean} true if collision is found
 		 * CollisionManager's collisions property.
 		 */
-		checkCollisionBetween: function($source, $target) {
-			if(boundingBoxCollision($source,$target)) {
-				return true;
-			} else {
+		checkCollisionBetween: function(source, target) {
+			var selector = source.type + "To" + target.type;
+			return this.algorithms[selector](source, target);
+		}
+		
+		
+	});
+	
+	/**
+	 * Strict bounding box to bounding box collision test.
+	 * 
+	 * @returns {Boolean}
+	 */
+	function boxToBoxCheck(source, target){
+		// check for x intersection
+		if(source.position.x <= target.position.x) {
+			if((source.position.x + source.width) < target.position.x) {
+				return false;
+			}
+		} else {
+			if((target.position.x + target.width) < source.position.x) {
 				return false;
 			}
 		}
-	});
+		// check for y intersection
+		if(source.position.y <= target.position.y) {
+			if((source.position.y + source.height) < target.position.y) {
+				return false;
+			}
+		} else {
+			if((target.position.y + target.height) < source.position.y) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * checks collision between a spriteMap and a bounding box.
+	 * 
+	 * @returns {Object} both elements with a list of tiles that collided.
+	 */
+	function boxToSpriteMapCheck(box, map){
+		// if necessary, swap so the SpriteMap is source
+		if (box.type == "SpriteMap") {
+			var temp = box;
+			box = map;
+			map = temp;
+		}
+		
+		// find collisions between tiles and box
+		var collidedTiles = [];
+		var xPos = box.position.x;
+		var yPos = box.position.y;
+		for(yPos; yPos < (box.position.y + box.height); yPos += map.tileHeight){
+			for(xPos; xPos < (box.position.x + box.width); xPos += map.tileWidth){
+				if(map.getTile(xPos, yPos)){
+					collidedTiles.push({
+						x: Math.floor(xPos / map.tileWidth),
+						y: Math.floor(yPos / map.tileHeight)
+					});
+				}
+			}
+			xPos = box.position.x;
+		}
+		
+		if(collidedTiles.length > 0){
+			return {
+				source: box,
+				target: map,
+				data: 	collidedTiles
+			};
+		} else {
+			return false;
+		}
+	}
 	
 	/**
 	 * performs a quad tree analysis on the collidables, this is the roughest
@@ -99,54 +223,8 @@
 	};
 	
 	/**
-	 * performs a bounding box check between two collidables. This is a finer
-	 * collision detection algorithm, the second stage in collision detection.
-	 * Most applications will not need to go farther than this.
-	 * @param $source {Collidable} first collidable object
-	 * @param $target {Collidable} second collidable object
-	 * @returns {Boolean} true if bounding box intersection, otherwise false
-	 */
-	function boundingBoxCollision($source, $target) {
-		var sourceBounds = $source.getBounds();
-		var targetBounds = $target.getBounds();
-//		var sourceBoxes	 = [];
-//		var targetBoxes  = [];
-//
-//		if($source.type == "SpriteMap"){
-//			sourceBoxes = $source.map;
-//		}
-//		if($target.type == "SpriteMap"){
-//			targetBoxes = $target.map;
-//		}
-		
-		// check for x intersection
-		if(sourceBounds.x <= targetBounds.x) {
-			if((sourceBounds.x + sourceBounds.width) < targetBounds.x) {
-				return false;
-			}
-		} else {
-			if((targetBounds.x + targetBounds.width) < sourceBounds.x) {
-				return false;
-			}
-		}
-		// check for y intersection
-		if(sourceBounds.y <= targetBounds.y) {
-			if((sourceBounds.y + sourceBounds.height) < targetBounds.y) {
-				return false;
-			}
-		} else {
-			if((targetBounds.y + targetBounds.height) < sourceBounds.y) {
-				return false;
-			}
-		}
-		
-		// If this line is reached, an intersection was found
-		return true;
-	};
-	
-	/**
 	 * performs a per pixel check between two collidables. This is the finest
-	 * and most processor intesive collision check. Looks for pixel overlap
+	 * and most processor intensive collision check. Looks for pixel overlap
 	 * between the source and target collidables.
 	 * @param $source {Collidable} first collidable object
 	 * @param $target {Collidable} second collidable object

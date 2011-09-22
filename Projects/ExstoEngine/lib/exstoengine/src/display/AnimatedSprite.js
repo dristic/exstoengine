@@ -26,20 +26,6 @@ ex.using([
 			this.height = frameHeight;
 		},
 		
-		/**
-		 * Returns the bounds of the image in x, y, widht, height format.
-		 * 
-		 * @returns {___anonymous680_785} the bounds object
-		 */
-		getBounds: function(){
-			return {
-				x: this.position.x,
-				y: this.position.y,
-				width: this.width,
-				height: this.height
-			};
-		},
-		
 		createAnimation: function(name, frames) {
 			this.animations[name] = frames;
 		},

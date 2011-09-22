@@ -15,8 +15,6 @@ ex.using([
         constructor: function (x, y, img, name) {
         	this.name = name;
         	this.type = "Sprite";
-            this.x = x || 0;
-            this.y = y || 0;
             this.position = new ex.base.Vector(x, y);
             this.velocity = new ex.base.Vector(0, 0);
             this.img = img || new Image();

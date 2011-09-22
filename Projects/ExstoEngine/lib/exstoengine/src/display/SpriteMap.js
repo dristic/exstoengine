@@ -1,5 +1,6 @@
 ex.using([
-  "ex.world.TileMap"
+  "ex.world.TileMap",
+  //"ex.base.Vector"
 ], function () {
 	ex.define("ex.display.SpriteMap", ex.world.TileMap, {
 		constructor: function(tileWidth, tileHeight, map, img, name) {
@@ -9,24 +10,10 @@ ex.using([
 			this.img = img;
 			this.x = 0;
 			this.y = 0;
+			this.position = {x: 0, y: 0};//new ex.base.Vector(0, 0);
 			this.scrollFactorX = this.scrollFactorY = 1;
 			
 			this._super("constructor", [tileWidth, tileHeight, map]);
-		},
-		
-		/**
-		 * Retrieves an object containing the position and size of the rendered
-		 * 		SpriteMap
-		 * @returns {___anonymous479_619} the position and size of the rendered
-		 * 				SpriteMap
-		 */
-		getBounds: function() {
-			return {
-				x		: this.x,
-				y		: this.y,
-				width	: this.tileWidth * this.map[0].length,
-				height	: this.tileHeight * this.map.length
-			};
 		},
 		
 		update: function(dt) {

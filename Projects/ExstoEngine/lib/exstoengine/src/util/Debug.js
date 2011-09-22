@@ -17,6 +17,7 @@ ex.using([
 	ex.define("ex.util.Debug", ex.base.Component, {
 		constructor: function() {
 			this.domElement = document.createElement("div");
+			this.domElement.id = "debug";
 			this.domElement.style.backgroundColor = "#222526";
 			this.domElement.style.opacity = "0.9";
 			this.domElement.style.border = "1px solid #ffbb6e";

@@ -13,7 +13,13 @@
 		getTile: function(x, y) {
 			x = Math.floor(x / this.tileWidth);
 			y = Math.floor(y / this.tileHeight);
-			return this.map[y][x];
+			
+			if(x >= 0 && x < this.map[0].length && 
+					y >= 0 && y < this.map.length){
+				return this.map[y][x];
+			} else {
+				return null;
+			}
 		},
 		
 		setTile: function(x, y, value) {

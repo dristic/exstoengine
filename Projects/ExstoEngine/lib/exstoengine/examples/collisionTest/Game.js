@@ -42,10 +42,7 @@
 		var laser = new ex.sound.Sound('../assets/sounds/lazer.ogg', 7);
 		
 		// Images
-		_engine.imageRepository.loadImage("Ship", "../assets/units/ship1.png");
-		_engine.imageRepository.loadImage("Base", "../assets/units/base2.png");
 		_engine.imageRepository.loadImage("Nebula", "../assets/world/bg.png");
-		_engine.imageRepository.loadImage("Nebula2", "../assets/world/nebula.png");
 		_engine.imageRepository.loadImage("Explosion", "../assets/effects/explode3.png");
 		_engine.imageRepository.loadImage("Tiles", "../assets/world/tileset-platformer.png");
 		_engine.imageRepository.loadImage("Player", "../assets/units/player.png");
@@ -112,19 +109,6 @@
 			// Apply the velocity and set the positions for the camera to follow
 			this.position.addScaled(this.velocity, dt);
 			
-			// Boundaries
-			if(this.position.x < 50) {
-				this.position.x = 50;
-				this.velocity.x = 0;
-			} else if (this.position.x > 750) {
-				this.position.x = 750;
-				this.velocity.x = 0;
-			}
-			if(this.position.y > 150) {
-				this.position.y = 150;
-				this.velocity.y = 0;
-			}
-			
 			this.x = this.position.x;
 			this.y = this.position.y;
 			
@@ -138,17 +122,42 @@
 		// Load tile map
 		var tiles = new ex.display.SpriteMap(32, 32, data, _engine.imageRepository.img.Tiles);
 		_engine.currentWorld.addObject(tiles);
+		_engine.collisionManager.addCollidable(tiles);
 		
 		// Load background image
 		var nebula = new ex.display.Sprite(0, 0, _engine.imageRepository.img.Nebula);
 		nebula.scrollFactorX = nebula.scrollFactorY = 0;
 		_engine.currentWorld.addObject(nebula);
 		
-		_engine.onUpdate = function(){
-			// Act on collisions
-			if(_engine.collisionManager.collisions.length > 0){
-				laser.play();
+		var playLaserSound = function(){
+			laser.play();
+		};
+		
+		var resolvePlayerToMapCollision = function(collision){
+			var index = 0;
+			var x = 0;
+			var y = 0;
+			for(index; index < collision.data.length; index++) {
+				x = collision.data[index].x;
+				y = collision.data[index].y;
+				collision.target.map[y][x] = 0;
 			}
+			playLaserSound();
+		};
+		
+		_engine.collisionManager.events = [
+   		    { source: explosion1, 	target: player, 	event: playLaserSound },
+   		    { source: player, 		target: explosion1, event: playLaserSound },
+    		{ source: explosion2, 	target: player, 	event: playLaserSound },
+    		{ source: player, 		target: explosion2, event: playLaserSound },
+		    { source: explosion3, 	target: player, 	event: playLaserSound },
+		    { source: player, 		target: explosion3, event: playLaserSound },
+		    { source: tiles, 		target: player,		event: resolvePlayerToMapCollision  },		
+		    { source: player, 		target: tiles,		event: resolvePlayerToMapCollision  },		
+		];
+		
+		_engine.onUpdate = function(){
+			// Extra code to run on each update
 		};
 	});
 	
