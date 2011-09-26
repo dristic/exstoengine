@@ -54,6 +54,16 @@ ex.using([
 			if(this.playing == true) {
 				//--If we have a framerate
 				if(this.frameRate > 0) {
+					// Check for frame skipping due to inactive tab
+					if(dt > (1 / this.frameRate)) {
+						var skips = Math.floor(dt / (1 / this.frameRate));
+						while(skips--) {
+							var index = array_index_of(this.curAnimation, this.curFrame) + 1;
+							if(index > this.curAnimation.length - 1) index = 0;
+							this.curFrame = this.curAnimation[index];
+						}
+						dt = dt % (1 / this.frameRate);
+					}
 					this.timer -= dt;
 					//--If it is time to go to the next frame
 					if(this.timer < 0) {
