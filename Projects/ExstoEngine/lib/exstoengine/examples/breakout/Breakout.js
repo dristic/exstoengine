@@ -1,21 +1,22 @@
 (function () {
 	
 	// Global variables
+	var playerSpeed = 10;
 	var data = [
 				[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 				[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-				[ 0, 0, 0, 0, 51, 52, 52, 53, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-				[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 51, 52, 52, 52, 52, 53, 0, 0, 0, 0, 0, 0],
+				[ 0, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6],
+				[ 0, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6],
 				[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 				[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 				[ 0, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6],
-				[ 0, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 12],
-				[ 0, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 12],
-				[ 0, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 12],
-				[ 0, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 12],
-				[ 0, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 12],
-				[ 0, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 12],
-				[ 0, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 12],
+				[ 0, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6],
+				[ 0, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6],
+				[ 0, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6],
+				[ 0, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6],
+				[ 0, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6],
+				[ 0, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6],
+				[ 0, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6],
 			];
 	
 	ex.using([
@@ -24,8 +25,7 @@
           "ex.world.World",
           "ex.world.CollisionMap",
           "ex.display.SpriteMap",
-          "ex.sound.Sound",
-          "entity.Player"
+          "ex.sound.Sound"
           	], 
   	function () {		
 		//--Startup new engine
@@ -44,14 +44,17 @@
 		// Images
 		_engine.imageRepository.loadImage("Nebula", "../assets/world/bg.png");
 		_engine.imageRepository.loadImage("Explosion", "../assets/effects/explode3.png");
-		_engine.imageRepository.loadImage("Tiles", "../assets/world/tileset-platformer.png");
+		_engine.imageRepository.loadImage("Tiles", "resources/bricks.png");
 		_engine.imageRepository.loadImage("Player", "../assets/units/player.png");
 		
 		//--Open base world
 		_engine.openWorld(ex.world.World);
 
 		// Setup player animation
-		var player = new entity.Player(_engine.imageRepository.img.Player, _engine.input);
+		var player = new ex.display.AnimatedSprite(50, 150, 41, 47, 7, _engine.imageRepository.img.Player);
+		player.createAnimation("Stand", [5]);
+		player.createAnimation("Walk", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
+		player.play("Walk");
 		_engine.currentWorld.addObject(player);
 		_engine.collisionManager.addCollidable(player);
 		
@@ -74,11 +77,50 @@
 		_engine.currentWorld.addObject(explosion3);
 		_engine.collisionManager.addCollidable(explosion3);
 		
+		// Setup player controls
+		player.onUpdate = function(dt) {
+			if(_engine.input.isKeyPressed(ex.util.Key.Spacebar)) {
+				//--Jump
+				this.velocity.y -= playerSpeed * 75;
+			}
+			if(_engine.input.isKeyDown(ex.util.Key.S)) {
+				//--Crouch
+				this.velocity.y += playerSpeed;
+			}
+			if(_engine.input.isKeyDown(ex.util.Key.A)) {
+				this.velocity.x -= playerSpeed;
+			}
+			if(_engine.input.isKeyDown(ex.util.Key.D)) {
+				this.velocity.x += playerSpeed;
+			}
+			if(_engine.input.isKeyPressed(ex.util.Key.J)) {
+				laser.play();
+			}
+			
+			if(this.velocity.x < 0.5 && this.velocity.x > -0.5){
+				this.play("Stand");
+			} else {
+				this.play("Walk");
+			}
+			
+			// Gravity
+			this.velocity.y += playerSpeed;
+			
+			// Apply the velocity and set the positions for the camera to follow
+			this.position.addScaled(this.velocity, dt);
+			
+			this.x = this.position.x;
+			this.y = this.position.y;
+			
+			// Scale down the velocity
+			this.velocity.scale(0.95);
+		};
+		
 		// Focus camera on player
 		_engine.camera.follow(player);
 		
 		// Load tile map
-		var tiles = new ex.display.SpriteMap(32, 32, data, _engine.imageRepository.img.Tiles);
+		var tiles = new ex.display.SpriteMap(100, 20, data, _engine.imageRepository.img.Tiles);
 		_engine.currentWorld.addObject(tiles);
 		_engine.collisionManager.addCollidable(tiles);
 		

@@ -119,7 +119,7 @@
 		
 		// Background image
 		var nebula = new ex.display.Sprite(0, 0, _engine.imageRepository.img.Nebula);
-		nebula.scrollFactorX = nebula.scrollFactorY = 0.4;
+		nebula.scrollFactorX = nebula.scrollFactorY = 1;
 		_engine.currentWorld.addObject(nebula);
 	});
 	

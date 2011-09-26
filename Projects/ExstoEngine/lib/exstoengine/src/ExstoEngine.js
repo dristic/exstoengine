@@ -174,7 +174,13 @@ if(!Array.indexOf){
 			var parts = namespace.split(".");
 			
 			// Build file url
-			var fileUrl = ex.config.baseUrl;
+			var fileUrl = window.location.href.substr(0, window.location.href.lastIndexOf('/'));
+			
+			// If we are loading ex classes, build from ex path
+			if(parts[0] == 'ex') {
+				fileUrl = ex.config.baseUrl;
+			}
+			
 			var i = -1;
 			while(++i < parts.length) {
 				// If we are loading ex files, they are located in a src folder so don't include the 'ex'
@@ -435,8 +441,14 @@ if(!Array.indexOf){
 		NewClass.prototype = _base;
 		ex.extend(NewClass.prototype, extension);
 		NewClass.prototype._super = function(func, args) {
+			// Change this._super so that any _super calls in the 
+			// super class function works properly
+			this._super = base.prototype._super;
 			base.prototype[func].apply(this, args);
+			// Reset _super to everything works properly again
+			this._super = this._superTemp;
 		};
+		NewClass.prototype._superTemp = NewClass.prototype._super;
 		
 		generateNamespace(namespace, NewClass);
 	};
