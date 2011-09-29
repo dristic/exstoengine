@@ -57,7 +57,7 @@ ex.using([
             }
             
             if (this.rotationEnabled == false) {
-                context.drawImage(this.img, this.x - (camX * this.scrollFactorX), this.y - (camY * this.scrollFactorY));
+                context.drawImage(this.img, this.position.x - (camX * this.scrollFactorX), this.position.y - (camY * this.scrollFactorY));
             } else {
                 var rContext = this.rotationCanvas.getContext("2d");
 
@@ -72,7 +72,7 @@ ex.using([
                 rContext.drawImage(this.img, 0, 0);
                 rContext.restore();
 
-                context.drawImage(this.rotationCanvas, this.x - (camX * this.scrollFactorX), this.y - (camY * this.scrollFactorY));
+                context.drawImage(this.rotationCanvas, this.position.x - (camX * this.scrollFactorX), this.position.y - (camY * this.scrollFactorY));
             }
         },
 
@@ -88,7 +88,7 @@ ex.using([
         },
 
         getBounds: function () {
-            return new ExstoEngine.Base.Rectangle(this.x, this.x, this.width, this.height);
+            return new ExstoEngine.Base.Rectangle(this.position.x, this.position.y, this.width, this.height);
         }
     });
 

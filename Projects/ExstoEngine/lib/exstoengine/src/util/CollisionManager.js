@@ -23,7 +23,7 @@
 			this.algorithms = {
 				SpriteToSpriteMap: 	boxToSpriteMapCheck,
 				SpriteMapToSprite: 	boxToSpriteMapCheck,
-				SpriteToSprite: 	boxToBoxCheck,
+				SpriteToSprite: 	boxToBoxCheck
 			};
 			
 			this.benchmarkData = [];
@@ -63,7 +63,6 @@
 		 */
 		addCollidable: function($newCollidable){
 			this.collidables.push($newCollidable);
-			console.log(this.collidables);
 		},
 		
 		/**
@@ -171,7 +170,10 @@
 			}
 		}
 		
-		return true;
+		return {
+			source: source,
+			target: target
+		};
 	}
 	
 	/**
