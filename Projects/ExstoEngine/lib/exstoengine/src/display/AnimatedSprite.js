@@ -24,8 +24,6 @@ ex.using([
 			
 			this.width = frameWidth;
 			this.height = frameHeight;
-			this.halfWidth = frameWidth / 2;
-			this.halfHeight = frameHeight / 2;
 		},
 		
 		_recalcDimensions: function () {
@@ -93,8 +91,8 @@ ex.using([
 							  this.renderingRect.y,
 							  this.renderingRect.width,
 							  this.renderingRect.height,
-							  this.position.x - (camX * this.scrollFactorX) - this.halfWidth, 
-							  this.position.y - (camY * this.scrollFactorY) - this.halfHeight,
+							  this.position.x - (camX * this.scrollFactorX), 
+							  this.position.y - (camY * this.scrollFactorY),
 							  this.renderingRect.width,
 							  this.renderingRect.height);
 		},

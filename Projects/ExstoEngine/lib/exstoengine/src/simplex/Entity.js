@@ -29,8 +29,8 @@ ex.using([
 			this.type = "Entity";
 			// Physical data
 			this.position = position;
-			this.halfWidth = sprite.width / 2;
-			this.halfHeight = sprite.height / 2;
+			this.width = sprite.width;
+			this.height = sprite.height;
 			this.velocity = new ex.base.Vector(0,0);
 			this.collides = collides;
 			// Display data
@@ -39,8 +39,8 @@ ex.using([
 			
 			if(sprite.width == 0 && sprite.height == 0) {
 				ex.event.listen(sprite.img, 'load', function () {
-            		this.halfWidth = sprite.width >> 1;
-            		this.halfHeight = sprite.height >> 1;
+					this.width = sprite.width;
+					this.height = sprite.height;
             	}, this);
 			}
 		},

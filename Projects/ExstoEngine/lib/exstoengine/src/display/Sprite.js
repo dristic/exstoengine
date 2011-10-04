@@ -67,24 +67,13 @@ ex.using([
                 this.rotationCanvas.height = this.img.height || 1;
 
                 rContext.save();
-                rContext.translate(this.halfWidth(), this.halfHeight());
+                rContext.translate(this.width / 2, this.height / 2);
                 rContext.rotate(this.rotation);
-                rContext.translate(-this.halfWidth(), -this.halfHeight());
+                rContext.translate(-this.width / 2, -this.height / 2);
                 rContext.drawImage(this.img, 0, 0);
                 rContext.restore();
 
                 context.drawImage(this.rotationCanvas, this.position.x - (camX * this.scrollFactorX), this.position.y - (camY * this.scrollFactorY));
-            }
-        },
-
-        handleCollision: function (collision) {
-            if (collision.y == true) {
-                this.velocity.y = 0;
-                this.position.y = collision.position.y;
-            }
-            if (collision.x == true) {
-                this.velocity.x = 0;
-                this.position.x = collision.position.x;
             }
         },
 

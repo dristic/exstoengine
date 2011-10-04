@@ -55,7 +55,7 @@ ex.using([
 			}
 			
 			// Gravity
-			//this.velocity.y += this.speed;
+//			this.velocity.y += this.speed;
 			
 			// Apply the velocity and set the positions for the camera to follow
 			this.updatePosition(this.velocity, dt);
@@ -80,21 +80,21 @@ ex.using([
 	function handleTileCollision(player, tileMap, data, dt) {
 		var collision = collide(
 				dt, 
-				player.position.x - player.halfWidth, 	// the extra math is
-				player.position.y - player.halfHeight, 	// to put the player's
-				player.velocity.x, 						// effective center
-				player.velocity.y, 						// at the top left
-				player.halfWidth * 2, 					// corner again. (old
-				player.halfHeight * 2,					// code uses that as
-				tileMap);								// center).
+				player.position.x, 	// the extra math is
+				player.position.y, 	// to put the player's
+				player.velocity.x, 	// effective center
+				player.velocity.y, 	// at the top left
+				player.width, 		// corner again. (old
+				player.height,		// code uses that as
+				tileMap);			// center).
 		
 		if (collision.y == true) {
             player.velocity.y = 0;
-            player.position.y = collision.position.y + player.halfHeight;
+            player.position.y = collision.position.y;
         }
         if (collision.x == true) {
         	player.velocity.x = 0;
-        	player.position.x = collision.position.x + player.halfWidth;
+        	player.position.x = collision.position.x;
         }
 	}
 	

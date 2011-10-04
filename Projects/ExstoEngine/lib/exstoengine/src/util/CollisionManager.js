@@ -12,7 +12,6 @@
 		/**
 		 * sets up the CollisionManager
 		 * @constructor
-		 * @param $usePerPixel
 		 */
 		constructor: function() {
 			this.activeLevel = null;
@@ -137,25 +136,23 @@
 	 * @returns {CollisionData}
 	 */
 	function boxToBoxCheck(source, target){
-		//console.log(source.name + ": (" + source.position.x + "," + source.position.y + ") to ("  + (source.position.x + source.width) + "," + (source.position.y + source.height) + ")");
-		//console.log(target.name + ": (" + target.position.x + "," + target.position.y + ") to ("  + (target.position.x + target.width) + "," + (target.position.y + target.height) + ")");
 		// check for x intersection
 		if(source.position.x <= target.position.x) {
-			if((source.position.x + source.halfWidth) < (target.position.x - target.halfWidth)) {
+			if((source.position.x + source.width) < target.position.x) {
 				return null;
 			}
 		} else {
-			if((target.position.x + target.halfWidth) < (source.position.x - source.halfWidth)) {
+			if((target.position.x + target.width) < source.position.x) {
 				return null;
 			}
 		}
 		// check for y intersection
 		if(source.position.y <= target.position.y) {
-			if((source.position.y + source.halfHeight) < (target.position.y - target.halfHeight)) {
+			if((source.position.y + source.height) < target.position.y) {
 				return null;
 			}
 		} else {
-			if((target.position.y + target.halfHeight) < (source.position.y - source.halfHeight)) {
+			if((target.position.y + target.height) < source.position.y) {
 				return null;
 			}
 		}
@@ -175,10 +172,10 @@
 	function boxToSpriteMapCheck(box, map){		
 		// find collisions between tiles and box
 		var collidedTiles = [];
-		var xPos = box.position.x - box.halfWidth;
-		var yPos = box.position.y - box.halfHeight;
-		for(yPos; yPos < (box.position.y + (box.halfHeight*2)); yPos += map.tileHeight){
-			for(xPos; xPos < (box.position.x + (box.halfWidth*2)); xPos += map.tileWidth){
+		var xPos = box.position.x;
+		var yPos = box.position.y;
+		for(yPos; yPos < (box.position.y + box.height); yPos += map.tileHeight) {
+			for(xPos; xPos < (box.position.x + box.width); xPos += map.tileWidth) {
 				if(map.getTile(xPos, yPos)){
 					collidedTiles.push({
 						x: Math.floor(xPos / map.tileWidth),
@@ -186,7 +183,7 @@
 					});
 				}
 			}
-			xPos = box.position.x - box.halfWidth;
+			xPos = box.position.x;
 		}
 		
 		if(collidedTiles.length > 0){
