@@ -65,6 +65,24 @@ ex.using([
 			this.renderer.renderables.push(object);
 		},
 		
+		removeObject: function(object) {
+			// Remove object from world
+			var index = this.objects.length;
+			while(index--) {
+				if(this.objects[index] === object){
+					this.objects.splice(index, 1);
+				}
+			}
+			
+			// Remove object from renderer
+			index = this.renderer.renderables.length;
+			while(index--) {
+				if(this.renderer.renderables[index] === object) {
+					this.renderer.renderables.splice(index, 1);
+				}
+			}
+		},
+		
 		destroy: function() {
 			
 		}

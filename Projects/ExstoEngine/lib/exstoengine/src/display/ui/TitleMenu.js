@@ -1,5 +1,6 @@
 ex.using([
   'ex.display.Sprite',
+  'ex.base.Component'
 ], function() {	
 	ex.define("ex.display.ui.TitleMenu", ex.base.Component, {
 		constructor: function(selections, defaultSelection, bgImage, logoImage, input){
@@ -13,24 +14,36 @@ ex.using([
 				},
 				logo: {
 					image: logoImage,
-					x: 400,
-					y: 300
+					x: 300,
+					y: 100
 				},
 				menu: {
-					x: 400,
-					y: 500,
+					x: 500,
+					y: 300,
 					actionKey: ex.util.Key.Enter
 				},
 				selection: {
 					width: 200,
-					height: 100
+					height: 70
 				},
 			};
 		},
 		
+		moveUpMenu: function() {
+			if(this.currentSelection != 0){
+				this.currentSelection--;
+			}
+		},
+		
+		moveDownMenu: function() {
+			if(this.currentSelection < (this.selections.length - 1)) {
+				this.currentSelection++;
+			}
+		},
+		
 		update: function(dt){
 			if(this.input.isKeyPressed(this.options.menu.actionKey)) {
-				this.currentSelection.action();
+				this.selections[this.currentSelection].action();
 			}
 			if(this.input.isKeyPressed(ex.util.Key.Up)) {
 				this.moveUpMenu();
@@ -54,16 +67,29 @@ ex.using([
 						0,0);
 			}
 			
+			if(this.options.logo.image != null) {
+				context.drawImage(
+						this.options.logo.image,
+						this.options.logo.x,
+						this.options.logo.y);
+			}
+			
+			context.font = "40pt Calibri";
+			context.fillStyle = "#FF0000";
+			context.textAlign = "center";
+			
 			var xPos = this.options.menu.x - (this.options.selection.width / 2);
 			var yPos = this.options.menu.y;
 			var index = 0;
 			for(index; index < this.selections.length; index++) {
-				if(this.selections[index] === this.currentSelection){
-					// TODO: Set color to selected
-					ctx.fillText(this.selections[index].text, xPos, yPos);
-					// TODO: Set color back to default
+				// Color current selection differently
+				if(index == this.currentSelection){
+					context.fillStyle = "#00FF00";
+					context.fillText(this.selections[index].text, xPos, yPos);
+					context.fillStyle = "#FF0000";
 				} else {
-					ctx.fillText(this.selections[index].text, xPos, yPos);
+					// Print non selected options in normal color
+					context.fillText(this.selections[index].text, xPos, yPos);
 				}
 				yPos += this.options.selection.height;
 			}

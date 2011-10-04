@@ -13,7 +13,7 @@ ex.using([
 			this.sprite.createAnimation('Walk', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
 			this.sprite.play('Walk');
 			this.input = input;
-			this.speed = 10;
+			this.speed = 20;
 		},
 		
 		onCollide: function(target, data, dt){
