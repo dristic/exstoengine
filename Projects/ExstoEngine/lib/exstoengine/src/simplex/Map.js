@@ -15,25 +15,30 @@ ex.using([ 'ex.simplex.Layer' ], function() {
 		 *            {String}: name of map
 		 * @constructor
 		 */
-		constructor : function($name) {
-			this.name = $name;
+		constructor : function(name) {
+			this.name = name;
 			this.layers = [];
 		},
 
-		/**
-		 * Adds a layer to the map with the supplied items
-		 * 
-		 * @param $name
-		 *            {String}: name of the layer
-		 * @param $items
-		 *            {Array}: array of items to be included in the layer
-		 */
-		addLayer : function($name, $items) {
-			if ($name != null && $items != null) {
-				var newLayer = new ex.simplex.Layer($name);
-				newLayer.items = $items;
-				this.layers.push(newLayer);
+		addLayer : function(layer) {
+			if (layer != null){
+				this.layers.push(layer);
 			}
+		},
+		
+		getLayer: function(name) {
+			if(name == null)
+				return null;
+			
+			var index = this.layers.length;
+			while(index--){
+				if(this.layers[index].name == name){
+					return this.layers[index];
+				}
+			}
+			
+			// if not found...
+			return null;
 		},
 
 		/**
@@ -63,11 +68,14 @@ ex.using([ 'ex.simplex.Layer' ], function() {
 		/**
 		 * performs actions every time period dt
 		 * 
-		 * @param $dt
+		 * @param dt
 		 *            {Number}: delta time, length of each time cycle
 		 */
-		update : function($dt) {
-
+		update : function(dt) {
+			var index = this.layers.length;
+			while(index--){
+				this.layers[index].update(dt);
+			}
 		},
 
 		/**

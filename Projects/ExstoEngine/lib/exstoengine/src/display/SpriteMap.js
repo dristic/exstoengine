@@ -10,10 +10,14 @@ ex.using([
 			this.img = img;
 			this.x = 0;
 			this.y = 0;
-			this.position = {x: 0, y: 0};//new ex.base.Vector(0, 0);
+			this.position = new ex.base.Vector(0, 0);
 			this.scrollFactorX = this.scrollFactorY = 1;
 			
 			this._super("constructor", [tileWidth, tileHeight, map]);
+		},
+		
+		onCollide: function() {
+			
 		},
 		
 		update: function(dt) {

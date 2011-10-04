@@ -22,19 +22,18 @@ ex.using([ 'ex.base.Point', 'ex.base.Vector' ], function() {
 
 		/**
 		 * creates a new layer with base attributes
-		 * 
-		 * @param $name
-		 *            {String}: name of the layer (mostly for IDE purposes)
-		 * @param $origin
-		 *            {ex.base.Point}: origin of the layer, defaults to (0,0) if
-		 *            not supplied
-		 * @param $scrollFactor
-		 *            {ex.base.Vector}: a multiplier that affects the scroll
-		 *            rate relative to the camera
+		 * @name ex.simplex.Layer
+		 * @param {String} $name name of the layer (mostly for IDE purposes)
+		 * @param {ex.display.SpriteMap} $map tile data for the layer
+		 * @param {ex.base.Point} $origin origin of the layer, defaults to (0,0) 
+		 * if not supplied
+		 * @param {ex.base.Vector} $scrollFactor a multiplier that affects the 
+		 * scroll rate relative to the camera
 		 * @constructor
 		 */
-		constructor : function($name, $origin, $scrollFactor) {
+		constructor : function($name, $map, $origin, $scrollFactor) {
 			this.name = $name;
+			this.map = $map;
 			this.items = [];
 			this.visible = true;
 			this.opacity = 1.0;
@@ -80,11 +79,19 @@ ex.using([ 'ex.base.Point', 'ex.base.Vector' ], function() {
 		/**
 		 * performs actions every time period dt
 		 * 
-		 * @param $dt
+		 * @param dt
 		 *            {Number}: delta time, length of each time cycle
 		 */
-		update : function($dt) {
-
+		update : function(dt) {
+			var index = this.items.length;
+			while(index--){
+				this.items[index].update(dt);
+				if(document.getElementById("debug")){
+					document.getElementById("debug").innerHTML += 
+						'<br><br>' + this.items[index].name + 
+						': (' + this.items[index].position.x + ',' + this.items[index].position.y + ')';
+				}
+			}
 		},
 
 		/**
@@ -128,21 +135,26 @@ ex.using([ 'ex.base.Point', 'ex.base.Vector' ], function() {
 		 * Supplies a canvas context and camera offset to each item and calls
 		 * their render functions
 		 * 
-		 * @param $context
+		 * @param context
 		 *            {Context}: canvas context to draw with
-		 * @param $camX
+		 * @param camX
 		 *            {Number}: camera offset on x
-		 * @param $camY
+		 * @param camY
 		 *            {Number}: camera offset on y
 		 */
-		render : function($context, $camX, $camY) {
+		render : function(context, camX, camY) {
 			if (!this.isVisible()) // Don't render if it won't be seen
 				return;
-
+			
+			// render map
+			if(this.map != null)
+				this.map.render(context, camX, camY);
+			
+			// render items
 			var count = this.items.length;
 			while (count--) {
-				this.items[count].render($context, $camX * this.scrollFactor.x,
-						$camY * this.scrollFactor.y);
+				this.items[count].render(context, camX * this.scrollFactor.x,
+						camY * this.scrollFactor.y);
 			}
 		}
 	});

@@ -12,23 +12,12 @@ ex.using([
 		 * @param {String} name The sprite's name.
 		 * @constructor
 		 */
-        constructor: function (x, y, img, name) {
-        	this.name = name;
+        constructor: function (position, img) {
         	this.type = "Sprite";
-            this.position = new ex.base.Vector(x, y);
+            this.position = position;
             this.velocity = new ex.base.Vector(0, 0);
             this.img = img || new Image();
             this.visible = true;
-            this.width = this.img.width;
-            this.height = this.img.height;
-
-            this.halfWidth = function () {
-                return this.img.width >> 1;
-            };
-
-            this.halfHeight = function () {
-                return this.img.height >> 1;
-            };
 
             this.rotation = 0;
             this.rotationEnabled = false;
@@ -36,18 +25,27 @@ ex.using([
 
             this.scrollFactorX = 1;
             this.scrollFactorY = 1;
-
-            //--Set rotation canvas the size of the image
-            this.rotationCanvas.width = this.img.width;
-            this.rotationCanvas.height = this.img.height;
+            
+            this.width = this.img.naturalWidth;
+            this.height = this.img.naturalHeight;
+            this.rotationCanvas.width = this.width;
+            this.rotationCanvas.height = this.height;
+            
+            if(this.width == 0  && this.height == 0) {
+            	ex.event.listen(img, 'load', function () {
+            		this._recalcDimensions();
+            	}, this);
+            }
+        },
+        
+        _recalcDimensions: function () {
+        	this.width = this.img.naturalWidth;
+            this.height = this.img.naturalHeight;
+            this.rotationCanvas.width = this.width;
+            this.rotationCanvas.height = this.height;
         },
 
         update: function (dt) {
-            if (this.width == 0) {
-                this.width = this.img.width;
-                this.height = this.img.height;
-            }
-
             if (typeof this.onUpdate === "function") this.onUpdate(dt);
         },
 
@@ -57,7 +55,10 @@ ex.using([
             }
             
             if (this.rotationEnabled == false) {
-                context.drawImage(this.img, this.position.x - (camX * this.scrollFactorX), this.position.y - (camY * this.scrollFactorY));
+                context.drawImage(
+                		this.img, 
+                		this.position.x - (camX * this.scrollFactorX), 
+                		this.position.y - (camY * this.scrollFactorY));
             } else {
                 var rContext = this.rotationCanvas.getContext("2d");
 

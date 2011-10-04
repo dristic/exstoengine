@@ -1,7 +1,7 @@
 (function () {
 	
 	// Global variables
-	var data = [
+	var map1Data = [
 				[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 				[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 				[ 0, 0, 0, 0, 51, 52, 52, 53, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -18,14 +18,38 @@
 				[ 0, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 12],
 			];
 	
+	var map2Data = [
+				[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				[ 0, 0, 0, 0, 51, 52, 52, 53, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 51, 52, 52, 52, 52, 53, 0, 0, 0, 0, 0, 0],
+				[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				[ 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3],
+				[ 0, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 9],
+				[ 0, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 9],
+				[ 0, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 9],
+				[ 0, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 9],
+				[ 0, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 9],
+				[ 0, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 9],
+				[ 0, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 9],
+				];
+	
 	ex.using([
           "ex.Engine",
+          "ex.base.Vector",
           "ex.display.AnimatedSprite",
+          "ex.display.Image",
           "ex.world.World",
-          "ex.world.CollisionMap",
+          "ex.display.Sprite",
           "ex.display.SpriteMap",
           "ex.sound.Sound",
-          "entity.Player"
+          "ex.simplex.Map",
+          "ex.simplex.Layer",
+          
+          "entity.Player",
+          "entity.Generic",
+          "entity.Teleporter"
           	], 
   	function () {		
 		//--Startup new engine
@@ -44,75 +68,110 @@
 		// Images
 		_engine.imageRepository.loadImage("Nebula", "../assets/world/bg.png");
 		_engine.imageRepository.loadImage("Explosion", "../assets/effects/explode3.png");
+		_engine.imageRepository.loadImage("Teleport", "../assets/effects/teleport2.png");
 		_engine.imageRepository.loadImage("Tiles", "../assets/world/tileset-platformer.png");
 		_engine.imageRepository.loadImage("Player", "../assets/units/player.png");
 		
+		// Setup player
+		var player = new entity.Player(
+				"Player", 
+				new ex.base.Vector(100, 150), 
+				new ex.display.AnimatedSprite(
+						new ex.base.Vector(0,0),
+						41, 47, 7,
+						_engine.imageRepository.getImage("Player")), 
+				true, 
+				_engine.input);
+		
+		// Setup explosion animations & teleporter
+		var explosion1 = new entity.Generic(
+				"Explosion", 
+				new ex.base.Vector(200, 145), 
+				new ex.display.AnimatedSprite(
+						new ex.base.Vector(0,0), 
+						48, 48, 7, 
+						_engine.imageRepository.getImage("Explosion")), 
+				true);
+		var explosion2 = new entity.Generic(
+				"Explosion", 
+				new ex.base.Vector(300, 50), 
+				new ex.display.AnimatedSprite(
+						new ex.base.Vector(0,0), 
+						48, 48, 7, 
+						_engine.imageRepository.getImage("Explosion")),
+				true);
+		var explosion3 = new entity.Generic(
+				"Explosion", 
+				new ex.base.Vector(500, 155), 
+				new ex.display.AnimatedSprite(
+						new ex.base.Vector(0,0), 
+						48, 48, 7, 
+						_engine.imageRepository.getImage("Explosion")),
+				true);
+		var teleporter = new entity.Teleporter(
+				"Teleporter", 
+				new ex.base.Vector(750, 162), 
+				new ex.display.AnimatedSprite(
+						new ex.base.Vector(0,0), 
+						60, 60, 10, 
+						_engine.imageRepository.getImage("Teleport")),
+				true);
+		teleporter.onCollide = function(target, data){
+			if(target.name == "Player" && !teleporter.triggered){
+				playLaserSound();
+				teleporter.triggered = true;
+				_engine.currentWorld.loadLevel("Level 2");
+				_engine.currentWorld.activeLevel.getLayer("Ground").addItem(player);
+				_engine.collisionManager.setActiveLevel(_engine.currentWorld.activeLevel);
+				
+			}
+		};
+		
+		
+		// Load tile maps
+		var level1Map = new ex.display.SpriteMap(32, 32, map1Data, _engine.imageRepository.getImage("Tiles"));
+		var level2Map = new ex.display.SpriteMap(32, 32, map2Data, _engine.imageRepository.getImage("Tiles"));
+		
+		// Setup background sprite
+		var nebula = new ex.display.Sprite(new ex.base.Vector(0,0), _engine.imageRepository.getImage("Nebula"));
+		
+		// Setup level 1
+		var firstLevel = new ex.simplex.Map("Level 1");
+		firstLevel.addLayer(new ex.simplex.Layer("Ground", level1Map, new ex.base.Vector(0,0), new ex.base.Vector(1,1)));
+		firstLevel.addLayer(new ex.simplex.Layer("Background", null, new ex.base.Vector(0,0), new ex.base.Vector(0.1,0.1)));
+		firstLevel.getLayer("Background").addItem(nebula);
+		firstLevel.getLayer("Ground").addItem(teleporter);
+		
+		// Setup level 2
+		var secondLevel = new ex.simplex.Map("Level 2");
+		secondLevel.addLayer(new ex.simplex.Layer("Ground", level2Map, new ex.base.Vector(0,0), new ex.base.Vector(1,1)));
+		secondLevel.getLayer("Ground").addItem(explosion1);
+		secondLevel.getLayer("Ground").addItem(explosion2);
+		secondLevel.getLayer("Ground").addItem(explosion3);
+		secondLevel.addLayer(new ex.simplex.Layer("Background", null, new ex.base.Vector(0,0), new ex.base.Vector(0.1,0.1)));
+		secondLevel.addLayer(new ex.simplex.Layer("Explosions", null, new ex.base.Vector(0,0), new ex.base.Vector(1,1)));
+		secondLevel.getLayer("Background").addItem(nebula);
+				
 		//--Open base world
 		_engine.openWorld(ex.world.World);
+		
+		// Add levels to world
+		_engine.currentWorld.addLevel(firstLevel);
+		_engine.currentWorld.addLevel(secondLevel);
+		
+		// Load level 2
+		_engine.currentWorld.loadLevel("Level 1");
+		_engine.currentWorld.activeLevel.getLayer("Ground").addItem(player);
+		_engine.collisionManager.setActiveLevel(_engine.currentWorld.activeLevel);
+		
+		console.log(_engine.collisionManager.activeLevel.getLayer("Ground").items);
 
-		// Setup player animation
-		var player = new entity.Player(_engine.imageRepository.img.Player, _engine.input);
-		_engine.currentWorld.addObject(player);
-		_engine.collisionManager.addCollidable(player);
-		
-		// Setup explosion animation
-		var explosion1 = new ex.display.AnimatedSprite(200, 145, 48, 48, 7, _engine.imageRepository.img.Explosion);
-		explosion1.createAnimation("Explode", [0, 1, 2, 3]);
-		explosion1.play("Explode");
-		_engine.currentWorld.addObject(explosion1);
-		_engine.collisionManager.addCollidable(explosion1);
-		
-		var explosion2 = new ex.display.AnimatedSprite(300, 50, 48, 48, 7, _engine.imageRepository.img.Explosion);
-		explosion2.createAnimation("Explode", [0, 1, 2, 3]);
-		explosion2.play("Explode");
-		_engine.currentWorld.addObject(explosion2);
-		_engine.collisionManager.addCollidable(explosion2);
-		
-		var explosion3 = new ex.display.AnimatedSprite(500, 145, 48, 48, 7, _engine.imageRepository.img.Explosion);
-		explosion3.createAnimation("Explode", [0, 1, 2, 3]);
-		explosion3.play("Explode");
-		_engine.currentWorld.addObject(explosion3);
-		_engine.collisionManager.addCollidable(explosion3);
-		
 		// Focus camera on player
 		_engine.camera.follow(player);
-		
-		// Load tile map
-		var tiles = new ex.display.SpriteMap(32, 32, data, _engine.imageRepository.img.Tiles);
-		_engine.currentWorld.addObject(tiles);
-		_engine.collisionManager.addCollidable(tiles);
-		
-		// Load background image
-		var nebula = new ex.display.Sprite(0, 0, _engine.imageRepository.img.Nebula);
-		nebula.scrollFactorX = nebula.scrollFactorY = 0;
-		_engine.currentWorld.addObject(nebula);
 		
 		var playLaserSound = function(){
 			laser.play();
 		};
-		
-		var resolvePlayerToMapCollision = function(collision){
-			var index = 0;
-			var x = 0;
-			var y = 0;
-			for(index; index < collision.data.length; index++) {
-				x = collision.data[index].x;
-				y = collision.data[index].y;
-				collision.target.map[y][x] = 0;
-			}
-			playLaserSound();
-		};
-		
-		_engine.collisionManager.events = [
-   		    { source: explosion1, 	target: player, 	event: playLaserSound },
-   		    { source: player, 		target: explosion1, event: playLaserSound },
-    		{ source: explosion2, 	target: player, 	event: playLaserSound },
-    		{ source: player, 		target: explosion2, event: playLaserSound },
-		    { source: explosion3, 	target: player, 	event: playLaserSound },
-		    { source: player, 		target: explosion3, event: playLaserSound },
-		    { source: tiles, 		target: player,		event: resolvePlayerToMapCollision  },		
-		    { source: player, 		target: tiles,		event: resolvePlayerToMapCollision  },		
-		];
 		
 		_engine.onUpdate = function(){
 			// Extra code to run on each update

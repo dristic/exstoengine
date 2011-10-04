@@ -2,7 +2,7 @@ ex.using([
   "ex.display.Sprite"
 ], function () {
 	ex.define("ex.display.AnimatedSprite", ex.display.Sprite, {
-		constructor: function(x, y, frameWidth, frameHeight, frameRate, img) {
+		constructor: function(position, frameWidth, frameHeight, frameRate, img) {
 			this.timer = (1 / frameRate);
 			this.frameRate = frameRate;
 			this.type = "Sprite";
@@ -13,7 +13,7 @@ ex.using([
 			this.curFrame = 0;
 			this.playing = true;
 			
-			this._super("constructor", [x, y, img]);
+			this._super("constructor", [position, img]);
 			
 			this.renderingRect = {
 				x		: 0, 
@@ -24,6 +24,12 @@ ex.using([
 			
 			this.width = frameWidth;
 			this.height = frameHeight;
+			this.halfWidth = frameWidth / 2;
+			this.halfHeight = frameHeight / 2;
+		},
+		
+		_recalcDimensions: function () {
+			// Overridden because we already have the dimensions
 		},
 		
 		createAnimation: function(name, frames) {
@@ -50,33 +56,30 @@ ex.using([
 		},
 		
 		update: function(dt) {
-			//--Ensure we are playing
-			if(this.playing == true) {
-				//--If we have a framerate
-				if(this.frameRate > 0) {
-					// Check for frame skipping due to inactive tab
-					if(dt > (1 / this.frameRate)) {
-						var skips = Math.floor(dt / (1 / this.frameRate));
-						while(skips--) {
-							var index = array_index_of(this.curAnimation, this.curFrame) + 1;
-							if(index > this.curAnimation.length - 1) index = 0;
-							this.curFrame = this.curAnimation[index];
-						}
-						dt = dt % (1 / this.frameRate);
+			//--Ensure we are playing and frameRate > 0
+			if(this.playing == true && this.frameRate > 0) {
+				// Check for frame skipping due to inactive tab
+				if(dt > (1 / this.frameRate)) {
+					var skips = Math.floor(dt / (1 / this.frameRate));
+					while(skips--) {
+						var index = array_index_of(this.curAnimation, this.curFrame) + 1;
+						if(index > this.curAnimation.length - 1) index = 0;
+						this.curFrame = this.curAnimation[index];
 					}
-					this.timer -= dt;
-					//--If it is time to go to the next frame
-					if(this.timer < 0) {
-						this.timer += (1 / this.frameRate);
-						//--Ensure image is available
-						if(this.img.width > 0 && this.img.height > 0) {
-							//--Go to correct frame
-							var index = array_index_of(this.curAnimation, this.curFrame) + 1;
-							if(index > this.curAnimation.length - 1) index = 0;
-							this.curFrame = this.curAnimation[index];
-							
-							this.goToFrame(this.curFrame);
-						}
+					dt = dt % (1 / this.frameRate);
+				}
+				this.timer -= dt;
+				//--If it is time to go to the next frame
+				if(this.timer < 0) {
+					this.timer += (1 / this.frameRate);
+					//--Ensure image is available
+					if(this.img.width > 0 && this.img.height > 0) {
+						//--Go to correct frame
+						var index = array_index_of(this.curAnimation, this.curFrame) + 1;
+						if(index > this.curAnimation.length - 1) index = 0;
+						this.curFrame = this.curAnimation[index];
+						
+						this.goToFrame(this.curFrame);
 					}
 				}
 			}
@@ -90,8 +93,8 @@ ex.using([
 							  this.renderingRect.y,
 							  this.renderingRect.width,
 							  this.renderingRect.height,
-							  this.position.x - (camX * this.scrollFactorX), 
-							  this.position.y - (camY * this.scrollFactorY),
+							  this.position.x - (camX * this.scrollFactorX) - this.halfWidth, 
+							  this.position.y - (camY * this.scrollFactorY) - this.halfHeight,
 							  this.renderingRect.width,
 							  this.renderingRect.height);
 		},

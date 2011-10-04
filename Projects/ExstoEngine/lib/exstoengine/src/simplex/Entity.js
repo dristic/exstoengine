@@ -10,32 +10,80 @@
  * @param bindings
  *            {Object}: associative array that binds inputs to actions
  */
-ex.using([ "ex.event.EventTarget" ], function() {
+ex.using([ 
+    "ex.event.EventTarget"
+], function() {
 	ex.define("ex.simplex.Entity", ex.event.EventTarget, {
 
 		/**
 		 * 
-		 * @param $name
+		 * @param name
 		 *            {String}: name of entity (used mostly in IDE)
-		 * @param $position
+		 * @param position
 		 *            {ex.base.Point}: original position of entity
 		 * @constructor
 		 */
-		constructor : function($name, $position) {
-			this.name = $name;
-			this.position = $position;
-			this.actions = {};
-			this.bindings = {};
+		constructor : function(name, position, sprite, collides) {
+			// Referencing data
+			this.name = name;
+			this.type = "Entity";
+			// Physical data
+			this.position = position;
+			this.halfWidth = sprite.width / 2;
+			this.halfHeight = sprite.height / 2;
+			this.velocity = new ex.base.Vector(0,0);
+			this.collides = collides;
+			// Display data
+			this.sprite = sprite;
+			this.sprite.position = this.position;	// pointer to this.position
+			
+			if(sprite.width == 0 && sprite.height == 0) {
+				ex.event.listen(sprite.img, 'load', function () {
+            		this.halfWidth = sprite.width >> 1;
+            		this.halfHeight = sprite.height >> 1;
+            	}, this);
+			}
 		},
 
 		/**
 		 * performs actions every time period dt
 		 * 
-		 * @param $dt
+		 * @param dt
 		 *            {Number}: delta time, length of each time cycle
 		 */
-		update : function($dt) {
-
+		update : function(dt) {
+			this.sprite.update(dt);
+		},
+		
+		/**
+		 * Adds a time scaled vector to the entity's position.
+		 * This must be used to update the entity's position or the entity will
+		 * become out of sync with its sprite.
+		 * 
+		 * If you want to set the absolute position, see setPosition(newX, newY)
+		 * 
+		 * @see ex.simplex.Entity.setPosition
+		 * 
+		 * @param {ex.base.Vector} vector
+		 * @param {Number} dt
+		 */
+		updatePosition: function(vector, dt) {
+			this.position.addScaled(vector, dt);
+		},
+		
+		/**
+		 * Sets the absolute position of the entity with x,y values.
+		 * 
+		 * @param newX
+		 * @param newY
+		 */
+		setPosition: function(newX, newY) {
+			this.position.x = newX;
+			this.position.y = newY;
+		},
+		
+		onCollide: function(target) {
+			
 		},
 
 		/**

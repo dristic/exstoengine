@@ -2,7 +2,7 @@
 	
 	// Global variables
 	var playerSpeed = 20;
-	var data = [
+	var level1Data = [
         [1, 1, 1, 1, 1, 1, 1, 1],
         [2, 2, 2, 2, 2, 2, 2, 2],
         [5, 5, 5, 5, 5, 5, 5, 5],
@@ -15,11 +15,17 @@
 	
 	ex.using([
           "ex.Engine",
+          "ex.base.Vector",
           "ex.world.World",
           "ex.display.AnimatedSprite",
           "ex.world.CollisionMap",
           "ex.display.SpriteMap",
-          "ex.sound.Sound"
+          "ex.sound.Sound",
+          "ex.simplex.Map",
+          "ex.simplex.Layer",
+          
+          "entity.Paddle",
+          "entity.Ball"
           	], 
   	function () {		
 		//--Startup new engine
@@ -32,121 +38,73 @@
 		//--Setup input
 		_engine.input.listenOn(_engine.renderer.canvas);
 		
+		// Images
+		_engine.imageRepository.loadImage("Ball", "resources/ball.png");
+		_engine.imageRepository.loadImage("Paddle", "resources/paddle.png");
+		_engine.imageRepository.loadImage("Tiles", "resources/bricks.png");
+		_engine.imageRepository.loadImage("BG", "resources/bg.png");
+		
 		// Sounds
 		var laser = new ex.sound.Sound('../assets/sounds/lazer.ogg', 7);
 		
-		// Images
-		_engine.imageRepository.loadImage("Ball", "resources/ball.png");
-		_engine.imageRepository.loadImage("Tiles", "resources/bricks.png");
-		_engine.imageRepository.loadImage("Paddle", "resources/paddle.png");
-		_engine.imageRepository.loadImage("BG", "resources/bg.png");
+		// Setup Sprites
+		var paddleSprite = new ex.display.Sprite(new ex.base.Vector(0, 0), _engine.imageRepository.getImage("Paddle"));
+		var ballSprite = new ex.display.Sprite(new ex.base.Vector(0, 0), _engine.imageRepository.getImage("Ball"));
 		
-		//--Open base world
-		_engine.openWorld(ex.world.World);
-
-		// Setup player animation
-		var player = new ex.display.Sprite(20, 460, _engine.imageRepository.img.Paddle, "Paddle");
-		_engine.currentWorld.addObject(player);
-		_engine.collisionManager.addCollidable(player);
+		// Setup Player
+		var paddle = new entity.Paddle(
+				"Paddle", 
+				new ex.base.Vector(20, 460), 
+				paddleSprite,
+				true, 
+				_engine.input);
 		
-		// Setup player controls
-		player.onUpdate = function(dt) {
-			if(_engine.input.isKeyDown(ex.util.Key.A)) {
-				this.velocity.x -= playerSpeed;
-			}
-			if(_engine.input.isKeyDown(ex.util.Key.D)) {
-				this.velocity.x += playerSpeed;
-			}
-			if(_engine.input.isKeyPressed(ex.util.Key.J)) {
-				laser.play();
-			}
-			
-			// Apply the velocity and set the positions for the camera to follow
-			this.position.addScaled(this.velocity, dt);
-			
-			if(this.position.x < 0) this.position.x = 0;
-			else if(this.position.x > 700) this.position.x = 700;
-			
-			this.x = this.position.x;
-			this.y = this.position.y;
-			
-			// Scale down the velocity
-			this.velocity.scale(0.95);
-		};
-		
-		// Focus camera on player
-		//_engine.camera.follow(player);
+		// Setup Ball
+		var ball = new entity.Ball(
+				"Ball",
+				new ex.base.Vector(20, 400),
+				ballSprite,
+				true);
+		ball.velocity = new ex.base.Vector(100, -100);
 		
 		// Load tile map
-		var tiles = new ex.display.SpriteMap(100, 20, data, _engine.imageRepository.img.Tiles);
-		_engine.currentWorld.addObject(tiles);
-		_engine.collisionManager.addCollidable(tiles);
+		var level1Map = new ex.display.SpriteMap(
+				100, 20, 
+				level1Data, 
+				_engine.imageRepository.img.Tiles);
+
+		// Load background image
+		var nebula = new ex.display.Sprite(new ex.base.Vector(0, 0), _engine.imageRepository.img.BG);
 		
-		var playLaserSound = function(){
-			laser.play();
-		};
+		// Setup level
+		var level1 = new ex.simplex.Map("Level 1");
+		level1.addLayer(new ex.simplex.Layer(
+				"Ground",
+				level1Map,
+				new ex.base.Vector(0,0),
+				new ex.base.Vector(0,0)));
+		level1.addLayer(new ex.simplex.Layer(
+				"Background",
+				null,
+				new ex.base.Vector(0,0),
+				new ex.base.Vector(0,0)));
 		
-		var ball = new ex.display.Sprite(20, 400, _engine.imageRepository.img.Ball, "Ball");
-		_engine.currentWorld.addObject(ball);
-		_engine.collisionManager.addCollidable(ball);
-		ball.velocity.x = 100;
-		ball.velocity.y = -100;
-		ball.onUpdate = function(dt) {
-			// Apply the velocity and set the positions for the camera to follow
-			this.position.addScaled(this.velocity, dt);
-			
-			if(this.position.x < 0) {
-				this.position.x = 0;
-				this.velocity.x = -this.velocity.x;
-			} else if(this.position.x > 775) {
-				this.position.x = 775;
-				this.velocity.x = -this.velocity.x;
-			}
-			
-			this.x = this.position.x;
-			this.y = this.position.y;
-		};
+		level1.getLayer("Ground").addItem(paddle);
+		level1.getLayer("Ground").addItem(ball);
+		level1.getLayer("Background").addItem(nebula);
 		
-		var resolveBallTileCollision = function(collision) {
-			var tileX = collision.data[0].x,
-				tileY = collision.data[0].y,
-				tileMap = collision.target;
-			
-			tileMap.map[tileY][tileX] = 0;
-			
-			tileX = tileMap.tileWidth * tileX;
-			tileY = tileMap.tileHeight * tileY;
-			
-			if(tileY < ball.position.y) {
-				ball.velocity.y = -ball.velocity.y;
-			} else {
-				ball.velocity.x = -ball.velocity.x;
-			}
-			
-			if(ball.velocity.y < 0) ball.velocity.y--;
-			else ball.velocity.y++;
-			
-			if(ball.velocity.x < 0) ball.velocity.x--;
-			else ball.velocity.x++;
-		};
+		//--Open world and add levels
+		_engine.openWorld(ex.world.World);
+		_engine.currentWorld.addLevel(level1);
 		
-		var resolveBallPaddleCollision = function(collision) {
-			ball.velocity.y = -ball.velocity.y;
-		};
-		
-		_engine.collisionManager.events = [
-           	{ source: ball, target: player, event: resolveBallPaddleCollision },
-           	{ source: player, target: ball, event: resolveBallPaddleCollision },
-           	{ source: ball, target: tiles, event: resolveBallTileCollision }
-		];
+		// Load Level 1
+		_engine.currentWorld.loadLevel("Level 1");
+		_engine.collisionManager.setActiveLevel(_engine.currentWorld.activeLevel);
 		
 		_engine.onUpdate = function(){
 			// Extra code to run on each update
 		};
 		
-		var nebula = new ex.display.Sprite(0, 0, _engine.imageRepository.img.BG, "BG");
-		_engine.currentWorld.addObject(nebula);
-		_engine.collisionManager.addCollidable(nebula);
 	});
 	
 })();

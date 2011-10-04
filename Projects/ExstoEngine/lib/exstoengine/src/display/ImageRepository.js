@@ -7,6 +7,10 @@
 			this.imagesToLoad = 0;
 		},
 		
+		getImage: function(name) {
+			return this.img[name];
+		},
+		
 		loadImage: function ($name, $dir) {
 			this.img[$name] = new Image();
 			
