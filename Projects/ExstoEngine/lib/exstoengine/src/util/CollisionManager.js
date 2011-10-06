@@ -6,7 +6,10 @@
  * 
  * @class ex.util.CollisionManager
  */
-(function() {
+ex.using([
+    'ex.util.CollisionDetector',
+    'ex.util.CollisionResolver'
+], function(){
 	ex.define("ex.util.CollisionManager", {
 		
 		/**
@@ -15,12 +18,11 @@
 		 */
 		constructor: function() {
 			this.activeLevel = null;
-			
-			this.algorithms = {
-				EntityToSpriteMap: 	boxToSpriteMapCheck,
-				SpriteMapToEntity: 	boxToSpriteMapCheck,
-				EntityToEntity: 	boxToBoxCheck
-			};
+			console.log("Setting up collision manager");
+			this.detector = new ex.util.CollisionDetector();
+			this.resolver = new ex.util.CollisionResolver();
+			console.log(this.detector);
+			console.log(this.resolver);
 			
 			this.benchmarkData = [];
 			this.benchmarkAverage = {
@@ -76,30 +78,12 @@
 			var index = this.activeLevel.layers.length;
 			while(index--){
 				// Test spriteMap -> entities
-				var source = 0;
-				var target = 0;
-				for(source; source < this.activeLevel.layers[index].items.length; source++) {
-					// Check source to spritemap (entity to spritemap)
-					if(this.activeLevel.layers[index].map != null){
-						var sourceToMap = this.checkCollisionBetween(
-								this.activeLevel.layers[index].items[source], 
-								this.activeLevel.layers[index].map);
-						if(sourceToMap != null){
-							collisions.push(sourceToMap);
-						}
-					}
-					
-					// Check source to target (entity to entity)
-					for(target = source + 1; target < this.activeLevel.layers[index].items.length; target++){
-						var sourceToTarget = this.checkCollisionBetween(
-								this.activeLevel.layers[index].items[source], 
-								this.activeLevel.layers[index].items[target]);
-						if(sourceToTarget != null){
-							collisions.push(sourceToTarget);
-						}
-					}
-				}
+				collisions.push.apply(
+						collisions, 
+						this.detector.detectGroupCollisions(this.activeLevel.layers[index].items));
 			}
+			if(collisions.length > 0)
+				console.log(collisions);
 			
 			// Call entity.onCollide() for each collision
 			index = collisions.length;
@@ -121,79 +105,6 @@
 				'<br>' + this.benchmarkAverage.time + 'ms' +
 				'<br>' + this.benchmarkAverage.collisions + ' collisions';
 			}
-		},
-		
-		checkCollisionBetween: function(source, target) {
-			var selector = source.type + "To" + target.type;
-			return this.algorithms[selector](source, target);
 		}
-		
-	});
-	
-	/**
-	 * Strict bounding box to bounding box collision test.
-	 * 
-	 * @returns {CollisionData}
-	 */
-	function boxToBoxCheck(source, target){
-		// check for x intersection
-		if(source.position.x <= target.position.x) {
-			if((source.position.x + source.width) < target.position.x) {
-				return null;
-			}
-		} else {
-			if((target.position.x + target.width) < source.position.x) {
-				return null;
-			}
-		}
-		// check for y intersection
-		if(source.position.y <= target.position.y) {
-			if((source.position.y + source.height) < target.position.y) {
-				return null;
-			}
-		} else {
-			if((target.position.y + target.height) < source.position.y) {
-				return null;
-			}
-		}
-		
-		return {
-			source: source,
-			target: target,
-			data:	null
-		};
-	}
-	
-	/**
-	 * checks collision between a spriteMap and a bounding box.
-	 * 
-	 * @returns {Object} both elements with a list of tiles that collided.
-	 */
-	function boxToSpriteMapCheck(box, map){		
-		// find collisions between tiles and box
-		var collidedTiles = [];
-		var xPos = box.position.x;
-		var yPos = box.position.y;
-		for(yPos; yPos < (box.position.y + box.height); yPos += map.tileHeight) {
-			for(xPos; xPos < (box.position.x + box.width); xPos += map.tileWidth) {
-				if(map.getTile(xPos, yPos)){
-					collidedTiles.push({
-						x: Math.floor(xPos / map.tileWidth),
-						y: Math.floor(yPos / map.tileHeight)
-					});
-				}
-			}
-			xPos = box.position.x;
-		}
-		
-		if(collidedTiles.length > 0){
-			return {
-				source: box,
-				target: map,
-				data: 	collidedTiles
-			};
-		} else {
-			return null;
-		}
-	}
-}());
+	});	
+});

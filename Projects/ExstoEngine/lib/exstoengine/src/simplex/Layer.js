@@ -33,8 +33,11 @@ ex.using([ 'ex.base.Point', 'ex.base.Vector' ], function() {
 		 */
 		constructor : function($name, $map, $origin, $scrollFactor) {
 			this.name = $name;
-			this.map = $map;
 			this.items = [];
+			this.map = $map;
+			if(this.map != null) {
+				this.items.push(this.map);
+			}
 			this.visible = true;
 			this.opacity = 1.0;
 
@@ -57,10 +60,23 @@ ex.using([ 'ex.base.Point', 'ex.base.Vector' ], function() {
 		 * @param $item
 		 *            {Object}: something that belongs in the layer
 		 */
-		addItem : function($item) {
-			$item.visible = this.visible;
-			$item.opacity = this.opacity;
-			this.items.push($item);
+		addItem : function(item) {
+			if(item.type == "SpriteMap"){
+				if(this.map == null){
+					this._setMap(item);
+				} else {
+					console.error("Layers cannot contain more than one SpriteMap");
+				}
+			} else {
+				item.visible = this.visible;
+				item.opacity = this.opacity;
+				this.items.push(item);
+			}
+		},
+		
+		_setMap : function(map) {
+			this.map = map;
+			this.items.push(this.map);
 		},
 		
 		/**
@@ -145,10 +161,6 @@ ex.using([ 'ex.base.Point', 'ex.base.Vector' ], function() {
 		render : function(context, camX, camY) {
 			if (!this.isVisible()) // Don't render if it won't be seen
 				return;
-			
-			// render map
-			if(this.map != null)
-				this.map.render(context, camX, camY);
 			
 			// render items
 			var count = this.items.length;
