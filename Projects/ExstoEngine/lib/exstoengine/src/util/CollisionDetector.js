@@ -14,12 +14,16 @@
 			var source = 0;
 			var target = 0;
 			for(source; source < group.length; source++) {
-				for(target = source + 1; target < group.length; target++){
-					var result = this.checkCollisionBetween(
-							group[source], 
-							group[target]);
-					if(result != null){
-						collisions.push(result);
+				if(group[source].collides){
+					for(target = source + 1; target < group.length; target++){
+						if(group[target].collides){
+							var result = this.checkCollisionBetween(
+									group[source], 
+									group[target]);
+							if(result != null){
+								collisions.push(result);
+							}
+						}
 					}
 				}
 			}
@@ -72,7 +76,8 @@
 	 * 
 	 * @returns {CollisionData} both elements with a list of tiles that collided.
 	 */
-	function boxToSpriteMapCheck(box, map){		
+	function boxToSpriteMapCheck(box, map){	
+		// Swap box and map if the arguments get pushed in backwards
 		if(box.type == "SpriteMap"){
 			var temp = box;
 			box = map;

@@ -18,11 +18,8 @@ ex.using([
 		 */
 		constructor: function() {
 			this.activeLevel = null;
-			console.log("Setting up collision manager");
 			this.detector = new ex.util.CollisionDetector();
 			this.resolver = new ex.util.CollisionResolver();
-			console.log(this.detector);
-			console.log(this.resolver);
 			
 			this.benchmarkData = [];
 			this.benchmarkAverage = {
@@ -69,12 +66,13 @@ ex.using([
 			// Grab start time for benchmark data
 			var startTime = new Date();
 			
+			// Do nothing if there is no active level
 			if(this.activeLevel == null){
 				return;
 			}
 			
 			var collisions = [];
-			// Loop through activeLevel.layers
+			// Loop through layers and detect collisions
 			var index = this.activeLevel.layers.length;
 			while(index--){
 				// Test spriteMap -> entities
@@ -82,8 +80,6 @@ ex.using([
 						collisions, 
 						this.detector.detectGroupCollisions(this.activeLevel.layers[index].items));
 			}
-			if(collisions.length > 0)
-				console.log(collisions);
 			
 			// Call entity.onCollide() for each collision
 			index = collisions.length;

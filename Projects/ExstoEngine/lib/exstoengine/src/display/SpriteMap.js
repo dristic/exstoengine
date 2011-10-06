@@ -5,6 +5,7 @@ ex.using([
 	ex.define("ex.display.SpriteMap", ex.world.TileMap, {
 		constructor: function(tileWidth, tileHeight, map, img, name) {
 			this.visible = true;
+			this.collides = true;
 			this.name = name;
 			this.type = "SpriteMap";
 			this.img = img;

@@ -13,7 +13,8 @@
           "ex.display.ui.TitleMenu",
           
           "entity.Player",
-          "entity.Generic",
+          "entity.Explosion",
+          "entity.Asteroid",
           "entity.Teleporter"
           	], 
   	function () {		
@@ -113,6 +114,7 @@
 		_engine.imageRepository.loadImage("Teleport", "../assets/effects/teleport2.png");
 		_engine.imageRepository.loadImage("Tiles", "../assets/world/tileset-platformer.png");
 		_engine.imageRepository.loadImage("Player", "../assets/units/player.png");
+		_engine.imageRepository.loadImage("Asteroid", "../assets/world/asteroid.png");
 		
 		// Setup player
 		var player = new entity.Player(
@@ -126,7 +128,7 @@
 				_engine.input);
 		
 		// Setup explosion animations & teleporter
-		var explosion1 = new entity.Generic(
+		var explosion1 = new entity.Explosion(
 				"Explosion", 
 				new ex.base.Vector(200, 145), 
 				new ex.display.AnimatedSprite(
@@ -134,7 +136,7 @@
 						48, 48, 7, 
 						_engine.imageRepository.getImage("Explosion")), 
 				true);
-		var explosion2 = new entity.Generic(
+		var explosion2 = new entity.Explosion(
 				"Explosion", 
 				new ex.base.Vector(300, 50), 
 				new ex.display.AnimatedSprite(
@@ -142,7 +144,7 @@
 						48, 48, 7, 
 						_engine.imageRepository.getImage("Explosion")),
 				true);
-		var explosion3 = new entity.Generic(
+		var explosion3 = new entity.Explosion(
 				"Explosion", 
 				new ex.base.Vector(500, 155), 
 				new ex.display.AnimatedSprite(
@@ -168,7 +170,13 @@
 				
 			}
 		};
-		
+		var asteroid = new entity.Asteroid(
+				"Asteroid",
+				new ex.base.Vector(750,162),
+				new ex.display.Sprite(
+						new ex.base.Vector(0,0),
+						_engine.imageRepository.getImage("Asteroid")),
+				false);
 		
 		// Load tile maps
 		var level1Map = new ex.display.SpriteMap(32, 32, map1Data, _engine.imageRepository.getImage("Tiles"));
@@ -190,6 +198,7 @@
 		secondLevel.getLayer("Ground").addItem(explosion1);
 		secondLevel.getLayer("Ground").addItem(explosion2);
 		secondLevel.getLayer("Ground").addItem(explosion3);
+		secondLevel.getLayer("Ground").addItem(asteroid);
 		secondLevel.addLayer(new ex.simplex.Layer("Background", null, new ex.base.Vector(0,0), new ex.base.Vector(0.1,0.1)));
 		secondLevel.addLayer(new ex.simplex.Layer("Explosions", null, new ex.base.Vector(0,0), new ex.base.Vector(1,1)));
 		secondLevel.getLayer("Background").addItem(nebula);
@@ -198,7 +207,7 @@
 		_engine.currentWorld.addLevel(firstLevel);
 		_engine.currentWorld.addLevel(secondLevel);
 		
-		// Load level 2
+		// Load level 1
 		_engine.currentWorld.loadLevel("Level 1");
 		_engine.currentWorld.activeLevel.getLayer("Ground").addItem(player);
 		_engine.collisionManager.setActiveLevel(_engine.currentWorld.activeLevel);
