@@ -81,16 +81,7 @@ ex.using([
 						this.detector.detectGroupCollisions(this.activeLevel.layers[index].items));
 			}
 			
-			// Call entity.onCollide() for each collision
-			index = collisions.length;
-			while(index--){
-				// call source -> target event
-				collisions[index].source.onCollide(
-						collisions[index].target, collisions[index].data, dt);
-				// call target -> source event 
-				collisions[index].target.onCollide(
-						collisions[index].source, collisions[index].data, dt);
-			}
+			this.resolver.resolveCollisions(collisions, dt);
 				
 			// Calculate and display benchmark data
 			var endTime = new Date();

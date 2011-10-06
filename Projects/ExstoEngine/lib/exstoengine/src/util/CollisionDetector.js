@@ -85,18 +85,29 @@
 		}
 		// find collisions between tiles and box
 		var collidedTiles = [];
-		var xPos = box.position.x;
-		var yPos = box.position.y;
-		for(yPos; yPos < (box.position.y + box.height); yPos += map.tileHeight) {
-			for(xPos; xPos < (box.position.x + box.width); xPos += map.tileWidth) {
-				if(map.getTile(xPos, yPos)){
+		var xPos = 0;
+		var yPos = 0;
+		var xMax = box.width / map.tileWidth;
+		var yMax = box.height / map.tileHeight;
+		if(xMax % map.tileWidth) {
+			xMax++;
+		}
+		if(yMax % map.tileHeight) {
+			yMax++;
+		}
+		
+		for(yPos; yPos < yMax; yPos++) {
+			for(xPos; xPos < xMax; xPos++) {
+				if(map.getTile(
+						box.position.x + (xPos*map.tileWidth), 
+						box.position.y + (yPos*map.tileHeight))){
 					collidedTiles.push({
-						x: Math.floor(xPos / map.tileWidth),
-						y: Math.floor(yPos / map.tileHeight)
+						x: Math.floor(box.position.x / map.tileWidth),
+						y: Math.floor(box.position.y / map.tileHeight)
 					});
 				}
 			}
-			xPos = box.position.x;
+			xPos = 0;
 		}
 		
 		if(collidedTiles.length > 0){
