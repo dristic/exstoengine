@@ -77,6 +77,10 @@ ex.using([
 			y: a.position.y - b.position.y };
 	};
 	
+	function handleMapCollision(player, tileMap, data, dt) {
+		
+	};
+	
 	function handleTileCollision(player, tileMap, data, dt) {
 		var collision = collide(
 				dt, 

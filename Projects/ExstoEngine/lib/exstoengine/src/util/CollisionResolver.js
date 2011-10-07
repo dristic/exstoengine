@@ -18,6 +18,10 @@
 						collisions[index].data,
 						dt);
 			}
+		},
+		
+		resolveEntityToMap: function(entity, map, dt) {
+			
 		}
 	});
 }());
