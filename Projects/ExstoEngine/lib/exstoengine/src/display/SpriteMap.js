@@ -30,11 +30,11 @@ ex.using([
 				return;
 			}
 			
-			for(var y = 0; y < this.map.length; y++) {
-				for(var x = 0; x < this.map[y].length; x++) {
-					var tile = this.map[y][x], sx = 0, sy = 0;
-					if(tile != 0) {
-						while(--tile) {
+			for(var y = 0; y < this.data.length; y++) {
+				for(var x = 0; x < this.data[y].length; x++) {
+					var tileValue = this.data[y][x].value, sx = 0, sy = 0;
+					if(tileValue != 0) {
+						while(--tileValue) {
 							sx += this.tileWidth;
 							if(sx >= this.img.width) {
 								sy += this.tileHeight;

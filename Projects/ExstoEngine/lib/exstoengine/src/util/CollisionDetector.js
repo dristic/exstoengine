@@ -9,7 +9,6 @@
 		},
 		
 		detectGroupCollisions: function(group){
-			console.log(group);
 			var collisions = [];
 			var source = 0;
 			var target = 0;
@@ -17,7 +16,7 @@
 				if(group[source].collides){
 					for(target = source + 1; target < group.length; target++){
 						if(group[target].collides){
-							var result = this.checkCollisionBetween(
+							var result = this.detectCollisionBetween(
 									group[source], 
 									group[target]);
 							if(result != null){
@@ -31,7 +30,7 @@
 			return collisions;
 		},
 		
-		checkCollisionBetween: function(source, target) {
+		detectCollisionBetween: function(source, target) {
 			var selector = source.type + "To" + target.type;
 			return this.algorithms[selector](source, target);
 		}
@@ -98,13 +97,13 @@
 		
 		for(yPos; yPos < yMax; yPos++) {
 			for(xPos; xPos < xMax; xPos++) {
-				if(map.getTile(
+				var currentTile = map.getTile(
 						box.position.x + (xPos*map.tileWidth), 
-						box.position.y + (yPos*map.tileHeight))){
-					collidedTiles.push({
-						x: Math.floor(box.position.x / map.tileWidth),
-						y: Math.floor(box.position.y / map.tileHeight)
-					});
+						box.position.y + (yPos*map.tileHeight));
+				if(currentTile){
+					if(currentTile.value != 0){
+						collidedTiles.push(currentTile);
+					}
 				}
 			}
 			xPos = 0;
