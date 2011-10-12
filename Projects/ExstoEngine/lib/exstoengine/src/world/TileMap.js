@@ -40,7 +40,9 @@ ex.using([
 			for(xPos = 0; xPos < tileData[yPos].length; xPos++) {
 				tileData[yPos][xPos] = new ex.world.Tile(
 						tileData[yPos][xPos],
-						new ex.base.Vector(xPos * tileWidth, yPos * tileHeight));
+						new ex.base.Vector(xPos * tileWidth, yPos * tileHeight),
+						tileWidth,
+						tileHeight);
 			}
 		}
 		return tileData;

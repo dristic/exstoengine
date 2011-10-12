@@ -32,7 +32,8 @@ ex.using([
 			
 			for(var y = 0; y < this.data.length; y++) {
 				for(var x = 0; x < this.data[y].length; x++) {
-					var tileValue = this.data[y][x].value, sx = 0, sy = 0;
+					var tile = this.data[y][x], sx = 0, sy = 0;
+					var tileValue = tile.value;
 					if(tileValue != 0) {
 						while(--tileValue) {
 							sx += this.tileWidth;
@@ -49,7 +50,7 @@ ex.using([
 								      this.x - (camX * this.scrollFactorX) + (x * this.tileWidth),
 								      this.y - (camY * this.scrollFactorY) + (y * this.tileHeight),
 								      this.tileWidth,
-								      this.tileHeight);	
+								      this.tileHeight);
 					}
 				}
 			}

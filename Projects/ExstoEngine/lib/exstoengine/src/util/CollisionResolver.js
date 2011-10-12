@@ -47,38 +47,86 @@
 	function resolveBoxToMap(box, map, data, dt) {		
 		//Loop through each tile
 		var index = data.length;
+		var collisionBits = 0;
 		while(index--) {
 			//Resolve x
 			if(box.velocity.x > 0){
+				
 				if(data[index].edges.left) {
-					box.setPosition(
-							data[index].position.x - box.width,
-							box.position.y);
-					box.velocity.x = 0;
+					collisionBits += 1;
 				}
 			} else if (box.velocity.x < 0) {
+				
 				if(data[index].edges.right) {
-					box.setPosition(
-							data[index].position.x + map.tileWidth,
-							box.position.y);
-					box.velocity.x = 0;
+					collisionBits += 2;
 				}
 			}
 			//Resolve y
 			if(box.velocity.y > 0) {
+				
 				if(data[index].edges.up) {
-					box.setPosition(
-							box.position.x,
-							data[index].position.y - box.height);
-					box.velocity.y = 0;
+					collisionBits += 4;
 				} 
 			} else if (box.velocity.y < 0) {
+				
 				if (data[index].edges.down) {
-					box.setPosition(
-							box.position.x,
-							data[index].position.y + map.tileHeight);
-					box.velocity.y = 0;
+					collisionBits += 8;
 				}
+			}
+			
+			switch(collisionBits){
+			case 1:		// Left
+				moveEntity(box, "Left", data[index]);
+				break;
+			case 2:		// Right
+				moveEntity(box, "Right", data[index]);
+				break;
+			case 4:		// Up
+				moveEntity(box, "Above", data[index]);
+				break;
+			case 8:		// Down
+				moveEntity(box, "Below", data[index]);
+				break;
+			case 5:		// Up & Left
+				if(box.position.x + box.width > data[index].position.x){
+					moveEntity(box, "Above", data[index]);
+				} else {
+					moveEntity(box, "Left", data[index]);
+				}
+				break;
+			case 6:		// Up & Right
+				if(box.position.x < data[index].position.x + data[index].width){
+					moveEntity(box, "Above", data[index]);
+				} else {
+					moveEntity(box, "Right", data[index]);
+				}
+				break;
+			case 9:		// Down & Left
+				if(box.position.x + box.width > data[index].position.x){
+					moveEntity(box, "Below", data[index]);
+				} else {
+					moveEntity(box, "Left", data[index]);
+				}
+				break;
+			case 10:	// Down & Right
+				if(box.position.x < data[index].position.x + data[index].width){
+					moveEntity(box, "Below", data[index]);
+				} else {
+					moveEntity(box, "Right", data[index]);
+				}
+				break;
+			case 7:		// Left Up Right
+				moveEntity(box, "Above", data[index]);
+				break;
+			case 11:	// Left Down Right
+				moveEntity(box, "Below", data[index]);
+				break;
+			case 13:	// Up Left Down
+				moveEntity(box, "Left", data[index]);
+				break;
+			case 14:	// Up Right Down
+				moveEntity(box, "Right", data[index]);
+				break;
 			}
 		}
 	};
@@ -86,4 +134,28 @@
 	function resolveBoxToBox(source, target, data, dt) {
 		
 	};
+	
+	function moveEntity(source, relation, target) {
+		if(relation == "Left of"){
+			source.setPosition(
+					target.position.x - source.width,
+					source.position.y);
+			source.velocity.x = 0;
+		} else if(relation == "Right of") {
+			source.setPosition(
+					target.position.x + target.width,
+					source.position.y);
+			source.velocity.x = 0;
+		} else if(relation == "Above") {
+			source.setPosition(
+					source.position.x,
+					target.position.y - source.height);
+			source.velocity.y = 0;
+		} else if(relation == "Below") {
+			source.setPosition(
+					source.position.x,
+					target.position.y + target.height);
+			source.velocity.y = 0;
+		}
+	}
 }());

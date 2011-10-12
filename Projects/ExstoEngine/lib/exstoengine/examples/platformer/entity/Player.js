@@ -45,7 +45,7 @@ ex.using([
 			}
 			
 			// Gravity
-			this.velocity.y += this.speed;
+//			this.velocity.y += this.speed;
 			
 			// Apply the velocity and set the positions for the camera to follow
 			this.updatePosition(this.velocity, dt);

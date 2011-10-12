@@ -9,6 +9,7 @@ ex.using([
 					 position,
 					 sprite,
 					 collides]);
+			this.speed = 100;
 		},
 		
 		update: function(dt) {
@@ -41,16 +42,13 @@ ex.using([
 	
 	function resolveBallTileCollision(ball, tileMap, data) {
 		console.log("Ball/tile collision!");
-		var tileX = data[0].x,
-			tileY = data[0].y;
+		var tileX = data[0].position.x,
+			tileY = data[0].position.y;
 		
-		tileMap.map[tileY][tileX] = 0;
-		
-		tileX = tileMap.tileWidth * tileX;
-		tileY = tileMap.tileHeight * tileY;
+		tileMap.getTile(tileX, tileY).setValue(0);
 		
 		if(tileY < ball.position.y) {
-			ball.velocity.y = -ball.velocity.y;
+			ball.velocity.y = ball.speed;
 		} else {
 			ball.velocity.x = -ball.velocity.x;
 		}

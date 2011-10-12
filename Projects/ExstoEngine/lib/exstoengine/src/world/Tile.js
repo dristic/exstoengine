@@ -1,8 +1,10 @@
 (function () {
 	ex.define("ex.world.Tile", {
-		constructor: function(value, position, neighborUp, neighborDown, neighborLeft, neighborRight) {
+		constructor: function(value, position, width, height, neighborUp, neighborDown, neighborLeft, neighborRight) {
 			this.value = value;
 			this.position = position;
+			this.width = width;
+			this.height = height;
 			// Pointers to adjacent tiles
 			this.neighbors = {
 					up: 	neighborUp,
