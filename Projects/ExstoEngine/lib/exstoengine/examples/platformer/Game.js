@@ -115,6 +115,10 @@
 		_engine.imageRepository.loadImage("Tiles", "../assets/world/tileset-platformer.png");
 		_engine.imageRepository.loadImage("Player", "../assets/units/player.png");
 		_engine.imageRepository.loadImage("Asteroid", "../assets/world/asteroid.png");
+		_engine.imageRepository.loadImage("edgeUp", "../assets/debug/EdgeUp.png");
+		_engine.imageRepository.loadImage("edgeDown", "../assets/debug/EdgeDown.png");
+		_engine.imageRepository.loadImage("edgeLeft", "../assets/debug/EdgeLeft.png");
+		_engine.imageRepository.loadImage("edgeRight", "../assets/debug/EdgeRight.png");
 		
 		// Setup player
 		var player = new entity.Player(
@@ -122,7 +126,7 @@
 				new ex.base.Vector(100, 150), 
 				new ex.display.AnimatedSprite(
 						new ex.base.Vector(0,0),
-						41, 47, 7,
+						36, 40, 7,
 						_engine.imageRepository.getImage("Player")), 
 				true, 
 				_engine.input);
@@ -154,7 +158,7 @@
 				true);
 		var teleporter = new entity.Teleporter(
 				"Teleporter", 
-				new ex.base.Vector(750, 162), 
+				new ex.base.Vector(750, 130), 
 				new ex.display.AnimatedSprite(
 						new ex.base.Vector(0,0), 
 						60, 60, 10, 
@@ -178,9 +182,16 @@
 						_engine.imageRepository.getImage("Asteroid")),
 				false);
 		
+		var edgeDebug = {
+			up: _engine.imageRepository.getImage("edgeUp"),
+			down: _engine.imageRepository.getImage("edgeDown"),
+			left: _engine.imageRepository.getImage("edgeLeft"),
+			right: _engine.imageRepository.getImage("edgeRight")
+		};
+		
 		// Load tile maps
-		var level1Map = new ex.display.SpriteMap(32, 32, map1Data, _engine.imageRepository.getImage("Tiles"));
-		var level2Map = new ex.display.SpriteMap(32, 32, map2Data, _engine.imageRepository.getImage("Tiles"));
+		var level1Map = new ex.display.SpriteMap(32, 32, map1Data, _engine.imageRepository.getImage("Tiles"), null, edgeDebug);
+		var level2Map = new ex.display.SpriteMap(32, 32, map2Data, _engine.imageRepository.getImage("Tiles"), null, edgeDebug);
 		
 		// Setup background sprite
 		var nebula = new ex.display.Sprite(new ex.base.Vector(0,0), _engine.imageRepository.getImage("Nebula"));

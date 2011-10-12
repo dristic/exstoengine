@@ -49,26 +49,28 @@
 		var index = data.length;
 		var collisionBits = 0;
 		while(index--) {
-			//Resolve x
-			if(box.velocity.x > 0){
-				
+			//Get x edge intersections
+			if(box.position.x < data[index].position.x && 
+					(box.position.x + box.width) > data[index].position.x){
 				if(data[index].edges.left) {
 					collisionBits += 1;
 				}
-			} else if (box.velocity.x < 0) {
-				
+			}
+			if (box.position.x < (data[index].position.x + data[index].width) &&
+					(box.position.x + box.width) > (data[index].position.x + data[index].width)) {
 				if(data[index].edges.right) {
 					collisionBits += 2;
 				}
 			}
-			//Resolve y
-			if(box.velocity.y > 0) {
-				
+			//Get y edge interesctions
+			if(box.position.y < data[index].position.y &&
+					(box.position.y + box.height) > data[index].position.y) {
 				if(data[index].edges.up) {
 					collisionBits += 4;
 				} 
-			} else if (box.velocity.y < 0) {
-				
+			}
+			if (box.position.y < (data[index].position.y + data[index].height) &&
+					(box.position.y + box.height) > (data[index].position.y + data[index].height)) {
 				if (data[index].edges.down) {
 					collisionBits += 8;
 				}

@@ -3,7 +3,7 @@ ex.using([
   //"ex.base.Vector"
 ], function () {
 	ex.define("ex.display.SpriteMap", ex.world.TileMap, {
-		constructor: function(tileWidth, tileHeight, map, img, name) {
+		constructor: function(tileWidth, tileHeight, map, img, name, edgeDebug) {
 			this.visible = true;
 			this.collides = true;
 			this.name = name;
@@ -13,6 +13,8 @@ ex.using([
 			this.y = 0;
 			this.position = new ex.base.Vector(0, 0);
 			this.scrollFactorX = this.scrollFactorY = 1;
+			
+			this.edgeDebug = edgeDebug;
 			
 			this._super("constructor", [tileWidth, tileHeight, map]);
 		},
@@ -51,7 +53,38 @@ ex.using([
 								      this.y - (camY * this.scrollFactorY) + (y * this.tileHeight),
 								      this.tileWidth,
 								      this.tileHeight);
+						if(this.edgeDebug){
+							if(tile.edges.left){
+								context.drawImage(this.edgeDebug.left,
+									this.x - (camX * this.scrollFactorX) + (x * this.tileWidth),
+									this.y - (camY * this.scrollFactorY) + (y * this.tileHeight),
+									this.tileWidth,
+									this.tileHeight);
+							}
+							if(tile.edges.right){
+								context.drawImage(this.edgeDebug.right,
+										this.x - (camX * this.scrollFactorX) + (x * this.tileWidth),
+										this.y - (camY * this.scrollFactorY) + (y * this.tileHeight),
+										this.tileWidth,
+										this.tileHeight);
+							}
+							if(tile.edges.up){
+								context.drawImage(this.edgeDebug.up,
+										this.x - (camX * this.scrollFactorX) + (x * this.tileWidth),
+										this.y - (camY * this.scrollFactorY) + (y * this.tileHeight),
+										this.tileWidth,
+										this.tileHeight);
+							}
+							if(tile.edges.down){
+								context.drawImage(this.edgeDebug.down,
+										this.x - (camX * this.scrollFactorX) + (x * this.tileWidth),
+										this.y - (camY * this.scrollFactorY) + (y * this.tileHeight),
+										this.tileWidth,
+										this.tileHeight);
+							}
+						}
 					}
+					
 				}
 			}
 		}
