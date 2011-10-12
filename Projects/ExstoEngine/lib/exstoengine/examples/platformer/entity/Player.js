@@ -38,6 +38,20 @@ ex.using([
 				this.velocity.x += this.speed;
 			}
 			
+			// Move Right
+			if(this.input.dragging && this.input.mouseX > 600){
+				this.velocity.x += this.speed;
+			}
+			// Move left
+			if(this.input.dragging && this.input.mouseX < 200){
+				this.velocity.x -= this.speed;
+			}
+			// Jump
+			if(this.input.mouseDown && this.input.mouseY > 400){
+				this.velocity.y -= this.speed * 60;
+			}
+			
+			
 			if(this.velocity.x < 0.5 && this.velocity.x > -0.5){
 				this.sprite.play("Stand");
 			} else {
