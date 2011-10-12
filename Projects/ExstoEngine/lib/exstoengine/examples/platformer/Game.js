@@ -95,14 +95,13 @@
 					[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 51, 52, 52, 52, 52, 53, 0, 0, 0, 0, 0, 0],
 					[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 					[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-					[ 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3],
-					[ 0, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 9],
-					[ 0, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 9],
-					[ 0, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 9],
-					[ 0, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 9],
-					[ 0, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 9],
-					[ 0, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 9],
-					[ 0, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 9],
+					[ 0, 60, 0, 0, 0, 62, 0, 60, 0, 61, 0, 0, 0, 60, 0, 61, 0, 62, 0, 0, 0, 61, 0, 62, 0],
+					[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+					[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+					[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+					[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+					[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+					[ 60, 0, 61, 0, 62, 0, 0, 0, 61, 61, 62, 0, 60, 0, 61, 0, 62, 0, 60, 0, 61, 0, 62, 0, 0],
 				];
 		
 		// Sounds
@@ -189,6 +188,19 @@
 			right: _engine.imageRepository.getImage("edgeRight")
 		};
 		
+		var asteroidField = [];
+		var cap = 50;
+		for(var counter = 0; counter < cap; counter++){
+			asteroidField.push(new entity.Asteroid(
+					"Asteroid",
+					new ex.base.Vector(Math.random() * 2400 - 1200, Math.random() * 1500 - 750),
+					new ex.display.Sprite(
+							new ex.base.Vector(0,0),
+							_engine.imageRepository.getImage("Asteroid")),
+					false));
+			asteroidField[counter].velocity = new ex.base.Vector(Math.random() * 15 - 7.5, Math.random() * 15 - 7.5);
+		}
+		
 		// Load tile maps
 		var level1Map = new ex.display.SpriteMap(32, 32, map1Data, _engine.imageRepository.getImage("Tiles"), null, edgeDebug);
 		var level2Map = new ex.display.SpriteMap(32, 32, map2Data, _engine.imageRepository.getImage("Tiles"), null, edgeDebug);
@@ -205,14 +217,19 @@
 		
 		// Setup level 2
 		var secondLevel = new ex.simplex.Map("Level 2");
+		secondLevel.addLayer(new ex.simplex.Layer("Asteroid Field", null, new ex.base.Vector(0,0), new ex.base.Vector(1.5,1.5)));
 		secondLevel.addLayer(new ex.simplex.Layer("Ground", level2Map, new ex.base.Vector(0,0), new ex.base.Vector(1,1)));
 		secondLevel.getLayer("Ground").addItem(explosion1);
 		secondLevel.getLayer("Ground").addItem(explosion2);
 		secondLevel.getLayer("Ground").addItem(explosion3);
 		secondLevel.getLayer("Ground").addItem(asteroid);
 		secondLevel.addLayer(new ex.simplex.Layer("Background", null, new ex.base.Vector(0,0), new ex.base.Vector(0.1,0.1)));
-		secondLevel.addLayer(new ex.simplex.Layer("Explosions", null, new ex.base.Vector(0,0), new ex.base.Vector(1,1)));
 		secondLevel.getLayer("Background").addItem(nebula);
+		var index = asteroidField.length;
+		var asteroidLayer = secondLevel.getLayer("Asteroid Field");
+		while(index--){
+			asteroidLayer.addItem(asteroidField[index]);
+		};
 		
 		// Add levels to world
 		_engine.currentWorld.addLevel(firstLevel);

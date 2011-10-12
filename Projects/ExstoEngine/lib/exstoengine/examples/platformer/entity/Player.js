@@ -13,7 +13,7 @@ ex.using([
 			this.sprite.createAnimation('Walk', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
 			this.sprite.play('Walk');
 			this.input = input;
-			this.speed = 20;
+			this.speed = 10;
 		},
 		
 		onCollide: function(target, data, dt){
@@ -23,10 +23,10 @@ ex.using([
 		update: function(dt) {
 			if(this.input.isKeyPressed(ex.util.Key.Spacebar)) {
 				//--Jump
-				this.velocity.y -= this.speed * 75;
+				this.velocity.y -= this.speed * 60;
 			}
 			if(this.input.isKeyDown(ex.util.Key.W)) {
-				this.velocity.y -= this.speed;
+				//this.velocity.y -= this.speed;
 			}
 			if(this.input.isKeyDown(ex.util.Key.S)) {
 				this.velocity.y += this.speed;

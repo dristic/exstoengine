@@ -52,6 +52,7 @@ ex.using([
 		 *            {Number}: delta time, length of each time cycle
 		 */
 		update : function(dt) {
+			this.updatePosition(this.velocity, dt);
 			this.sprite.update(dt);
 		},
 		
