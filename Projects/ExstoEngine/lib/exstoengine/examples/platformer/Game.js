@@ -60,12 +60,11 @@
 				_engine.imageRepository.getImage("Explosion"), 
 				_engine.input);
 		
-		var onOptions = 
-		
 		_engine.currentWorld.addObject(titleScreen);
 		
 		_engine.onUpdate = function(){
 			// Extra code to run on each update
+			
 		};
 	});
 	
@@ -181,6 +180,7 @@
 						_engine.imageRepository.getImage("Asteroid")),
 				false);
 		
+		// Debug images to show edges on tiles
 		var edgeDebug = {
 			up: _engine.imageRepository.getImage("edgeUp"),
 			down: _engine.imageRepository.getImage("edgeDown"),
@@ -188,6 +188,8 @@
 			right: _engine.imageRepository.getImage("edgeRight")
 		};
 		
+		// Generates an array of asteroids at random position and velocities
+		// to be added to a layer later.
 		var asteroidField = [];
 		var cap = 50;
 		for(var counter = 0; counter < cap; counter++){
@@ -211,7 +213,7 @@
 		// Setup level 1
 		var firstLevel = new ex.simplex.Map("Level 1");
 		firstLevel.addLayer(new ex.simplex.Layer("Ground", level1Map, new ex.base.Vector(0,0), new ex.base.Vector(1,1)));
-		firstLevel.addLayer(new ex.simplex.Layer("Background", null, new ex.base.Vector(0,0), new ex.base.Vector(0.1,0.1)));
+		firstLevel.addLayer(new ex.simplex.Layer("Background", null, new ex.base.Vector(0,0), new ex.base.Vector(0,0)));
 		firstLevel.getLayer("Background").addItem(nebula);
 		firstLevel.getLayer("Ground").addItem(teleporter);
 		
@@ -223,7 +225,7 @@
 		secondLevel.getLayer("Ground").addItem(explosion2);
 		secondLevel.getLayer("Ground").addItem(explosion3);
 		secondLevel.getLayer("Ground").addItem(asteroid);
-		secondLevel.addLayer(new ex.simplex.Layer("Background", null, new ex.base.Vector(0,0), new ex.base.Vector(0.1,0.1)));
+		secondLevel.addLayer(new ex.simplex.Layer("Background", null, new ex.base.Vector(0,0), new ex.base.Vector(0,0)));
 		secondLevel.getLayer("Background").addItem(nebula);
 		var index = asteroidField.length;
 		var asteroidLayer = secondLevel.getLayer("Asteroid Field");

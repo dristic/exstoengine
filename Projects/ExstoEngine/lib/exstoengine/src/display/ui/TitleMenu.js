@@ -18,12 +18,12 @@ ex.using([
 					y: 100
 				},
 				menu: {
-					x: 500,
+					x: 400,
 					y: 300,
 					actionKey: ex.util.Key.Enter
 				},
 				selection: {
-					width: 200,
+					width: 150,
 					height: 70
 				},
 			};
@@ -58,6 +58,17 @@ ex.using([
 			//		 - bounding box
 			//		 - click event to run action
 			//		 - mouseover event to set currentSelection
+			if(this.input.mouseDown){
+				var index = this.selections.length;
+				while(index--){
+					if(this.input.mouseX > (this.options.menu.x - this.options.selection.width) &&
+							this.input.mouseX < (this.options.menu.x + this.options.selection.width) &&
+							this.input.mouseY > (this.options.menu.y + (this.options.selection.height * (index - 1))) &&
+							this.input.mouseY < (this.options.menu.y + (this.options.selection.height * (index)))){
+						this.selections[index].action();
+					}
+				}
+			}
 		},
 		
 		render: function(context, camX, camY){
@@ -78,7 +89,7 @@ ex.using([
 			context.fillStyle = "#FF0000";
 			context.textAlign = "center";
 			
-			var xPos = this.options.menu.x - (this.options.selection.width / 2);
+			var xPos = this.options.menu.x;
 			var yPos = this.options.menu.y;
 			var index = 0;
 			for(index; index < this.selections.length; index++) {
