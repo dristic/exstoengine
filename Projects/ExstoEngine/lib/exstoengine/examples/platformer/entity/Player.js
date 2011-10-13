@@ -20,10 +20,21 @@ ex.using([
 
 		},
 		
+		jump: function(){
+			this.velocity.y -= this.speed * 60;
+		},
+		
+		moveLeft: function(){
+			this.velocity.x -= this.speed;
+		},
+		
+		moveRight: function(){
+			this.velocity.x += this.speed;
+		},
+		
 		update: function(dt) {
 			if(this.input.isKeyPressed(ex.util.Key.Spacebar)) {
-				//--Jump
-				this.velocity.y -= this.speed * 60;
+				this.jump();
 			}
 			if(this.input.isKeyDown(ex.util.Key.W)) {
 				//this.velocity.y -= this.speed;
@@ -32,23 +43,23 @@ ex.using([
 				this.velocity.y += this.speed;
 			}
 			if(this.input.isKeyDown(ex.util.Key.A)) {
-				this.velocity.x -= this.speed;
+				this.moveLeft();
 			}
 			if(this.input.isKeyDown(ex.util.Key.D)) {
-				this.velocity.x += this.speed;
+				this.moveRight();
 			}
 			
 			// Move Right
 			if(this.input.dragging && this.input.mouseX > 600){
-				this.velocity.x += this.speed;
+				this.moveRight();
 			}
 			// Move left
 			if(this.input.dragging && this.input.mouseX < 200){
-				this.velocity.x -= this.speed;
+				this.moveLeft();
 			}
 			// Jump
 			if(this.input.mouseDown && this.input.mouseY > 400){
-				this.velocity.y -= this.speed * 60;
+				this.jump();
 			}
 			
 			

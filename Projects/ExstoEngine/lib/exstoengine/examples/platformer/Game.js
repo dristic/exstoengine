@@ -39,8 +39,7 @@
 				[{
 					text: "Start Game",
 					action: function(){
-						_engine.currentWorld.removeObject(titleScreen);
-						startGame(_engine);
+						titleScreenToGame();
 					}
 				},
 				{
@@ -62,13 +61,23 @@
 		
 		_engine.currentWorld.addObject(titleScreen);
 		
+		// function call to remove title screen and start game
+		function titleScreenToGame() {
+			_engine.currentWorld.removeObject(titleScreen);
+			startGame(_engine);
+			document.getElementById("buttonJump").removeEventListener('mousedown', titleScreenToGame, false);
+		};
+		
+		// UI button to start game
+		document.getElementById("buttonJump").addEventListener('mousedown', titleScreenToGame, false);
+		
 		_engine.onUpdate = function(){
 			// Extra code to run on each update
 			
 		};
 	});
 	
-	function startGame(_engine) {
+	function startGame(_engine) {		
 		// Global variables
 		var map1Data = [
 					[ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -128,6 +137,13 @@
 						_engine.imageRepository.getImage("Player")), 
 				true, 
 				_engine.input);
+		
+		// UI Setup
+		document.getElementById("buttonJump").addEventListener('mousedown', function(){player.jump();}, false);
+		document.getElementById("buttonLeft").addEventListener('mousedown', function(){_engine.input.keys[65] = true;}, false);
+		document.getElementById("buttonRight").addEventListener('mousedown', function(){_engine.input.keys[68] = true;}, false);
+		document.getElementById("buttonLeft").addEventListener('mouseup', function(){_engine.input.keys[65] = false;}, false);
+		document.getElementById("buttonRight").addEventListener('mouseup', function(){_engine.input.keys[68] = false;}, false);
 		
 		// Setup explosion animations & teleporter
 		var explosion1 = new entity.Explosion(
