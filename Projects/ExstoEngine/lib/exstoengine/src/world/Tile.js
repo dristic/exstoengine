@@ -77,6 +77,11 @@
 			this.value = value;
 			this.update();
 		},
+
+		setPosition: function(x, y) {
+			this.position.x = x;
+			this.position.y = y;
+		},
 		
 		_setAllEdgesTo: function(value) {
 			this.edges.up 		= 	value;

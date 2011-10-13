@@ -86,14 +86,8 @@
 		var collidedTiles = [];
 		var xPos = 0;
 		var yPos = 0;
-		var xMax = box.width / map.tileWidth;
-		var yMax = box.height / map.tileHeight;
-		if(xMax % map.tileWidth) {
-			xMax++;
-		}
-		if(yMax % map.tileHeight) {
-			yMax++;
-		}
+		var xMax = Math.ceil(box.width / map.tileWidth);
+		var yMax = Math.ceil(box.height / map.tileHeight);
 		
 		for(yPos; yPos < yMax; yPos++) {
 			for(xPos; xPos < xMax; xPos++) {

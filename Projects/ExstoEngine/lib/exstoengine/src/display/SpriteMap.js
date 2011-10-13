@@ -49,38 +49,38 @@ ex.using([
 								      sy,
 								      this.tileWidth,
 								      this.tileHeight,
-								      this.x - (camX * this.scrollFactorX) + (x * this.tileWidth),
-								      this.y - (camY * this.scrollFactorY) + (y * this.tileHeight),
-								      this.tileWidth,
-								      this.tileHeight);
+								      tile.position.x - (camX * this.scrollFactorX),
+								      tile.position.y - (camY * this.scrollFactorY),
+								      tile.width,
+								      tile.height);
 						if(this.edgeDebug){
 							if(tile.edges.left){
 								context.drawImage(this.edgeDebug.left,
-									this.x - (camX * this.scrollFactorX) + (x * this.tileWidth),
-									this.y - (camY * this.scrollFactorY) + (y * this.tileHeight),
-									this.tileWidth,
-									this.tileHeight);
+										tile.position.x - (camX * this.scrollFactorX),
+										tile.position.y - (camY * this.scrollFactorY),
+										tile.width,
+										tile.height);
 							}
 							if(tile.edges.right){
 								context.drawImage(this.edgeDebug.right,
-										this.x - (camX * this.scrollFactorX) + (x * this.tileWidth),
-										this.y - (camY * this.scrollFactorY) + (y * this.tileHeight),
-										this.tileWidth,
-										this.tileHeight);
+										tile.position.x - (camX * this.scrollFactorX),
+										tile.position.y - (camY * this.scrollFactorY),
+										tile.width,
+										tile.height);
 							}
 							if(tile.edges.up){
 								context.drawImage(this.edgeDebug.up,
-										this.x - (camX * this.scrollFactorX) + (x * this.tileWidth),
-										this.y - (camY * this.scrollFactorY) + (y * this.tileHeight),
-										this.tileWidth,
-										this.tileHeight);
+										tile.position.x - (camX * this.scrollFactorX),
+										tile.position.y - (camY * this.scrollFactorY),
+										tile.width,
+										tile.height);
 							}
 							if(tile.edges.down){
 								context.drawImage(this.edgeDebug.down,
-										this.x - (camX * this.scrollFactorX) + (x * this.tileWidth),
-										this.y - (camY * this.scrollFactorY) + (y * this.tileHeight),
-										this.tileWidth,
-										this.tileHeight);
+										tile.position.x - (camX * this.scrollFactorX),
+								      	tile.position.y - (camY * this.scrollFactorY),
+								      	tile.width,
+								      	tile.height);
 							}
 						}
 					}
