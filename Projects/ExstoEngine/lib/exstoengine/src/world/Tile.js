@@ -1,21 +1,22 @@
 (function () {
 	ex.define("ex.world.Tile", {
-		constructor: function(value, position, width, height, neighborUp, neighborDown, neighborLeft, neighborRight) {
+		constructor: function(value, position, width, height, neighborTop, neighborBottom, neighborLeft, neighborRight) {
 			this.value = value;
 			this.position = position;
 			this.width = width;
 			this.height = height;
+			this.mass = 1;
 			// Pointers to adjacent tiles
 			this.neighbors = {
-					up: 	neighborUp,
-					down: 	neighborDown,
+					top: 	neighborTop,
+					bottom: neighborBottom,
 					left: 	neighborLeft,
 					right: 	neighborRight
 			};
 			// Collision information
 			this.edges = {
-					up: 	false,
-					down: 	false,
+					top: 	false,
+					bottom: false,
 					left: 	false,
 					right: 	false
 			};
@@ -28,16 +29,16 @@
 				this._setAllEdgesTo(false);
 			}
 			// Set edge based on upper neighbor
-			if(!this.neighbors.up || this.neighbors.up.value == 0) {
-				this.edges.up = true;
+			if(!this.neighbors.top || this.neighbors.top.value == 0) {
+				this.edges.top = true;
 			} else {
-				this.edges.up = false;
+				this.edges.top = false;
 			}
 			// Set edge based on lower neighbor
-			if(!this.neighbors.down || this.neighbors.down.value == 0) {
-				this.edges.down = true;
+			if(!this.neighbors.bottom || this.neighbors.bottom.value == 0) {
+				this.edges.bottom = true;
 			} else {
-				this.edges.down = false;
+				this.edges.bottom = false;
 			}
 			// Set edge based on left neighbor
 			if(!this.neighbors.left || this.neighbors.left.value == 0) {

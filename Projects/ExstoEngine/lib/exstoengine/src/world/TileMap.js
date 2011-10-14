@@ -64,14 +64,14 @@ ex.using([
 					tiles[yPos][xPos].neighbors.right = tiles[yPos][xPos + 1];
 				}
 				if(yPos == 0) {
-					tiles[yPos][xPos].neighbors.up = null;
-					tiles[yPos][xPos].neighbors.down = tiles[yPos + 1][xPos];
+					tiles[yPos][xPos].neighbors.top = null;
+					tiles[yPos][xPos].neighbors.bottom = tiles[yPos + 1][xPos];
 				} else if(yPos == tiles.length - 1) {
-					tiles[yPos][xPos].neighbors.up = tiles[yPos - 1][xPos];
-					tiles[yPos][xPos].neighbors.down = null;
+					tiles[yPos][xPos].neighbors.top = tiles[yPos - 1][xPos];
+					tiles[yPos][xPos].neighbors.bottom = null;
 				} else {
-					tiles[yPos][xPos].neighbors.up = tiles[yPos - 1][xPos];
-					tiles[yPos][xPos].neighbors.down = tiles[yPos + 1][xPos];
+					tiles[yPos][xPos].neighbors.top = tiles[yPos - 1][xPos];
+					tiles[yPos][xPos].neighbors.bottom = tiles[yPos + 1][xPos];
 				}
 				tiles[yPos][xPos].update();
 			}

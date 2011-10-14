@@ -197,8 +197,8 @@
 		
 		// Debug images to show edges on tiles
 		var edgeDebug = {
-			up: _engine.imageRepository.getImage("edgeUp"),
-			down: _engine.imageRepository.getImage("edgeDown"),
+			top: _engine.imageRepository.getImage("edgeUp"),
+			bottom: _engine.imageRepository.getImage("edgeDown"),
 			left: _engine.imageRepository.getImage("edgeLeft"),
 			right: _engine.imageRepository.getImage("edgeRight")
 		};

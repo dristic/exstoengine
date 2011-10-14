@@ -33,6 +33,7 @@ ex.using([
 			this.height = sprite.height;
 			this.velocity = new ex.base.Vector(0,0);
 			this.collides = collides;
+			this.mass = 1;
 			// Display data
 			this.sprite = sprite;
 			this.sprite.position = this.position;	// pointer to this.position

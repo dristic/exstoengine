@@ -8,7 +8,7 @@
 			};
 		},
 		
-		detectGroupCollisions: function(group){
+		detectGroupCollisions: function(group, dt){
 			var collisions = [];
 			var source = 0;
 			var target = 0;
@@ -18,7 +18,8 @@
 						if(group[target].collides){
 							var result = this.detectCollisionBetween(
 									group[source], 
-									group[target]);
+									group[target],
+									dt);
 							if(result != null){
 								collisions.push(result);
 							}
@@ -30,9 +31,9 @@
 			return collisions;
 		},
 		
-		detectCollisionBetween: function(source, target) {
+		detectCollisionBetween: function(source, target, dt) {
 			var selector = source.type + "To" + target.type;
-			return this.algorithms[selector](source, target);
+			return this.algorithms[selector](source, target, dt);
 		}
 	});
 	
@@ -75,7 +76,7 @@
 	 * 
 	 * @returns {CollisionData} both elements with a list of tiles that collided.
 	 */
-	function boxToSpriteMapCheck(box, map){	
+	function boxToSpriteMapCheck(box, map, dt){	
 		// Swap box and map if the arguments get pushed in backwards
 		if(box.type == "SpriteMap"){
 			var temp = box;
@@ -86,28 +87,81 @@
 		var collidedTiles = [];
 		var xPos = 0;
 		var yPos = 0;
-		var xMax = Math.ceil(box.width / map.tileWidth);
-		var yMax = Math.ceil(box.height / map.tileHeight);
+		var firstTile = map.getTile(box.position.x, box.position.y) || { position: { x: 0, y: 0 }};
+		var xMax = Math.floor((box.width + box.position.x - firstTile.position.x) / map.tileWidth);
+		var yMax = Math.floor((box.height + box.position.y - firstTile.position.y) / map.tileHeight);
 		
+		// Find penetration vector
+		var penVector = new ex.base.Vector(0, 0),
+			tempPenVector = new ex.base.Vector(0, 0),
+			i,
+			currentTile,
+			tile;
+		
+		// Generate list of tile collisions
 		for(yPos; yPos <= yMax; yPos++) {
 			for(xPos; xPos <= xMax; xPos++) {
-				var currentTile = map.getTile(
+				currentTile = map.getTile(
 						box.position.x + (xPos*map.tileWidth), 
 						box.position.y + (yPos*map.tileHeight));
+					
 				if(currentTile){
-					if(currentTile.value != 0){
+					if(currentTile.value != 0) {
 						collidedTiles.push(currentTile);
 					}
 				}
 			}
 			xPos = 0;
 		}
+	
+		i = collidedTiles.length;
+		while(i--) {
+			tile = collidedTiles[i];
+			
+			// Find y penetration
+			if(box.velocity.y > 0 && tile.edges.top) {
+				// Find out if box is penetrating top edge of tile
+				if(box.position.y < tile.position.y && box.position.y + box.height > tile.position.y) {
+					tempPenVector.y = (box.position.y + box.height) - tile.position.y;
+				}
+			} else if(box.velocity.y < 0 && tile.edges.bottom) {
+				// Find out if box is penetrating bottom edge of tile
+				if(tile.position.y < box.position.y && tile.position.y + tile.height > box.position.y) {
+					tempPenVector.y = box.position.y - (tile.position.y + tile.height);
+				}
+			}
+			
+			// Find x penetration
+			if(box.velocity.x > 0 && tile.edges.left) {
+				// Find out if box is penetrating left edge of tile
+				if(box.position.x < tile.position.x && box.position.x + box.width > tile.position.x) {
+					tempPenVector.x = (box.position.x + box.width) - tile.position.x;
+				}
+			} else if(box.velocity.x < 0 && tile.edges.right) {
+				// Find out if box is penetrating right edge of tile
+				if(tile.position.x < box.position.x && tile.position.x + tile.width > box.position.x) {
+					tempPenVector.x = box.position.x - (tile.position.x + tile.width);
+				}
+			}
+			
+			if(tempPenVector.x != 0 && tempPenVector.y != 0) {
+				if(tempPenVector.x / (box.velocity.x * dt) < tempPenVector.y / (box.velocity.y * dt)) {
+					penVector.x = tempPenVector.x;
+				} else {
+					penVector.y = tempPenVector.y;
+				}
+			} else if(tempPenVector.x != 0) {
+				penVector.x = tempPenVector.x;
+			} else if(tempPenVector.y != 0) {
+				penVector.y = tempPenVector.y;
+			}
+		}
 		
-		if(collidedTiles.length > 0){
+		if(collidedTiles.length > 0) {
 			return {
 				source: box,
 				target: map,
-				data: 	collidedTiles
+				data: 	penVector
 			};
 		} else {
 			return null;

@@ -78,7 +78,7 @@ ex.using([
 				// Test spriteMap -> entities
 				collisions.push.apply(
 						collisions, 
-						this.detector.detectGroupCollisions(this.activeLevel.layers[index].items));
+						this.detector.detectGroupCollisions(this.activeLevel.layers[index].items, dt));
 			}
 			this.resolver.resolveCollisions(collisions, dt);
 				

@@ -68,15 +68,15 @@ ex.using([
 										tile.width,
 										tile.height);
 							}
-							if(tile.edges.up){
-								context.drawImage(this.edgeDebug.up,
+							if(tile.edges.top){
+								context.drawImage(this.edgeDebug.top,
 										tile.position.x - (camX * this.scrollFactorX),
 										tile.position.y - (camY * this.scrollFactorY),
 										tile.width,
 										tile.height);
 							}
-							if(tile.edges.down){
-								context.drawImage(this.edgeDebug.down,
+							if(tile.edges.bottom){
+								context.drawImage(this.edgeDebug.bottom,
 										tile.position.x - (camX * this.scrollFactorX),
 								      	tile.position.y - (camY * this.scrollFactorY),
 								      	tile.width,
