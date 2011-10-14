@@ -1,4 +1,4 @@
-var ex = {};
+var ex = ex || {};
 
 // Array indexOf fix for IE because IE is lame
 // Source: http://soledadpenades.com/2007/05/17/arrayindexof-in-internet-explorer/
@@ -17,22 +17,22 @@ if(!Array.indexOf){
 	"use strict";
 	
 	/**
+	 * Copies the values from one object to another object.
+	 * @param {Object} object The object to copy values to
+	 * @param {Object} other The object to copy values from
+	 * @return {Object} Returns the new object for chaining
+	 */
+	ex.extend = function (object, other) {
+		for(var prop in other) {
+			object[prop] = other[prop];
+		}
+		return object;
+	};
+	
+	/**
 	 * ex helper functions for basic library use
 	 */
-	ex = {
-		/**
-		 * Copies the values from one object to another object.
-		 * @param {Object} object The object to copy values to
-		 * @param {Object} other The object to copy values from
-		 * @return {Object} Returns the new object for chaining
-		 */
-		extend: function (object, other) {
-			for(var prop in other) {
-				object[prop] = other[prop];
-			}
-			return object;
-		},
-		
+	ex.extend(ex, {
 		/**
 		 * Calls the function using apply which sets the 'this' when running
 		 * that function to the object specified.
@@ -52,7 +52,7 @@ if(!Array.indexOf){
 		 * @returns {Object} cloned object constructor
 		 */
 		clone: function (object) {
-			function Constructor() { }
+			function Constructor() {};
 		    Constructor.prototype = object;
 		    return new Constructor();
 		},
@@ -70,7 +70,7 @@ if(!Array.indexOf){
 		        }
 		    }
 		}
-	};
+	});
 	
 	/**
 	 * ex Array class with static Array helper functions
@@ -174,7 +174,10 @@ if(!Array.indexOf){
 			var parts = namespace.split(".");
 			
 			// Build file url
-			var fileUrl = window.location.href.substr(0, window.location.href.lastIndexOf('/'));
+			var fileUrl = "";
+			if(typeof window != "undefined") {
+				fileUrl = window.location.href.substr(0, window.location.href.lastIndexOf('/'));
+			}
 			
 			// If we are loading ex classes, build from ex path
 			if(parts[0] == 'ex') {
@@ -323,7 +326,9 @@ if(!Array.indexOf){
 		}
 	};
 	
-	function preload() {
+	var exports = exports || null;
+	
+	if(exports == null) {
 		var head = document.getElementsByTagName('head')[0];
 		var scripts = head.getElementsByTagName('script');
 		var pattern = new RegExp(/ExstoEngine\.js/);
@@ -338,12 +343,10 @@ if(!Array.indexOf){
 		ex.using([ 'ex.event.EventTarget' ], function () {});
 	}
 	
-	preload();
-	
 })();
 
 // ex.Class implementation
-(function(window) {
+(function() {
 
 	/**
 	 * The base class definition for all classes in ExstoEngine. This function
@@ -462,7 +465,7 @@ if(!Array.indexOf){
 	function generateNamespace(namespace, newClass){
 		var context = window;
 		var parts = namespace.split('.');
-		for ( var index = 0; index < parts.length; index++) {
+		for (var index = 0; index < parts.length; index++) {
 			var part = parts[index];
 			
 			context[part] = context[part] || {};
@@ -477,4 +480,9 @@ if(!Array.indexOf){
 		}
 	}
 
-})(window);
+})();
+
+var exports = exports || null;
+if(exports) {
+	ex.extend(exports, ex);
+}
