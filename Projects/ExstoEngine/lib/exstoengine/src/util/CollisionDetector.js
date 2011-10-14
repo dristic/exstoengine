@@ -113,7 +113,7 @@
 			}
 			xPos = 0;
 		}
-	
+		
 		i = collidedTiles.length;
 		while(i--) {
 			tile = collidedTiles[i];
@@ -145,16 +145,32 @@
 			}
 			
 			if(tempPenVector.x != 0 && tempPenVector.y != 0) {
-				if(tempPenVector.x / (box.velocity.x * dt) < tempPenVector.y / (box.velocity.y * dt)) {
-					penVector.x = tempPenVector.x;
+				var deltaDX = box.velocity.x * dt,
+					deltaDY = box.velocity.y * dt,
+					x1 = box.position.x - deltaDX,
+					y1 = box.position.y - deltaDY,
+					x2 = box.position.x,
+					y2 = box.position.y,
+					b = (- (( (y2 - y1) / (x2 - x1) ) * x2)) + y2,
+					top = tempPenVector.y > 0;
+				if(top) {
+					if(b < tile.position.y)
+						penVector.x = tempPenVector.x;
+					else
+						penVector.y = tempPenVector.y;
 				} else {
-					penVector.y = tempPenVector.y;
+					if(b > tile.position.y)
+						penVector.x = tempPenVector.x;
+					else
+						penVector.y = tempPenVector.y;
 				}
 			} else if(tempPenVector.x != 0) {
 				penVector.x = tempPenVector.x;
 			} else if(tempPenVector.y != 0) {
 				penVector.y = tempPenVector.y;
 			}
+			
+			tempPenVector = new ex.base.Vector(0, 0);
 		}
 		
 		if(collidedTiles.length > 0) {

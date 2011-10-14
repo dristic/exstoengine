@@ -46,12 +46,12 @@
 	
 	function resolveBoxToMap(box, map, data, dt) {		
 		if(data.y != 0) {
-			box.position.y -= data.y;
+			box.position.y -= data.y + 0.1;
 			box.velocity.y = 0;
 		}
 		
 		if(data.x != 0) {
-			box.position.x -= data.x;
+			box.position.x -= data.x + 0.1;
 			box.velocity.x = 0;
 		}
 	};
