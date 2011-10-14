@@ -186,7 +186,10 @@
 			return {
 				source: box,
 				target: map,
-				data: 	penVector
+				data: {
+					pen: penVector,
+					tile: collidedTiles[0]
+				}
 			};
 		} else {
 			return null;

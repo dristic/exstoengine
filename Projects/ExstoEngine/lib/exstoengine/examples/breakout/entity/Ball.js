@@ -41,8 +41,8 @@ ex.using([
 	});
 	
 	function resolveBallTileCollision(ball, tileMap, data) {
-		var tileX = data[0].position.x,
-			tileY = data[0].position.y;
+		var tileX = data.tile.position.x,
+			tileY = data.tile.position.y;
 		
 		tileMap.getTile(tileX, tileY).setValue(0);
 		

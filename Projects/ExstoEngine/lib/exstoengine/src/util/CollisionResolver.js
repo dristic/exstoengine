@@ -44,7 +44,8 @@
 		}
 	});
 	
-	function resolveBoxToMap(box, map, data, dt) {		
+	function resolveBoxToMap(box, map, data, dt) {	
+		data = data.pen;
 		if(data.y != 0) {
 			if(data.y > 0) data.y += 0.1;
 			else data.y -= 0.1;
