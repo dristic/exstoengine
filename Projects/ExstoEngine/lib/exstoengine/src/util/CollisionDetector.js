@@ -89,8 +89,8 @@
 		var xMax = Math.ceil(box.width / map.tileWidth);
 		var yMax = Math.ceil(box.height / map.tileHeight);
 		
-		for(yPos; yPos < yMax; yPos++) {
-			for(xPos; xPos < xMax; xPos++) {
+		for(yPos; yPos <= yMax; yPos++) {
+			for(xPos; xPos <= xMax; xPos++) {
 				var currentTile = map.getTile(
 						box.position.x + (xPos*map.tileWidth), 
 						box.position.y + (yPos*map.tileHeight));

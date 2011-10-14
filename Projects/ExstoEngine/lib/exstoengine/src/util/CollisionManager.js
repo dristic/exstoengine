@@ -80,7 +80,6 @@ ex.using([
 						collisions, 
 						this.detector.detectGroupCollisions(this.activeLevel.layers[index].items));
 			}
-			
 			this.resolver.resolveCollisions(collisions, dt);
 				
 			// Calculate and display benchmark data

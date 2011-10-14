@@ -130,6 +130,8 @@
 				moveEntity(box, "Right", data[index]);
 				break;
 			}
+			
+			collisionBits = 0;
 		}
 	};
 	
@@ -138,12 +140,12 @@
 	};
 	
 	function moveEntity(source, relation, target) {
-		if(relation == "Left of"){
+		if(relation == "Left"){
 			source.setPosition(
 					target.position.x - source.width,
 					source.position.y);
 			source.velocity.x = 0;
-		} else if(relation == "Right of") {
+		} else if(relation == "Right") {
 			source.setPosition(
 					target.position.x + target.width,
 					source.position.y);
