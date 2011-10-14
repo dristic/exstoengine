@@ -1,7 +1,6 @@
 (function () {
 	
 	// Global variables
-	var playerSpeed = 20;
 	var level1Data = [
         [1, 1, 1, 1, 1, 1, 1, 1],
         [2, 2, 2, 2, 2, 2, 2, 2],
