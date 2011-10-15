@@ -63,8 +63,7 @@ ex.using([
 		 * @param dt
 		 */
 		update: function(dt) {
-			// Grab start time for benchmark data
-			var startTime = new Date();
+			ex.Debug.time('collision');
 			
 			// Do nothing if there is no active level
 			if(this.activeLevel == null){
@@ -82,15 +81,7 @@ ex.using([
 			}
 			this.resolver.resolveCollisions(collisions, dt);
 				
-			// Calculate and display benchmark data
-			var endTime = new Date();
-			this.updateBenchmark(endTime - startTime, collisions.length);
-			if(document.getElementById("debug")){
-				document.getElementById("debug").innerHTML += 
-				'<br>Collision Loop Benchmark: ' + 
-				'<br>' + this.benchmarkAverage.time + 'ms' +
-				'<br>' + this.benchmarkAverage.collisions + ' collisions';
-			}
+			ex.Debug.time('collision');
 		}
 	});	
 });

@@ -83,16 +83,15 @@
 			box = map;
 			map = temp;
 		}
-		// find collisions between tiles and box
-		var collidedTiles = [];
-		var xPos = 0;
-		var yPos = 0;
-		var firstTile = map.getTile(box.position.x, box.position.y) || { position: { x: 0, y: 0 }};
-		var xMax = Math.floor((box.width + box.position.x - firstTile.position.x) / map.tileWidth);
-		var yMax = Math.floor((box.height + box.position.y - firstTile.position.y) / map.tileHeight);
 		
-		// Find penetration vector
-		var penVector = new ex.base.Vector(0, 0),
+		// find collisions between tiles and box
+		var collidedTiles = [],
+			xPos = 0,
+			yPos = 0,
+			firstTile = map.getTile(box.position.x, box.position.y) || { position: { x: 0, y: 0 }},
+			xMax = Math.floor((box.width + box.position.x - firstTile.position.x) / map.tileWidth),
+			yMax = Math.floor((box.height + box.position.y - firstTile.position.y) / map.tileHeight),
+			penVector = new ex.base.Vector(0, 0),
 			tempPenVector = new ex.base.Vector(0, 0),
 			i,
 			currentTile,
@@ -118,21 +117,16 @@
 		while(i--) {
 			tile = collidedTiles[i];
 			
-			var x2 = 0,
-				y2 = 0;
-			
 			// Find y penetration
 			if(box.velocity.y > 0 && tile.edges.top) {
 				// Find out if box is penetrating top edge of tile
 				if(box.position.y < tile.position.y && box.position.y + box.height > tile.position.y) {
 					tempPenVector.y = (box.position.y + box.height) - tile.position.y;
-					y2 = box.position.y + box.height;
 				}
 			} else if(box.velocity.y < 0 && tile.edges.bottom) {
 				// Find out if box is penetrating bottom edge of tile
 				if(tile.position.y < box.position.y && tile.position.y + tile.height > box.position.y) {
 					tempPenVector.y = box.position.y - (tile.position.y + tile.height);
-					y2 = box.position.y;
 				}
 			}
 			
@@ -141,27 +135,24 @@
 				// Find out if box is penetrating left edge of tile
 				if(box.position.x < tile.position.x && box.position.x + box.width > tile.position.x) {
 					tempPenVector.x = (box.position.x + box.width) - tile.position.x;
-					x2 = box.position.x + box.width;
 				}
 			} else if(box.velocity.x < 0 && tile.edges.right) {
 				// Find out if box is penetrating right edge of tile
 				if(tile.position.x < box.position.x && tile.position.x + tile.width > box.position.x) {
 					tempPenVector.x = box.position.x - (tile.position.x + tile.width);
-					x2 = box.position.x;
 				}
 			}
 			
-			x2 = tempPenVector.x;
-			y2 = tempPenVector.y;
 			if(tempPenVector.x != 0 && tempPenVector.y != 0) {
 				var deltaDX = box.velocity.x * dt,
 					deltaDY = box.velocity.y * dt,
+					x2 = tempPenVector.x,
+					y2 = tempPenVector.y,
 					x1 = x2 - deltaDX,
 					y1 = y2 - deltaDY,
-					b = y2 - (( (y1 - y2) / (x1 - x2) ) * x2),
+					b = -(y2 - (( (y1 - y2) / (x1 - x2) ) * x2)),
 					top = tempPenVector.y > 0;
-					b -= b*2;
-					console.log(b, top, tile.position.y, x1, y1, x2, y2);
+					
 				if(top) {
 					if(b < 0)
 						penVector.x = tempPenVector.x;

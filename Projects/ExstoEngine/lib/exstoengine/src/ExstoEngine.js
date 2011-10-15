@@ -90,6 +90,19 @@ if(!Array.indexOf){
 		
 		remove: function(array, object) {
 			array.splice(array.indexOf(object), 1);
+		},
+		
+		average: function(array) {
+			var ret = 0;
+			
+			var i = array.length;
+			while(i--) {
+				ret += array[i];
+			}
+			
+			ret = ret / array.length;
+			
+			return ret;
 		}
 	};
 	

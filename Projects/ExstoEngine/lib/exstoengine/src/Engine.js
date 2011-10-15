@@ -1,6 +1,5 @@
 ex.using([
           "ex.base.Component",
-          "ex.util.Logger",
           "ex.util.Input",
           "ex.util.Debug",
           "ex.display.ImageRepository",
@@ -34,9 +33,6 @@ ex.using([
 				
 				var _gameInterval = null;
 				
-				//--Load logger
-				this.logger = new ex.util.Logger();
-				
 				//--Load up input class
 				this.input = new ex.util.Input();
 				
@@ -51,19 +47,14 @@ ex.using([
 				//--Setup update interval
 				_gameInterval = setInterval(ex.bind(this, this.update), (1 / frameRate) * 1000);
 			} else {
-				this.logger = new ex.util.Logger();
-				
-				this.logger.log("Your browser does not support canvas!");
+				ex.Debug.log("Your browser does not support canvas!");
 			}
 		},
 		
 		enableDebugging: function() {
 			this.debug = true;
 			
-			this.loadComponent(new ex.util.Debug());
-			
-			//this.getComponent("Debug").renderer = this.renderer;
-			//this.getComponent("Debug").logger = this.logger;
+			ex.Debug.enable();
 		},
 		
 		setupCanvas: function (bgColor, canvas) {
@@ -106,6 +97,8 @@ ex.using([
 			this.onUpdate(dt);
 			
 			this.input.update(dt);
+			
+			ex.Debug.benchmarkEngine(dt);
 		},
 		
 		onUpdate: function() {

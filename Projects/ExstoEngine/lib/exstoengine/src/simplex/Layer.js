@@ -102,11 +102,6 @@ ex.using([ 'ex.base.Point', 'ex.base.Vector' ], function() {
 			var index = this.items.length;
 			while(index--){
 				this.items[index].update(dt);
-				if(document.getElementById("debug")){
-					document.getElementById("debug").innerHTML += 
-						'<br><br>' + this.items[index].name + 
-						': (' + this.items[index].position.x + ',' + this.items[index].position.y + ')';
-				}
 			}
 		},
 
