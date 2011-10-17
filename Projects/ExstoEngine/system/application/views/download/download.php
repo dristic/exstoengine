@@ -1,8 +1,14 @@
 <h2>Download</h2>
 
-<p>Current Version:</p>
+<h3>Current Version:</h3>
+<p>
+	<a href="../../lib/exstoengine/build/exstoengine-0.6.1.zip">ExstoEngine - 0.6.1</a>
+</p>
 
-<a href="../../lib/exstoengine-0.6.0.zip">Download ExstoEngine - 0.6.0</a>
-
-<p>Older Releases:</p>
-<a href="../../lib/exstoengine-0.3.0.zip">Download ExstoEngine - 0.3.0</a>
+<h3>Older Releases:</h3>
+<p>
+	<a href="../../lib/exstoengine/build/exstoengine-0.6.0.zip">ExstoEngine - 0.6.0</a>
+</p>
+<p>
+	<a href="../../lib/exstoengine/build/exstoengine-0.3.0.zip">ExstoEngine - 0.3.0</a>
+</p>

@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>JsDoc Reference - Array</title>
+		<title>JsDoc Reference - ex.base.Vector</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -1275,7 +1275,7 @@ figure {
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Built-In Namespace Array
+				Class ex.base.Vector
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -1286,19 +1286,80 @@ figure {
 				
 				
 				
+					<br /><i>Defined in: </i> <a href="../symbols/src/src__base_Vector.js.html">Vector.js</a>.
+				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class ex.base.Vector.">
+				<caption>Class Summary</caption>
+				<thead>
+					<tr>
+						<th scope="col">Constructor Attributes</th>
+						<th scope="col">Constructor Name and Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="attributes">&nbsp;</td>
+						<td class="nameDescription" >
+							<div class="fixedFont">
+								<b><a href="../symbols/ex.base.Vector.html#constructor">ex.base.Vector</a></b>(x, y)
+							</div>
+							<div class="description"></div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
 
 <!-- ============================== properties summary ===================== -->
+			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class ex.base.Vector.">
+					<caption>Field Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Field Attributes</th>
+							<th scope="col">Field Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/ex.base.Vector.html#x">x</a></b>
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/ex.base.Vector.html#y">y</a></b>
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
 			
 
 <!-- ============================== methods summary ======================== -->
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class Array.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class ex.base.Vector.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -1309,11 +1370,74 @@ figure {
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Array.html#indexOf">indexOf</a></b>(obj)
+								<div class="fixedFont">ex.base.Vector.<b><a href="../symbols/ex.base.Vector.html#.add">add</a></b>(v)
 								</div>
-								<div class="description"></div>
+								<div class="description">Adds another vector to this one.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ex.base.Vector.<b><a href="../symbols/ex.base.Vector.html#.addScaled">addScaled</a></b>(v, s)
+								</div>
+								<div class="description">Adds a scaled vector to this vector.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ex.base.Vector.<b><a href="../symbols/ex.base.Vector.html#.clone">clone</a></b>()
+								</div>
+								<div class="description">Creates a copy of this vector (instead of a pointer ifcalled directly).</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ex.base.Vector.<b><a href="../symbols/ex.base.Vector.html#.distance">distance</a></b>(vectorB)
+								</div>
+								<div class="description">Returns the magnitude of the vector from the supplied vector to this vector.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ex.base.Vector.<b><a href="../symbols/ex.base.Vector.html#.length">length</a></b>()
+								</div>
+								<div class="description">Returns the magnitude of the vector</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ex.base.Vector.<b><a href="../symbols/ex.base.Vector.html#.rotate">rotate</a></b>(rad)
+								</div>
+								<div class="description">Rotates the vector by the supplied value in radians.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ex.base.Vector.<b><a href="../symbols/ex.base.Vector.html#.scale">scale</a></b>(s)
+								</div>
+								<div class="description">Scales the vector.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ex.base.Vector.<b><a href="../symbols/ex.base.Vector.html#.subtract">subtract</a></b>(v)
+								</div>
+								<div class="description">Subtracts a vector from this vector.</div>
 							</td>
 						</tr>
 					
@@ -1328,8 +1452,101 @@ figure {
 
 <!-- ============================== constructor details ==================== -->		
 			
+			<div class="details"><a name="constructor"> </a>
+				<div class="sectionTitle">
+					Class Detail
+				</div>
+				
+				<div class="fixedFont">
+						<b>ex.base.Vector</b>(x, y)
+				</div>
+				
+				<div class="description">
+					
+					
+				</div>
+				
+				
+				
+				
+					
+						<dl class="detailList">
+						<dt class="heading">Parameters:</dt>
+						
+							<dt>
+								<span class="light fixedFont">{Number}</span>  <b>x</b>
+								
+							</dt>
+								<dd>magnitude on x axis</dd>
+						
+							<dt>
+								<span class="light fixedFont">{Number}</span>  <b>y</b>
+								
+							</dt>
+								<dd>magnitude on y axis</dd>
+						
+						</dl>
+					
+					
+					
+					
+					
+					
+					
+
+			</div>
+			
 
 <!-- ============================== field details ========================== -->		
+			
+				<div class="sectionTitle">
+					Field Detail
+				</div>
+				
+					<a name="x"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Number}</span>
+					<b>x</b>
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="y"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Number}</span>
+					<b>y</b>
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					
+				
 			
 
 <!-- ============================== method details ========================= -->		
@@ -1338,18 +1555,15 @@ figure {
 					Method Detail
 				</div>
 				
-					<a name="indexOf"> </a>
-					<div class="fixedFont">
+					<a name=".add"> </a>
+					<div class="fixedFont">&lt;static&gt; 
 					
-					
-					<b>indexOf</b>(obj)
+					<span class="light">{<a href="../symbols/ex.base.Vector.html">ex.base.Vector</a>}</span>
+					<span class="light">ex.base.Vector.</span><b>add</b>(v)
 					
 					</div>
 					<div class="description">
-						
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/src__ExstoEngine.js.html">ExstoEngine.js</a>.
+						Adds another vector to this one.
 						
 						
 					</div>
@@ -1361,16 +1575,308 @@ figure {
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<b>obj</b>
+									<span class="light fixedFont">{<a href="../symbols/ex.base.Vector.html">ex.base.Vector</a>}</span> <b>v</b>
 									
 								</dt>
-								<dd></dd>
+								<dd>other vector</dd>
 							
 							</dl>
 						
 						
 						
 						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{<a href="../symbols/ex.base.Vector.html">ex.base.Vector</a>}</span> this</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".addScaled"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{<a href="../symbols/ex.base.Vector.html">ex.base.Vector</a>}</span>
+					<span class="light">ex.base.Vector.</span><b>addScaled</b>(v, s)
+					
+					</div>
+					<div class="description">
+						Adds a scaled vector to this vector. To subtract, the scalar should be made negative.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{<a href="../symbols/ex.base.Vector.html">ex.base.Vector</a>}</span> <b>v</b>
+									
+								</dt>
+								<dd>vector to add</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>s</b>
+									
+								</dt>
+								<dd>scalar value to apply to v</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{<a href="../symbols/ex.base.Vector.html">ex.base.Vector</a>}</span> this</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".clone"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{<a href="../symbols/ex.base.Vector.html">ex.base.Vector</a>}</span>
+					<span class="light">ex.base.Vector.</span><b>clone</b>()
+					
+					</div>
+					<div class="description">
+						Creates a copy of this vector (instead of a pointer ifcalled directly).
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{<a href="../symbols/ex.base.Vector.html">ex.base.Vector</a>}</span> a copy of this</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".distance"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Number}</span>
+					<span class="light">ex.base.Vector.</span><b>distance</b>(vectorB)
+					
+					</div>
+					<div class="description">
+						Returns the magnitude of the vector from the supplied vector to this vector. (Magnitude of B-A)
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{<a href="../symbols/ex.base.Vector.html">ex.base.Vector</a>}</span> <b>vectorB</b>
+									
+								</dt>
+								<dd>vector to check distance between</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Number}</span> magnitude of vectorB - this</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".length"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Number}</span>
+					<span class="light">ex.base.Vector.</span><b>length</b>()
+					
+					</div>
+					<div class="description">
+						Returns the magnitude of the vector
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Number}</span> magnitude of this vector</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".rotate"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{<a href="../symbols/ex.base.Vector.html">ex.base.Vector</a>}</span>
+					<span class="light">ex.base.Vector.</span><b>rotate</b>(rad)
+					
+					</div>
+					<div class="description">
+						Rotates the vector by the supplied value in radians.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>rad</b>
+									
+								</dt>
+								<dd>radians to rotate by</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{<a href="../symbols/ex.base.Vector.html">ex.base.Vector</a>}</span> this</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".scale"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{<a href="../symbols/ex.base.Vector.html">ex.base.Vector</a>}</span>
+					<span class="light">ex.base.Vector.</span><b>scale</b>(s)
+					
+					</div>
+					<div class="description">
+						Scales the vector.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Nummber}</span> <b>s</b>
+									
+								</dt>
+								<dd>scalar value</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{<a href="../symbols/ex.base.Vector.html">ex.base.Vector</a>}</span> this</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".subtract"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{<a href="../symbols/ex.base.Vector.html">ex.base.Vector</a>}</span>
+					<span class="light">ex.base.Vector.</span><b>subtract</b>(v)
+					
+					</div>
+					<div class="description">
+						Subtracts a vector from this vector.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{<a href="../symbols/ex.base.Vector.html">ex.base.Vector</a>}</span> <b>v</b>
+									
+								</dt>
+								<dd>the vector to be subtracted</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{<a href="../symbols/ex.base.Vector.html">ex.base.Vector</a>}</span> this</dd>
+							
+							</dl>
 						
 						
 						

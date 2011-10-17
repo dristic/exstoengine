@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>JsDoc Reference - Array</title>
+		<title>JsDoc Reference - ex.simplex.Layer</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -1275,7 +1275,7 @@ figure {
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Built-In Namespace Array
+				Class ex.simplex.Layer
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -1286,19 +1286,120 @@ figure {
 				
 				
 				
+					<br /><i>Defined in: </i> <a href="../symbols/src/src__simplex_Layer.js.html">Layer.js</a>.
+				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class ex.simplex.Layer.">
+				<caption>Class Summary</caption>
+				<thead>
+					<tr>
+						<th scope="col">Constructor Attributes</th>
+						<th scope="col">Constructor Name and Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="attributes">&nbsp;</td>
+						<td class="nameDescription" >
+							<div class="fixedFont">
+								<b><a href="../symbols/ex.simplex.Layer.html#constructor">ex.simplex.Layer</a></b>(name, map, origin, scrollFactor)
+							</div>
+							<div class="description">A collection of items at a certain z-index in a map.</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
 
 <!-- ============================== properties summary ===================== -->
+			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class ex.simplex.Layer.">
+					<caption>Field Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Field Attributes</th>
+							<th scope="col">Field Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/ex.simplex.Layer.html#items">items</a></b>
+								</div>
+								<div class="description">an array of all items in the layer</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/ex.simplex.Layer.html#name">name</a></b>
+								</div>
+								<div class="description">the name of the layer (mostly for 		labeling in the IDE)</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/ex.simplex.Layer.html#opacity">opacity</a></b>
+								</div>
+								<div class="description">ranges from 0.0 - 1.0, this is the 		transparency of the layer</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/ex.simplex.Layer.html#position">position</a></b>
+								</div>
+								<div class="description">the starting location of the 		layer</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/ex.simplex.Layer.html#scrollFactor">scrollFactor</a></b>
+								</div>
+								<div class="description">the multiplier for the 		amount of scroll per pixel moved by the camera, can be 		used to simulate depth of field.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/ex.simplex.Layer.html#visible">visible</a></b>
+								</div>
+								<div class="description">allows rendering if true</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
 			
 
 <!-- ============================== methods summary ======================== -->
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class Array.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class ex.simplex.Layer.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -1309,11 +1410,74 @@ figure {
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Array.html#indexOf">indexOf</a></b>(obj)
+								<div class="fixedFont">ex.simplex.Layer.<b><a href="../symbols/ex.simplex.Layer.html#.addItem">addItem</a></b>(item)
 								</div>
-								<div class="description"></div>
+								<div class="description">Adds an item to the layer, could be anything really.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ex.simplex.Layer.<b><a href="../symbols/ex.simplex.Layer.html#.hide">hide</a></b>()
+								</div>
+								<div class="description">Sets visible property to false, does not affect opacity.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ex.simplex.Layer.<b><a href="../symbols/ex.simplex.Layer.html#.isVisible">isVisible</a></b>()
+								</div>
+								<div class="description">Checks properties and determines if layer is visible</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ex.simplex.Layer.<b><a href="../symbols/ex.simplex.Layer.html#.removeItem">removeItem</a></b>(index)
+								</div>
+								<div class="description">removes an item from the layer</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ex.simplex.Layer.<b><a href="../symbols/ex.simplex.Layer.html#.render">render</a></b>(context, camX, camY)
+								</div>
+								<div class="description">Supplies a canvas context and camera offset to each item and callstheir render functions</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ex.simplex.Layer.<b><a href="../symbols/ex.simplex.Layer.html#.show">show</a></b>()
+								</div>
+								<div class="description">Sets visible property to true, does not affect opacity.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ex.simplex.Layer.<b><a href="../symbols/ex.simplex.Layer.html#.toggleVisibility">toggleVisibility</a></b>()
+								</div>
+								<div class="description">Toggles visibility of the layer.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ex.simplex.Layer.<b><a href="../symbols/ex.simplex.Layer.html#.update">update</a></b>(dt)
+								</div>
+								<div class="description">Performs actions every time period dt</div>
 							</td>
 						</tr>
 					
@@ -1328,8 +1492,201 @@ figure {
 
 <!-- ============================== constructor details ==================== -->		
 			
+			<div class="details"><a name="constructor"> </a>
+				<div class="sectionTitle">
+					Class Detail
+				</div>
+				
+				<div class="fixedFont">
+						<b>ex.simplex.Layer</b>(name, map, origin, scrollFactor)
+				</div>
+				
+				<div class="description">
+					A collection of items at a certain z-index in a map.
+					
+				</div>
+				
+				
+				
+				
+					
+						<dl class="detailList">
+						<dt class="heading">Parameters:</dt>
+						
+							<dt>
+								<span class="light fixedFont">{String}</span>  <b>name</b>
+								
+							</dt>
+								<dd>name of the layer (mostly for IDE purposes)</dd>
+						
+							<dt>
+								<span class="light fixedFont">{<a href="../symbols/ex.display.html#.SpriteMap">ex.display.SpriteMap</a>}</span>  <b>map</b>
+								
+							</dt>
+								<dd>tile data for the layer</dd>
+						
+							<dt>
+								<span class="light fixedFont">{<a href="../symbols/ex.base.Point.html">ex.base.Point</a>}</span>  <b>origin</b>
+								
+							</dt>
+								<dd>origin of the layer, defaults to (0,0) 		if not supplied</dd>
+						
+							<dt>
+								<span class="light fixedFont">{<a href="../symbols/ex.base.Vector.html">ex.base.Vector</a>}</span>  <b>scrollFactor</b>
+								
+							</dt>
+								<dd>a multiplier that affects the 		scroll rate relative to the camera</dd>
+						
+						</dl>
+					
+					
+					
+					
+					
+					
+					
+
+			</div>
+			
 
 <!-- ============================== field details ========================== -->		
+			
+				<div class="sectionTitle">
+					Field Detail
+				</div>
+				
+					<a name="items"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object[]}</span>
+					<b>items</b>
+					
+					</div>
+					<div class="description">
+						an array of all items in the layer
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="name"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{String}</span>
+					<b>name</b>
+					
+					</div>
+					<div class="description">
+						the name of the layer (mostly for 		labeling in the IDE)
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="opacity"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Number}</span>
+					<b>opacity</b>
+					
+					</div>
+					<div class="description">
+						ranges from 0.0 - 1.0, this is the 		transparency of the layer
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="position"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{<a href="../symbols/ex.base.Vector.html">ex.base.Vector</a>}</span>
+					<b>position</b>
+					
+					</div>
+					<div class="description">
+						the starting location of the 		layer
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="scrollFactor"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{<a href="../symbols/ex.base.Vector.html">ex.base.Vector</a>}</span>
+					<b>scrollFactor</b>
+					
+					</div>
+					<div class="description">
+						the multiplier for the 		amount of scroll per pixel moved by the camera, can be 		used to simulate depth of field.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="visible"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Boolean}</span>
+					<b>visible</b>
+					
+					</div>
+					<div class="description">
+						allows rendering if true
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					
+				
 			
 
 <!-- ============================== method details ========================= -->		
@@ -1338,18 +1695,15 @@ figure {
 					Method Detail
 				</div>
 				
-					<a name="indexOf"> </a>
-					<div class="fixedFont">
+					<a name=".addItem"> </a>
+					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<b>indexOf</b>(obj)
+					<span class="light">ex.simplex.Layer.</span><b>addItem</b>(item)
 					
 					</div>
 					<div class="description">
-						
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/src__ExstoEngine.js.html">ExstoEngine.js</a>.
+						Adds an item to the layer, could be anything really...
 						
 						
 					</div>
@@ -1361,10 +1715,237 @@ figure {
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<b>obj</b>
+									<span class="light fixedFont">{Object}</span> <b>item</b>
 									
 								</dt>
-								<dd></dd>
+								<dd>something that belongs in the layer</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".hide"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">ex.simplex.Layer.</span><b>hide</b>()
+					
+					</div>
+					<div class="description">
+						Sets visible property to false, does not affect opacity.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".isVisible"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Boolean}</span>
+					<span class="light">ex.simplex.Layer.</span><b>isVisible</b>()
+					
+					</div>
+					<div class="description">
+						Checks properties and determines if layer is visible
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Boolean}</span> </dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".removeItem"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">ex.simplex.Layer.</span><b>removeItem</b>(index)
+					
+					</div>
+					<div class="description">
+						removes an item from the layer
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>index</b>
+									
+								</dt>
+								<dd>index of the item to remove</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".render"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">ex.simplex.Layer.</span><b>render</b>(context, camX, camY)
+					
+					</div>
+					<div class="description">
+						Supplies a canvas context and camera offset to each item and callstheir render functions
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Context}</span> <b>context</b>
+									
+								</dt>
+								<dd>canvas context to draw with</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>camX</b>
+									
+								</dt>
+								<dd>camera offset on x</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>camY</b>
+									
+								</dt>
+								<dd>camera offset on y</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".show"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">ex.simplex.Layer.</span><b>show</b>()
+					
+					</div>
+					<div class="description">
+						Sets visible property to true, does not affect opacity.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".toggleVisibility"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">ex.simplex.Layer.</span><b>toggleVisibility</b>()
+					
+					</div>
+					<div class="description">
+						Toggles visibility of the layer.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".update"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">ex.simplex.Layer.</span><b>update</b>(dt)
+					
+					</div>
+					<div class="description">
+						Performs actions every time period dt
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>dt</b>
+									
+								</dt>
+								<dd>delta time, length of each time cycle</dd>
 							
 							</dl>
 						

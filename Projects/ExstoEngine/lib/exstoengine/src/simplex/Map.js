@@ -1,18 +1,17 @@
-/**
- * @class A single environment that can be loaded into the world. In most cases,
- *        can be considered one game level or zone.
- * @param name
- *            {String}: name of map
- * @param layers
- *            {Array}: contains all layers in order of z-index
- */
-ex.using([ 'ex.simplex.Layer' ], function() {
+ex.using([ 
+    'ex.simplex.Layer' 
+], function() {
 	ex.define("ex.simplex.Map", {
 		/**
 		 * Builds the map with a name and an empty set of layers
 		 * 
-		 * @param $name
-		 *            {String}: name of map
+		 * @name ex.simplex.Map
+		 * 
+		 * @param {String} name name of map
+		 * 
+		 * @property {String} name
+		 * @property {ex.simplex.Layer[]} layers
+		 * 
 		 * @constructor
 		 */
 		constructor : function(name) {
@@ -20,12 +19,32 @@ ex.using([ 'ex.simplex.Layer' ], function() {
 			this.layers = [];
 		},
 
+		/**
+		 * Adds a layer to the the end of layers.
+		 * 
+		 * @function
+		 * @name addLayer
+		 * @memberOf ex.simplex.Map
+		 * 
+		 * @param layer
+		 */
 		addLayer : function(layer) {
 			if (layer != null){
 				this.layers.push(layer);
 			}
 		},
 		
+		/**
+		 * Retrieves a layer from the map by name.
+		 * 
+		 * @function
+		 * @name getLayer
+		 * @memberOf ex.simplex.Map
+		 * 
+		 * @param {String} name
+		 * @returns {ex.simplex.Layer} returns null if no layer is found
+		 * 		by the supplied name.
+		 */
 		getLayer: function(name) {
 			if(name == null)
 				return null;
@@ -42,34 +61,43 @@ ex.using([ 'ex.simplex.Layer' ], function() {
 		},
 
 		/**
-		 * Removes the layer at the specified index
+		 * Removes the layer at the specified index.
 		 * 
-		 * @param $index
-		 *            {Number}: location of layer in array
+		 * @function
+		 * @name removeLayer
+		 * @memberOf ex.simplex.Map
+		 * 
+		 * @param {Number} index location of layer in array
 		 */
-		removeLayer : function($index) {
-			if ($index < 0 || $index >= this.layers.length) {
+		removeLayer : function(index) {
+			if (index < 0 || index >= this.layers.length) {
 				return;
 			}
-			this.layers.splice($index, 1);
+			this.layers.splice(index, 1);
 		},
 
 		/**
-		 * toggles layer visiblity
+		 * Toggles layer visiblity.
 		 * 
-		 * @param $layerId
-		 *            {Number}: index of layer to toggle
+		 * @function
+		 * @name toggleLayer
+		 * @memberOf ex.simplex.Map
+		 * 
+		 * @param {Number} layerId index of layer to toggle
 		 */
-		toggleLayer : function($layerId) {
-			var layer = this.layers[$layerId];
+		toggleLayer : function(layerId) {
+			var layer = this.layers[layerId];
 			layer.visible = !layer.visible;
 		},
 
 		/**
-		 * performs actions every time period dt
+		 * Performs actions every time period dt.
 		 * 
-		 * @param dt
-		 *            {Number}: delta time, length of each time cycle
+		 * @function
+		 * @name update
+		 * @memberOf ex.simplex.Map
+		 * 
+		 * @param {Number} dt delta time, length of each time cycle
 		 */
 		update : function(dt) {
 			var index = this.layers.length;
@@ -79,15 +107,16 @@ ex.using([ 'ex.simplex.Layer' ], function() {
 		},
 
 		/**
-		 * Supplies a canvas context and camera offset to each layer and calls
+		 * Supplies a canvas context and camera offset to each item and calls
 		 * their render functions
 		 * 
-		 * @param $context
-		 *            {Context}: canvas context to draw with
-		 * @param $camX
-		 *            {Number}: camera offset on x
-		 * @param $camY
-		 *            {Number}: camera offset on y
+		 * @function
+		 * @name render
+		 * @memberOf ex.simplex.Map
+		 * 
+		 * @param {Context} context canvas context to draw with
+		 * @param {Number} camX camera offset on x
+		 * @param {Number} camY camera offset on y
 		 */
 		render : function($context, $camX, $camY) {
 			var i = this.layers.length;

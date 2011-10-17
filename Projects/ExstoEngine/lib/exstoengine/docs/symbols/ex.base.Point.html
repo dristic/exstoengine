@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>JsDoc Reference - Array</title>
+		<title>JsDoc Reference - ex.base.Point</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -1275,7 +1275,7 @@ figure {
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Built-In Namespace Array
+				Class ex.base.Point
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -1286,19 +1286,80 @@ figure {
 				
 				
 				
+					<br /><i>Defined in: </i> <a href="../symbols/src/src__base_Point.js.html">Point.js</a>.
+				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class ex.base.Point.">
+				<caption>Class Summary</caption>
+				<thead>
+					<tr>
+						<th scope="col">Constructor Attributes</th>
+						<th scope="col">Constructor Name and Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="attributes">&nbsp;</td>
+						<td class="nameDescription" >
+							<div class="fixedFont">
+								<b><a href="../symbols/ex.base.Point.html#constructor">ex.base.Point</a></b>(x, y)
+							</div>
+							<div class="description"></div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
 
 <!-- ============================== properties summary ===================== -->
+			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class ex.base.Point.">
+					<caption>Field Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Field Attributes</th>
+							<th scope="col">Field Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/ex.base.Point.html#x">x</a></b>
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/ex.base.Point.html#y">y</a></b>
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
 			
 
 <!-- ============================== methods summary ======================== -->
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class Array.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class ex.base.Point.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -1309,11 +1370,20 @@ figure {
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Array.html#indexOf">indexOf</a></b>(obj)
+								<div class="fixedFont">ex.base.Point.<b><a href="../symbols/ex.base.Point.html#.add">add</a></b>(other)
 								</div>
-								<div class="description"></div>
+								<div class="description">Adds the x and y values of a Vector or Point to this object'sx and y values.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ex.base.Point.<b><a href="../symbols/ex.base.Point.html#.subtract">subtract</a></b>(other)
+								</div>
+								<div class="description">Subtracts the x and y values of a Vector or Point from this object'sx and y values.</div>
 							</td>
 						</tr>
 					
@@ -1328,8 +1398,101 @@ figure {
 
 <!-- ============================== constructor details ==================== -->		
 			
+			<div class="details"><a name="constructor"> </a>
+				<div class="sectionTitle">
+					Class Detail
+				</div>
+				
+				<div class="fixedFont">
+						<b>ex.base.Point</b>(x, y)
+				</div>
+				
+				<div class="description">
+					
+					
+				</div>
+				
+				
+				
+				
+					
+						<dl class="detailList">
+						<dt class="heading">Parameters:</dt>
+						
+							<dt>
+								<span class="light fixedFont">{Number}</span>  <b>x</b>
+								
+							</dt>
+								<dd>magnitude on x axis</dd>
+						
+							<dt>
+								<span class="light fixedFont">{Number}</span>  <b>y</b>
+								
+							</dt>
+								<dd>magnitude on y axis</dd>
+						
+						</dl>
+					
+					
+					
+					
+					
+					
+					
+
+			</div>
+			
 
 <!-- ============================== field details ========================== -->		
+			
+				<div class="sectionTitle">
+					Field Detail
+				</div>
+				
+					<a name="x"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Number}</span>
+					<b>x</b>
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="y"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Number}</span>
+					<b>y</b>
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					
+				
 			
 
 <!-- ============================== method details ========================= -->		
@@ -1338,18 +1501,15 @@ figure {
 					Method Detail
 				</div>
 				
-					<a name="indexOf"> </a>
-					<div class="fixedFont">
+					<a name=".add"> </a>
+					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<b>indexOf</b>(obj)
+					<span class="light">ex.base.Point.</span><b>add</b>(other)
 					
 					</div>
 					<div class="description">
-						
-						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/src__ExstoEngine.js.html">ExstoEngine.js</a>.
+						Adds the x and y values of a Vector or Point to this object'sx and y values.
 						
 						
 					</div>
@@ -1361,10 +1521,46 @@ figure {
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<b>obj</b>
+									<span class="light fixedFont">{<a href="../symbols/ex.base.Point.html">ex.base.Point</a> or ex.base.Vector}</span> <b>other</b>
 									
 								</dt>
-								<dd></dd>
+								<dd>Point or Vector to addto this Point</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".subtract"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">ex.base.Point.</span><b>subtract</b>(other)
+					
+					</div>
+					<div class="description">
+						Subtracts the x and y values of a Vector or Point from this object'sx and y values.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{<a href="../symbols/ex.base.Point.html">ex.base.Point</a> or ex.base.Vector}</span> <b>other</b>
+									
+								</dt>
+								<dd>Point or Vector tosubtract from this Point</dd>
 							
 							</dl>
 						

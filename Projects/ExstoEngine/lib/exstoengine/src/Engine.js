@@ -91,7 +91,7 @@ ex.using([
 			
 			//--Step renderer
 			if(this.renderer != null) {
-				this.renderer.update(dt, this.camera.x, this.camera.y);
+				this.renderer.update(dt, this.camera.position.x, this.camera.position.y);
 			}
 			
 			this.onUpdate(dt);

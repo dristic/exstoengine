@@ -5,17 +5,35 @@
 	.STRN {color: #393;}
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
-	</style></head><body><pre><span class='line'>  1</span> <span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>  2</span> </span><span class="WHIT">	</span><span class="NAME">ex.define</span><span class="PUNC">(</span><span class="STRN">"ex.base.Component"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>  3</span> </span><span class="WHIT">		</span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>  4</span> </span><span class="WHIT">			</span><span class="WHIT">
-<span class='line'>  5</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>  6</span> </span><span class="WHIT">		</span><span class="WHIT">
-<span class='line'>  7</span> </span><span class="WHIT">		</span><span class="NAME">update</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">dt</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>  8</span> </span><span class="WHIT">			</span><span class="WHIT">
-<span class='line'>  9</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 10</span> </span><span class="WHIT">		</span><span class="WHIT">
-<span class='line'> 11</span> </span><span class="WHIT">		</span><span class="NAME">name</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"Component"</span><span class="WHIT">
-<span class='line'> 12</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 13</span> </span><span class="PUNC">}</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 14</span> </span></pre></body></html>
+	</style></head><body><pre><span class='line'>  1</span> <span class="WHIT">
+<span class='line'>  2</span> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>  3</span> </span><span class="WHIT">	</span><span class="NAME">ex.define</span><span class="PUNC">(</span><span class="STRN">"ex.base.Component"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>  4</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>  5</span> 		 * Interface for engine components.
+<span class='line'>  6</span> 		 * @name ex.base.Component
+<span class='line'>  7</span> 		 * @constructor
+<span class='line'>  8</span> 		 */</span><span class="WHIT">
+<span class='line'>  9</span> </span><span class="WHIT">		</span><span class="NAME">constructor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 10</span> </span><span class="WHIT">			</span><span class="WHIT">
+<span class='line'> 11</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 12</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'> 13</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'> 14</span> 		 * Update loop
+<span class='line'> 15</span> 		 * @function
+<span class='line'> 16</span> 		 * @name update
+<span class='line'> 17</span> 		 * @memberOf ex.base.Component
+<span class='line'> 18</span> 		 * @param {Number} dt timestep between frames
+<span class='line'> 19</span> 		 */</span><span class="WHIT">
+<span class='line'> 20</span> </span><span class="WHIT">		</span><span class="NAME">update</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">dt</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 21</span> </span><span class="WHIT">			</span><span class="WHIT">
+<span class='line'> 22</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 23</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'> 24</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'> 25</span> 		 * Component name
+<span class='line'> 26</span> 		 * @name name
+<span class='line'> 27</span> 		 * @memberOf ex.base.Component
+<span class='line'> 28</span> 		 */</span><span class="WHIT">
+<span class='line'> 29</span> </span><span class="WHIT">		</span><span class="NAME">name</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="STRN">"Component"</span><span class="WHIT">
+<span class='line'> 30</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 31</span> </span><span class="PUNC">}</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 32</span> </span></pre></body></html>

@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>JsDoc Reference - Array</title>
+		<title>JsDoc Reference - ex.display.ui.TitleMenu</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -1275,7 +1275,7 @@ figure {
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Built-In Namespace Array
+				Class ex.display.ui.TitleMenu
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -1286,19 +1286,100 @@ figure {
 				
 				
 				
+					<br /><i>Defined in: </i> <a href="../symbols/src/src__display_ui_TitleMenu.js.html">TitleMenu.js</a>.
+				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class ex.display.ui.TitleMenu.">
+				<caption>Class Summary</caption>
+				<thead>
+					<tr>
+						<th scope="col">Constructor Attributes</th>
+						<th scope="col">Constructor Name and Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="attributes">&nbsp;</td>
+						<td class="nameDescription" >
+							<div class="fixedFont">
+								<b><a href="../symbols/ex.display.ui.TitleMenu.html#constructor">ex.display.ui.TitleMenu</a></b>(selections, defaultSelection, bgImage, logoImage, input)
+							</div>
+							<div class="description">Creates a title menu with background, logo, selection options,and input bindings.</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
 
 <!-- ============================== properties summary ===================== -->
+			
+				
+				
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class ex.display.ui.TitleMenu.">
+					<caption>Field Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Field Attributes</th>
+							<th scope="col">Field Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/ex.display.ui.TitleMenu.html#currentSelection">currentSelection</a></b>
+								</div>
+								<div class="description">The array index of		the current selection.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/ex.display.ui.TitleMenu.html#listening">listening</a></b>
+								</div>
+								<div class="description">input component.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/ex.display.ui.TitleMenu.html#selections">selections</a></b>
+								</div>
+								<div class="description">The array of selections		available on the menu.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/ex.display.ui.TitleMenu.html#settings">settings</a></b>
+								</div>
+								<div class="description">for orientation and selection events.</div>
+							</td>
+						</tr>
+					
+					</tbody>
+				</table>
+				
+				
+				
 			
 
 <!-- ============================== methods summary ======================== -->
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class Array.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class ex.display.ui.TitleMenu.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -1309,11 +1390,38 @@ figure {
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&nbsp;</td>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont"><b><a href="../symbols/Array.html#indexOf">indexOf</a></b>(obj)
+								<div class="fixedFont">ex.display.ui.TitleMenu.<b><a href="../symbols/ex.display.ui.TitleMenu.html#.moveDownMenu">moveDownMenu</a></b>()
 								</div>
-								<div class="description"></div>
+								<div class="description">Moves the selection down by one if possible.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ex.display.ui.TitleMenu.<b><a href="../symbols/ex.display.ui.TitleMenu.html#.moveUpMenu">moveUpMenu</a></b>()
+								</div>
+								<div class="description">Moves the selection up by one if possible.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ex.display.ui.TitleMenu.<b><a href="../symbols/ex.display.ui.TitleMenu.html#.render">render</a></b>(context, camX, camY)
+								</div>
+								<div class="description">Renders the TitleMenu to the screen.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ex.display.ui.TitleMenu.<b><a href="../symbols/ex.display.ui.TitleMenu.html#.update">update</a></b>(dt)
+								</div>
+								<div class="description">The update loop where user input is checked</div>
 							</td>
 						</tr>
 					
@@ -1328,8 +1436,163 @@ figure {
 
 <!-- ============================== constructor details ==================== -->		
 			
+			<div class="details"><a name="constructor"> </a>
+				<div class="sectionTitle">
+					Class Detail
+				</div>
+				
+				<div class="fixedFont">
+						<b>ex.display.ui.TitleMenu</b>(selections, defaultSelection, bgImage, logoImage, input)
+				</div>
+				
+				<div class="description">
+					Creates a title menu with background, logo, selection options,and input bindings.
+					
+				</div>
+				
+				
+				
+				
+					
+						<dl class="detailList">
+						<dt class="heading">Parameters:</dt>
+						
+							<dt>
+								<span class="light fixedFont">{Object}</span>  <b>selections</b>
+								
+							</dt>
+								<dd>a selection object (text, action pair)</dd>
+						
+							<dt>
+								<span class="light fixedFont">{Number}</span>  <b>defaultSelection</b>
+								
+							</dt>
+								<dd>starting selection index (0 based)</dd>
+						
+							<dt>
+								<span class="light fixedFont">{Image}</span>  <b>bgImage</b>
+								
+							</dt>
+								<dd>image to use as the background</dd>
+						
+							<dt>
+								<span class="light fixedFont">{Image}</span>  <b>logoImage</b>
+								
+							</dt>
+								<dd>image to use as the logo</dd>
+						
+							<dt>
+								<span class="light fixedFont">{ex.Input}</span>  <b>input</b>
+								
+							</dt>
+								<dd>the input component of the engine.</dd>
+						
+						</dl>
+					
+					
+					
+					
+					
+					
+					
+
+			</div>
+			
 
 <!-- ============================== field details ========================== -->		
+			
+				<div class="sectionTitle">
+					Field Detail
+				</div>
+				
+					<a name="currentSelection"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Number}</span>
+					<b>currentSelection</b>
+					
+					</div>
+					<div class="description">
+						The array index of		the current selection.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="listening"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{ex.util.Input}</span>
+					<b>listening</b>
+					
+					</div>
+					<div class="description">
+						input component.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="selections"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object[]}</span>
+					<b>selections</b>
+					
+					</div>
+					<div class="description">
+						The array of selections		available on the menu.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="settings"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Object}</span>
+					<b>settings</b>
+					
+					</div>
+					<div class="description">
+						for orientation and selection events.
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					
+				
 			
 
 <!-- ============================== method details ========================= -->		
@@ -1338,18 +1601,65 @@ figure {
 					Method Detail
 				</div>
 				
-					<a name="indexOf"> </a>
-					<div class="fixedFont">
+					<a name=".moveDownMenu"> </a>
+					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<b>indexOf</b>(obj)
+					<span class="light">ex.display.ui.TitleMenu.</span><b>moveDownMenu</b>()
 					
 					</div>
 					<div class="description">
+						Moves the selection down by one if possible.
 						
 						
-							<br />
-							<i>Defined in: </i> <a href="../symbols/src/src__ExstoEngine.js.html">ExstoEngine.js</a>.
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".moveUpMenu"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">ex.display.ui.TitleMenu.</span><b>moveUpMenu</b>()
+					
+					</div>
+					<div class="description">
+						Moves the selection up by one if possible.
+						
+						
+					</div>
+					
+					
+					
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".render"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">ex.display.ui.TitleMenu.</span><b>render</b>(context, camX, camY)
+					
+					</div>
+					<div class="description">
+						Renders the TitleMenu to the screen.
 						
 						
 					</div>
@@ -1361,10 +1671,58 @@ figure {
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<b>obj</b>
+									<span class="light fixedFont">{Canvas Context}</span> <b>context</b>
 									
 								</dt>
-								<dd></dd>
+								<dd>canvas context to render with</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>camX</b>
+									
+								</dt>
+								<dd>camera offset on x</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>camY</b>
+									
+								</dt>
+								<dd>camera offset on y</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".update"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">ex.display.ui.TitleMenu.</span><b>update</b>(dt)
+					
+					</div>
+					<div class="description">
+						The update loop where user input is checked
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>dt</b>
+									
+								</dt>
+								<dd>timestep</dd>
 							
 							</dl>
 						

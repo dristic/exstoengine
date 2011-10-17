@@ -3,6 +3,30 @@ ex.using([
     "ex.base.Vector"
 ], function () {
 	ex.define("ex.world.TileMap", {
+		
+		/**
+		 * A 2D grid of ex.world.Tile objects used to create a game level.
+		 * 
+		 * @name ex.world.TileMap
+		 * 
+		 * @param {Number} tileWidth the uniform width of each tile.
+		 * 		Do not change once set, can and most likely will cause
+		 * 		odd behavior.
+		 * @param {Number} tileHeight the uniform height of each tile.
+		 * 		Do not change once set, can and most likely will cause
+		 * 		odd behavior.
+		 * @param {Number[][]} map the 2D numerical values for each tile.
+		 * 		These values will be converted into ex.world.Tile objects
+		 * 		during initialization.
+		 * 
+		 * @property {Number} tileWidth
+		 * @property {Number} tileHeight
+		 * @property {ex.world.Tile[][]} data 2D grid of ex.world.Tile objects
+		 * @property {Number} width total width of the map
+		 * @property {Number} height total height of the map
+		 * 
+		 * @constructor 
+		 */
 		constructor: function(tileWidth, tileHeight, map) {
 			this.tileWidth = tileWidth;
 			this.tileHeight = tileHeight;
@@ -14,6 +38,17 @@ ex.using([
 			this.height = map.length * this.tileHeight;
 		},
 		
+		/**
+		 * Retrieves a tile at the supplied x, y position.
+		 * 
+		 * @function
+		 * @name getTile
+		 * @memberOf ex.world.TileMap
+		 * 
+		 * @param {Number} x
+		 * @param {Number} y
+		 * @returns {ex.world.Tile
+		 */
 		getTile: function(x, y) {
 			x = Math.floor(x / this.tileWidth);
 			y = Math.floor(y / this.tileHeight);
@@ -26,6 +61,17 @@ ex.using([
 			}
 		},
 		
+		/**
+		 * Sets a tile at the given x,y position to the given value.
+		 * 
+		 * @function
+		 * @name setTile
+		 * @memberOf ex.world.TileMap
+		 * 
+		 * @param {Number} x
+		 * @param {Number} y
+		 * @param {Number} value
+		 */
 		setTile: function(x, y, value) {
 			x = Math.floor(x / this.tileWidth);
 			y = Math.floor(y / this.tileHeight);

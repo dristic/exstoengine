@@ -1,64 +1,68 @@
 /**
  * @class The collection of all items at a certain z-index in a map.
  * 
- * @param name
- *            {String}: the name of the layer (mostly for labeling in the IDE)
- * @param items
- *            {Array}: an array of all items in the layer
- * @param visible
- *            {Boolean}: allows rendering if true
- * @param opacity
- *            {Number}: ranges from 0.0 - 1.0, this is the transparency of the
- *            layer
- * @param position
- *            {ex.base.Point}: the starting location of the layer, used for
- *            rendering
- * @param scrollFactor
- *            {ex.base.Vector}: the multiplier for the amount of scroll per
- *            pixel moved by the camera, can be used to simulate depth of field.
+ * 
  */
 ex.using([ 'ex.base.Point', 'ex.base.Vector' ], function() {
 	ex.define("ex.simplex.Layer", {
 
 		/**
-		 * creates a new layer with base attributes
+		 * A collection of items at a certain z-index in a map.
+		 * 
 		 * @name ex.simplex.Layer
-		 * @param {String} $name name of the layer (mostly for IDE purposes)
-		 * @param {ex.display.SpriteMap} $map tile data for the layer
-		 * @param {ex.base.Point} $origin origin of the layer, defaults to (0,0) 
-		 * if not supplied
-		 * @param {ex.base.Vector} $scrollFactor a multiplier that affects the 
-		 * scroll rate relative to the camera
+		 * 
+		 * @param {String} name name of the layer (mostly for IDE purposes)
+		 * @param {ex.display.SpriteMap} map tile data for the layer
+		 * @param {ex.base.Point} origin origin of the layer, defaults to (0,0) 
+		 * 		if not supplied
+		 * @param {ex.base.Vector} scrollFactor a multiplier that affects the 
+		 * 		scroll rate relative to the camera
+		 * 
+		 * @property {String} name the name of the layer (mostly for 
+		 * 		labeling in the IDE)
+		 * @property {Object[]} items an array of all items in the layer
+		 * @property {Boolean} visible allows rendering if true
+		 * @property {Number} opacity ranges from 0.0 - 1.0, this is the 
+		 * 		transparency of the layer
+		 * @property {ex.base.Vector} position the starting location of the 
+		 * 		layer
+		 * @property {ex.base.Vector} scrollFactor the multiplier for the 
+		 * 		amount of scroll per pixel moved by the camera, can be 
+		 * 		used to simulate depth of field.
+		 * 
 		 * @constructor
 		 */
-		constructor : function($name, $map, $origin, $scrollFactor) {
-			this.name = $name;
+		constructor : function(name, map, origin, scrollFactor) {
+			this.name = name;
 			this.items = [];
-			this.map = $map;
+			this.map = map;
 			if(this.map != null) {
 				this.items.push(this.map);
 			}
 			this.visible = true;
 			this.opacity = 1.0;
 
-			if ($origin == null) {
+			if (origin == null) {
 				this.position = new ex.base.Point(0, 0);
 			} else {
-				this.position = $origin;
+				this.position = origin;
 			}
 
-			if ($scrollFactor == null) {
+			if (scrollFactor == null) {
 				this.scrollFactor = new ex.base.Vector(1, 1);
 			} else {
-				this.scrollFactor = $scrollFactor;
+				this.scrollFactor = scrollFactor;
 			}
 		},
 
 		/**
-		 * adds an item to the layer, could be anything really...
+		 * Adds an item to the layer, could be anything really...
 		 * 
-		 * @param $item
-		 *            {Object}: something that belongs in the layer
+		 * @function
+		 * @name addItem
+		 * @memberOf ex.simplex.Layer
+		 * 
+		 * @param {Object} item something that belongs in the layer
 		 */
 		addItem : function(item) {
 			if(item.type == "SpriteMap"){
@@ -82,21 +86,27 @@ ex.using([ 'ex.base.Point', 'ex.base.Vector' ], function() {
 		/**
 		 * removes an item from the layer
 		 * 
-		 * @param $index
-		 * 			{Number}: index of the item to remove
+		 * @function
+		 * @name removeItem
+		 * @memberOf ex.simplex.Layer
+		 * 
+		 * @param {Number} index index of the item to remove
 		 */
-		removeItem: function($index) {
-			if ($index < 0 || $index >= this.items.length) {
+		removeItem: function(index) {
+			if (index < 0 || index >= this.items.length) {
 				return;
 			}
 			this.items.splice($index, 1);
 		},
 
 		/**
-		 * performs actions every time period dt
+		 * Performs actions every time period dt
 		 * 
-		 * @param dt
-		 *            {Number}: delta time, length of each time cycle
+		 * @function
+		 * @name update
+		 * @memberOf ex.simplex.Layer
+		 * 
+		 * @param {Number} dt delta time, length of each time cycle
 		 */
 		update : function(dt) {
 			var index = this.items.length;
@@ -106,7 +116,11 @@ ex.using([ 'ex.base.Point', 'ex.base.Vector' ], function() {
 		},
 
 		/**
-		 * checks properties and determines if layer is visible
+		 * Checks properties and determines if layer is visible
+		 * 
+		 * @function
+		 * @name isVisible
+		 * @memberOf ex.simplex.Layer
 		 * 
 		 * @returns {Boolean}
 		 */
@@ -119,7 +133,11 @@ ex.using([ 'ex.base.Point', 'ex.base.Vector' ], function() {
 		},
 
 		/**
-		 * toggles visibility of the layer
+		 * Toggles visibility of the layer.
+		 * 
+		 * @function
+		 * @name toggleVisibility
+		 * @memberOf ex.simplex.Layer
 		 */
 		toggleVisibility : function() {
 			if (this.visible)
@@ -129,14 +147,22 @@ ex.using([ 'ex.base.Point', 'ex.base.Vector' ], function() {
 		},
 
 		/**
-		 * sets visible property to true, does not affect opacity.
+		 * Sets visible property to true, does not affect opacity.
+		 * 
+		 * @function
+		 * @name show
+		 * @memberOf ex.simplex.Layer
 		 */
 		show : function() {
 			this.visible = true;
 		},
 
 		/**
-		 * sets visible property to false, does not affect opacity.
+		 * Sets visible property to false, does not affect opacity.
+		 * 
+		 * @function
+		 * @name hide
+		 * @memberOf ex.simplex.Layer
 		 */
 		hide : function() {
 			this.visible = false;
@@ -146,12 +172,13 @@ ex.using([ 'ex.base.Point', 'ex.base.Vector' ], function() {
 		 * Supplies a canvas context and camera offset to each item and calls
 		 * their render functions
 		 * 
-		 * @param context
-		 *            {Context}: canvas context to draw with
-		 * @param camX
-		 *            {Number}: camera offset on x
-		 * @param camY
-		 *            {Number}: camera offset on y
+		 * @function
+		 * @name render
+		 * @memberOf ex.simplex.Layer
+		 * 
+		 * @param {Context} context canvas context to draw with
+		 * @param {Number} camX camera offset on x
+		 * @param {Number} camY camera offset on y
 		 */
 		render : function(context, camX, camY) {
 			if (!this.isVisible()) // Don't render if it won't be seen

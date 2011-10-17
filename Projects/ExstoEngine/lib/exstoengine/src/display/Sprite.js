@@ -4,18 +4,33 @@ ex.using([
 	ex.define("ex.display.Sprite", {
 		/**
 		 * Sprite object that contains a single image to draw on the canvas.
+		 * 
 		 * @name ex.display.Sprite
 		 * 
 		 * @param {Number} x The sprite's x position.
 		 * @param {Number} y The sprite's y position.
 		 * @param {Image} img The img to use to render the sprite.
 		 * @param {String} name The sprite's name.
+		 * 
+		 * @property {String} type
+		 * 		Internal use only. Do not change!
+		 * @property {ex.base.Vector} position
+		 * @property {ex.display.Image} image
+		 * @property {Number} rotation angle of the image
+		 * @property {Boolean} rotationEnabled if rotation is currently
+		 * 		being used.
+		 * @property {Canvas} rotationCanvas buffer canvas used to rotate
+		 * 		the sprite.
+		 * @property {ex.base.Vector} scrollFactor the rate at which the
+		 * 		sprite moves with the camera. Values less than 1 cause the
+		 * 		sprite to move slower than the camera making it appear to be
+		 * 		farther away from the focus while numbers greater than 1 
+		 *		make the sprite appear to be closer than the focus.
 		 * @constructor
 		 */
         constructor: function (position, img) {
         	this.type = "Sprite";
             this.position = position;
-            this.velocity = new ex.base.Vector(0, 0);
             this.img = img || new Image();
             this.visible = true;
 
@@ -23,8 +38,7 @@ ex.using([
             this.rotationEnabled = false;
             this.rotationCanvas = document.createElement("canvas");
 
-            this.scrollFactorX = 1;
-            this.scrollFactorY = 1;
+            this.scrollFactor = new ex.base.Vector(1,1);
             
             this.width = this.img.naturalWidth;
             this.height = this.img.naturalHeight;
@@ -38,6 +52,15 @@ ex.using([
             }
         },
         
+        /**
+         * Recalculates dimensions of sprite based on image. 
+         * Automatically called if image changes or loads after sprite 
+         * is initialized.
+         * 
+         * @function
+         * @name _recalcDimensions
+         * @memberOf ex.display.Sprite
+         */
         _recalcDimensions: function () {
         	this.width = this.img.naturalWidth;
             this.height = this.img.naturalHeight;
@@ -45,10 +68,30 @@ ex.using([
             this.rotationCanvas.height = this.height;
         },
 
+        /**
+         * Update routine
+         * 
+         * @function
+         * @name update
+         * @memberOf ex.display.Sprite
+         * 
+         * @param {Number} dt timestep
+         */
         update: function (dt) {
             if (typeof this.onUpdate === "function") this.onUpdate(dt);
         },
-
+        
+        /**
+         * Renders sprite, usually called by Renderer.
+         * 
+         * @function
+         * @name render
+         * @memberOf ex.display.Sprite
+         * 
+         * @param {Context} context
+         * @param {Number} camX
+         * @param {Number} camY
+         */
         render: function (context, camX, camY) {
             if (!this.visible){
             	return;
@@ -57,8 +100,8 @@ ex.using([
             if (this.rotationEnabled == false) {
                 context.drawImage(
                 		this.img, 
-                		this.position.x - (camX * this.scrollFactorX), 
-                		this.position.y - (camY * this.scrollFactorY));
+                		this.position.x - (camX * this.scrollFactor.x), 
+                		this.position.y - (camY * this.scrollFactor.y));
             } else {
                 var rContext = this.rotationCanvas.getContext("2d");
 
@@ -73,12 +116,26 @@ ex.using([
                 rContext.drawImage(this.img, 0, 0);
                 rContext.restore();
 
-                context.drawImage(this.rotationCanvas, this.position.x - (camX * this.scrollFactorX), this.position.y - (camY * this.scrollFactorY));
+                context.drawImage(
+                		this.rotationCanvas, 
+                		this.position.x - (camX * this.scrollFactor.x), 
+                		this.position.y - (camY * this.scrollFactor.y));
             }
         },
 
+        /**
+         * Returns bounding box of sprite.
+         * 
+         * @function
+         * @name getBounds
+         * @memberOf ex.display.Sprite
+         * @returns {ex.base.Rectangle} bounding box
+         */
         getBounds: function () {
-            return new ExstoEngine.Base.Rectangle(this.position.x, this.position.y, this.width, this.height);
+            return new ex.base.Rectangle(
+            		this.position, 
+            		this.width, 
+            		this.height);
         }
     });
 

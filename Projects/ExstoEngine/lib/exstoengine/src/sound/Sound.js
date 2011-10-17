@@ -2,6 +2,23 @@ ex.using([
    
 ], function () {
 	ex.define("ex.sound.Sound", {
+		
+		/**
+		 * A container class for sound objects.
+		 * 
+		 * @name ex.sound.Sound
+		 * 
+		 * @param {String} url address to the audio track
+		 * @param {Number} numChannels number of audio channels in the track
+		 * 
+		 * @property {Audio} audio
+		 * @property {Number} channels
+		 * @property {Object[]} readyChannels the channels that are ready
+		 * 		to play.
+		 * @property {Boolean} ready true if audio track is finished loading.
+		 * 
+		 * @constructor
+		 */
 		constructor: function (url, numChannels) {
 			var _audio = new Audio(),
 				_this = this;
@@ -23,6 +40,13 @@ ex.using([
 			this.ready = false;
 		},
 		
+		/**
+		 * Plays the audio track.
+		 * 
+		 * @function
+		 * @name play
+		 * @memberOf ex.sound.Sound
+		 */
 		play: function () {
 			if(this.ready == true) {
 				var i = 0;
@@ -42,6 +66,13 @@ ex.using([
 			}
 		},
 		
+		/**
+		 * Stops audio playback.
+		 * 
+		 * @function
+		 * @name stop
+		 * @memberOf ex.sound.Sound
+		 */
 		stop: function () {
 			this.audio.stop();
 		}

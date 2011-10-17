@@ -16,11 +16,27 @@ ex.using([
 	ex.define("ex.simplex.Entity", ex.event.EventTarget, {
 
 		/**
+		 * The base class for all interactive game objects such as players,
+		 * NPCs, and triggers.
 		 * 
-		 * @param name
-		 *            {String}: name of entity (used mostly in IDE)
-		 * @param position
-		 *            {ex.base.Point}: original position of entity
+		 * @name ex.world.Entity
+		 * 
+		 * @param {String} name name of entity (used mostly in IDE)
+		 * @param {ex.base.Vector} position original position of entity
+		 * @param {ex.base.Sprite} sprite display object
+		 * @param {Boolean} collides whether collision should be added
+		 * 		to the entity.
+		 * 
+		 * @property {String} name
+		 * @property {String} type
+		 * 		Internal use only! Do not change!
+		 * @property {ex.base.Vector} position
+		 * @property {ex.base.Vector} velocity
+		 * @property {Number} width
+		 * @property {Number} height
+		 * @property {Boolean} collides
+		 * @property {Number} mass used in physics engine
+		 * @property {ex.display.Sprite} sprite
 		 * @constructor
 		 */
 		constructor : function(name, position, sprite, collides) {
@@ -49,8 +65,11 @@ ex.using([
 		/**
 		 * performs actions every time period dt
 		 * 
-		 * @param dt
-		 *            {Number}: delta time, length of each time cycle
+		 * @function
+		 * @name update
+		 * @memberOf ex.simplex.Entity
+		 * 
+		 * @param {Number} dt delta time, length of each time cycle
 		 */
 		update : function(dt) {
 			this.sprite.update(dt);
@@ -63,8 +82,11 @@ ex.using([
 		 * become out of sync with its sprite.
 		 * 
 		 * If you want to set the absolute position, see setPosition(newX, newY)
-		 * 
 		 * @see ex.simplex.Entity.setPosition
+		 * 
+		 * @function
+		 * @name updatePosition
+		 * @memberOf ex.simplex.Entity
 		 * 
 		 * @param {ex.base.Vector} vector
 		 * @param {Number} dt
@@ -76,43 +98,53 @@ ex.using([
 		/**
 		 * Sets the absolute position of the entity with x,y values.
 		 * 
-		 * @param newX
-		 * @param newY
+		 * @function
+		 * @name setPosition
+		 * @memberOf ex.simplex.Entity
+		 * 
+		 * @param {Number} newX
+		 * @param {Number} newY
 		 */
 		setPosition: function(newX, newY) {
 			this.position.x = newX;
 			this.position.y = newY;
 		},
 		
+		/**
+		 * Called every time a collision is found with the entity.
+		 * 
+		 * @function
+		 * @name onCollide
+		 * @memberOf ex.simplex.Entity
+		 * 
+		 * @param {Entity} target the collision target
+		 */
 		onCollide: function(target) {
 			
 		},
 
 		/**
-		 * checks properties and determines if layer is visible
+		 * Checks properties and determines if entity is visible.
+		 * 
+		 * @function
+		 * @name isVisible
+		 * @memberOf ex.simplex.Entity
 		 * 
 		 * @returns {Boolean}
 		 */
 		isVisible : function() {
-			if (this.visible && this.opacity > 0.0) {
-				return true;
-			} else {
-				return false;
-			}
+			return this.visible;
 		},
 
 		/**
 		 * Supplies a canvas context and camera offset to each item and calls
 		 * their render functions
 		 * 
-		 * @param $context
-		 *            {Context}: canvas context to draw with
-		 * @param $camX
-		 *            {Number}: camera offset on x
-		 * @param $camY
-		 *            {Number}: camera offset on y
+		 * @param {Context} context canvas context to draw with
+		 * @param {Number} camX camera offset on x
+		 * @param {Number} camY camera offset on y
 		 */
-		render : function($context, $camX, $camY) {
+		render : function(context, camX, camY) {
 			if (!this.isVisible()) // Don't render if it won't be seen
 				return;
 

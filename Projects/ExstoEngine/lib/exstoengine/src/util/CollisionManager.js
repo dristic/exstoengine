@@ -1,11 +1,3 @@
-/**
- * Runs collision checks between all registered collidable objects. Has
- * options for doing bounding box collision or per-pixel collision. Per-pixel
- * collision will default to bounding box collision if no pixel collision data
- * is provided.
- * 
- * @class ex.util.CollisionManager
- */
 ex.using([
     'ex.util.CollisionDetector',
     'ex.util.CollisionResolver'
@@ -13,7 +5,14 @@ ex.using([
 	ex.define("ex.util.CollisionManager", {
 		
 		/**
-		 * sets up the CollisionManager
+		 * The engine component that handles collision detection and
+		 * resolution.
+		 * 
+		 * @name ex.util.CollisionManager
+		 * 
+		 * @property {ex.simplex.Map} activeLevel the current level in the game
+		 * 		world.
+		 * 
 		 * @constructor
 		 */
 		constructor: function() {
@@ -28,6 +27,15 @@ ex.using([
 			};
 		},
 		
+		/**
+		 * Sets the level for the manager to handle collisions on.
+		 * 
+		 * @function
+		 * @name setActiveLevel
+		 * @memberOf ex.util.CollisionManager
+		 * 
+		 * @param {ex.simplex.Map} level
+		 */
 		setActiveLevel: function(level) {
 			this.activeLevel = level;
 			console.log("Active Level: " + this.activeLevel.name);
@@ -58,9 +66,15 @@ ex.using([
 		},
 		
 		/**
-		 * clears the collisions array, checks for new collisions, and runs
-		 * each collision's actions.
-		 * @param dt
+		 * Clears the collisions array, request collision detection on each
+		 * layer separately from the detector, then requests resolution of
+		 * each collision from the resolver.
+		 * 
+		 * @function
+		 * @name update
+		 * @memberOf ex.util.CollisionManager
+		 * 
+		 * @param {Number} dt timestep
 		 */
 		update: function(dt) {
 			ex.Debug.time('collision');
