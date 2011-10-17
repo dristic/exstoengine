@@ -5,11 +5,12 @@
           "ex.display.AnimatedSprite",
           "ex.display.Image",
           "ex.world.World",
+          "ex.world.Map",
+          "ex.world.Layer",
           "ex.display.Sprite",
           "ex.display.SpriteMap",
           "ex.sound.Sound",
-          "ex.simplex.Map",
-          "ex.simplex.Layer",
+          
           "ex.display.ui.TitleMenu",
           
           "entity.Player",
@@ -226,21 +227,21 @@
 		var nebula = new ex.display.Sprite(new ex.base.Vector(0,0), _engine.imageRepository.getImage("Nebula"));
 		
 		// Setup level 1
-		var firstLevel = new ex.simplex.Map("Level 1");
-		firstLevel.addLayer(new ex.simplex.Layer("Ground", level1Map, new ex.base.Vector(0,0), new ex.base.Vector(1,1)));
-		firstLevel.addLayer(new ex.simplex.Layer("Background", null, new ex.base.Vector(0,0), new ex.base.Vector(0,0)));
+		var firstLevel = new ex.world.Map("Level 1");
+		firstLevel.addLayer(new ex.world.Layer("Ground", level1Map, new ex.base.Vector(0,0), new ex.base.Vector(1,1)));
+		firstLevel.addLayer(new ex.world.Layer("Background", null, new ex.base.Vector(0,0), new ex.base.Vector(0,0)));
 		firstLevel.getLayer("Background").addItem(nebula);
 		firstLevel.getLayer("Ground").addItem(teleporter);
 		
 		// Setup level 2
-		var secondLevel = new ex.simplex.Map("Level 2");
-		secondLevel.addLayer(new ex.simplex.Layer("Asteroid Field", null, new ex.base.Vector(0,0), new ex.base.Vector(1.5,1.5)));
-		secondLevel.addLayer(new ex.simplex.Layer("Ground", level2Map, new ex.base.Vector(0,0), new ex.base.Vector(1,1)));
+		var secondLevel = new ex.world.Map("Level 2");
+		secondLevel.addLayer(new ex.world.Layer("Asteroid Field", null, new ex.base.Vector(0,0), new ex.base.Vector(1.5,1.5)));
+		secondLevel.addLayer(new ex.world.Layer("Ground", level2Map, new ex.base.Vector(0,0), new ex.base.Vector(1,1)));
 		secondLevel.getLayer("Ground").addItem(explosion1);
 		secondLevel.getLayer("Ground").addItem(explosion2);
 		secondLevel.getLayer("Ground").addItem(explosion3);
 		secondLevel.getLayer("Ground").addItem(asteroid);
-		secondLevel.addLayer(new ex.simplex.Layer("Background", null, new ex.base.Vector(0,0), new ex.base.Vector(0,0)));
+		secondLevel.addLayer(new ex.world.Layer("Background", null, new ex.base.Vector(0,0), new ex.base.Vector(0,0)));
 		secondLevel.getLayer("Background").addItem(nebula);
 		var index = asteroidField.length;
 		var asteroidLayer = secondLevel.getLayer("Asteroid Field");

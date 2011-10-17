@@ -20,8 +20,8 @@
           "ex.world.CollisionMap",
           "ex.display.SpriteMap",
           "ex.sound.Sound",
-          "ex.simplex.Map",
-          "ex.simplex.Layer",
+          "ex.world.Map",
+          "ex.world.Layer",
           
           "entity.Paddle",
           "entity.Ball"
@@ -70,19 +70,19 @@
 		var level1Map = new ex.display.SpriteMap(
 				100, 20, 
 				level1Data, 
-				_engine.imageRepository.img.Tiles);
+				_engine.imageRepository.getImage("Tiles"));
 
 		// Load background image
-		var nebula = new ex.display.Sprite(new ex.base.Vector(0, 0), _engine.imageRepository.img.BG);
+		var nebula = new ex.display.Sprite(new ex.base.Vector(0, 0), _engine.imageRepository.getImage("BG"));
 		
 		// Setup level
-		var level1 = new ex.simplex.Map("Level 1");
-		level1.addLayer(new ex.simplex.Layer(
+		var level1 = new ex.world.Map("Level 1");
+		level1.addLayer(new ex.world.Layer(
 				"Ground",
 				level1Map,
 				new ex.base.Vector(0,0),
 				new ex.base.Vector(0,0)));
-		level1.addLayer(new ex.simplex.Layer(
+		level1.addLayer(new ex.world.Layer(
 				"Background",
 				null,
 				new ex.base.Vector(0,0),

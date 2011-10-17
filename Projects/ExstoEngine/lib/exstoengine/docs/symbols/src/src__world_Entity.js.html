@@ -1,0 +1,161 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/**
+<span class='line'>  2</span>  * 
+<span class='line'>  3</span>  * @class ex.world.Entity
+<span class='line'>  4</span>  * @param name
+<span class='line'>  5</span>  *            {String}: name of entity
+<span class='line'>  6</span>  * @param position
+<span class='line'>  7</span>  *            {ex.base.Point}: position of entity
+<span class='line'>  8</span>  * @param actions
+<span class='line'>  9</span>  *            {Object}: contains properties that perform actions
+<span class='line'> 10</span>  * @param bindings
+<span class='line'> 11</span>  *            {Object}: associative array that binds inputs to actions
+<span class='line'> 12</span>  */</span><span class="WHIT">
+<span class='line'> 13</span> </span><span class="NAME">ex.using</span><span class="PUNC">(</span><span class="PUNC">[</span><span class="WHIT"> </span><span class="WHIT">
+<span class='line'> 14</span> </span><span class="WHIT">    </span><span class="STRN">"ex.event.EventTarget"</span><span class="WHIT">
+<span class='line'> 15</span> </span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 16</span> </span><span class="WHIT">	</span><span class="NAME">ex.define</span><span class="PUNC">(</span><span class="STRN">"ex.world.Entity"</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">ex.event.EventTarget</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 17</span> 
+<span class='line'> 18</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'> 19</span> 		 * The base class for all interactive game objects such as players,
+<span class='line'> 20</span> 		 * NPCs, and triggers.
+<span class='line'> 21</span> 		 * 
+<span class='line'> 22</span> 		 * @name ex.world.Entity
+<span class='line'> 23</span> 		 * 
+<span class='line'> 24</span> 		 * @param {String} name name of entity (used mostly in IDE)
+<span class='line'> 25</span> 		 * @param {ex.base.Vector} position original position of entity
+<span class='line'> 26</span> 		 * @param {ex.base.Sprite} sprite display object
+<span class='line'> 27</span> 		 * @param {Boolean} collides whether collision should be added
+<span class='line'> 28</span> 		 * 		to the entity.
+<span class='line'> 29</span> 		 * 
+<span class='line'> 30</span> 		 * @property {String} name
+<span class='line'> 31</span> 		 * @property {String} type
+<span class='line'> 32</span> 		 * 		Internal use only! Do not change!
+<span class='line'> 33</span> 		 * @property {ex.base.Vector} position
+<span class='line'> 34</span> 		 * @property {ex.base.Vector} velocity
+<span class='line'> 35</span> 		 * @property {Number} width
+<span class='line'> 36</span> 		 * @property {Number} height
+<span class='line'> 37</span> 		 * @property {Boolean} collides
+<span class='line'> 38</span> 		 * @property {Number} mass used in physics engine
+<span class='line'> 39</span> 		 * @property {ex.display.Sprite} sprite
+<span class='line'> 40</span> 		 * @constructor
+<span class='line'> 41</span> 		 */</span><span class="WHIT">
+<span class='line'> 42</span> </span><span class="WHIT">		</span><span class="NAME">constructor</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">name</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">position</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">sprite</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">collides</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 43</span> </span><span class="WHIT">			</span><span class="COMM">// Referencing data</span><span class="WHIT">
+<span class='line'> 44</span> </span><span class="WHIT">			</span><span class="NAME">this.name</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">name</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 45</span> </span><span class="WHIT">			</span><span class="NAME">this.type</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"Entity"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 46</span> </span><span class="WHIT">			</span><span class="COMM">// Physical data</span><span class="WHIT">
+<span class='line'> 47</span> </span><span class="WHIT">			</span><span class="NAME">this.position</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">position</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 48</span> </span><span class="WHIT">			</span><span class="NAME">this.width</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">sprite.width</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 49</span> </span><span class="WHIT">			</span><span class="NAME">this.height</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">sprite.height</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 50</span> </span><span class="WHIT">			</span><span class="NAME">this.velocity</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">ex.base.Vector</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="NUMB">0</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 51</span> </span><span class="WHIT">			</span><span class="NAME">this.collides</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">collides</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 52</span> </span><span class="WHIT">			</span><span class="NAME">this.mass</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 53</span> </span><span class="WHIT">			</span><span class="COMM">// Display data</span><span class="WHIT">
+<span class='line'> 54</span> </span><span class="WHIT">			</span><span class="NAME">this.sprite</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">sprite</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 55</span> </span><span class="WHIT">			</span><span class="NAME">this.sprite.position</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.position</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// pointer to this.position</span><span class="WHIT">
+<span class='line'> 56</span> </span><span class="WHIT">			</span><span class="WHIT">
+<span class='line'> 57</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="NAME">sprite.width</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">sprite.height</span><span class="WHIT"> </span><span class="PUNC">==</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 58</span> </span><span class="WHIT">				</span><span class="NAME">ex.event.listen</span><span class="PUNC">(</span><span class="NAME">sprite.img</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'load'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 59</span> </span><span class="WHIT">					</span><span class="NAME">this.width</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">sprite.width</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 60</span> </span><span class="WHIT">					</span><span class="NAME">this.height</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">sprite.height</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 61</span> </span><span class="WHIT">            	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 62</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 63</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 64</span> 
+<span class='line'> 65</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'> 66</span> 		 * performs actions every time period dt
+<span class='line'> 67</span> 		 * 
+<span class='line'> 68</span> 		 * @function
+<span class='line'> 69</span> 		 * @name update
+<span class='line'> 70</span> 		 * @memberOf ex.world.Entity
+<span class='line'> 71</span> 		 * 
+<span class='line'> 72</span> 		 * @param {Number} dt delta time, length of each time cycle
+<span class='line'> 73</span> 		 */</span><span class="WHIT">
+<span class='line'> 74</span> </span><span class="WHIT">		</span><span class="NAME">update</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">dt</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 75</span> </span><span class="WHIT">			</span><span class="NAME">this.sprite.update</span><span class="PUNC">(</span><span class="NAME">dt</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 76</span> </span><span class="WHIT">			</span><span class="NAME">this.updatePosition</span><span class="PUNC">(</span><span class="NAME">this.velocity</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">dt</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 77</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 78</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'> 79</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'> 80</span> 		 * Adds a time scaled vector to the entity's position.
+<span class='line'> 81</span> 		 * This must be used to update the entity's position or the entity will
+<span class='line'> 82</span> 		 * become out of sync with its sprite.
+<span class='line'> 83</span> 		 * 
+<span class='line'> 84</span> 		 * If you want to set the absolute position, see setPosition(newX, newY)
+<span class='line'> 85</span> 		 * @see ex.world.Entity.setPosition
+<span class='line'> 86</span> 		 * 
+<span class='line'> 87</span> 		 * @function
+<span class='line'> 88</span> 		 * @name updatePosition
+<span class='line'> 89</span> 		 * @memberOf ex.world.Entity
+<span class='line'> 90</span> 		 * 
+<span class='line'> 91</span> 		 * @param {ex.base.Vector} vector
+<span class='line'> 92</span> 		 * @param {Number} dt
+<span class='line'> 93</span> 		 */</span><span class="WHIT">
+<span class='line'> 94</span> </span><span class="WHIT">		</span><span class="NAME">updatePosition</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">vector</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">dt</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 95</span> </span><span class="WHIT">			</span><span class="NAME">this.position.addScaled</span><span class="PUNC">(</span><span class="NAME">vector</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">dt</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 96</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 97</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'> 98</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'> 99</span> 		 * Sets the absolute position of the entity with x,y values.
+<span class='line'>100</span> 		 * 
+<span class='line'>101</span> 		 * @function
+<span class='line'>102</span> 		 * @name setPosition
+<span class='line'>103</span> 		 * @memberOf ex.world.Entity
+<span class='line'>104</span> 		 * 
+<span class='line'>105</span> 		 * @param {Number} newX
+<span class='line'>106</span> 		 * @param {Number} newY
+<span class='line'>107</span> 		 */</span><span class="WHIT">
+<span class='line'>108</span> </span><span class="WHIT">		</span><span class="NAME">setPosition</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">newX</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">newY</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>109</span> </span><span class="WHIT">			</span><span class="NAME">this.position.x</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">newX</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>110</span> </span><span class="WHIT">			</span><span class="NAME">this.position.y</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">newY</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>111</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>112</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'>113</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>114</span> 		 * Called every time a collision is found with the entity.
+<span class='line'>115</span> 		 * 
+<span class='line'>116</span> 		 * @function
+<span class='line'>117</span> 		 * @name onCollide
+<span class='line'>118</span> 		 * @memberOf ex.world.Entity
+<span class='line'>119</span> 		 * 
+<span class='line'>120</span> 		 * @param {Entity} target the collision target
+<span class='line'>121</span> 		 */</span><span class="WHIT">
+<span class='line'>122</span> </span><span class="WHIT">		</span><span class="NAME">onCollide</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">target</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>123</span> </span><span class="WHIT">			</span><span class="WHIT">
+<span class='line'>124</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>125</span> 
+<span class='line'>126</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>127</span> 		 * Checks properties and determines if entity is visible.
+<span class='line'>128</span> 		 * 
+<span class='line'>129</span> 		 * @function
+<span class='line'>130</span> 		 * @name isVisible
+<span class='line'>131</span> 		 * @memberOf ex.world.Entity
+<span class='line'>132</span> 		 * 
+<span class='line'>133</span> 		 * @returns {Boolean}
+<span class='line'>134</span> 		 */</span><span class="WHIT">
+<span class='line'>135</span> </span><span class="WHIT">		</span><span class="NAME">isVisible</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>136</span> </span><span class="WHIT">			</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this.visible</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>137</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>138</span> 
+<span class='line'>139</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'>140</span> 		 * Supplies a canvas context and camera offset to each item and calls
+<span class='line'>141</span> 		 * their render functions
+<span class='line'>142</span> 		 * 
+<span class='line'>143</span> 		 * @param {Context} context canvas context to draw with
+<span class='line'>144</span> 		 * @param {Number} camX camera offset on x
+<span class='line'>145</span> 		 * @param {Number} camY camera offset on y
+<span class='line'>146</span> 		 */</span><span class="WHIT">
+<span class='line'>147</span> </span><span class="WHIT">		</span><span class="NAME">render</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">context</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">camX</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">camY</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>148</span> </span><span class="WHIT">			</span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="PUNC">!</span><span class="NAME">this.isVisible</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="COMM">// Don't render if it won't be seen</span><span class="WHIT">
+<span class='line'>149</span> </span><span class="WHIT">				</span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>150</span> 
+<span class='line'>151</span> </span><span class="WHIT">			</span><span class="COMM">// Render code</span><span class="WHIT">
+<span class='line'>152</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>153</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>154</span> </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span></pre></body></html>

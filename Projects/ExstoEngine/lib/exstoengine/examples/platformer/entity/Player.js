@@ -1,8 +1,8 @@
 ex.using([
-   'ex.simplex.Entity',
+   'ex.world.Entity',
    'ex.display.AnimatedSprite'
 ], function () {
-	ex.define('entity.Player', ex.simplex.Entity, {
+	ex.define('entity.Player', ex.world.Entity, {
 		constructor: function (name, position, sprite, collides, input) {
 			this._super("constructor", 
 					[name, 
