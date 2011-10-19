@@ -8,6 +8,7 @@
           "ex.world.Map",
           "ex.world.Layer",
           "ex.world.CollisionMap",
+          "ex.world.Trigger",
           "ex.display.Sprite",
           "ex.display.SpriteMap",
           "ex.sound.Sound",
@@ -67,11 +68,11 @@
 		function titleScreenToGame() {
 			_engine.currentWorld.removeObject(titleScreen);
 			startGame(_engine);
-			document.getElementById("buttonJump").removeEventListener('mousedown', titleScreenToGame, false);
+			//document.getElementById("buttonJump").removeEventListener('mousedown', titleScreenToGame, false);
 		};
 		
 		// UI button to start game
-		document.getElementById("buttonJump").addEventListener('mousedown', titleScreenToGame, false);
+//		document.getElementById("buttonJump").addEventListener('mousedown', titleScreenToGame, false);
 		
 		_engine.onUpdate = function(){
 			// Extra code to run on each update
@@ -199,11 +200,11 @@
 				_engine.input);
 		
 		// UI Setup
-		document.getElementById("buttonJump").addEventListener('mousedown', function(){player.jump();}, false);
-		document.getElementById("buttonLeft").addEventListener('mousedown', function(){_engine.input.keys[65] = true;}, false);
-		document.getElementById("buttonRight").addEventListener('mousedown', function(){_engine.input.keys[68] = true;}, false);
-		document.getElementById("buttonLeft").addEventListener('mouseup', function(){_engine.input.keys[65] = false;}, false);
-		document.getElementById("buttonRight").addEventListener('mouseup', function(){_engine.input.keys[68] = false;}, false);
+//		document.getElementById("buttonJump").addEventListener('mousedown', function(){player.jump();}, false);
+//		document.getElementById("buttonLeft").addEventListener('mousedown', function(){_engine.input.keys[65] = true;}, false);
+//		document.getElementById("buttonRight").addEventListener('mousedown', function(){_engine.input.keys[68] = true;}, false);
+//		document.getElementById("buttonLeft").addEventListener('mouseup', function(){_engine.input.keys[65] = false;}, false);
+//		document.getElementById("buttonRight").addEventListener('mouseup', function(){_engine.input.keys[68] = false;}, false);
 		
 		// Setup explosion animations & teleporter
 		var explosion1 = new entity.Explosion(
@@ -230,6 +231,10 @@
 						48, 48, 7, 
 						_engine.imageRepository.getImage("Explosion")),
 				true);
+		
+		// Teleporter with onCollide event set
+		// TODO: make the teleport event a one line call within teleport
+		// 	e.g.: teleporter.teleport(player, level2, 400, 600);
 		var teleporter = new entity.Teleporter(
 				"Teleporter", 
 				new ex.base.Vector(750, 130), 
@@ -238,15 +243,15 @@
 						60, 60, 10, 
 						_engine.imageRepository.getImage("Teleport")),
 				true);
-		teleporter.addEventListener('Player', function(){
-			if(!teleporter.triggered){
+		teleporter.onCollide = function(target, data){
+			if(target.name == "Player" && !teleporter.triggered){
 				playLaserSound();
 				teleporter.triggered = true;
 				_engine.currentWorld.loadLevel("Level 2");
 				_engine.currentWorld.activeLevel.getLayer("Ground").addItem(player);
 				_engine.collisionManager.setActiveLevel(_engine.currentWorld.activeLevel);
 			}
-		});
+		};
 
 		var asteroid = new entity.Asteroid(
 				"Asteroid",
@@ -280,9 +285,9 @@
 		}
 		
 		// Load tile maps
-		var level1Map = new ex.display.SpriteMap(32, 32, level1Tiles, _engine.imageRepository.getImage("Tiles"));
-		var level1Overlay = new ex.display.SpriteMap(32, 32, level1Hidden, _engine.imageRepository.getImage("Tiles"));
-		var level2Map = new ex.display.SpriteMap(32, 32, level2Tiles, _engine.imageRepository.getImage("Tiles"));
+		var level1Map = new ex.display.SpriteMap(32, 32, level1Tiles, _engine.imageRepository.getImage("Tiles"), "Base Map");
+		var level1Overlay = new ex.display.SpriteMap(32, 32, level1Hidden, _engine.imageRepository.getImage("Tiles"), "Hidden Overlay");
+		var level2Map = new ex.display.SpriteMap(32, 32, level2Tiles, _engine.imageRepository.getImage("Tiles"), "Base Map");
 		
 		// Load collision maps
 		var level1CollisionMap = new ex.world.CollisionMap(32, 32, level1Collision, true, edgeDebug);
@@ -299,6 +304,15 @@
 		firstLevel.getLayer("Ground").addItem(level1Overlay);
 		firstLevel.getLayer("Ground").addItem(level1Map);
 		
+		var hiddenAreaTrigger = new ex.world.Trigger(
+				new ex.base.Point(1088, 608),
+				64, 32);
+		hiddenAreaTrigger.addEventListener('Player', function(){
+			_engine.currentWorld.activeLevel.getLayer("Ground").getItem(level1Overlay.name).visible = false;
+		});
+		
+		firstLevel.getLayer("Ground").addItem(hiddenAreaTrigger);
+		
 		// Setup level 2
 		var secondLevel = new ex.world.Map("Level 2");
 		secondLevel.addLayer(new ex.world.Layer("Asteroid Field", null, new ex.base.Vector(0,0), new ex.base.Vector(1.5,1.5)));
@@ -309,6 +323,8 @@
 		secondLevel.getLayer("Ground").addItem(asteroid);
 		secondLevel.addLayer(new ex.world.Layer("Background", null, new ex.base.Vector(0,0), new ex.base.Vector(0,0)));
 		secondLevel.getLayer("Background").addItem(nebula);
+		
+		// Add all asteroids
 		var index = asteroidField.length;
 		var asteroidLayer = secondLevel.getLayer("Asteroid Field");
 		while(index--){

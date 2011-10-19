@@ -4,7 +4,9 @@
 			this.algorithms = {
 				EntityToTileMap: 	boxToMapCheck,
 				TileMapToEntity: 	boxToMapCheck,
-				EntityToEntity: 	boxToBoxCheck
+				EntityToEntity: 	boxToBoxCheck,
+				EntityToTrigger:	boxToBoxCheck,
+				TriggerToEntity:	boxToBoxCheck,
 			};
 		},
 		
@@ -33,7 +35,9 @@
 		
 		detectCollisionBetween: function(source, target, dt) {
 			var selector = source.type + "To" + target.type;
-			return this.algorithms[selector](source, target, dt);
+			if(this.algorithms[selector]){
+				return this.algorithms[selector](source, target, dt);
+			}
 		}
 	});
 	

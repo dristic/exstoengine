@@ -1,7 +1,5 @@
-ex.using([ 
-    "ex.event.EventTarget"
-], function() {
-	ex.define("ex.world.Entity", ex.event.EventTarget, {
+(function() {
+	ex.define("ex.world.Entity", {
 
 		/**
 		 * The base class for all interactive game objects such as players,
@@ -50,8 +48,6 @@ ex.using([
 					this.height = sprite.height;
             	}, this);
 			}
-			
-			this._super('constructor', []);
 		},
 
 		/**
@@ -118,7 +114,7 @@ ex.using([
 		 * @param {Entity} target the collision target
 		 */
 		onCollide: function(target, data) {
-			this.dispatchEvent(target.name, data);
+			
 		},
 
 		/**
@@ -149,4 +145,4 @@ ex.using([
 			// Render code
 		}
 	});
-});
+}());

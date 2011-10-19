@@ -21,6 +21,10 @@ ex.using([
 			this.width = width;
 			this.height = height;
 			this.anchored = true;
+			this.collides = true;
+			this.type = "Trigger";
+			
+			this._super('constructor', []);
 		},
 		
 		onCollide: function(target, data){

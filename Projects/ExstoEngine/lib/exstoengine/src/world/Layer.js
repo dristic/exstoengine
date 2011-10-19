@@ -76,6 +76,26 @@ ex.using([
 			}
 		},
 		
+		/**
+		 * Retrieves an item by name.
+		 * 
+		 * @function
+		 * @name getItem
+		 * @memberOf ex.world.Layer
+		 * 
+		 * @param {String} name name of the item to retrieve
+		 * 
+		 * @returns {Object} returns the item if found, otherwise null
+		 */
+		getItem: function(name) {
+			var index = this.items.length;
+			while(index--) {
+				if(this.items[index].name == name){
+					return this.items[index];
+				}
+			}
+		},
+		
 		_setMap : function(map) {
 			this.map = map;
 			this.items.push(this.map);
@@ -94,7 +114,7 @@ ex.using([
 			if (index < 0 || index >= this.items.length) {
 				return;
 			}
-			this.items.splice($index, 1);
+			this.items.splice(index, 1);
 		},
 
 		/**

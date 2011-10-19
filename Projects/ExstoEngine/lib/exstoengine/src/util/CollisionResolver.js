@@ -3,7 +3,7 @@
 		constructor: function(){
 			this.algorithms = {
 					EntityToTileMap: 	resolveBoxToMap,
-					EntityToEntity: 	resolveBoxToBox
+					EntityToEntity: 	resolveBoxToBox,
 				};
 		},
 		
@@ -40,7 +40,9 @@
 		 */
 		resolveCollisionBetween: function(source, target, data, dt) {
 			var selector = source.type + "To" + target.type;
-			return this.algorithms[selector](source, target, data, dt);
+			if(this.algorithms[selector]){
+				return this.algorithms[selector](source, target, data, dt);
+			}
 		}
 	});
 	
