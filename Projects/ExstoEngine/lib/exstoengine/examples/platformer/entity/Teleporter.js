@@ -18,10 +18,6 @@ ex.using([
 			this._super("update", [dt]);
 		},
 		
-		onCollide: function(target) {
-			
-		},
-		
 		render: function(context, camX, camY){
 			this.sprite.render(context, camX, camY);
 		}

@@ -1,15 +1,3 @@
-/**
- * 
- * @class ex.world.Entity
- * @param name
- *            {String}: name of entity
- * @param position
- *            {ex.base.Point}: position of entity
- * @param actions
- *            {Object}: contains properties that perform actions
- * @param bindings
- *            {Object}: associative array that binds inputs to actions
- */
 ex.using([ 
     "ex.event.EventTarget"
 ], function() {
@@ -62,6 +50,8 @@ ex.using([
 					this.height = sprite.height;
             	}, this);
 			}
+			
+			this._super('constructor', []);
 		},
 
 		/**
@@ -127,8 +117,8 @@ ex.using([
 		 * 
 		 * @param {Entity} target the collision target
 		 */
-		onCollide: function(target) {
-			
+		onCollide: function(target, data) {
+			this.dispatchEvent(target.name, data);
 		},
 
 		/**

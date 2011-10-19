@@ -49,7 +49,7 @@ ex.using([], function () {
 	// The extendable event target object
     ex.define("ex.event.EventTarget", {
         constructor: function () {
-        	this._listeners = [];
+        	this._listeners = {};
         },
         
         addEventListener: function (event, func) {

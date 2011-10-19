@@ -238,16 +238,16 @@
 						60, 60, 10, 
 						_engine.imageRepository.getImage("Teleport")),
 				true);
-		teleporter.onCollide = function(target, data){
-			if(target.name == "Player" && !teleporter.triggered){
+		teleporter.addEventListener('Player', function(){
+			if(!teleporter.triggered){
 				playLaserSound();
 				teleporter.triggered = true;
 				_engine.currentWorld.loadLevel("Level 2");
 				_engine.currentWorld.activeLevel.getLayer("Ground").addItem(player);
 				_engine.collisionManager.setActiveLevel(_engine.currentWorld.activeLevel);
-				
 			}
-		};
+		});
+
 		var asteroid = new entity.Asteroid(
 				"Asteroid",
 				new ex.base.Vector(750,162),
