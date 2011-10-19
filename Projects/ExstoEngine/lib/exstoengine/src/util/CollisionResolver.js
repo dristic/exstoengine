@@ -2,7 +2,7 @@
 	ex.define("ex.util.CollisionResolver", {
 		constructor: function(){
 			this.algorithms = {
-					EntityToSpriteMap: 	resolveBoxToMap,
+					EntityToTileMap: 	resolveBoxToMap,
 					EntityToEntity: 	resolveBoxToBox
 				};
 		},

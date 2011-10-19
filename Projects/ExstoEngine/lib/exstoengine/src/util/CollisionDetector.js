@@ -2,8 +2,8 @@
 	ex.define("ex.util.CollisionDetector", {
 		constructor: function() {
 			this.algorithms = {
-				EntityToSpriteMap: 	boxToSpriteMapCheck,
-				SpriteMapToEntity: 	boxToSpriteMapCheck,
+				EntityToTileMap: 	boxToMapCheck,
+				TileMapToEntity: 	boxToMapCheck,
 				EntityToEntity: 	boxToBoxCheck
 			};
 		},
@@ -76,9 +76,9 @@
 	 * 
 	 * @returns {CollisionData} both elements with a list of tiles that collided.
 	 */
-	function boxToSpriteMapCheck(box, map, dt){	
+	function boxToMapCheck(box, map, dt){	
 		// Swap box and map if the arguments get pushed in backwards
-		if(box.type == "SpriteMap"){
+		if(box.type == "TileMap"){
 			var temp = box;
 			box = map;
 			map = temp;

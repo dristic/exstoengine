@@ -16,7 +16,6 @@ ex.using([
 		 * 		tiles in the supplied tileSet
 		 * @param {Image} tileSet
 		 * @param {String} name
-		 * @param {Object} edgeDebug
 		 * 
 		 * @property {Boolean} visible Controls whether the object is drawn
 		 * 		to the screen.
@@ -28,19 +27,15 @@ ex.using([
 		 * @property {Image} tileSet the tile set to use when rendering.
 		 * @property {ex.base.Vector} position
 		 * @property {ex.base.Vector} scrollFactor
-		 * @property {Object} edgeDebug contains collision debug images.
-		 * 		If supplied, collision edges will be shown graphically.
 		 */
-		constructor: function(tileWidth, tileHeight, map, tileSet, name, edgeDebug) {
+		constructor: function(tileWidth, tileHeight, map, tileSet, name) {
 			this.visible = true;
-			this.collides = true;
+			this.collides = false;
 			this.name = name;
 			this.type = "SpriteMap";
 			this.tileSet = tileSet;
 			this.position = new ex.base.Vector(0,0);
 			this.scrollFactor = new ex.base.Vector(1,1);
-			
-			this.edgeDebug = edgeDebug;
 			
 			this._super("constructor", [tileWidth, tileHeight, map]);
 		},
@@ -107,38 +102,7 @@ ex.using([
 								      tile.position.y - (camY * this.scrollFactor.y),
 								      tile.width,
 								      tile.height);
-						if(this.edgeDebug){
-							if(tile.edges.left){
-								context.drawImage(this.edgeDebug.left,
-										tile.position.x - (camX * this.scrollFactor.x),
-										tile.position.y - (camY * this.scrollFactor.y),
-										tile.width,
-										tile.height);
-							}
-							if(tile.edges.right){
-								context.drawImage(this.edgeDebug.right,
-										tile.position.x - (camX * this.scrollFactor.x),
-										tile.position.y - (camY * this.scrollFactor.y),
-										tile.width,
-										tile.height);
-							}
-							if(tile.edges.top){
-								context.drawImage(this.edgeDebug.top,
-										tile.position.x - (camX * this.scrollFactor.x),
-										tile.position.y - (camY * this.scrollFactor.y),
-										tile.width,
-										tile.height);
-							}
-							if(tile.edges.bottom){
-								context.drawImage(this.edgeDebug.bottom,
-										tile.position.x - (camX * this.scrollFactor.x),
-								      	tile.position.y - (camY * this.scrollFactor.y),
-								      	tile.width,
-								      	tile.height);
-							}
-						}
 					}
-					
 				}
 			}
 		}

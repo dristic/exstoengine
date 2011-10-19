@@ -35,11 +35,12 @@ ex.using([
 		 * @property {Number} width
 		 * @property {Number} height
 		 * @property {Boolean} collides
+		 * @property {Boolean} anchored if true, entity will be unable to move
 		 * @property {Number} mass used in physics engine
 		 * @property {ex.display.Sprite} sprite
 		 * @constructor
 		 */
-		constructor : function(name, position, sprite, collides) {
+		constructor : function(name, position, sprite, collides, anchored) {
 			// Referencing data
 			this.name = name;
 			this.type = "Entity";
@@ -49,6 +50,7 @@ ex.using([
 			this.height = sprite.height;
 			this.velocity = new ex.base.Vector(0,0);
 			this.collides = collides;
+			this.anchored = anchored;
 			this.mass = 1;
 			// Display data
 			this.sprite = sprite;
@@ -73,7 +75,9 @@ ex.using([
 		 */
 		update : function(dt) {
 			this.sprite.update(dt);
-			this.updatePosition(this.velocity, dt);
+			if(!this.anchored){
+				this.updatePosition(this.velocity, dt);
+			}
 		},
 		
 		/**
@@ -92,8 +96,10 @@ ex.using([
 		 * @param {Number} dt
 		 */
 		updatePosition: function(vector, dt) {
-			this.position.addScaled(vector, dt);
-		},
+			if(!this.anchored){
+				this.position.addScaled(vector, dt);
+			}
+		},	
 		
 		/**
 		 * Sets the absolute position of the entity with x,y values.
@@ -106,8 +112,10 @@ ex.using([
 		 * @param {Number} newY
 		 */
 		setPosition: function(newX, newY) {
-			this.position.x = newX;
-			this.position.y = newY;
+			if(!this.anchored){
+				this.position.x = newX;
+				this.position.y = newY;
+			}
 		},
 		
 		/**

@@ -63,11 +63,11 @@ ex.using([
 		 * @param {Object} item something that belongs in the layer
 		 */
 		addItem : function(item) {
-			if(item.type == "SpriteMap"){
+			if(item instanceof ex.world.CollisionMap){
 				if(this.map == null){
 					this._setMap(item);
 				} else {
-					console.error("Layers cannot contain more than one SpriteMap");
+					console.error("Layers cannot contain more than one CollisionMap");
 				}
 			} else {
 				item.visible = this.visible;
