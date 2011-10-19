@@ -60,12 +60,26 @@ ex.using([], function () {
         	this._listeners[event].push(func);
         },
         
+        /**
+         * Dispatches all events with the selector event.
+         * Returns true if events are dispatched, false
+         * if there are no events for that selector.
+         * 
+         * @param event
+         * @param params
+         * @returns {Boolean}
+         */
         dispatchEvent: function (event, params) {
+        	if(this._listeners[event] == null){
+        		return false;
+        	}
+        	
         	var i = this._listeners[event].length;
         	while(i--) {
         		var func = this._listeners[event][i];
-        		func(event);
+        		func(params);
         	}
+        	return true;
         },
         
         removeEventListener: function (event, func) {

@@ -4,8 +4,6 @@ ex.using([
 ], function () {
 	ex.define("ex.world.CollisionMap", ex.world.TileMap, {
 		constructor: function(tileWidth, tileHeight, data, debug, debugImages) {
-			
-			this.data = data;
 			this.tileWidth = tileWidth;
 			this.tileHeight = tileHeight;
 			this.collides = true;
@@ -15,9 +13,7 @@ ex.using([
 			
 			this.type = "TileMap";
 			
-			if(debug){
-				this.render = this.debugRender;
-			}
+			this.debug = debug;
 			
 			this.debugImages = debugImages;
 			
@@ -66,6 +62,10 @@ ex.using([
 			
 		},
 		
+		render: function(context, camX, camY){
+			// This has no render view
+		},
+		
 		/**
 		 * 
 		 */
@@ -76,7 +76,7 @@ ex.using([
 			for(yPos = 0; yPos < this.data.length; yPos++){
 				for(xPos = 0; xPos < this.data[yPos].length; xPos++){
 					tile = this.data[yPos][xPos];
-					if(tile.value == true){
+					if(tile.value != 0){
 						this._renderTileEdges(context, camX, camY, tile);
 					}
 				}
@@ -92,28 +92,28 @@ ex.using([
 		 */
 		_renderTileEdges: function(context, camX, camY, tile) {
 			if(tile.edges.left){
-				context.drawImage(this.edgeDebug.left,
+				context.drawImage(this.debugImages.left,
 						tile.position.x - (camX * this.scrollFactor.x),
 						tile.position.y - (camY * this.scrollFactor.y),
 						tile.width,
 						tile.height);
 			}
 			if(tile.edges.right){
-				context.drawImage(this.edgeDebug.right,
+				context.drawImage(this.debugImages.right,
 						tile.position.x - (camX * this.scrollFactor.x),
 						tile.position.y - (camY * this.scrollFactor.y),
 						tile.width,
 						tile.height);
 			}
 			if(tile.edges.top){
-				context.drawImage(this.edgeDebug.top,
+				context.drawImage(this.debugImages.top,
 						tile.position.x - (camX * this.scrollFactor.x),
 						tile.position.y - (camY * this.scrollFactor.y),
 						tile.width,
 						tile.height);
 			}
 			if(tile.edges.bottom){
-				context.drawImage(this.edgeDebug.bottom,
+				context.drawImage(this.debugImages.bottom,
 						tile.position.x - (camX * this.scrollFactor.x),
 				      	tile.position.y - (camY * this.scrollFactor.y),
 				      	tile.width,

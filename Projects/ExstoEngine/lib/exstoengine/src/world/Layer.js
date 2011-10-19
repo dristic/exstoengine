@@ -188,6 +188,14 @@ ex.using([
 				this.items[count].render(context, camX * this.scrollFactor.x,
 						camY * this.scrollFactor.y);
 			}
+		},
+		
+		debugRender: function (context, camX, camY) {
+			this.render(context, camX, camY);
+			var count = this.items.length;
+			while (count--) {
+				this.items[count].debugRender(context, camX, camY);
+			}
 		}
 	});
 });

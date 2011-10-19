@@ -47,7 +47,7 @@ ex.using([
 		 * 
 		 * @param {Number} x
 		 * @param {Number} y
-		 * @returns {ex.world.Tile
+		 * @returns {ex.world.Tile}
 		 */
 		getTile: function(x, y) {
 			x = Math.floor(x / this.tileWidth);
