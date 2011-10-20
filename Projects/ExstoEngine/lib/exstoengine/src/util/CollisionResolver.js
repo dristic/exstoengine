@@ -63,7 +63,19 @@
 		}
 	};
 	
-	function resolveBoxToBox(source, target, data, dt) {
-		
+	function resolveBoxToBox(source, target, data, dt) {		
+		if(source.anchored) {
+			if(target.anchored) {
+				return;
+			} else {
+				resolveBoxToMap(target, source, data, dt);
+			}
+		} else {
+			if(target.anchored) {
+				resolveBoxToMap(source, target, data, dt);
+			} else {
+				
+			}
+		}
 	};
 }());

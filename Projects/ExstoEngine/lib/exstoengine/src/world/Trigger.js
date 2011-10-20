@@ -18,6 +18,7 @@ ex.using([
 		 */
 		constructor: function(position, width, height) {
 			this.position = position;
+			this.velocity = new ex.base.Vector(0,0);
 			this.width = width;
 			this.height = height;
 			this.anchored = true;

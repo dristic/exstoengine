@@ -68,10 +68,67 @@
 			}
 		}
 		
+		var penVector = new ex.base.Vector(0,0),
+			tempPenVector = new ex.base.Vector(0,0);
+		// Find y penetration
+		if(source.velocity.y > 0) {
+			// Find out if box is penetrating top edge of tile
+			if(source.position.y < target.position.y && source.position.y + source.height > target.position.y) {
+				tempPenVector.y = (source.position.y + source.height) - target.position.y;
+			}
+		} else if(source.velocity.y < 0) {
+			// Find out if box is penetrating bottom edge of tile
+			if(target.position.y < source.position.y && target.position.y + target.height > source.position.y) {
+				tempPenVector.y = source.position.y - (target.position.y + target.height);
+			}
+		}
+		
+		// Find x penetration
+		if(source.velocity.x > 0) {
+			// Find out if box is penetrating left edge of tile
+			if(source.position.x < target.position.x && source.position.x + source.width > target.position.x) {
+				tempPenVector.x = (source.position.x + source.width) - target.position.x;
+			}
+		} else if(source.velocity.x < 0) {
+			// Find out if box is penetrating right edge of tile
+			if(target.position.x < source.position.x && target.position.x + target.width > source.position.x) {
+				tempPenVector.x = source.position.x - (target.position.x + target.width);
+			}
+		}
+		
+		if(tempPenVector.x != 0 && tempPenVector.y != 0) {
+			var deltaDX = source.velocity.x * dt,
+				deltaDY = source.velocity.y * dt,
+				x2 = tempPenVector.x,
+				y2 = tempPenVector.y,
+				x1 = x2 - deltaDX,
+				y1 = y2 - deltaDY,
+				b = -(y2 - (( (y1 - y2) / (x1 - x2) ) * x2)),
+				top = tempPenVector.y > 0;
+				
+			if(top) {
+				if(b < 0)
+					penVector.x = tempPenVector.x;
+				else
+					penVector.y = tempPenVector.y;
+			} else {
+				if(b > 0)
+					penVector.x = tempPenVector.x;
+				else
+					penVector.y = tempPenVector.y;
+			}
+		} else if(tempPenVector.x != 0) {
+			penVector.x = tempPenVector.x;
+		} else if(tempPenVector.y != 0) {
+			penVector.y = tempPenVector.y;
+		}
+		
 		return {
 			source: source,
 			target: target,
-			data:	null
+			data: {
+				pen: penVector
+			}
 		};
 	};
 	
