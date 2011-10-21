@@ -8,7 +8,9 @@ ex.using([
 		 * 
 		 * @property {ex.base.Point} position Position of camera.
 		 * 		Initialized to (0,0).
-		 * @property {Object} following Entity to follow. 
+		 * @property {Number} width width of the viewport
+		 * @property {Number} height height of the viewport
+		 * @property {Object} following Entity being followed. 
 		 * 		Initialized to null.
 		 * @property {Canvas} canvas Canvas to use for rendering.
 		 * 		Initialized to null.

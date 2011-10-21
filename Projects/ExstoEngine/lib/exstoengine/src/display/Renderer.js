@@ -38,15 +38,14 @@
 		 * @memberOf ex.display.Renderer
 		 * 
 		 * @param {Number} dt 
-		 * @param {Number} camX
-		 * @param {Number} camY
+		 * @param {ex.display.Camera} camera
 		 */
 		update: function (dt, camera) {			
 			this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 			
 			var i = this.renderables.length;
 			while(i--) {
-				this.renderables[i].render(this.context, camera.position.x, camera.position.y);
+				this.renderables[i].render(this.context, camera.position.x, camera.position.y, camera.width, camera.height);
 			}
 		},
 		
