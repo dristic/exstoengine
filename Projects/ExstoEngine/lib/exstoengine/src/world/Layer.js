@@ -199,24 +199,35 @@ ex.using([
 		 * @param {Context} context canvas context to draw with
 		 * @param {Number} camX camera offset on x
 		 * @param {Number} camY camera offset on y
+		 * @param {Number} camWidth viewport width
+		 * @param {Number} camHeight viewport height
 		 */
-		render : function(context, camX, camY) {
+		render : function(context, camX, camY, camWidth, camHeight) {
 			if (!this.isVisible()) // Don't render if it won't be seen
 				return;
 			
 			// render items
 			var count = this.items.length;
 			while (count--) {
-				this.items[count].render(context, camX * this.scrollFactor.x,
-						camY * this.scrollFactor.y);
+				this.items[count].render(
+						context, 
+						camX * this.scrollFactor.x,
+						camY * this.scrollFactor.y, 
+						camWidth, 
+						camHeight);
 			}
 		},
 		
-		debugRender: function (context, camX, camY) {
+		debugRender: function (context, camX, camY, camWidth, camHeight) {
 			this.render(context, camX, camY);
 			var count = this.items.length;
 			while (count--) {
-				this.items[count].debugRender(context, camX, camY);
+				this.items[count].debugRender(
+						context, 
+						camX * this.scrollFactor.x, 
+						camY * this.scrollFactor.y,
+						camWidth, 
+						camHeight);
 			}
 		}
 	});

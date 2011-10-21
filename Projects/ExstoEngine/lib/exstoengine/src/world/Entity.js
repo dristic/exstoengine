@@ -126,7 +126,7 @@
 		 * 
 		 * @returns {Boolean}
 		 */
-		isVisible : function() {
+		isVisible: function() {
 			return this.visible;
 		},
 
@@ -137,12 +137,16 @@
 		 * @param {Context} context canvas context to draw with
 		 * @param {Number} camX camera offset on x
 		 * @param {Number} camY camera offset on y
+		 * @param {Number} camWidth viewport width
+		 * @param {Number} camHeight viewport height
 		 */
-		render : function(context, camX, camY) {
-			if (!this.isVisible()) // Don't render if it won't be seen
+		render: function(context, camX, camY, camWidth, camHeight) {
+			// Don't render if it won't be seen
+			if (!this.isVisible())
 				return;
 
 			// Render code
+			this.sprite.render(context, camX, camY, camWidth, camHeight);
 		}
 	});
 }());

@@ -119,11 +119,13 @@ ex.using([
 		 * @param {Context} context canvas context to draw with
 		 * @param {Number} camX camera offset on x
 		 * @param {Number} camY camera offset on y
+		 * @param {Number} camWidth viewport width
+		 * @param {Number} camHeight viewport height
 		 */
-		render : function(context, camX, camY) {
+		render : function(context, camX, camY, camWidth, camHeight) {
 			var i = this.layers.length;
 			while (i--) {
-				this.layers[i].render(context, camX, camY);
+				this.layers[i].render(context, camX, camY, camWidth, camHeight);
 			}
 		}
 	});
