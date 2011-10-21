@@ -9,18 +9,6 @@ ex.using([
 					 position,
 					 sprite,
 					 collides]);
-		},
-		
-		update: function(dt) {
-			this._super("update", [dt]);
-		},
-		
-		onCollide: function(target) {
-
-		},
-		
-		render: function(context, camX, camY){
-			this.sprite.render(context, camX, camY);
 		}
 	});
 });

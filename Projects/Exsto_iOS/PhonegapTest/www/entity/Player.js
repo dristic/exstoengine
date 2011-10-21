@@ -16,10 +16,6 @@ ex.using([
 			this.speed = 10;
 		},
 		
-		onCollide: function(target, data, dt){
-
-		},
-		
 		jump: function(){
 			this.velocity.y -= this.speed * 60;
 		},
@@ -79,10 +75,9 @@ ex.using([
 			this.velocity.scale(0.95);
 			
 			this._super("update", [dt]);
-		},
-		
-		render: function(context, camX, camY){
-			this.sprite.render(context, camX, camY);
+			
+			if(this.velocity.x < 0.5 && this.velocity.x > -0.5)
+				this.velocity.x = 0;
 		}
 	});
 	
