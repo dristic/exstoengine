@@ -155,23 +155,37 @@ ex.using([
 		
 		/**
 		 * Renders the current frame of the animation.
-		 * @function
-		 * @name render
-		 * @memberOf ex.display.AnimatedSprite
-		 * @param {Canvas Context} context
-		 * @param {Number} camX camera offset on x axis
-		 * @param {Number} camY camera offset on y axis
+		 * 
+		 * @param {Context} context canvas context to draw with
+		 * @param {Number} camX camera offset on x
+		 * @param {Number} camY camera offset on y
+		 * @param {Number} camWidth viewport width
+		 * @param {Number} camHeight viewport height
 		 */
-		render: function (context, camX, camY) {
-			context.drawImage(this.img, 
-							  this.renderingRect.position.x, 
-							  this.renderingRect.position.y,
-							  this.renderingRect.width,
-							  this.renderingRect.height,
-							  this.position.x - (camX * this.scrollFactor.x), 
-							  this.position.y - (camY * this.scrollFactor.y),
-							  this.renderingRect.width,
-							  this.renderingRect.height);
+		render: function (context, camX, camY, camWidth, camHeight) {
+			if(!this.visible){
+				return;
+			}
+			
+			// Position of the animated sprite in the viewport
+			var viewPortX = this.position.x - (camX * this.scrollFactor.x),
+				viewPortY = this.position.y - (camY * this.scrollFactor.y);
+			
+			// Render only if the animated sprite is within the viewport
+			if((viewPortX + this.renderingRect.width) > 0
+					&& viewPortX < camWidth
+					&& (viewPortY + this.renderingRect.height) > 0
+					&& viewPortY < camHeight) {
+				context.drawImage(this.img, 
+								  this.renderingRect.position.x, 
+								  this.renderingRect.position.y,
+								  this.renderingRect.width,
+								  this.renderingRect.height,
+								  viewPortX, 
+								  viewPortY,
+								  this.renderingRect.width,
+								  this.renderingRect.height);
+			}
 		},
 		
 		/**

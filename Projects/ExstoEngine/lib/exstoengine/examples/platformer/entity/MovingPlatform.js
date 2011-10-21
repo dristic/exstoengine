@@ -37,22 +37,12 @@ ex.using([
 			this._super("update", [dt]);
 		},
 		
-		onCollide: function(target, data) {
-			if(target instanceof ex.world.Entity && !target.anchored) {
-				target.velocity.addS
-			}
-		},
-		
 		start: function(){
 			this.moving = true;
 		},
 		
 		stop: function(){
 			this.moving = false;
-		},
-		
-		render: function(context, camX, camY){
-			this.sprite.render(context, camX, camY);
 		}
 	});
 });

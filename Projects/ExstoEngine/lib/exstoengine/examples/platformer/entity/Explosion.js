@@ -12,18 +12,6 @@ ex.using([
 			this.sprite.createAnimation('Explode', [0, 1, 2, 3]);
 			this.sprite.play('Explode');
 			this.speed = 10;
-		},
-		
-		update: function(dt) {
-			this._super("update", [dt]);
-		},
-		
-		onCollide: function(target) {
-
-		},
-		
-		render: function(context, camX, camY){
-			this.sprite.render(context, camX, camY);
 		}
 	});
 });

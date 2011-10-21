@@ -189,8 +189,8 @@ ex.using([
 		},
 
 		/**
-		 * Supplies a canvas context and camera offset to each item and calls
-		 * their render functions
+		 * Supplies a canvas context and camera parameters for
+		 * rendering to the canvas.
 		 * 
 		 * @function
 		 * @name render

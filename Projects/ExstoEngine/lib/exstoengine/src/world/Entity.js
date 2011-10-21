@@ -131,8 +131,9 @@
 		},
 
 		/**
-		 * Supplies a canvas context and camera offset to each item and calls
-		 * their render functions
+		 * Supplies a canvas context and camera parameters for
+		 * rendering to the canvas. Can be overridden by subclasses
+		 * for customized rendering.
 		 * 
 		 * @param {Context} context canvas context to draw with
 		 * @param {Number} camX camera offset on x
