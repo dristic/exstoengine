@@ -18,8 +18,14 @@ if(!Array.indexOf){
 	
 	/**
 	 * Copies the values from one object to another object.
+	 * 
+	 * @function
+	 * @name extend
+	 * @memberOf ex
+	 * 
 	 * @param {Object} object The object to copy values to
 	 * @param {Object} other The object to copy values from
+	 * 
 	 * @return {Object} Returns the new object for chaining
 	 */
 	ex.extend = function (object, other) {
@@ -29,15 +35,18 @@ if(!Array.indexOf){
 		return object;
 	};
 	
-	/**
-	 * ex helper functions for basic library use
-	 */
 	ex.extend(ex, {
 		/**
 		 * Calls the function using apply which sets the 'this' when running
 		 * that function to the object specified.
+		 * 
+		 * @function
+		 * @name bind
+		 * @memberOf ex
+		 * 
 		 * @param {Object} object Object to be bound
 		 * @param {Function} func Function to receive object
+		 * 
 		 * @returns {Function} Function with object bound
 		 */
 		bind: function (object, func) {
@@ -47,8 +56,15 @@ if(!Array.indexOf){
 		},
 		
 		/**
-		 * Makes a copy of an object by placing it in a new object's constructor
+		 * Makes a copy of an object by placing it in a new 
+		 * object's constructor.
+		 * 
+		 * @function
+		 * @name clone
+		 * @memberOf ex
+		 * 
 		 * @param object {Object} object to be cloned
+		 * 
 		 * @returns {Object} cloned object constructor
 		 */
 		clone: function (object) {
@@ -60,7 +76,12 @@ if(!Array.indexOf){
 		/**
 		 * Equivalent to a foreach loop in other languages, 
 		 * iterates through object and runs func on each property.
-		 * @param object {Object} the array or object being passed in
+		 * 
+		 * @function
+		 * @name each
+		 * @memberOf ex
+		 * 
+		 * @param {Object}object  the array or object being passed in
 		 * @param func {Function} function to run on each property of object
 		 */
 		each: function (object, func) {
@@ -69,6 +90,24 @@ if(!Array.indexOf){
 		            action(property, object[property]);
 		        }
 		    }
+		},
+		
+		/**
+		 * Converts a Number to an integer value by terminating at
+		 * the decimal place.
+		 * 
+		 * e.g.: ex.toInt(123.456) returns 123
+		 * 
+		 * @function
+		 * @name toInt
+		 * @memberOf ex
+		 * 
+		 * @param {Number} number
+		 * 
+		 * @returns {Number} input terminated at decimal (integer value)
+		 */
+		toInt: function (number) {
+			return number | 0;
 		}
 	});
 	

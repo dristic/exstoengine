@@ -168,8 +168,8 @@ ex.using([
 			}
 			
 			// Position of the animated sprite in the viewport
-			var viewPortX = this.position.x - (camX * this.scrollFactor.x),
-				viewPortY = this.position.y - (camY * this.scrollFactor.y);
+			var viewPortX = ex.toInt(this.position.x - (camX * this.scrollFactor.x)),
+				viewPortY = ex.toInt(this.position.y - (camY * this.scrollFactor.y));
 			
 			// Render only if the animated sprite is within the viewport
 			if((viewPortX + this.renderingRect.width) > 0

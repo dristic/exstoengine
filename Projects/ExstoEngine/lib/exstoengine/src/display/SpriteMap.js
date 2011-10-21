@@ -75,15 +75,55 @@ ex.using([
 		 * @param {Context} context
 		 * @param {Number} camX
 		 * @param {Number} camY
+		 * @param {Number} camWidth
+		 * @param {Number} camHeight
 		 */
-		render: function(context, camX, camY) {
+		render: function(context, camX, camY, camWidth, camHeight) {
+			// Do nothing if not visible
 			if(!this.visible){
 				return;
 			}
 			
-			for(var y = 0; y < this.data.length; y++) {
-				for(var x = 0; x < this.data[y].length; x++) {
-					var tile = this.data[y][x], sx = 0, sy = 0;
+			//Pre-calculated values for speed
+			var camWithScrollX = (camX * this.scrollFactor.x),
+				camWithScrollY = (camY * this.scrollFactor.y);
+			
+			// Calculate the range of tiles in the viewport
+			var yStart = ex.toInt(camWithScrollY / this.tileHeight),
+				yStop = ex.toInt((camWithScrollY + camHeight) / this.tileHeight + 1),
+				xStart = ex.toInt(camWithScrollX / this.tileWidth),
+				xStop = ex.toInt((camWithScrollX + camWidth) / this.tileWidth + 1);
+			
+			// Check for the SpriteMap being completely off screen
+			if(yStart < ex.toInt(-(camHeight / this.tileHeight)))
+				return;		// SpriteMap below viewport
+			else if(yStop < 0)
+				return;		// SpriteMap above viewport
+			else if(xStart < ex.toInt(-(camWidth / this.tileWidth)))
+				return;		// SpriteMap left of viewport
+			else if(xStop < 0)
+				return;		// SpriteMap right of viewport
+			
+			// Constrain start/stop parameters to grid values
+			if(yStart < 0)
+				yStart = 0;
+			else if(yStart > this.data.length)
+				yStop = this.data.length;
+			if(xStart < 0)
+				xStart = 0;
+			else if(xStart > this.data[0].length)
+				xStart = this.data[0].length;
+			if(yStop > this.data.length)
+				yStop = this.data.length;
+			if(xStop > this.data[0].length)
+				xStop = this.data[0].length;
+			
+			// Render tiles in viewport
+			var yPos = yStart,
+				xPos = xStart;
+			for(yPos; yPos < yStop; yPos++) {
+				for(xPos; xPos < xStop; xPos++) {
+					var tile = this.data[yPos][xPos], sx = 0, sy = 0;
 					var tileValue = tile.value;
 					if(tileValue != 0) {
 						while(--tileValue) {
@@ -98,12 +138,13 @@ ex.using([
 								      sy,
 								      this.tileWidth,
 								      this.tileHeight,
-								      tile.position.x - (camX * this.scrollFactor.x),
-								      tile.position.y - (camY * this.scrollFactor.y),
+								      ex.toInt(tile.position.x - camWithScrollX),
+								      ex.toInt(tile.position.y - camWithScrollY),
 								      tile.width,
 								      tile.height);
 					}
 				}
+				xPos = xStart;
 			}
 		}
 	});

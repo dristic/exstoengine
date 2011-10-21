@@ -88,20 +88,35 @@ ex.using([
          * @name render
          * @memberOf ex.display.Sprite
          * 
-         * @param {Context} context
-         * @param {Number} camX
-         * @param {Number} camY
-         */
-        render: function (context, camX, camY) {
-            if (!this.visible){
-            	return;
-            }
+         * @param {Context} context canvas context to draw with
+		 * @param {Number} camX camera offset on x
+		 * @param {Number} camY camera offset on y
+		 * @param {Number} camWidth viewport width
+		 * @param {Number} camHeight viewport height
+		 */
+		render: function (context, camX, camY, camWidth, camHeight) {
+			// Do nothing if sprite is not visible
+			if(!this.visible){
+				return;
+			}
+			
+			// Position of the sprite in the viewport
+			var viewPortX = ex.toInt(this.position.x - (camX * this.scrollFactor.x)),
+				viewPortY = ex.toInt(this.position.y - (camY * this.scrollFactor.y));
+						
+			// Do nothing if sprite is out of the viewport
+			if((viewPortX + this.width) < 0
+					&& viewPortX > camWidth
+					&& (viewPortY + this.height) < 0
+					&& viewPortY > camHeight) {
+				return;
+			}
             
             if (this.rotationEnabled == false) {
                 context.drawImage(
                 		this.img, 
-                		this.position.x - (camX * this.scrollFactor.x), 
-                		this.position.y - (camY * this.scrollFactor.y));
+                		viewPortX, 
+                		viewPortY);
             } else {
                 var rContext = this.rotationCanvas.getContext("2d");
 
@@ -118,8 +133,8 @@ ex.using([
 
                 context.drawImage(
                 		this.rotationCanvas, 
-                		this.position.x - (camX * this.scrollFactor.x), 
-                		this.position.y - (camY * this.scrollFactor.y));
+                		viewPortX, 
+                		viewPortY);
             }
         },
 
