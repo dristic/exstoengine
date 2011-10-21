@@ -14,8 +14,10 @@ ex.using([
 		 * 		Initialized to null.
 		 * @constructor
 		 */
-		constructor: function() {
-			this.position = new ex.base.Vector(0,0);
+		constructor: function(position, width, height) {
+			this.position = position;
+			this.width = width;
+			this.height = height;
 			this.following = null;
 			this.canvas = null;
 		},

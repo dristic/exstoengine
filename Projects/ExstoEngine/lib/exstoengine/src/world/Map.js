@@ -67,7 +67,7 @@ ex.using([
 		 * @name removeLayer
 		 * @memberOf ex.world.Map
 		 * 
-		 * @param {Number} index location of layer in array
+		 * @param {String} name name of layer to remove
 		 */
 		removeLayer : function(name) {
 			var index = this.layers.length;
@@ -120,10 +120,10 @@ ex.using([
 		 * @param {Number} camX camera offset on x
 		 * @param {Number} camY camera offset on y
 		 */
-		render : function($context, $camX, $camY) {
+		render : function(context, camX, camY) {
 			var i = this.layers.length;
 			while (i--) {
-				this.layers[i].render($context, $camX, $camY);
+				this.layers[i].render(context, camX, camY);
 			}
 		}
 	});

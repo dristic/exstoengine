@@ -42,7 +42,10 @@ ex.using([
 				this.collisionManager = new ex.util.CollisionManager();
 				
 				//--Load new camera
-				this.camera = new ex.display.Camera();
+				this.camera = new ex.display.Camera(
+						new ex.base.Point(0,0),
+						this.width,
+						this.height);
 				
 				//--Setup update interval
 				_gameInterval = setInterval(ex.bind(this, this.update), (1 / frameRate) * 1000);
@@ -91,7 +94,7 @@ ex.using([
 			
 			//--Step renderer
 			if(this.renderer != null) {
-				this.renderer.update(dt, this.camera.position.x, this.camera.position.y);
+				this.renderer.update(dt, this.camera);
 			}
 			
 			this.onUpdate(dt);

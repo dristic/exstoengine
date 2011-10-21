@@ -41,12 +41,12 @@
 		 * @param {Number} camX
 		 * @param {Number} camY
 		 */
-		update: function (dt, camX, camY) {			
+		update: function (dt, camera) {			
 			this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 			
 			var i = this.renderables.length;
 			while(i--) {
-				this.renderables[i].render(this.context, camX, camY);
+				this.renderables[i].render(this.context, camera.position.x, camera.position.y);
 			}
 		},
 		

@@ -108,13 +108,15 @@ ex.using([
 		 * @name removeItem
 		 * @memberOf ex.world.Layer
 		 * 
-		 * @param {Number} index index of the item to remove
+		 * @param {String} name name of item to remove
 		 */
-		removeItem: function(index) {
-			if (index < 0 || index >= this.items.length) {
-				return;
+		removeItem: function(name) {
+			var index = this.items.length;
+			while(index--) {
+				if(this.items[index].name == name) {
+					this.items.splice(index, 1);
+				}
 			}
-			this.items.splice(index, 1);
 		},
 
 		/**
