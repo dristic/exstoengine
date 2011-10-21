@@ -75,6 +75,9 @@ ex.using([
 			this.velocity.scale(0.95);
 			
 			this._super("update", [dt]);
+			
+			if(this.velocity.x < 0.5 && this.velocity.x > -0.5)
+				this.velocity.x = 0;
 		}
 	});
 	
