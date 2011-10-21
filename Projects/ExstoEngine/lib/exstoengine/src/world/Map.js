@@ -69,11 +69,13 @@ ex.using([
 		 * 
 		 * @param {Number} index location of layer in array
 		 */
-		removeLayer : function(index) {
-			if (index < 0 || index >= this.layers.length) {
-				return;
+		removeLayer : function(name) {
+			var index = this.layers.length;
+			while(index--) {
+				if(this.layers[index].name == name){
+					this.layers.splice(index, 1);
+				}
 			}
-			this.layers.splice(index, 1);
 		},
 
 		/**
@@ -101,7 +103,7 @@ ex.using([
 		 */
 		update : function(dt) {
 			var index = this.layers.length;
-			while(index--){
+			while(index--) {
 				this.layers[index].update(dt);
 			}
 		},
