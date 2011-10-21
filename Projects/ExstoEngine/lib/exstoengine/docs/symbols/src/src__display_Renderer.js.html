@@ -45,32 +45,31 @@
 <span class='line'> 38</span> 		 * @memberOf ex.display.Renderer
 <span class='line'> 39</span> 		 * 
 <span class='line'> 40</span> 		 * @param {Number} dt 
-<span class='line'> 41</span> 		 * @param {Number} camX
-<span class='line'> 42</span> 		 * @param {Number} camY
-<span class='line'> 43</span> 		 */</span><span class="WHIT">
-<span class='line'> 44</span> </span><span class="WHIT">		</span><span class="NAME">update</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">dt</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">camX</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">camY</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">			</span><span class="WHIT">
-<span class='line'> 45</span> </span><span class="WHIT">			</span><span class="NAME">this.context.clearRect</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.canvas.width</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.canvas.height</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 46</span> </span><span class="WHIT">			</span><span class="WHIT">
-<span class='line'> 47</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.renderables.length</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 48</span> </span><span class="WHIT">			</span><span class="KEYW">while</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">--</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 49</span> </span><span class="WHIT">				</span><span class="NAME">this.renderables</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">render</span><span class="PUNC">(</span><span class="NAME">this.context</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">camX</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">camY</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 50</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 51</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'> 52</span> </span><span class="WHIT">		</span><span class="WHIT">
-<span class='line'> 53</span> </span><span class="WHIT">		</span><span class="COMM">/**
-<span class='line'> 54</span> 		 * Resizes the canvas.
-<span class='line'> 55</span> 		 * 
-<span class='line'> 56</span> 		 * @function
-<span class='line'> 57</span> 		 * @name resizeCanvas
-<span class='line'> 58</span> 		 * @memberOf ex.display.Renderer
-<span class='line'> 59</span> 		 * 
-<span class='line'> 60</span> 		 * @param {Number} newWidth
-<span class='line'> 61</span> 		 * @param {Number} newHeight
-<span class='line'> 62</span> 		 */</span><span class="WHIT">
-<span class='line'> 63</span> </span><span class="WHIT">		</span><span class="NAME">resizeCanvas</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">newWidth</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">newHeight</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 64</span> </span><span class="WHIT">			</span><span class="NAME">this.canvas.width</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">newWidth</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 65</span> </span><span class="WHIT">			</span><span class="NAME">this.canvas.height</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">newHeight</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 66</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'> 67</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 68</span> </span><span class="PUNC">}</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 69</span> </span></pre></body></html>
+<span class='line'> 41</span> 		 * @param {ex.display.Camera} camera
+<span class='line'> 42</span> 		 */</span><span class="WHIT">
+<span class='line'> 43</span> </span><span class="WHIT">		</span><span class="NAME">update</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">dt</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">camera</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">			</span><span class="WHIT">
+<span class='line'> 44</span> </span><span class="WHIT">			</span><span class="NAME">this.context.clearRect</span><span class="PUNC">(</span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.canvas.width</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this.canvas.height</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 45</span> </span><span class="WHIT">			</span><span class="WHIT">
+<span class='line'> 46</span> </span><span class="WHIT">			</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">i</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">this.renderables.length</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 47</span> </span><span class="WHIT">			</span><span class="KEYW">while</span><span class="PUNC">(</span><span class="NAME">i</span><span class="PUNC">--</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 48</span> </span><span class="WHIT">				</span><span class="NAME">this.renderables</span><span class="PUNC">[</span><span class="NAME">i</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">render</span><span class="PUNC">(</span><span class="NAME">this.context</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">camera.position.x</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">camera.position.y</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">camera.width</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">camera.height</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 49</span> </span><span class="WHIT">			</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 50</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 51</span> </span><span class="WHIT">		</span><span class="WHIT">
+<span class='line'> 52</span> </span><span class="WHIT">		</span><span class="COMM">/**
+<span class='line'> 53</span> 		 * Resizes the canvas.
+<span class='line'> 54</span> 		 * 
+<span class='line'> 55</span> 		 * @function
+<span class='line'> 56</span> 		 * @name resizeCanvas
+<span class='line'> 57</span> 		 * @memberOf ex.display.Renderer
+<span class='line'> 58</span> 		 * 
+<span class='line'> 59</span> 		 * @param {Number} newWidth
+<span class='line'> 60</span> 		 * @param {Number} newHeight
+<span class='line'> 61</span> 		 */</span><span class="WHIT">
+<span class='line'> 62</span> </span><span class="WHIT">		</span><span class="NAME">resizeCanvas</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">newWidth</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">newHeight</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 63</span> </span><span class="WHIT">			</span><span class="NAME">this.canvas.width</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">newWidth</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 64</span> </span><span class="WHIT">			</span><span class="NAME">this.canvas.height</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">newHeight</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 65</span> </span><span class="WHIT">		</span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 66</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 67</span> </span><span class="PUNC">}</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 68</span> </span></pre></body></html>

@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>JsDoc Reference - ex.Math</title>
+		<title>JsDoc Reference - ex</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -1277,7 +1277,7 @@ figure {
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class ex.Math
+				Class ex
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -1285,7 +1285,7 @@ figure {
 				
 				
 			
-				ex.Math
+				
 				
 				
 					<br /><i>Defined in: </i> <a href="../symbols/src/src__ExstoEngine.js.html">ExstoEngine.js</a>.
@@ -1294,7 +1294,7 @@ figure {
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class ex.Math.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class ex.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -1307,9 +1307,9 @@ figure {
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/ex.Math.html#constructor">ex.Math</a></b>()
+								<b><a href="../symbols/ex.html#constructor">ex</a></b>()
 							</div>
-							<div class="description">Helper math functions</div>
+							<div class="description">The base ExstoEngine library.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -1323,7 +1323,7 @@ figure {
 			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class ex.Math.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class ex.">
 					<caption>Method Summary</caption>
 					<thead>
 						<tr>
@@ -1336,18 +1336,54 @@ figure {
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">ex.Math.<b><a href="../symbols/ex.Math.html#.average">average</a></b>(array)
+								<div class="fixedFont">ex.<b><a href="../symbols/ex.html#.bind">bind</a></b>(object, func)
 								</div>
-								<div class="description">Returns the average of an array of numbers.</div>
+								<div class="description">Calls the function using apply which sets the 'this' when runningthat function to the object specified.</div>
 							</td>
 						</tr>
 					
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">ex.Math.<b><a href="../symbols/ex.Math.html#.floor">floor</a></b>(num)
+								<div class="fixedFont">ex.<b><a href="../symbols/ex.html#.clone">clone</a></b>(object)
 								</div>
-								<div class="description">Floors a number using bitwise operators (faster).</div>
+								<div class="description">Makes a copy of an object by placing it in a new object's constructor.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ex.<b><a href="../symbols/ex.html#.define">define</a></b>(namespace, base, extension)
+								</div>
+								<div class="description">The base class definition for all classes in ExstoEngine.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ex.<b><a href="../symbols/ex.html#.each">each</a></b>(object, func)
+								</div>
+								<div class="description">Equivalent to a foreach loop in other languages, iterates through object and runs func on each property.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ex.<b><a href="../symbols/ex.html#.extend">extend</a></b>(object, other)
+								</div>
+								<div class="description">Copies the values from one object to another object.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">ex.<b><a href="../symbols/ex.html#.toInt">toInt</a></b>(number)
+								</div>
+								<div class="description">Converts a Number to an integer value by terminating atthe decimal place.</div>
 							</td>
 						</tr>
 					
@@ -1368,11 +1404,11 @@ figure {
 				</div>
 				
 				<div class="fixedFont">
-						<b>ex.Math</b>()
+						<b>ex</b>()
 				</div>
 				
 				<div class="description">
-					Helper math functions
+					The base ExstoEngine library.
 					
 				</div>
 				
@@ -1399,15 +1435,15 @@ figure {
 					Method Detail
 				</div>
 				
-					<a name=".average"> </a>
+					<a name=".bind"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
-					<span class="light">{Number}</span>
-					<span class="light">ex.Math.</span><b>average</b>(array)
+					<span class="light">{Function}</span>
+					<span class="light">ex.</span><b>bind</b>(object, func)
 					
 					</div>
 					<div class="description">
-						Returns the average of an array of numbers.
+						Calls the function using apply which sets the 'this' when runningthat function to the object specified.
 						
 						
 					</div>
@@ -1419,10 +1455,16 @@ figure {
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{<a href="../symbols/Array.html">Array</a>}</span> <b>array</b>
+									<span class="light fixedFont">{Object}</span> <b>object</b>
 									
 								</dt>
-								<dd>An array of numbers.</dd>
+								<dd>Object to be bound</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Function}</span> <b>func</b>
+									
+								</dt>
+								<dd>Function to receive object</dd>
 							
 							</dl>
 						
@@ -1433,7 +1475,7 @@ figure {
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd><span class="light fixedFont">{Number}</span> The result of the average.</dd>
+								<dd><span class="light fixedFont">{Function}</span> Function with object bound</dd>
 							
 							</dl>
 						
@@ -1442,15 +1484,15 @@ figure {
 
 					<hr />
 				
-					<a name=".floor"> </a>
+					<a name=".clone"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
-					<span class="light">{Int}</span>
-					<span class="light">ex.Math.</span><b>floor</b>(num)
+					<span class="light">{Object}</span>
+					<span class="light">ex.</span><b>clone</b>(object)
 					
 					</div>
 					<div class="description">
-						Floors a number using bitwise operators (faster).
+						Makes a copy of an object by placing it in a new object's constructor.
 						
 						
 					</div>
@@ -1462,10 +1504,10 @@ figure {
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{Number}</span> <b>num</b>
+									<b>object</b>
 									
 								</dt>
-								<dd>The number to floor.</dd>
+								<dd>{Object} object to be cloned</dd>
 							
 							</dl>
 						
@@ -1476,7 +1518,196 @@ figure {
 							<dl class="detailList">
 							<dt class="heading">Returns:</dt>
 							
-								<dd><span class="light fixedFont">{Int}</span> The resulting integer value.</dd>
+								<dd><span class="light fixedFont">{Object}</span> cloned object constructor</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".define"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Class}</span>
+					<span class="light">ex.</span><b>define</b>(namespace, base, extension)
+					
+					</div>
+					<div class="description">
+						The base class definition for all classes in ExstoEngine. This functionchains for proper use of instanceof and also supplies a _super method foraccessing base classes.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<b>namespace</b>
+									
+								</dt>
+								<dd>The namespace of the new class</dd>
+							
+								<dt>
+									<b>base</b>
+									
+								</dt>
+								<dd>The base class type to extend from or the class definition if           not extending</dd>
+							
+								<dt>
+									<b>extension</b>
+									
+								</dt>
+								<dd>The new class that will be extending base</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Class}</span> new class</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".each"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					
+					<span class="light">ex.</span><b>each</b>(object, func)
+					
+					</div>
+					<div class="description">
+						Equivalent to a foreach loop in other languages, iterates through object and runs func on each property.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>object</b>
+									
+								</dt>
+								<dd>the array or object being passed in</dd>
+							
+								<dt>
+									<b>func</b>
+									
+								</dt>
+								<dd>{Function} function to run on each property of object</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name=".extend"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Object}</span>
+					<span class="light">ex.</span><b>extend</b>(object, other)
+					
+					</div>
+					<div class="description">
+						Copies the values from one object to another object.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>object</b>
+									
+								</dt>
+								<dd>The object to copy values to</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Object}</span> <b>other</b>
+									
+								</dt>
+								<dd>The object to copy values from</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> Returns the new object for chaining</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
+					<a name=".toInt"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Number}</span>
+					<span class="light">ex.</span><b>toInt</b>(number)
+					
+					</div>
+					<div class="description">
+						Converts a Number to an integer value by terminating atthe decimal place.e.g.: ex.toInt(123.456) returns 123
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>number</b>
+									
+								</dt>
+								<dd></dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Number}</span> input terminated at decimal (integer value)</dd>
 							
 							</dl>
 						
@@ -1497,7 +1728,7 @@ figure {
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri Oct 21 2011 14:39:23 GMT-0700 (MST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri Oct 21 2011 14:39:22 GMT-0700 (MST)
 		</div>
 		
 			</div>

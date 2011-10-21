@@ -1,3 +1,10 @@
+/**
+ * The base ExstoEngine library.
+ * 
+ * @name ex
+ * 
+ * @constructor
+ */
 var ex = ex || {};
 
 // Array indexOf fix for IE because IE is lame

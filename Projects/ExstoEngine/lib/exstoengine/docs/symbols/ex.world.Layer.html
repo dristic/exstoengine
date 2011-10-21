@@ -1218,6 +1218,8 @@ figure {
 	
 	<li><a href="../symbols/Array.html">Array</a></li>
 	
+	<li><a href="../symbols/ex.html">ex</a></li>
+	
 	<li><a href="../symbols/ex.Array.html">ex.Array</a></li>
 	
 	<li><a href="../symbols/ex.base.Component.html">ex.base.Component</a></li>
@@ -1421,6 +1423,15 @@ figure {
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
+								<div class="fixedFont">ex.world.Layer.<b><a href="../symbols/ex.world.Layer.html#.getItem">getItem</a></b>(name)
+								</div>
+								<div class="description">Retrieves an item by name.</div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="nameDescription">
 								<div class="fixedFont">ex.world.Layer.<b><a href="../symbols/ex.world.Layer.html#.hide">hide</a></b>()
 								</div>
 								<div class="description">Sets visible property to false, does not affect opacity.</div>
@@ -1439,7 +1450,7 @@ figure {
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">ex.world.Layer.<b><a href="../symbols/ex.world.Layer.html#.removeItem">removeItem</a></b>(index)
+								<div class="fixedFont">ex.world.Layer.<b><a href="../symbols/ex.world.Layer.html#.removeItem">removeItem</a></b>(name)
 								</div>
 								<div class="description">removes an item from the layer</div>
 							</td>
@@ -1448,9 +1459,9 @@ figure {
 						<tr>
 							<td class="attributes">&lt;static&gt; &nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">ex.world.Layer.<b><a href="../symbols/ex.world.Layer.html#.render">render</a></b>(context, camX, camY)
+								<div class="fixedFont">ex.world.Layer.<b><a href="../symbols/ex.world.Layer.html#.render">render</a></b>(context, camX, camY, camWidth, camHeight)
 								</div>
-								<div class="description">Supplies a canvas context and camera offset to each item and callstheir render functions</div>
+								<div class="description">Supplies a canvas context and camera parameters forrendering to the canvas.</div>
 							</td>
 						</tr>
 					
@@ -1731,6 +1742,49 @@ figure {
 
 					<hr />
 				
+					<a name=".getItem"> </a>
+					<div class="fixedFont">&lt;static&gt; 
+					
+					<span class="light">{Object}</span>
+					<span class="light">ex.world.Layer.</span><b>getItem</b>(name)
+					
+					</div>
+					<div class="description">
+						Retrieves an item by name.
+						
+						
+					</div>
+					
+					
+					
+						
+							<dl class="detailList">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span> <b>name</b>
+									
+								</dt>
+								<dd>name of the item to retrieve</dd>
+							
+							</dl>
+						
+						
+						
+						
+						
+							<dl class="detailList">
+							<dt class="heading">Returns:</dt>
+							
+								<dd><span class="light fixedFont">{Object}</span> returns the item if found, otherwise null</dd>
+							
+							</dl>
+						
+						
+						
+
+					<hr />
+				
 					<a name=".hide"> </a>
 					<div class="fixedFont">&lt;static&gt; 
 					
@@ -1792,7 +1846,7 @@ figure {
 					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<span class="light">ex.world.Layer.</span><b>removeItem</b>(index)
+					<span class="light">ex.world.Layer.</span><b>removeItem</b>(name)
 					
 					</div>
 					<div class="description">
@@ -1808,10 +1862,10 @@ figure {
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									<span class="light fixedFont">{Number}</span> <b>index</b>
+									<span class="light fixedFont">{String}</span> <b>name</b>
 									
 								</dt>
-								<dd>index of the item to remove</dd>
+								<dd>name of item to remove</dd>
 							
 							</dl>
 						
@@ -1828,11 +1882,11 @@ figure {
 					<div class="fixedFont">&lt;static&gt; 
 					
 					
-					<span class="light">ex.world.Layer.</span><b>render</b>(context, camX, camY)
+					<span class="light">ex.world.Layer.</span><b>render</b>(context, camX, camY, camWidth, camHeight)
 					
 					</div>
 					<div class="description">
-						Supplies a canvas context and camera offset to each item and callstheir render functions
+						Supplies a canvas context and camera parameters forrendering to the canvas.
 						
 						
 					</div>
@@ -1860,6 +1914,18 @@ figure {
 									
 								</dt>
 								<dd>camera offset on y</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>camWidth</b>
+									
+								</dt>
+								<dd>viewport width</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span> <b>camHeight</b>
+									
+								</dt>
+								<dd>viewport height</dd>
 							
 							</dl>
 						
@@ -1970,7 +2036,7 @@ figure {
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Mon Oct 17 2011 12:55:03 GMT-0700 (MST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri Oct 21 2011 14:39:23 GMT-0700 (MST)
 		</div>
 		
 			</div>
