@@ -37,13 +37,14 @@ ex.using([
             this.rotation = 0;
             this.rotationEnabled = false;
             this.rotationCanvas = document.createElement("canvas");
-
+            
             this.scrollFactor = new ex.base.Vector(1,1);
             
             this.width = this.img.naturalWidth;
             this.height = this.img.naturalHeight;
             this.rotationCanvas.width = this.width;
             this.rotationCanvas.height = this.height;
+            this.rotationContext = this.rotationCanvas.getContext("2d");
             
             if(this.width == 0  && this.height == 0) {
             	ex.event.listen(img, 'load', function () {
@@ -106,9 +107,9 @@ ex.using([
 						
 			// Do nothing if sprite is out of the viewport
 			if((viewPortX + this.width) < 0
-					&& viewPortX > camWidth
-					&& (viewPortY + this.height) < 0
-					&& viewPortY > camHeight) {
+					|| viewPortX > camWidth
+					|| (viewPortY + this.height) < 0
+					|| viewPortY > camHeight) {
 				return;
 			}
             
@@ -118,18 +119,16 @@ ex.using([
                 		viewPortX, 
                 		viewPortY);
             } else {
-                var rContext = this.rotationCanvas.getContext("2d");
-
                 //--Ensure width and height are not 0 to avoid INVALID_STATE_ERR
                 this.rotationCanvas.width = this.img.width || 1;
                 this.rotationCanvas.height = this.img.height || 1;
 
-                rContext.save();
-                rContext.translate(this.width / 2, this.height / 2);
-                rContext.rotate(this.rotation);
-                rContext.translate(-this.width / 2, -this.height / 2);
-                rContext.drawImage(this.img, 0, 0);
-                rContext.restore();
+                rotationContext.save();
+                rotationContext.translate(this.width / 2, this.height / 2);
+                rotationContext.rotate(this.rotation);
+                rotationContext.translate(-this.width / 2, -this.height / 2);
+                rotationContext.drawImage(this.img, 0, 0);
+                rotationContext.restore();
 
                 context.drawImage(
                 		this.rotationCanvas, 

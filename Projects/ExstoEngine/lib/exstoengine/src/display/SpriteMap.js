@@ -36,8 +36,18 @@ ex.using([
 			this.tileSet = tileSet;
 			this.position = new ex.base.Vector(0,0);
 			this.scrollFactor = new ex.base.Vector(1,1);
-			
+
+			// Run TileMap constructor to prepare tile data
 			this._super("constructor", [tileWidth, tileHeight, map]);
+
+			// Used to pre-render the whole map as an image
+			this.preRenderCanvas = document.createElement("canvas");
+			this.preRenderCanvas.width = this.width;
+			this.preRenderCanvas.height = this.height;
+			this.preRenderContext = this.preRenderCanvas.getContext('2d');
+			
+			this._preRenderSpriteMap();
+			this.rendered = 10;
 		},
 		
 		/**
@@ -62,7 +72,50 @@ ex.using([
 		 * @param {Number} dt timestep
 		 */
 		update: function(dt) {
-			
+			if(this.rendered-- > 0) {
+				this._preRenderSpriteMap();
+			}
+			// Check for any tile changes
+			// If changes found, 
+			//		alter the preRenderCanvas accordingly
+		},
+		
+		/*
+		 * Pre-renders the SpriteMap to the preRenderCanvas,
+		 * which acts as a buffer to the SpriteMap. This
+		 * results in the SpriteMap not having to be fully
+		 * generated each frame, instead redrawing the buffer
+		 * as a single image.
+		 */
+		_preRenderSpriteMap: function () {
+			var yPos = 0,
+				xPos = 0;
+			for(yPos; yPos < this.data.length; yPos++) {
+				for(xPos; xPos < this.data[yPos].length; xPos++) {
+					var tile = this.data[yPos][xPos], sx = 0, sy = 0;
+					var tileValue = tile.value;
+					if(tileValue != 0) {
+						while(--tileValue) {
+							sx += this.tileWidth;
+							if(sx >= this.tileSet.width) {
+								sy += this.tileHeight;
+								sx = 0;
+							}
+						}
+						this.preRenderContext.drawImage(
+								this.tileSet,
+								sx,
+								sy,
+								this.tileWidth,
+								this.tileHeight,
+								tile.position.x,
+								tile.position.y,
+								tile.width,
+								tile.height);
+					}
+				}
+				xPos = 0;
+			}
 		},
 		
 		/**
@@ -84,68 +137,45 @@ ex.using([
 				return;
 			}
 			
-			//Pre-calculated values for speed
-			var camWithScrollX = (camX * this.scrollFactor.x),
-				camWithScrollY = (camY * this.scrollFactor.y);
-			
-			// Calculate the range of tiles in the viewport
-			var yStart = ex.toInt(camWithScrollY / this.tileHeight),
-				yStop = ex.toInt((camWithScrollY + camHeight) / this.tileHeight + 1),
-				xStart = ex.toInt(camWithScrollX / this.tileWidth),
-				xStop = ex.toInt((camWithScrollX + camWidth) / this.tileWidth + 1);
-			
-			// Check for the SpriteMap being completely off screen
-			if(yStart < ex.toInt(-(camHeight / this.tileHeight)))
-				return;		// SpriteMap below viewport
-			else if(yStop < 0)
-				return;		// SpriteMap above viewport
-			else if(xStart < ex.toInt(-(camWidth / this.tileWidth)))
-				return;		// SpriteMap left of viewport
-			else if(xStop < 0)
-				return;		// SpriteMap right of viewport
-			
-			// Constrain start/stop parameters to grid values
-			if(yStart < 0)
-				yStart = 0;
-			else if(yStart > this.data.length)
-				yStop = this.data.length;
-			if(xStart < 0)
-				xStart = 0;
-			else if(xStart > this.data[0].length)
-				xStart = this.data[0].length;
-			if(yStop > this.data.length)
-				yStop = this.data.length;
-			if(xStop > this.data[0].length)
-				xStop = this.data[0].length;
-			
-			// Render tiles in viewport
-			var yPos = yStart,
-				xPos = xStart;
-			for(yPos; yPos < yStop; yPos++) {
-				for(xPos; xPos < xStop; xPos++) {
-					var tile = this.data[yPos][xPos], sx = 0, sy = 0;
-					var tileValue = tile.value;
-					if(tileValue != 0) {
-						while(--tileValue) {
-							sx += this.tileWidth;
-							if(sx >= this.tileSet.width) {
-								sy += this.tileHeight;
-								sx = 0;
-							}
-						}
-						context.drawImage(this.tileSet,
-								      sx,
-								      sy,
-								      this.tileWidth,
-								      this.tileHeight,
-								      ex.toInt(tile.position.x - camWithScrollX),
-								      ex.toInt(tile.position.y - camWithScrollY),
-								      tile.width,
-								      tile.height);
-					}
-				}
-				xPos = xStart;
+			// Position of the sprite in the viewport
+			var viewPortX = ex.toInt(this.position.x - (camX * this.scrollFactor.x)),
+				viewPortY = ex.toInt(this.position.y - (camY * this.scrollFactor.y));
+						
+			// Do nothing if sprite map is out of the viewport
+			if((viewPortX + this.preRenderCanvas.width) < 0
+					|| viewPortX > camWidth
+					||(viewPortY + this.preRenderCanvas.height) < 0
+					|| viewPortY > camHeight) {
+				return;
 			}
+			
+			// Calculate section of preRenderCanvas to draw
+			var sourceX = -viewPortX,
+				sourceY = -viewPortY,
+				sourceWidth = camWidth - viewPortX,
+				sourceHeight = camWidth - viewPortY;
+			var destX = viewPortX,
+				destY = viewPortY;
+			
+			// Constrain values to image size
+			if(sourceX < 0) sourceX = 0;
+			if(sourceY < 0) sourceY = 0;
+			if((sourceX + sourceWidth) > this.preRenderCanvas.width) sourceWidth = this.preRenderCanvas.width - sourceX;
+			if((sourceY + sourceHeight) > this.preRenderCanvas.height) sourceHeight = this.preRenderCanvas.height - sourceY;
+			if(destX < 0) destX = 0;
+			if(destY < 0) destY = 0;
+			
+			// Draw image
+			context.drawImage(
+            		this.preRenderCanvas,
+            		sourceX,
+            		sourceY,
+            		sourceWidth,
+            		sourceHeight,
+            		destX, 
+            		destY,
+            		sourceWidth,	//destWidth and Height == sourceWidth and Height
+            		sourceHeight);
 		}
 	});
 });
