@@ -46,7 +46,7 @@
 	 * 
 	 * @returns {CollisionData}
 	 */
-	function boxToBoxCheck(source, target){
+	function boxToBoxCheck(source, target, dt){
 		// check for x intersection
 		if(source.position.x <= target.position.x) {
 			if((source.position.x + source.width) < target.position.x) {

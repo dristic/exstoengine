@@ -298,14 +298,6 @@
 				new ex.display.Sprite(
 						new ex.base.Vector(0,0),
 						_engine.imageRepository.getImage("Platform")));
-
-		var asteroid = new entity.Asteroid(
-				"Asteroid",
-				new ex.base.Vector(750,162),
-				new ex.display.Sprite(
-						new ex.base.Vector(0,0),
-						_engine.imageRepository.getImage("Asteroid")),
-				false);
 		
 		// Debug images to show edges on tiles
 		var edgeDebug = {
@@ -368,7 +360,6 @@
 		secondLevel.getLayer("Ground").addItem(explosion1);
 		secondLevel.getLayer("Ground").addItem(explosion2);
 		secondLevel.getLayer("Ground").addItem(explosion3);
-		secondLevel.getLayer("Ground").addItem(asteroid);
 		secondLevel.getLayer("Ground").addItem(platform);
 		secondLevel.addLayer(new ex.world.Layer("Background", null, new ex.base.Vector(0,0), new ex.base.Vector(0,0)));
 		secondLevel.getLayer("Background").addItem(nebula);
@@ -386,7 +377,24 @@
 		
 		// Load level 1
 		_engine.currentWorld.loadLevel("Level 1");
+
+
+		
+		var asteroid = new entity.Asteroid(
+				"Asteroid",
+				new ex.base.Vector(750,162),
+				new ex.display.Sprite(
+						new ex.base.Vector(0,0),
+						_engine.imageRepository.getImage("Asteroid")),
+				true);
+		asteroid.onCollide = function(){
+			console.log("Removing asteroid!");
+			_engine.currentWorld.activeLevel.getLayer("Ground").removeItem(asteroid);
+		}
+		
 		_engine.currentWorld.activeLevel.getLayer("Ground").addItem(player);
+		_engine.currentWorld.activeLevel.getLayer("Ground").addItem(asteroid);
+		
 		_engine.collisionManager.setActiveLevel(_engine.currentWorld.activeLevel);
 		
 		// Focus camera on player
