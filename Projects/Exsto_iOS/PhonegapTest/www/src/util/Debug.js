@@ -33,7 +33,7 @@ ex.using([
 			},
 			
 			log: function (message) {
-				ex.util.Debug.logger.log(message);
+				//ex.util.Debug.logger.log(message);
 			},
 			
 			benchmarkEngine: function (dt) {
@@ -85,8 +85,8 @@ ex.using([
 				debug.writeLog.value = "logger";
 				debug.writeLog.checked = "checked";
 				debug.writeLog.id = "writeLog";
-				debug.domElement.appendChild(debug.writeLog);
-				debug.domElement.appendChild(debug.loggerElement);
+				//debug.domElement.appendChild(debug.writeLog);
+				//debug.domElement.appendChild(debug.loggerElement);
 				
 				document.body.appendChild(debug.domElement);
 			}

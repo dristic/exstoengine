@@ -23,7 +23,7 @@
           	], 
   	function () {		
 		//--Startup new engine
-		var _engine = new ex.Engine(800, 500, 600);
+		var _engine = new ex.Engine(window.innerWidth, window.innerHeight, 30);
 		
 		//--Setup rendering
 		_engine.setupCanvas("#000000");
@@ -239,6 +239,17 @@
 //		document.getElementById("buttonRight").addEventListener('mousedown', function(){_engine.input.keys[68] = true;}, false);
 //		document.getElementById("buttonLeft").addEventListener('mouseup', function(){_engine.input.keys[65] = false;}, false);
 //		document.getElementById("buttonRight").addEventListener('mouseup', function(){_engine.input.keys[68] = false;}, false);
+ 
+ document.getElementById('left').addEventListener("touchstart", function () { _engine.input.keys[65] = true; }, false);
+ document.getElementById('left').addEventListener("touchend", function () { _engine.input.keys[65] = false; }, false);
+ document.getElementById('right').addEventListener("touchstart", function () { _engine.input.keys[68] = true; }, false);
+ document.getElementById('right').addEventListener("touchend", function () { _engine.input.keys[68] = false; }, false);
+ document.getElementById('jump').addEventListener("touchstart", function () {
+                                                  _engine.input.onKeyDown({ keyCode: 32 });
+    }, false);
+ document.getElementById('jump').addEventListener("touchend", function () {
+                                                  _engine.input.onKeyUp({ keyCode: 32 });
+    }, false);
 		
 		// Setup explosion animations & teleporter
 		var explosion1 = new entity.Explosion(

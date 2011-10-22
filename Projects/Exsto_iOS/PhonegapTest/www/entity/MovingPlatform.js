@@ -8,7 +8,7 @@ ex.using([
 			this.endPosition = endPosition;
 			this.moving = true;
 			this._super("constructor", 
-					[name,
+					[name,`
 					 startPosition,
 					 sprite,
 					 true,

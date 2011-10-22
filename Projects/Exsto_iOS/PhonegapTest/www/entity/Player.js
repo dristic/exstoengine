@@ -16,8 +16,8 @@ ex.using([
 			this.speed = 10;
 		},
 		
-		jump: function(){
-			this.velocity.y -= this.speed * 60;
+		jump: function(dt){
+			this.velocity.y -= this.speed * 30;
 		},
 		
 		moveLeft: function(){
@@ -30,7 +30,7 @@ ex.using([
 		
 		update: function(dt) {
 			if(this.input.isKeyPressed(ex.util.Key.Spacebar)) {
-				this.jump();
+				this.jump(dt);
 			}
 			if(this.input.isKeyDown(ex.util.Key.W)) {
 				//this.velocity.y -= this.speed;
@@ -43,19 +43,6 @@ ex.using([
 			}
 			if(this.input.isKeyDown(ex.util.Key.D)) {
 				this.moveRight();
-			}
-			
-			// Move Right
-			if(this.input.dragging && this.input.mouseX > 600){
-				this.moveRight();
-			}
-			// Move left
-			if(this.input.dragging && this.input.mouseX < 200){
-				this.moveLeft();
-			}
-			// Jump
-			if(this.input.mouseDown && this.input.mouseY > 400){
-				this.jump();
 			}
 			
 			

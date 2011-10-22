@@ -19,6 +19,8 @@
 			this.canvas.id = "mainCanvas";
 			this.canvas.width = width;
 			this.canvas.height = height;
+            this.canvas.style.width = '100%';
+            this.canvas.style.height = '100%';
 			this.canvas.style.backgroundColor = bgColor;
 			this.context = this.canvas.getContext("2d");
 			
