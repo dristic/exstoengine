@@ -123,12 +123,12 @@ ex.using([
                 this.rotationCanvas.width = this.img.width || 1;
                 this.rotationCanvas.height = this.img.height || 1;
 
-                rotationContext.save();
-                rotationContext.translate(this.width / 2, this.height / 2);
-                rotationContext.rotate(this.rotation);
-                rotationContext.translate(-this.width / 2, -this.height / 2);
-                rotationContext.drawImage(this.img, 0, 0);
-                rotationContext.restore();
+                this.rotationContext.save();
+                this.rotationContext.translate(this.width / 2, this.height / 2);
+                this.rotationContext.rotate(this.rotation);
+                this.rotationContext.translate(-this.width / 2, -this.height / 2);
+                this.rotationContext.drawImage(this.img, 0, 0);
+                this.rotationContext.restore();
 
                 context.drawImage(
                 		this.rotationCanvas, 
