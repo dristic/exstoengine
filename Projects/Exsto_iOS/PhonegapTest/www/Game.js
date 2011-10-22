@@ -36,8 +36,8 @@
 		_engine.openWorld(ex.world.World);
 		
 		//--Load Images
-		_engine.imageRepository.loadImage("Nebula", "../assets/world/bg.png");
-		_engine.imageRepository.loadImage("Explosion", "../assets/effects/explode3.png");
+		_engine.imageRepository.loadImage("Nebula", "assets/world/bg.png");
+		_engine.imageRepository.loadImage("Explosion", "assets/effects/explode3.png");
 		
 		var titleScreen = new ex.display.ui.TitleMenu(
 				[{
@@ -212,17 +212,15 @@
 		var laser = new ex.sound.Sound('../assets/sounds/lazer.ogg', 7);
 		
 		// Images
-		_engine.imageRepository.loadImage("Nebula", "../assets/world/bg.png");
-		_engine.imageRepository.loadImage("Explosion", "../assets/effects/explode3.png");
-		_engine.imageRepository.loadImage("Teleport", "../assets/effects/teleport2.png");
-		_engine.imageRepository.loadImage("Tiles", "../assets/world/tileset-platformer.png");
-		_engine.imageRepository.loadImage("Player", "../assets/units/player.png");
-		_engine.imageRepository.loadImage("Asteroid", "../assets/world/asteroid.png");
-		_engine.imageRepository.loadImage("edgeUp", "../assets/debug/EdgeUp.png");
-		_engine.imageRepository.loadImage("edgeDown", "../assets/debug/EdgeDown.png");
-		_engine.imageRepository.loadImage("edgeLeft", "../assets/debug/EdgeLeft.png");
-		_engine.imageRepository.loadImage("edgeRight", "../assets/debug/EdgeRight.png");
-		_engine.imageRepository.loadImage("Platform", "../assets/world/platform.png");
+		_engine.imageRepository.loadImage("Teleport", "assets/effects/teleport2.png");
+		_engine.imageRepository.loadImage("Tiles", "assets/world/tileset-platformer.png");
+		_engine.imageRepository.loadImage("Player", "assets/units/player.png");
+		_engine.imageRepository.loadImage("Asteroid", "assets/world/asteroid.png");
+		_engine.imageRepository.loadImage("edgeUp", "assets/debug/EdgeUp.png");
+		_engine.imageRepository.loadImage("edgeDown", "assets/debug/EdgeDown.png");
+		_engine.imageRepository.loadImage("edgeLeft", "assets/debug/EdgeLeft.png");
+		_engine.imageRepository.loadImage("edgeRight", "assets/debug/EdgeRight.png");
+		_engine.imageRepository.loadImage("Platform", "assets/world/platform.png");
 		
 		// Setup player
 		var player = new entity.Player(
