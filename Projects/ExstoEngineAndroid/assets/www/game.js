@@ -37,7 +37,7 @@ function onDeviceReady() {
 	          	], 
 	  	function () {		
 			//--Startup new engine
-			var _engine = new ex.Engine(800, 500, 60);
+			var _engine = new ex.Engine(480, 320, 25);
 			
 			//--Setup rendering
 			_engine.setupCanvas("#000000");
