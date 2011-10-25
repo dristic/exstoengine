@@ -24,7 +24,7 @@ ex.using([
 			// Get its magnitude
 			var length = velocity.length();
 			// Scale the vector by the ration speed / magnitude
-			velocity.scale(speed/length);
+			velocity.scale(speed / length);
 			// Set the result to the platform's velocity
 			this.velocity = velocity;
 		},

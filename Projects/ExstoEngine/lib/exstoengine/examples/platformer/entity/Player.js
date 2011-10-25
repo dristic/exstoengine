@@ -14,17 +14,19 @@ ex.using([
 			this.sprite.play('Walk');
 			this.input = input;
 			this.speed = 10;
+			this.maxSpeed = 200;
+			this.score = 0;
 		},
 		
 		jump: function(){
-			this.velocity.y -= this.speed * 60;
+			this.velocity.y -= this.speed * 80;
 		},
 		
-		moveLeft: function(){
+		moveLeft: function() {
 			this.velocity.x -= this.speed;
 		},
 		
-		moveRight: function(){
+		moveRight: function() {
 			this.velocity.x += this.speed;
 		},
 		
@@ -68,11 +70,23 @@ ex.using([
 			// Gravity
 			this.velocity.y += this.speed;
 			
+			// Trim speed if past max speed
+			if(this.velocity.x < -this.maxSpeed) {
+				this.velocity.x = -this.maxSpeed;
+			} else if(this.velocity.x > this.maxSpeed) {
+				this.velocity.x = this.maxSpeed;
+			}
+			if(this.velocity.y < -this.maxSpeed) {
+				//this.velocity.y = -this.maxSpeed;
+			} else if (this.velocity.y > this.maxSpeed) {
+				this.velocity.y = this.maxSpeed;
+			}
+			
 			// Apply the velocity and set the positions for the camera to follow
 			this.updatePosition(this.velocity, dt);
 			
 			// Scale down the velocity
-			this.velocity.scale(0.95);
+			this.velocity.addScaled(this.velocity, -5 * dt);
 			
 			this._super("update", [dt]);
 			

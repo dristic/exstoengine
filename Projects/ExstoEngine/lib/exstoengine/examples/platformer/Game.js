@@ -14,6 +14,7 @@
           "ex.sound.Sound",
           
           "ex.display.ui.TitleMenu",
+          "ex.display.ui.StatusBar",
           
           "entity.Player",
           "entity.Explosion",
@@ -69,11 +70,7 @@
 		function titleScreenToGame() {
 			_engine.currentWorld.removeObject(titleScreen);
 			startGame(_engine);
-			//document.getElementById("buttonJump").removeEventListener('mousedown', titleScreenToGame, false);
 		};
-		
-		// UI button to start game
-//		document.getElementById("buttonJump").addEventListener('mousedown', titleScreenToGame, false);
 		
 		_engine.onUpdate = function(){
 			// Extra code to run on each update
@@ -212,8 +209,6 @@
 		var laser = new ex.sound.Sound('../assets/sounds/lazer.ogg', 7);
 		
 		// Images
-		_engine.imageRepository.loadImage("Nebula", "../assets/world/bg.png");
-		_engine.imageRepository.loadImage("Explosion", "../assets/effects/explode3.png");
 		_engine.imageRepository.loadImage("Teleport", "../assets/effects/teleport2.png");
 		_engine.imageRepository.loadImage("Tiles", "../assets/world/tileset-platformer.png");
 		_engine.imageRepository.loadImage("Player", "../assets/units/player.png");
@@ -234,13 +229,6 @@
 						_engine.imageRepository.getImage("Player")), 
 				true, 
 				_engine.input);
-		
-		// UI Setup
-//		document.getElementById("buttonJump").addEventListener('mousedown', function(){player.jump();}, false);
-//		document.getElementById("buttonLeft").addEventListener('mousedown', function(){_engine.input.keys[65] = true;}, false);
-//		document.getElementById("buttonRight").addEventListener('mousedown', function(){_engine.input.keys[68] = true;}, false);
-//		document.getElementById("buttonLeft").addEventListener('mouseup', function(){_engine.input.keys[65] = false;}, false);
-//		document.getElementById("buttonRight").addEventListener('mouseup', function(){_engine.input.keys[68] = false;}, false);
 		
 		// Setup explosion animations & teleporter
 		var explosion1 = new entity.Explosion(
@@ -371,7 +359,11 @@
 			asteroidLayer.addItem(asteroidField[index]);
 		};
 		
-		// Add levels to world
+		// Build Health Bar
+		var scoreBar = new ex.display.ui.StatusBar(player, 'score');
+		
+		// Add UI and levels to world
+		_engine.currentWorld.addObject(scoreBar);
 		_engine.currentWorld.addLevel(firstLevel);
 		_engine.currentWorld.addLevel(secondLevel);
 		
@@ -387,7 +379,10 @@
 						new ex.base.Vector(0,0),
 						_engine.imageRepository.getImage("Asteroid")),
 				true);
-		asteroid.onCollide = function(){
+		asteroid.onCollide = function(target, data, dt){
+			if(target.name == "Player"){
+				target.score += 100;
+			}
 			console.log("Removing asteroid!");
 			_engine.currentWorld.activeLevel.getLayer("Ground").removeItem(asteroid);
 		}

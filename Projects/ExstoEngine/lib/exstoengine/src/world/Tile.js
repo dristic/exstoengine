@@ -86,27 +86,39 @@
 		update: function(requestedByNeighbor) {
 			if(this.value == 0){
 				this._setAllEdgesTo(false);
+				if(!requestedByNeighbor) {
+					this.updateNeighbors();
+				}
+				return;
 			}
 			// Set edge based on upper neighbor
-			if(!this.neighbors.top || this.neighbors.top.value == 0) {
+			if(this.neighbors.top && this.neighbors.top.value == 0) {
+				this.edges.top = true;
+			} else if (!this.neighbors.top && this.value > 0) {
 				this.edges.top = true;
 			} else {
 				this.edges.top = false;
 			}
 			// Set edge based on lower neighbor
-			if(!this.neighbors.bottom || this.neighbors.bottom.value == 0) {
+			if(this.neighbors.bottom && this.neighbors.bottom.value == 0) {
+				this.edges.bottom = true;
+			} else if (!this.neighbors.bottom && this.value > 0) {
 				this.edges.bottom = true;
 			} else {
 				this.edges.bottom = false;
 			}
 			// Set edge based on left neighbor
-			if(!this.neighbors.left || this.neighbors.left.value == 0) {
+			if(this.neighbors.left && this.neighbors.left.value == 0) {
+				this.edges.left = true;
+			} else if (!this.neighbors.left && this.value > 0) {
 				this.edges.left = true;
 			} else {
 				this.edges.left = false;
 			}
 			// Set edge based on right neighbor
-			if(!this.neighbors.right || this.neighbors.right.value == 0) {
+			if(this.neighbors.right && this.neighbors.right.value == 0) {
+				this.edges.right = true;
+			} else if (!this.neighbors.right && this.value > 0) {
 				this.edges.right = true;
 			} else {
 				this.edges.right = false;
