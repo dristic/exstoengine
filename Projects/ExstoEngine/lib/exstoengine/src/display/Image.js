@@ -1,8 +1,9 @@
 ex.using([ 
     'ex.base.Point', 
-    'ex.base.Vector' 
+    'ex.base.Vector',
+    'ex.display.Renderable'
 ], function() {
-	ex.define("ex.display.Image", {
+	ex.define("ex.display.Image", ex.display.Renderable, {
 		/**
 		 * Container class for HTML Images with additional position,
 		 * size, and name data.
@@ -14,9 +15,6 @@ ex.using([
 		 * @param {ex.base.Vector} size width and height
 		 * @param {String} name 
 		 * 
-		 * @property {Boolean} visible controls whether the image
-		 * 		is rendered or not.
-		 * @property {String} type For internal use only. Do not change!
 		 * @property {ex.base.Point} position
 		 * @property {ex.base.Vector} size width and height
 		 * @property {Image} image
@@ -24,8 +22,6 @@ ex.using([
 		 * @constructor
 		 */
 		constructor : function(image, position, size, name) {
-			this.visible = true;
-			this.type = "Image";
 			this.name = name;
 			this.position = position || new ex.base.Point(0, 0);
 			this.width = image.naturalWidth;
@@ -36,6 +32,8 @@ ex.using([
 			if(this.image.complete == false) {
 				ex.event.listenOnce(this.image, 'load', this.autoSize, this);
 			}
+			
+			this._super("constructor", [true, 1.0]);
 		},
 		
 		/**
@@ -96,7 +94,7 @@ ex.using([
 		 * @param {Number} camHeight viewport height
 		 */
 		render : function(context, camX, camY, camWidth, camHeight) {
-			if(!this.visible){
+			if(!this.isVisible()){
 				return;
 			}
 			

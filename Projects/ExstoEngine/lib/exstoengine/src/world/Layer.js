@@ -1,8 +1,9 @@
 ex.using([ 
 	'ex.base.Point', 
-	'ex.base.Vector' 
+	'ex.base.Vector',
+	'ex.display.Renderable'
 ], function() {
-	ex.define("ex.world.Layer", {
+	ex.define("ex.world.Layer", ex.display.Renderable, {
 
 		/**
 		 * A collection of items at a certain z-index in a map.
@@ -19,9 +20,6 @@ ex.using([
 		 * @property {String} name the name of the layer (mostly for 
 		 * 		labeling in the IDE)
 		 * @property {Object[]} items an array of all items in the layer
-		 * @property {Boolean} visible allows rendering if true
-		 * @property {Number} opacity ranges from 0.0 - 1.0, this is the 
-		 * 		transparency of the layer
 		 * @property {ex.base.Vector} position the starting location of the 
 		 * 		layer
 		 * @property {ex.base.Vector} scrollFactor the multiplier for the 
@@ -37,8 +35,6 @@ ex.using([
 			if(this.map != null) {
 				this.items.push(this.map);
 			}
-			this.visible = true;
-			this.opacity = 1.0;
 
 			if (origin == null) {
 				this.position = new ex.base.Point(0, 0);
@@ -51,6 +47,8 @@ ex.using([
 			} else {
 				this.scrollFactor = scrollFactor;
 			}
+			
+			this._super("constructor", [true, 1.0]);
 		},
 
 		/**
@@ -133,59 +131,6 @@ ex.using([
 			while(index--){
 				this.items[index].update(dt);
 			}
-		},
-
-		/**
-		 * Checks properties and determines if layer is visible
-		 * 
-		 * @function
-		 * @name isVisible
-		 * @memberOf ex.world.Layer
-		 * 
-		 * @returns {Boolean}
-		 */
-		isVisible : function() {
-			if (this.visible && this.opacity > 0.0) {
-				return true;
-			} else {
-				return false;
-			}
-		},
-
-		/**
-		 * Toggles visibility of the layer.
-		 * 
-		 * @function
-		 * @name toggleVisibility
-		 * @memberOf ex.world.Layer
-		 */
-		toggleVisibility : function() {
-			if (this.visible)
-				this.hide();
-			else
-				this.show();
-		},
-
-		/**
-		 * Sets visible property to true, does not affect opacity.
-		 * 
-		 * @function
-		 * @name show
-		 * @memberOf ex.world.Layer
-		 */
-		show : function() {
-			this.visible = true;
-		},
-
-		/**
-		 * Sets visible property to false, does not affect opacity.
-		 * 
-		 * @function
-		 * @name hide
-		 * @memberOf ex.world.Layer
-		 */
-		hide : function() {
-			this.visible = false;
 		},
 
 		/**

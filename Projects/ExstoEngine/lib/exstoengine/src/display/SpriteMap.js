@@ -1,8 +1,8 @@
 ex.using([
   "ex.world.TileMap",
-  //"ex.base.Vector"
+  "ex.display.Renderable"
 ], function () {
-	ex.define("ex.display.SpriteMap", ex.world.TileMap, {
+	ex.define("ex.display.SpriteMap", ex.display.Renderable, {
 		
 		/**
 		 * The graphical representation of a TileMap.
@@ -17,33 +17,30 @@ ex.using([
 		 * @param {Image} tileSet
 		 * @param {String} name
 		 * 
-		 * @property {Boolean} visible Controls whether the object is drawn
-		 * 		to the screen.
 		 * @property {Boolean} collides Controls whether the object is included
 		 * 		in collision detection.
 		 * @propety {String} name
-		 * @property {String} type
-		 * 		Internal use only. Do not change!
 		 * @property {Image} tileSet the tile set to use when rendering.
 		 * @property {ex.base.Vector} position
 		 * @property {ex.base.Vector} scrollFactor
 		 */
 		constructor: function(tileWidth, tileHeight, map, tileSet, name) {
-			this.visible = true;
 			this.collides = false;
 			this.name = name;
-			this.type = "SpriteMap";
 			this.tileSet = tileSet;
 			this.position = new ex.base.Vector(0,0);
 			this.scrollFactor = new ex.base.Vector(1,1);
 
-			// Run TileMap constructor to prepare tile data
-			this._super("constructor", [tileWidth, tileHeight, map]);
+			// Call Renderable constructor (visibility, opacity)
+			this._super("constructor", [true, 1.0]);
+			
+			// Create TileMap
+			this.tileMap = new ex.world.TileMap(tileWidth, tileHeight, map);
 
 			// Used to pre-render the whole map as an image
 			this.preRenderCanvas = document.createElement("canvas");
-			this.preRenderCanvas.width = this.width;
-			this.preRenderCanvas.height = this.height;
+			this.preRenderCanvas.width = this.tileMap.width;
+			this.preRenderCanvas.height = this.tileMap.height;
 			this.preRenderContext = this.preRenderCanvas.getContext('2d');
 			
 			this._preRenderSpriteMap();
@@ -90,15 +87,15 @@ ex.using([
 		_preRenderSpriteMap: function () {
 			var yPos = 0,
 				xPos = 0;
-			for(yPos; yPos < this.data.length; yPos++) {
-				for(xPos; xPos < this.data[yPos].length; xPos++) {
-					var tile = this.data[yPos][xPos], sx = 0, sy = 0;
+			for(yPos; yPos < this.tileMap.data.length; yPos++) {
+				for(xPos; xPos < this.tileMap.data[yPos].length; xPos++) {
+					var tile = this.tileMap.data[yPos][xPos], sx = 0, sy = 0;
 					var tileValue = tile.value;
 					if(tileValue != 0) {
 						while(--tileValue) {
-							sx += this.tileWidth;
+							sx += this.tileMap.tileWidth;
 							if(sx >= this.tileSet.width) {
-								sy += this.tileHeight;
+								sy += this.tileMap.tileHeight;
 								sx = 0;
 							}
 						}
@@ -106,8 +103,8 @@ ex.using([
 								this.tileSet,
 								sx,
 								sy,
-								this.tileWidth,
-								this.tileHeight,
+								this.tileMap.tileWidth,
+								this.tileMap.tileHeight,
 								tile.position.x,
 								tile.position.y,
 								tile.width,
@@ -133,7 +130,7 @@ ex.using([
 		 */
 		render: function(context, camX, camY, camWidth, camHeight) {
 			// Do nothing if not visible
-			if(!this.visible){
+			if(!this.isVisible()){
 				return;
 			}
 			

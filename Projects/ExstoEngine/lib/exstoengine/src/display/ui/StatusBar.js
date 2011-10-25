@@ -1,7 +1,8 @@
 ex.using([
-  'ex.display.Sprite'
+  'ex.display.Sprite',
+  'ex.display.Renderable'
 ], function() {	
-	ex.define("ex.display.ui.StatusBar", {
+	ex.define("ex.display.ui.StatusBar", ex.display.Renderable, {
 		constructor: function(targetEntity, statSelector, options) {
 			this.target = targetEntity;
 			this.selector = statSelector;
@@ -15,6 +16,8 @@ ex.using([
 			if(options != null){
 				ex.extend(this.options, options);
 			}
+			
+			this._super("constructor", [true, 1.0]);
 		},
 		
 		_setStyle: function(context) {
@@ -27,6 +30,10 @@ ex.using([
 		},
 		
 		render: function(context, camX, camY, camWidth, camHeight) {
+			if(!this.isVisible()){
+				return;
+			}
+				
 			context.save();
 			this._setStyle(context);
 			context.fillText(

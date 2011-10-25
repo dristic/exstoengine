@@ -20,8 +20,6 @@ ex.using([
 		 * @property {Number} timer Animation timer, inverse of framerate.
 		 * @property {Number} frameRate Number of frames to wait per
 		 * 		sprite tile.
-		 * @property {String} type Object type (used in multi-type
-		 * 		comparisons). Do not modify!
 		 * @property {Object} Associative array of animations (name : frames).
 		 * @property {Number[]} curAnimation The frames of the selected
 		 * 		animation.
@@ -37,7 +35,6 @@ ex.using([
 		constructor: function(position, frameWidth, frameHeight, frameRate, img) {
 			this.timer = (1 / frameRate);
 			this.frameRate = frameRate;
-			this.type = "Sprite";
 
 			this.animations = {};
 			this.curAnimation = [];
@@ -163,7 +160,7 @@ ex.using([
 		 * @param {Number} camHeight viewport height
 		 */
 		render: function (context, camX, camY, camWidth, camHeight) {
-			if(!this.visible){
+			if(!this.isVisible()){
 				return;
 			}
 			

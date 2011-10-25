@@ -1,7 +1,8 @@
 ex.using([
-  "ex.base.Vector"
+  "ex.base.Vector",
+  "ex.display.Renderable"
 ], function () {
-	ex.define("ex.display.Sprite", {
+	ex.define("ex.display.Sprite", ex.display.Renderable, {
 		/**
 		 * Sprite object that contains a single image to draw on the canvas.
 		 * 
@@ -12,8 +13,6 @@ ex.using([
 		 * @param {Image} img The img to use to render the sprite.
 		 * @param {String} name The sprite's name.
 		 * 
-		 * @property {String} type
-		 * 		Internal use only. Do not change!
 		 * @property {ex.base.Vector} position
 		 * @property {ex.display.Image} image
 		 * @property {Number} rotation angle of the image
@@ -29,10 +28,8 @@ ex.using([
 		 * @constructor
 		 */
         constructor: function (position, img) {
-        	this.type = "Sprite";
             this.position = position;
             this.img = img || new Image();
-            this.visible = true;
 
             this.rotation = 0;
             this.rotationEnabled = false;
@@ -51,6 +48,8 @@ ex.using([
             		this._recalcDimensions();
             	}, this);
             }
+            
+            this._super("constructor", [true, 1.0]);
         },
         
         /**
@@ -97,7 +96,7 @@ ex.using([
 		 */
 		render: function (context, camX, camY, camWidth, camHeight) {
 			// Do nothing if sprite is not visible
-			if(!this.visible){
+			if(!this.isVisible()){
 				return;
 			}
 			
