@@ -12,8 +12,11 @@
           	], 
   	function () {	
 		var client = new ex.novus.NovusClient('http://localhost:8080');
-		client.login('Dan');
-		client.createRoom('AwesomeRoom');
+		client.login('Dan', 'test', function (success) {
+			if(success == true) {
+				client.createRoom('AwesomeRoom');
+			}
+		});
 		
 		//--Startup new engine
 		var _engine = new ex.Engine(800, 500, 40);
