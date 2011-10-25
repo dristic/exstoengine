@@ -1,10 +1,4 @@
 (function () {
-	
-	// Globals
-	var socket = io.connect('http://localhost:8080');
-	socket.emit('login', { username: 'Dan' });
-	socket.emit('createRoom', { name: 'DansRoom' });
-	
 	ex.using([
           "ex.Engine",
           "ex.display.AnimatedSprite",
@@ -13,9 +7,14 @@
           "ex.display.SpriteMap",
           "ex.display.Emitter",
           "ex.plugins.Emitter2",
-          "ex.sound.Sound"
+          "ex.sound.Sound",
+          "ex.novus.NovusClient"
           	], 
-  	function () {
+  	function () {	
+		var client = new ex.novus.NovusClient('http://localhost:8080');
+		client.login('Dan');
+		client.createRoom('AwesomeRoom');
+		
 		//--Startup new engine
 		var _engine = new ex.Engine(800, 500, 40);
 		
