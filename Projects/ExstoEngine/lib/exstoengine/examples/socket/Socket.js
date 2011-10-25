@@ -2,6 +2,8 @@
 	
 	// Globals
 	var socket = io.connect('http://localhost:8080');
+	socket.emit('login', { username: 'Dan' });
+	
 	var playerSpeed = 10;
 	
 	ex.using([
