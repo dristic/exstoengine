@@ -31,7 +31,7 @@ ex.using([
 					    '.gif',
 					    '.bmp', '.dib'
 					    ]
-			}
+			};
 		},
 		
 		load: function (name, filePath) {
