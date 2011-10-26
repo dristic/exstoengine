@@ -244,11 +244,17 @@
 		client.on('jump', function () {
 			player.jump();
 		});
-		client.on('moveLeft', function () {
-			player.moveLeft();
+		client.on('leftStart', function () {
+			_engine.input.keys[65] = true;
 		});
-		client.on('moveRight', function () {
-			player.moveRight();
+		client.on('leftStop', function () {
+			_engine.input.keys[65] = false;
+		});
+		client.on('rightStart', function () {
+			_engine.input.keys[68] = true;
+		});
+		client.on('rightStop', function () {
+			_engine.input.keys[68] = false;
 		});
 		
 		// Setup explosion animations & teleporter

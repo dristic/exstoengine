@@ -106,8 +106,12 @@ function startGame() {
 		
 		_engine.onUpdate = function () {
 			if(_engine.input.isKeyDown(ex.util.Key.Spacebar)) {
-				client.message('testing!');
+				client.messageTo('Dan', 'test', {});
 			}
 		};
+		
+		client.on('test', function (data) {
+			console.log('works');
+		});
 	});
 };
