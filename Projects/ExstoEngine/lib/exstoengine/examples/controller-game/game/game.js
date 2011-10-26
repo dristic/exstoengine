@@ -25,7 +25,7 @@
           "ex.novus.NovusClient"
           	], 
   	function () {		
-		var client = new ex.novus.NovusClient('http://localhost:8080');
+		var client = new ex.novus.NovusClient('http://shadowrule.com:8080');
 		client.login('Joe', 'test', function (success) {
 			if(success == true) {
 				client.createRoom('controller-game');
@@ -33,7 +33,7 @@
 		});
 		
 		//--Startup new engine
-		var _engine = new ex.Engine(800, 500, 600);
+		var _engine = new ex.Engine(800, 500, 60);
 		_engine.client = client;
 		
 		//--Setup rendering
