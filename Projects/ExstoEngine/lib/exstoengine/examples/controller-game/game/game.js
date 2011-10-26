@@ -25,15 +25,16 @@
           "ex.novus.NovusClient"
           	], 
   	function () {		
-		var client = new ex.novus.NovusClient('localhost:8080');
+		var client = new ex.novus.NovusClient('http://localhost:8080');
 		client.login('Joe', 'test', function (success) {
 			if(success == true) {
-				client.createGame('controller-game');
+				client.createRoom('controller-game');
 			}
 		});
 		
 		//--Startup new engine
 		var _engine = new ex.Engine(800, 500, 600);
+		_engine.client = client;
 		
 		//--Setup rendering
 		_engine.setupCanvas("#000000");
@@ -238,6 +239,17 @@
 						_engine.imageRepository.getImage("Player")), 
 				true, 
 				_engine.input);
+		
+		var client = _engine.client;
+		client.on('jump', function () {
+			player.jump();
+		});
+		client.on('moveLeft', function () {
+			player.moveLeft();
+		});
+		client.on('moveRight', function () {
+			player.moveRight();
+		});
 		
 		// Setup explosion animations & teleporter
 		var explosion1 = new entity.Explosion(
