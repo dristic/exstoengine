@@ -19,22 +19,8 @@ ex.using([
 		 * 
 		 * @constructor
 		 */
-		constructor: function (url, numChannels) {
-			var _audio = new Audio(),
-				_this = this;
-			
-			_audio.src = url;
-			
-			_audio.addEventListener('canplaythrough', function (event) {
-				var i = numChannels || 4;
-				while(i--) {
-					_this.channels.push(this.cloneNode(true));
-					_this.readyChannels.push(true);
-					_this.ready = true;
-				}
-			});
-			
-			this.audio = _audio;
+		constructor: function (audio) {
+			this.audio = audio;
 			this.channels = [];
 			this.readyChannels = [];
 			this.ready = false;
