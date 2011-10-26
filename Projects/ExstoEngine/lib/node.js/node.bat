@@ -1,3 +1,3 @@
-node.exe ExampleServer.js
+node.exe server.js
 
 pause
