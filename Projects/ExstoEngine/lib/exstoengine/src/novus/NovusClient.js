@@ -10,6 +10,10 @@ ex.using([
 			this.socket.on('login', function (data) {
 				that.callback(data.success);
 			});
+			
+			this.socket.on('roomMessage', function(data) {
+				console.log(data.message);
+			});
 		},
 		
 		login: function (name, password, callback) {
@@ -27,6 +31,10 @@ ex.using([
 		
 		leaveRoom: function() {
 			this.socket.emit('leaveRoom', {});
+		},
+		
+		message: function(message) {
+			this.socket.emit('roomMessage', { message: message });
 		}
 	});
 });
