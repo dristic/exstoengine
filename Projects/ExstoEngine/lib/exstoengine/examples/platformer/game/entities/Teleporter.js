@@ -2,16 +2,16 @@ ex.using([
    'ex.world.Entity',
    'ex.display.AnimatedSprite'
 ], function () {
-	ex.define('entity.Explosion', ex.world.Entity, {
+	ex.define('game.entities.Teleporter', ex.world.Entity, {
 		constructor: function (name, position, sprite, collides) {
 			this._super("constructor", 
-					[name,
+					[name, 
 					 position,
 					 sprite,
 					 collides]);
-			this.sprite.createAnimation('Explode', [0, 1, 2, 3]);
-			this.sprite.play('Explode');
-			this.speed = 10;
+			this.sprite.createAnimation('Teleport', [0, 1, 2, 3, 4, 5, 6, 7, 8]);
+			this.sprite.play('Teleport');
+			this.triggered = false;
 		}
 	});
 });

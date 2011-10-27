@@ -2,7 +2,7 @@ ex.using([
    'ex.world.Entity',
    'ex.display.AnimatedSprite'
 ], function () {
-	ex.define('entity.Player', ex.world.Entity, {
+	ex.define('game.entities.Player', ex.world.Entity, {
 		constructor: function (name, position, sprite, collides, input) {
 			this._super("constructor", 
 					[name, 

@@ -16,11 +16,11 @@
           "ex.display.ui.TitleMenu",
           "ex.display.ui.StatusBar",
           
-          "entity.Player",
-          "entity.Explosion",
-          "entity.Asteroid",
-          "entity.Teleporter",
-          "entity.MovingPlatform",
+          "game.entities.Player",
+          "game.entities.Explosion",
+          "game.entities.Asteroid",
+          "game.entities.Teleporter",
+          "game.entities.MovingPlatform",
           	], 
   	function () {		
 		//--Startup new engine
@@ -221,7 +221,7 @@
 		ex.Assets.load("Platform", "../assets/world/platform.png");
 		
 		// Setup player
-		var player = new entity.Player(
+		var player = new game.entities.Player(
 				"Player", 
 				new ex.base.Vector(100, 150), 
 				new ex.display.AnimatedSprite(
@@ -232,7 +232,7 @@
 				_engine.input);
 		
 		// Setup explosion animations & teleporter
-		var explosion1 = new entity.Explosion(
+		var explosion1 = new game.entities.Explosion(
 				"Explosion", 
 				new ex.base.Vector(200, 145), 
 				new ex.display.AnimatedSprite(
@@ -240,7 +240,7 @@
 						48, 48, 7, 
 						ex.Assets.getImage("Explosion")), 
 				true);
-		var explosion2 = new entity.Explosion(
+		var explosion2 = new game.entities.Explosion(
 				"Explosion", 
 				new ex.base.Vector(300, 50), 
 				new ex.display.AnimatedSprite(
@@ -248,7 +248,7 @@
 						48, 48, 7, 
 						ex.Assets.getImage("Explosion")),
 				true);
-		var explosion3 = new entity.Explosion(
+		var explosion3 = new game.entities.Explosion(
 				"Explosion", 
 				new ex.base.Vector(500, 155), 
 				new ex.display.AnimatedSprite(
@@ -260,7 +260,7 @@
 		// Teleporter with onCollide event set
 		// TODO: make the teleport event a one line call within teleport
 		// 	e.g.: teleporter.teleport(player, level2, 400, 600);
-		var teleporter = new entity.Teleporter(
+		var teleporter = new game.entities.Teleporter(
 				"Teleporter", 
 				new ex.base.Vector(448, 512), 
 				new ex.display.AnimatedSprite(
@@ -279,7 +279,7 @@
 		};
 		
 		//Moving Platform
-		var platform = new entity.MovingPlatform(
+		var platform = new game.entities.MovingPlatform(
 				"Platform",
 				new ex.base.Vector(448, 600),
 				new ex.base.Vector(1000, 600),
@@ -301,7 +301,7 @@
 		var asteroidField = [];
 		var cap = 50;
 		for(var counter = 0; counter < cap; counter++){
-			asteroidField.push(new entity.Asteroid(
+			asteroidField.push(new game.entities.Asteroid(
 					"Asteroid",
 					new ex.base.Vector(Math.random() * 2400 - 1200, Math.random() * 1500 - 750),
 					new ex.display.Sprite(
@@ -373,7 +373,7 @@
 
 
 		
-		var asteroid = new entity.Asteroid(
+		var asteroid = new game.entities.Asteroid(
 				"Asteroid",
 				new ex.base.Vector(750,162),
 				new ex.display.Sprite(

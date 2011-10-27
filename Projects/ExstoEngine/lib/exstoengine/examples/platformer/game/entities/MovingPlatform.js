@@ -2,7 +2,7 @@ ex.using([
    'ex.world.Entity',
    'ex.display.Sprite'
 ], function () {
-	ex.define('entity.MovingPlatform', ex.world.Entity, {
+	ex.define('game.entities.MovingPlatform', ex.world.Entity, {
 		constructor: function (name, startPosition, endPosition, speed, sprite) {
 			this.startPosition = startPosition;
 			this.endPosition = endPosition;
