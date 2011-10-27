@@ -29,6 +29,10 @@ ex.using([
 				that.callback(data.list);
 			});
 			
+			this.socket.on('joinRoom', function (data) {
+				that.callback(data);
+			});
+			
 			this.socket.on('createRoom', ex.bind(this, function (data) {
 				this.dispatchEvent('createRoom', data);
 			}));
@@ -89,7 +93,8 @@ ex.using([
 		 * 
 		 * @param {String} The name of the room to join.
 		 */
-		joinRoom: function(name) {
+		joinRoom: function(name, callback) {
+			this.callback = callback;
 			this.socket.emit('joinRoom', { name: name });
 		},
 		

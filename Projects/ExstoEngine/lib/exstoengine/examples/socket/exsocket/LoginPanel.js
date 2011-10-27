@@ -41,10 +41,6 @@ Ext.define('exsocket.LoginPanel', {
             	setTimeout(function () {
             		login(form.getValues());
             		form.destroy();
-            		//var viewport = Ext.getCmp('viewport');
-            		//viewport.removeAll();
-            		//viewport.destroy();
-            		//Ext.select('.x-box-inner').destroy();
             	}, 200);
             }
         }

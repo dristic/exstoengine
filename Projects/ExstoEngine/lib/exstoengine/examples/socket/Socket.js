@@ -24,6 +24,18 @@ window.login = function (data) {
 	});
 };
 
+window.joinRoom = function (name) {
+	client.joinRoom(name, function (data) {
+		if(data.success == true) {
+			var viewport = Ext.getCmp('viewport');
+    		viewport.removeAll();
+    		viewport.destroy();
+    		Ext.select('.x-box-inner').destroy();
+    		startGame();
+		}
+	});
+};
+
 function startGame() {
 	ex.using([
           "ex.Engine",
