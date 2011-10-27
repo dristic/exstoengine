@@ -20,7 +20,7 @@
           "entity.Explosion",
           "entity.Asteroid",
           "entity.Teleporter",
-          "entity.MovingPlatform"
+          "entity.MovingPlatform",
           	], 
   	function () {		
 		//--Startup new engine
@@ -36,9 +36,9 @@
 		//--Open base world
 		_engine.openWorld(ex.world.World);
 		
-		//--Load Images
-		_engine.imageRepository.loadImage("Nebula", "../assets/world/bg.png");
-		_engine.imageRepository.loadImage("Explosion", "../assets/effects/explode3.png");
+		//--Load Images (current code)
+		ex.Assets.load("Nebula", "../assets/world/bg.png");
+		ex.Assets.load("Explosion", "../assets/effects/explode3.png");
 		
 		var titleScreen = new ex.display.ui.TitleMenu(
 				[{
@@ -60,8 +60,8 @@
 					}
 				}], 
 				0, 
-				_engine.imageRepository.getImage("Nebula"), 
-				_engine.imageRepository.getImage("Explosion"), 
+				ex.Assets.getImage("Nebula"),
+				ex.Assets.getImage("Explosion"),
 				_engine.input);
 		
 		_engine.currentWorld.addObject(titleScreen);
@@ -206,18 +206,19 @@
 				];
 		
 		// Sounds
-		var laser = new ex.sound.Sound('../assets/sounds/lazer.ogg', 7);
+		ex.Assets.load('Laser', '../assets/sounds/lazer.ogg', {numChannels: 7});
+		var laser = ex.Assets.getAudio('Laser');
 		
 		// Images
-		_engine.imageRepository.loadImage("Teleport", "../assets/effects/teleport2.png");
-		_engine.imageRepository.loadImage("Tiles", "../assets/world/tileset-platformer.png");
-		_engine.imageRepository.loadImage("Player", "../assets/units/player.png");
-		_engine.imageRepository.loadImage("Asteroid", "../assets/world/asteroid.png");
-		_engine.imageRepository.loadImage("edgeUp", "../assets/debug/EdgeUp.png");
-		_engine.imageRepository.loadImage("edgeDown", "../assets/debug/EdgeDown.png");
-		_engine.imageRepository.loadImage("edgeLeft", "../assets/debug/EdgeLeft.png");
-		_engine.imageRepository.loadImage("edgeRight", "../assets/debug/EdgeRight.png");
-		_engine.imageRepository.loadImage("Platform", "../assets/world/platform.png");
+		ex.Assets.load("Teleport", "../assets/effects/teleport2.png");
+		ex.Assets.load("Tiles", "../assets/world/tileset-platformer.png");
+		ex.Assets.load("Player", "../assets/units/player.png");
+		ex.Assets.load("Asteroid", "../assets/world/asteroid.png");
+		ex.Assets.load("edgeUp", "../assets/debug/EdgeUp.png");
+		ex.Assets.load("edgeDown", "../assets/debug/EdgeDown.png");
+		ex.Assets.load("edgeLeft", "../assets/debug/EdgeLeft.png");
+		ex.Assets.load("edgeRight", "../assets/debug/EdgeRight.png");
+		ex.Assets.load("Platform", "../assets/world/platform.png");
 		
 		// Setup player
 		var player = new entity.Player(
@@ -226,7 +227,7 @@
 				new ex.display.AnimatedSprite(
 						new ex.base.Vector(0,0),
 						36, 40, 7,
-						_engine.imageRepository.getImage("Player")), 
+						ex.Assets.getImage("Player")), 
 				true, 
 				_engine.input);
 		
@@ -237,7 +238,7 @@
 				new ex.display.AnimatedSprite(
 						new ex.base.Vector(0,0), 
 						48, 48, 7, 
-						_engine.imageRepository.getImage("Explosion")), 
+						ex.Assets.getImage("Explosion")), 
 				true);
 		var explosion2 = new entity.Explosion(
 				"Explosion", 
@@ -245,7 +246,7 @@
 				new ex.display.AnimatedSprite(
 						new ex.base.Vector(0,0), 
 						48, 48, 7, 
-						_engine.imageRepository.getImage("Explosion")),
+						ex.Assets.getImage("Explosion")),
 				true);
 		var explosion3 = new entity.Explosion(
 				"Explosion", 
@@ -253,7 +254,7 @@
 				new ex.display.AnimatedSprite(
 						new ex.base.Vector(0,0), 
 						48, 48, 7, 
-						_engine.imageRepository.getImage("Explosion")),
+						ex.Assets.getImage("Explosion")),
 				true);
 		
 		// Teleporter with onCollide event set
@@ -265,7 +266,7 @@
 				new ex.display.AnimatedSprite(
 						new ex.base.Vector(0,0), 
 						60, 60, 10, 
-						_engine.imageRepository.getImage("Teleport")),
+						ex.Assets.getImage("Teleport")),
 				true);
 		teleporter.onCollide = function(target, data){
 			if(target.name == "Player" && !teleporter.triggered){
@@ -285,14 +286,14 @@
 				100,
 				new ex.display.Sprite(
 						new ex.base.Vector(0,0),
-						_engine.imageRepository.getImage("Platform")));
+						ex.Assets.getImage("Platform")));
 		
 		// Debug images to show edges on tiles
 		var edgeDebug = {
-			top: _engine.imageRepository.getImage("edgeUp"),
-			bottom: _engine.imageRepository.getImage("edgeDown"),
-			left: _engine.imageRepository.getImage("edgeLeft"),
-			right: _engine.imageRepository.getImage("edgeRight")
+			top: ex.Assets.getImage("edgeUp"),
+			bottom: ex.Assets.getImage("edgeDown"),
+			left: ex.Assets.getImage("edgeLeft"),
+			right: ex.Assets.getImage("edgeRight")
 		};
 		
 		// Generates an array of asteroids at random position and velocities
@@ -305,22 +306,22 @@
 					new ex.base.Vector(Math.random() * 2400 - 1200, Math.random() * 1500 - 750),
 					new ex.display.Sprite(
 							new ex.base.Vector(0,0),
-							_engine.imageRepository.getImage("Asteroid")),
+							ex.Assets.getImage("Asteroid")),
 					false));
 			asteroidField[counter].velocity = new ex.base.Vector(Math.random() * 15 - 7.5, Math.random() * 15 - 7.5);
 		}
 		
 		// Load tile maps
-		var level1Map = new ex.display.SpriteMap(32, 32, level1Tiles, _engine.imageRepository.getImage("Tiles"), "Base Map");
-		var level1Overlay = new ex.display.SpriteMap(32, 32, level1Hidden, _engine.imageRepository.getImage("Tiles"), "Hidden Overlay");
-		var level2Map = new ex.display.SpriteMap(32, 32, level2Tiles, _engine.imageRepository.getImage("Tiles"), "Base Map");
+		var level1Map = new ex.display.SpriteMap(32, 32, level1Tiles, ex.Assets.getImage("Tiles"), "Base Map");
+		var level1Overlay = new ex.display.SpriteMap(32, 32, level1Hidden, ex.Assets.getImage("Tiles"), "Hidden Overlay");
+		var level2Map = new ex.display.SpriteMap(32, 32, level2Tiles, ex.Assets.getImage("Tiles"), "Base Map");
 		
 		// Load collision maps
 		var level1CollisionMap = new ex.world.CollisionMap(32, 32, level1Collision, true, edgeDebug);
 		var level2CollisionMap = new ex.world.CollisionMap(32, 32, level2Collision, true, edgeDebug);
 		
 		// Setup background sprite
-		var nebula = new ex.display.Sprite(new ex.base.Vector(0,0), _engine.imageRepository.getImage("Nebula"));
+		var nebula = new ex.display.Sprite(new ex.base.Vector(0,0), ex.Assets.getImage("Nebula"));
 		
 		// Setup level 1
 		var firstLevel = new ex.world.Map("Level 1");
@@ -377,7 +378,7 @@
 				new ex.base.Vector(750,162),
 				new ex.display.Sprite(
 						new ex.base.Vector(0,0),
-						_engine.imageRepository.getImage("Asteroid")),
+						ex.Assets.getImage("Asteroid")),
 				true);
 		asteroid.onCollide = function(target, data, dt){
 			if(target.name == "Player"){

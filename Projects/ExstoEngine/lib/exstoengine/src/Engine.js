@@ -2,6 +2,7 @@ ex.using([
           "ex.base.Component",
           "ex.util.Input",
           "ex.util.Debug",
+          "ex.util.AssetManager",
           "ex.display.ImageRepository",
           "ex.util.CollisionManager",
           "ex.display.Camera",
