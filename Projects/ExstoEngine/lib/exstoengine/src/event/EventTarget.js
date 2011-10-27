@@ -69,15 +69,18 @@ ex.using([], function () {
          * @param params
          * @returns {Boolean}
          */
-        dispatchEvent: function (event, params) {
+        dispatchEvent: function (event, eventObject) {
         	if(this._listeners[event] == null){
         		return false;
         	}
         	
         	var i = this._listeners[event].length;
         	while(i--) {
-        		var func = this._listeners[event][i];
-        		func(params);
+        		var func = this._listeners[event][i],
+        			ret = func(eventObject);
+        		if(ret == false) {
+        			break;
+        		}
         	}
         	return true;
         },

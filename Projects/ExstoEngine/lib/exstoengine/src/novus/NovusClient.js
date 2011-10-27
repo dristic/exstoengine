@@ -1,7 +1,7 @@
 ex.using([
-
+      'ex.event.EventTarget'
 ], function () {
-	ex.define('ex.novus.NovusClient', {
+	ex.define('ex.novus.NovusClient', 'ex.event.EventTarget', {
 		/**
 		 * The client object to connect to a Novus node.js server.
 		 * 
@@ -24,6 +24,14 @@ ex.using([
 			this.socket.on('login', function (data) {
 				that.callback(data.success);
 			});
+			
+			this.socket.on('roomList', function (data) {
+				that.callback(data.list);
+			});
+			
+			this.socket.on('createRoom', ex.bind(this, function (data) {
+				this.dispatchEvent('createRoom', data);
+			}));
 			
 			this.socket.on('roomMessage', ex.bind(this, function(data) {
 				var callbacks = this.listeners[data.type] || [];
@@ -60,6 +68,11 @@ ex.using([
 		login: function (name, password, callback) {
 			this.callback = callback;
 			this.socket.emit('login', { name: name, password: password });
+		},
+		
+		roomList: function (callback) {
+			this.callback = callback;
+			this.socket.emit('roomList', {});
 		},
 		
 		/**
