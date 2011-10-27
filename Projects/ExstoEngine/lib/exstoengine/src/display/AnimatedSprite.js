@@ -94,7 +94,7 @@ ex.using([
 		 * Stops the current animation.
 		 * @function
 		 * @name stop
-		 * @memberOf ex.base.AnimatedSprite
+		 * @memberOf ex.display.AnimatedSprite
 		 */
 		stop: function() {
 			this.playing = false;
@@ -104,7 +104,7 @@ ex.using([
 		 * Resumes play of the current animation.
 		 * @function
 		 * @name resume
-		 * @memberOf ex.base.AnimatedSprite
+		 * @memberOf ex.display.AnimatedSprite
 		 */
 		resume: function() {
 			this.playing = true;

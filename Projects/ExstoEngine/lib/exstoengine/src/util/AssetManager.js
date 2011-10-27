@@ -3,6 +3,13 @@ ex.using([
     'ex.sound.Sound'
 ],function () {
 	ex.define("ex.util.AssetManager", ex.base.GlobalComponent, {
+		/**
+		 * The global asset manager, loads and retrieves audio, video, 
+		 * and image files.
+		 * 
+		 * @name ex.Assets
+		 * @class
+		 */
 		statics: {
 			componentName: 'Assets',
 			
@@ -39,6 +46,16 @@ ex.using([
 				    ]
 			},
 			
+			/**
+			 * Retrieves an audio file by name from the asset manager.
+			 * 
+			 * @function
+			 * @name getAudio
+			 * @memberOf ex.Assets
+			 * 
+			 * @param {String} name
+			 * @returns {ex.sound.Sound} audio file or null with error
+			 */
 			getAudio: function(name) {
 				return this._audio[name] || 
 					throwAssetDoesNotExistError(name, 'audio');
@@ -49,11 +66,34 @@ ex.using([
 					throwAssetDoesNotExistError(name, 'video');
 			},
 			
+			/**
+			 * Retrieves an image file by name from the asset manager.
+			 * 
+			 * @function
+			 * @name getImage
+			 * @memberOf ex.Assets
+			 * 
+			 * @param {String} name
+			 * @returns {Image} image file or null with error
+			 */
 			getImage: function(name) {
 				return this._images[name] || 
 					throwAssetDoesNotExistError(name, 'image');
 			},
 			
+			/**
+			 * Loads a file from the file system and adds it to the
+			 * asset manager.
+			 * 
+			 * @function
+			 * @name load
+			 * @memberOf ex.Assets
+			 * 
+			 * @param {String} name name used to retrieve asset once loaded
+			 * @param {String} filePath path to the asset in the file system
+			 * @param {Object} [options] extra parameters, varies
+			 * 		by asset type.
+			 */
 			load: function (name, filePath, options) {
 				// Determine file type and use proper loading method
 				var extension = filePath.substring(filePath.lastIndexOf('.'));

@@ -2,6 +2,7 @@
 	ex.define("ex.display.ImageRepository", {
 		
 		/**
+		 * *** LEGACY AS OF version 0.6.3! ***
 		 * Manages the loading and retrieving of images for the game.
 		 * 
 		 * @name ex.display.ImageRepository
