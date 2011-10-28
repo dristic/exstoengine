@@ -1,26 +1,15 @@
-Ext.create('Ext.data.Store', {
-    storeId:'roomStore',
-    fields:['name', 'creator', 'users'],
-    data:{'items':[
-    ]},
-    proxy: {
-        type: 'memory',
-        reader: {
-            type: 'json',
-            root: 'items'
-        }
-    }
-});
-
-Ext.define('exsocket.RoomList', {
+Ext.define('ExSocket.view.room.List', {
 	extend: 'Ext.grid.Panel',
+	xtype: 'room-list',
+	
     title: 'Rooms',
-    store: Ext.data.StoreManager.lookup('roomStore'),
+    
     columns: [
         { header: 'Name',  dataIndex: 'name', flex: 1 },
         { header: 'Creator', dataIndex: 'creator' },
         { header: 'Users', dataIndex: 'users', renderer: function (value) { return value.length; } }
     ],
+    
     height: 300,
     width: 400,
     

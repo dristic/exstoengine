@@ -1,23 +1,18 @@
 var client;
 
-window.login = function (data) {
+window.login = function (data, callback, scope) {
 	ex.using([
 	      "ex.novus.NovusClient"
 	  ], function () {
 		client = new ex.novus.NovusClient('http://localhost:8080');
-		client.login(data.username, data.password, function (success) {
+		client.login(data.name, data.password, function (success) {
 			if(success == true) {
 				client.createRoom('Awesome Room');
 				client.createRoom('Awesome Room2');
 				client.createRoom('Awesome Room3');
 				
-				var viewport = Ext.getCmp('viewport');
-				viewport.removeAll();
-				viewport.add(Ext.create('exsocket.RoomList'));
-				
 				client.roomList(function (list) {
-					var store = Ext.data.StoreManager.lookup('roomStore');
-					store.loadData(list);
+					ex.bind(scope, callback)(list);
 				});
 			}
 		});
