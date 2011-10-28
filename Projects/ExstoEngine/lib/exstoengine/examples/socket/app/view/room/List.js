@@ -15,9 +15,6 @@ Ext.define('ExSocket.view.room.List', {
     
     buttons: [{
         text: 'Join Room',
-        handler: function () {
-        	var selection = this.up('panel').getSelectionModel().getSelection()[0];
-        	joinRoom(selection.data.name);
-        }
+        id: 'join-button'
     }]
 });

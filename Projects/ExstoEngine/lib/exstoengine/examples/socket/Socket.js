@@ -19,14 +19,10 @@ window.login = function (data, callback, scope) {
 	});
 };
 
-window.joinRoom = function (name) {
+window.joinRoom = function (name, callback, scope) {
 	client.joinRoom(name, function (data) {
 		if(data.success == true) {
-			var viewport = Ext.getCmp('viewport');
-    		viewport.removeAll();
-    		viewport.destroy();
-    		Ext.select('.x-box-inner').destroy();
-    		startGame();
+			ex.bind(scope, callback)();
 		}
 	});
 };

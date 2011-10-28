@@ -39,8 +39,8 @@ Ext.define('ExSocket.controller.Main', {
         	formContainer.getEl().fadeOut({
         		duration: 200,
         		callback: function () {
-        			login(form.getValues(), this.afterLogin, this);
         			formContainer.destroy();
+        			login(form.getValues(), this.afterLogin, this);
         		},
         		scope: this
         	});
@@ -54,6 +54,28 @@ Ext.define('ExSocket.controller.Main', {
 		this.getContentPanel().add({
 			xtype: 'room-list',
 			store: store
+		});
+		this.getContentPanel().down('#join-button').addListener('click', this.joinRoom, this);
+	},
+	
+	joinRoom: function () {
+    	var selection = this.getContentPanel().down('room-list').getSelectionModel().getSelection()[0];
+    	joinRoom(selection.data.name, this.afterJoinRoom, this);
+    },
+	
+	afterJoinRoom: function () {
+		var gridPanel = this.getContentPanel().down('room-list');
+		
+		gridPanel.getEl().fadeOut({
+			duration: 200,
+			callback: function () {
+				var viewport = this.getViewport();
+				viewport.removeAll();
+				viewport.destroy();
+				Ext.select('.x-box-inner').destroy();
+				startGame();
+			},
+			scope: this
 		});
 	}
 });
