@@ -27,7 +27,7 @@ window.joinRoom = function (name, callback, scope) {
 	});
 };
 
-function startGame() {
+window.startGame = function () {
 	ex.using([
           "ex.Engine",
           "ex.display.AnimatedSprite",
