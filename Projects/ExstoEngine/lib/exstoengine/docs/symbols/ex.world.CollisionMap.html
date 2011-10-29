@@ -5,7 +5,7 @@
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
 		
-		<title>JsDoc Reference - ex.Element</title>
+		<title>JsDoc Reference - ex.world.CollisionMap</title>
 
 		<style type="text/css">
 			/* default.css */
@@ -1244,6 +1244,8 @@ figure {
 	
 	<li><a href="../symbols/ex.display.Sprite.html">ex.display.Sprite</a></li>
 	
+	<li><a href="../symbols/ex.display.SpriteMap.html">ex.display.SpriteMap</a></li>
+	
 	<li><a href="../symbols/ex.display.ui.TitleMenu.html">ex.display.ui.TitleMenu</a></li>
 	
 	<li><a href="../symbols/ex.Element.html">ex.Element</a></li>
@@ -1259,6 +1261,8 @@ figure {
 	<li><a href="../symbols/ex.sound.Sound.html">ex.sound.Sound</a></li>
 	
 	<li><a href="../symbols/ex.util.CollisionManager.html">ex.util.CollisionManager</a></li>
+	
+	<li><a href="../symbols/ex.world.CollisionMap.html">ex.world.CollisionMap</a></li>
 	
 	<li><a href="../symbols/ex.world.Entity.html">ex.world.Entity</a></li>
 	
@@ -1281,7 +1285,7 @@ figure {
 <!-- ============================== class title ============================ -->
 			<h1 class="classTitle">
 				
-				Class ex.Element
+				Class ex.world.CollisionMap
 			</h1>
 
 <!-- ============================== class summary ========================== -->			
@@ -1289,16 +1293,16 @@ figure {
 				
 				
 			
-				ex.Element
 				
 				
-					<br /><i>Defined in: </i> <a href="../symbols/src/src__ExstoEngine.js.html">ExstoEngine.js</a>.
+				
+					<br /><i>Defined in: </i> <a href="../symbols/src/src__world_CollisionMap.js.html">CollisionMap.js</a>.
 				
 			</p>
 
 <!-- ============================== constructor summary ==================== -->			
 			
-			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class ex.Element.">
+			<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class ex.world.CollisionMap.">
 				<caption>Class Summary</caption>
 				<thead>
 					<tr>
@@ -1311,9 +1315,9 @@ figure {
 						<td class="attributes">&nbsp;</td>
 						<td class="nameDescription" >
 							<div class="fixedFont">
-								<b><a href="../symbols/ex.Element.html#constructor">ex.Element</a></b>()
+								<b><a href="../symbols/ex.world.CollisionMap.html#constructor">ex.world.CollisionMap</a></b>(tileWidth, tileHeight, data)
 							</div>
-							<div class="description">Element helper for creating and getting DOM elements.</div>
+							<div class="description">The bounding tile map used for world collision.</div>
 						</td>
 					</tr>
 				</tbody>
@@ -1322,34 +1326,63 @@ figure {
 
 <!-- ============================== properties summary ===================== -->
 			
-
-<!-- ============================== methods summary ======================== -->
-			
 				
 				
-				<table class="summaryTable" cellspacing="0" summary="A summary of the methods documented in the class ex.Element.">
-					<caption>Method Summary</caption>
+				<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class ex.world.CollisionMap.">
+					<caption>Field Summary</caption>
 					<thead>
 						<tr>
-							<th scope="col">Method Attributes</th>
-							<th scope="col">Method Name and Description</th>
+							<th scope="col">Field Attributes</th>
+							<th scope="col">Field Name and Description</th>
 						</tr>
 					</thead>
 					<tbody>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">ex.Element.<b><a href="../symbols/ex.Element.html#.createTag">createTag</a></b>(tag, params)
+								<div class="fixedFont">
+								<b><a href="../symbols/ex.world.CollisionMap.html#collides">collides</a></b>
 								</div>
 								<div class="description"></div>
 							</td>
 						</tr>
 					
 						<tr>
-							<td class="attributes">&lt;static&gt; &nbsp;</td>
+							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription">
-								<div class="fixedFont">ex.Element.<b><a href="../symbols/ex.Element.html#.getByTagName">getByTagName</a></b>(name)
+								<div class="fixedFont">
+								<b><a href="../symbols/ex.world.CollisionMap.html#position">position</a></b>
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/ex.world.CollisionMap.html#scrollFactor">scrollFactor</a></b>
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/ex.world.CollisionMap.html#tileHeight">tileHeight</a></b>
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription">
+								<div class="fixedFont">
+								<b><a href="../symbols/ex.world.CollisionMap.html#tileWidth">tileWidth</a></b>
 								</div>
 								<div class="description"></div>
 							</td>
@@ -1360,6 +1393,9 @@ figure {
 				
 				
 				
+			
+
+<!-- ============================== methods summary ======================== -->
 			
 <!-- ============================== events summary ======================== -->
 			
@@ -1372,17 +1408,40 @@ figure {
 				</div>
 				
 				<div class="fixedFont">
-						<b>ex.Element</b>()
+						<b>ex.world.CollisionMap</b>(tileWidth, tileHeight, data)
 				</div>
 				
 				<div class="description">
-					Element helper for creating and getting DOM elements.
+					The bounding tile map used for world collision.
 					
 				</div>
 				
 				
 				
 				
+					
+						<dl class="detailList">
+						<dt class="heading">Parameters:</dt>
+						
+							<dt>
+								<span class="light fixedFont">{Number}</span>  <b>tileWidth</b>
+								
+							</dt>
+								<dd></dd>
+						
+							<dt>
+								<span class="light fixedFont">{Number}</span>  <b>tileHeight</b>
+								
+							</dt>
+								<dd></dd>
+						
+							<dt>
+								<span class="light fixedFont">{Number[][]}</span>  <b>data</b>
+								
+							</dt>
+								<dd>2D array of collision data</dd>
+						
+						</dl>
 					
 					
 					
@@ -1396,18 +1455,15 @@ figure {
 
 <!-- ============================== field details ========================== -->		
 			
-
-<!-- ============================== method details ========================= -->		
-			
 				<div class="sectionTitle">
-					Method Detail
+					Field Detail
 				</div>
 				
-					<a name=".createTag"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="collides"> </a>
+					<div class="fixedFont">
 					
-					
-					<span class="light">ex.Element.</span><b>createTag</b>(tag, params)
+					<span class="light">{Boolean}</span>
+					<b>collides</b>
 					
 					</div>
 					<div class="description">
@@ -1417,27 +1473,7 @@ figure {
 					</div>
 					
 					
-					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>tag</b>
-									
-								</dt>
-								<dd></dd>
-							
-								<dt>
-									<b>params</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
-						
-						
-						
+
 						
 						
 						
@@ -1445,11 +1481,11 @@ figure {
 
 					<hr />
 				
-					<a name=".getByTagName"> </a>
-					<div class="fixedFont">&lt;static&gt; 
+					<a name="position"> </a>
+					<div class="fixedFont">
 					
-					
-					<span class="light">ex.Element.</span><b>getByTagName</b>(name)
+					<span class="light">{<a href="../symbols/ex.base.Vector.html">ex.base.Vector</a>}</span>
+					<b>position</b>
 					
 					</div>
 					<div class="description">
@@ -1459,21 +1495,73 @@ figure {
 					</div>
 					
 					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="scrollFactor"> </a>
+					<div class="fixedFont">
 					
-						
-							<dl class="detailList">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<b>name</b>
-									
-								</dt>
-								<dd></dd>
-							
-							</dl>
+					<span class="light">{<a href="../symbols/ex.base.Vector.html">ex.base.Vector</a>}</span>
+					<b>scrollFactor</b>
+					
+					</div>
+					<div class="description">
 						
 						
 						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="tileHeight"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Number}</span>
+					<b>tileHeight</b>
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+
+						
+						
+						
+						
+
+					<hr />
+				
+					<a name="tileWidth"> </a>
+					<div class="fixedFont">
+					
+					<span class="light">{Number}</span>
+					<b>tileWidth</b>
+					
+					</div>
+					<div class="description">
+						
+						
+						
+					</div>
+					
+					
+
 						
 						
 						
@@ -1481,6 +1569,9 @@ figure {
 
 					
 				
+			
+
+<!-- ============================== method details ========================= -->		
 			
 			
 <!-- ============================== event details ========================= -->		
@@ -1493,7 +1584,7 @@ figure {
 <!-- ============================== footer ================================= -->
 		<div class="fineprint" style="clear:both">
 			
-			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri Oct 28 2011 18:07:26 GMT-0700 (MST)
+			Documentation generated by <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0 on Fri Oct 28 2011 01:17:18 GMT-0700 (MST)
 		</div>
 		
 			</div>
