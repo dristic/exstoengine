@@ -27,7 +27,7 @@ window.joinRoom = function (name, callback, scope) {
 	});
 };
 
-window.startGame = function () {
+window.startGame = function (canvas) {
 	ex.using([
           "ex.Engine",
           "ex.display.AnimatedSprite",
@@ -36,21 +36,42 @@ window.startGame = function () {
           "ex.display.SpriteMap",
           "ex.display.Emitter",
           "ex.plugins.Emitter2",
-          "ex.sound.Sound"
+          "ex.sound.Sound",
+          
+          "game.entities.Player"
           	], 
   	function () {
 		//--Startup new engine
 		var _engine = new ex.Engine(800, 500, 40);
 		
 		//--Setup rendering
-		_engine.setupCanvas("#000000");
+		_engine.setupCanvas("#000000", canvas);
 		_engine.enableDebugging();
 		
 		//--Setup input
 		_engine.input.listenOn(_engine.renderer.canvas);
 		
+		// Assets
+		ex.Assets.load('Player', '../assets/units/ship.png');
+		
 		//--Open base world
 		_engine.openWorld(ex.world.World);
+		
+		// Add player
+		var player = new game.entities.Player(
+				"Player", 
+				new ex.base.Vector(0, 0), 
+				new ex.display.Sprite(
+						0,
+						0,
+						ex.Assets.getImage("Player"),
+						'Player'), 
+				true, 
+				_engine.input);
+		
+		_engine.currentWorld.addObject(player);
+		
+		_engine.camera.follow(player);
 		
 		_engine.onUpdate = function () {
 			if(_engine.input.isKeyDown(ex.util.Key.Spacebar)) {

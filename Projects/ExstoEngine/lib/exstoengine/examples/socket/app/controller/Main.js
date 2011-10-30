@@ -5,7 +5,8 @@ Ext.define('ExSocket.controller.Main', {
         'Viewport',
         'Header',
         'login.Login',
-        'room.List'
+        'room.List',
+        'game.Panel'
 	],
 	
 	stores: [
@@ -69,11 +70,15 @@ Ext.define('ExSocket.controller.Main', {
 		gridPanel.getEl().fadeOut({
 			duration: 200,
 			callback: function () {
-				var viewport = this.getViewport();
-				viewport.removeAll();
-				viewport.destroy();
-				Ext.select('.x-box-inner').destroy();
-				startGame();
+				//var viewport = this.getViewport();
+				//viewport.removeAll();
+				//viewport.destroy();
+				//Ext.select('.x-box-inner').destroy();
+				
+				this.getContentPanel().add({
+					xtype: 'game-panel'
+				});
+				startGame(Ext.get('game-canvas').dom);
 			},
 			scope: this
 		});
