@@ -37,6 +37,8 @@ window.startGame = function (canvas) {
           "ex.display.Emitter",
           "ex.plugins.Emitter2",
           "ex.sound.Sound",
+          "ex.world.Map",
+          "ex.world.Layer",
           
           "game.entities.Player"
           	], 
@@ -53,6 +55,7 @@ window.startGame = function (canvas) {
 		
 		// Assets
 		ex.Assets.load('Player', '../assets/units/Character%20Boy.png');
+		ex.Assets.load('WoodBlock', '../assets/world/Wood%20Block.png');
 		
 		//--Open base world
 		_engine.openWorld(ex.world.World);
@@ -67,10 +70,41 @@ window.startGame = function (canvas) {
 				true, 
 				_engine.input);
 		
-		_engine.currentWorld.addObject(player);
-		_engine.renderer.renderables.push(player.sprite);
+		// Add wood floor
+		var data = [
+		 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		 	[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		 	[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+	 	];
+		
+		var floor = new ex.display.SpriteMap(
+				101,
+				171,
+				data,
+				ex.Assets.getImage('WoodBlock'),
+				'Floor');
+		
+		// Collision data
+		var collision = new ex.world.CollisionMap(
+				101,
+				171,
+				data);
 		
 		_engine.camera.follow(player);
+		
+		// Setup map
+		var map = new ex.world.Map('Level');
+		var layer = new ex.world.Layer('Layer1', collision, new ex.base.Vector(0, 0), new ex.base.Vector(1, 1));
+		map.addLayer(layer);
+		
+		layer.addItem(player);
+		layer.addItem(floor);
+		
+		_engine.currentWorld.addLevel(map);
+		_engine.currentWorld.loadLevel('Level');
+		
+		_engine.collisionManager.setActiveLevel(map);
 		
 		_engine.onUpdate = function () {
 			if(_engine.input.isKeyDown(ex.util.Key.Spacebar)) {

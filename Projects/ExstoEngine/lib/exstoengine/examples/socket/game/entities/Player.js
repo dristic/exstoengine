@@ -58,7 +58,7 @@ ex.using([
 			}
 			
 			// Gravity
-			//this.velocity.y += this.speed;
+			this.velocity.y += this.speed;
 			
 			// Trim speed if past max speed
 			if(this.velocity.x < -this.maxSpeed) {
