@@ -10,13 +10,23 @@ ex.using([
 					 sprite,
 					 collides]);
 			this.input = input;
-			this.speed = 10;
+			this.speed = 30;
 			this.maxSpeed = 200;
 			this.score = 0;
+			this.jumping = false;
+		},
+		
+		onCollide: function (target, data, dt) {
+			if(target.type == "TileMap" && data.pen.y > 0) {
+				this.jumping = false;
+			}
 		},
 		
 		jump: function(){
-			this.velocity.y -= this.speed * 80;
+			if(this.jumping == false) {
+				this.velocity.y -= this.speed * 30;
+				this.jumping = true;
+			}
 		},
 		
 		moveLeft: function() {

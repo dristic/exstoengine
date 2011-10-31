@@ -24,12 +24,13 @@ ex.using([
 		 * @property {ex.base.Vector} position
 		 * @property {ex.base.Vector} scrollFactor
 		 */
-		constructor: function(tileWidth, tileHeight, map, tileSet, name) {
+		constructor: function(tileWidth, tileHeight, map, tileSet, name, yOffset) {
 			this.collides = false;
 			this.name = name;
 			this.tileSet = tileSet;
 			this.position = new ex.base.Vector(0,0);
 			this.scrollFactor = new ex.base.Vector(1,1);
+			this.yOffset = yOffset || 0;
 
 			// Call Renderable constructor (visibility, opacity)
 			this._super("constructor", [true, 1.0]);
@@ -85,9 +86,9 @@ ex.using([
 		 * as a single image.
 		 */
 		_preRenderSpriteMap: function () {
-			var yPos = 0,
+			var yPos = this.tileMap.data.length - 1,
 				xPos = 0;
-			for(yPos; yPos < this.tileMap.data.length; yPos++) {
+			for(yPos; yPos > -1; yPos--) {
 				for(xPos; xPos < this.tileMap.data[yPos].length; xPos++) {
 					var tile = this.tileMap.data[yPos][xPos], sx = 0, sy = 0;
 					var tileValue = tile.value;
@@ -106,7 +107,7 @@ ex.using([
 								this.tileMap.tileWidth,
 								this.tileMap.tileHeight,
 								tile.position.x,
-								tile.position.y,
+								tile.position.y - (this.yOffset * yPos),
 								tile.width,
 								tile.height);
 					}

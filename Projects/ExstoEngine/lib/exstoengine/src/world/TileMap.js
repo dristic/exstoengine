@@ -80,18 +80,20 @@ ex.using([
 	});
 	
 	function convertValueMapToTileMap(tileData, tileWidth, tileHeight) {
-		var yPos = 0;
-		var xPos = 0;
+		var yPos = 0,
+			xPos = 0,
+			newMap = [];
 		for(yPos; yPos < tileData.length; yPos++) {
+			newMap[yPos] = [];
 			for(xPos = 0; xPos < tileData[yPos].length; xPos++) {
-				tileData[yPos][xPos] = new ex.world.Tile(
+				newMap[yPos][xPos] = new ex.world.Tile(
 						tileData[yPos][xPos],
 						new ex.base.Vector(xPos * tileWidth, yPos * tileHeight),
 						tileWidth,
 						tileHeight);
 			}
 		}
-		return tileData;
+		return newMap;
 	};
 	
 	function setupNeighbors(tiles) {
