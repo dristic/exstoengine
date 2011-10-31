@@ -3,6 +3,25 @@ ex.using([
   "ex.world.TileMap"
 ], function () {
 	ex.define("ex.world.CollisionMap", ex.world.TileMap, {
+		/**
+		 * Tile based collision data for an area.
+		 * 
+		 * @name ex.world.CollisionMap
+		 * 
+		 * @param tileWidth
+		 * @param tileHeight
+		 * @param data
+		 * @param debug
+		 * @param debugImages
+		 * 
+		 * @property tileWidth
+		 * @property tileHeight
+		 * @property collides
+		 * @property position
+		 * @property scrollFactor
+		 * 
+		 * @constructor
+		 */
 		constructor: function(tileWidth, tileHeight, data, debug, debugImages) {
 			this.tileWidth = tileWidth;
 			this.tileHeight = tileHeight;
@@ -10,12 +29,6 @@ ex.using([
 			
 			this.position = new ex.base.Vector(0,0);
 			this.scrollFactor = new ex.base.Vector(1,1);
-			
-			this.type = "TileMap";
-			
-			this.debug = debug;
-			
-			this.debugImages = debugImages;
 			
 			this._super("constructor", [tileWidth, tileHeight, data]);
 		},

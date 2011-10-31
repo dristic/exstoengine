@@ -1,5 +1,6 @@
 ex.using([
           "ex.base.Component",
+          "ex.base.Point",
           "ex.util.Input",
           "ex.util.Debug",
           "ex.util.AssetManager",
@@ -115,6 +116,25 @@ ex.using([
 			}
 			
 			this.currentWorld = new world(this.renderer);
+		},
+		
+		loadLevel: function(levelName) {
+			var levelNamespace = "game.levels." + levelName;
+			
+			ex.using([levelNamespace], function(){
+				var level = new game.levels[levelName](this.input);
+				var assets = level.getAssets();
+
+				ex.event.listen(ex.Assets, 'ready', function(){
+					var objects = level.getObjects();
+					this.currentWorld.addObjects(objects);
+				}, this);
+				
+				ex.Assets.loadBulk(assets);
+				
+				
+			});
+			
 		},
 		
 		loadComponent: function(component) {

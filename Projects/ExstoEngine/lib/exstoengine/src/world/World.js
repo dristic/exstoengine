@@ -130,6 +130,13 @@ ex.using([
 			this.renderer.renderables.push(object);
 		},
 		
+		addObjects: function(objects) {
+			var index = objects.length;
+			while(index--){
+				this.addObject(objects[index]);
+			}
+		},
+		
 		/**
 		 * Removes an object from the world by direct reference.
 		 * 

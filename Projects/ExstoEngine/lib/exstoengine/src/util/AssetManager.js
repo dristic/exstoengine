@@ -1,6 +1,7 @@
 ex.using([
     'ex.base.GlobalComponent',
-    'ex.sound.Sound'
+    'ex.sound.Sound',
+    'ex.event.EventTarget'
 ],function () {
 	ex.define("ex.util.AssetManager", ex.base.GlobalComponent, {
 		/**
@@ -19,7 +20,8 @@ ex.using([
 			_ready: true,
 			_assetsToLoad: 0,
 			_assetsLoaded: 0,
-			
+			_eventTarget: new ex.event.EventTarget(),
+	
 			_supportedExtensions: {
 				video: [
 				    // MP4 (Chrome, IE9, Safari, iOS, Android)
@@ -108,6 +110,13 @@ ex.using([
 				}
 			},
 			
+			loadBulk: function(list){
+				var index = list.length;
+				while(index--){
+					this.load(list[index].name, list[index].filePath, list[index].options);
+				}
+			},
+			
 			_loadImage: function(name, filePath, options) {
 				this._images[name] = new Image();
 				
@@ -120,11 +129,12 @@ ex.using([
 					that._assetsLoaded++;
 					if(that._assetsLoaded == that._assetsToLoad) {
 						that._ready = true;
+						this._eventTarget.dispatchEvent(that, 'ready');
 					}
 				};
 				
 				this._images[name].src = '';
-				this._images[name].src = filePath + '? ex=' + (new Date());
+				this._images[name].src = filePath + '?ex=' + (new Date()).getTime();
 			},
 			
 			_loadAudio: function(name, filePath, options) {
@@ -140,12 +150,13 @@ ex.using([
 				this._assetsToLoad++;
 				
 				that.audio.onError = throwFileUnableToLoadError;
-				that.audio.src = filePath + '? ex=' + (new Date());
+				that.audio.src = filePath + '?ex=' + (new Date()).getTime();
 				that.audio.addEventListener('canplaythrough', function (event) {
 					while(numChannels--) {
 						that.channels.push(that.audio.cloneNode(true));
 						that.readyChannels.push(true);
 						that.ready = true;
+						ex.event.dispatchEvent(that, 'ready');
 					}
 				});
 				

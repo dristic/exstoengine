@@ -168,8 +168,13 @@ if(!Array.indexOf){
 		/**
 		 * prepares all dependencies for loading then starts
 		 * the loader queue
-		 * @param namespaces {String} dependencies to be loaded
-		 * @param func {Function} the class being defined
+		 * 
+		 * @function
+		 * @name using
+		 * @memberOf ex
+		 * 
+		 * @param {String} namespaces dependencies to be loaded
+		 * @param {Function} func the class being defined
 		 */
 		using: function (namespaces, func) {
 			var loaded = true,
@@ -201,6 +206,15 @@ if(!Array.indexOf){
 			}
 		},
 		
+		/**
+		 * Loads a namespace for use.
+		 * 
+		 * @function
+		 * @name require
+		 * @memberOf ex
+		 * 
+		 * @param {String} namespace
+		 */
 		require: function(namespace) {
 			ex.Loader.asyncFile(this.namespaceToUrl(namespace));
 		},
@@ -209,8 +223,10 @@ if(!Array.indexOf){
 		 * Create relationship between the namespace and class
 		 * for forward and reverse lookup. Saves forward lookup in
 		 * _namespaces and reverse in _classes.
-		 * @param namespace {String or String[]} namespace in relationship
-		 * @param func {Function} class in relationship
+		 * 
+		 * 
+		 * @param {String or String[]} namespace namespace in relationship
+		 * @param {Function} func class in relationship
 		 */
 		addRelationship: function (namespace, func){
 			if(!this._namespaces[namespace])		// Add Namespace -> Class relation
@@ -258,7 +274,9 @@ if(!Array.indexOf){
 	
 	/**
 	 * Loader class for async loading javascript files.
-	 * @class ex.Loader
+	 * 
+	 * @class
+	 * @name ex.Loader
 	 */
 	ex.Loader = {
 		_urls: {},
@@ -266,6 +284,17 @@ if(!Array.indexOf){
 		_queue: [],
 		_date: new Date(),
 		
+		/**
+		 * Dynamically adds a script tag for the url and runs the callback
+		 * once loading is complete.
+		 * 
+		 * @function
+		 * @name asyncFile
+		 * @memberOf ex.Loader
+		 * 
+		 * @param {String} url
+		 * @param {Function} callback
+		 */
 		asyncFile: function (url, callback) {
 			if(typeof this._urls[url] != 'undefined') {
 				return;
@@ -309,8 +338,8 @@ if(!Array.indexOf){
 		
 		/**
 		 * Creates script DOM object and appends to DOM head
-		 * @param url src value for script tag
-		 * @returns {___script0} DOM object
+		 * @param {String} url src value for script tag
+		 * @returns {Function} onLoad event to run after script is loaded
 		 */
 		addScriptTag: function(url, onLoad) {
 			// Create a script tag and add it to the html
@@ -329,7 +358,8 @@ if(!Array.indexOf){
 	
 	/**
 	 * Element helper for creating and getting DOM elements.
-	 * @class ex.Element
+	 * @class
+	 * @name ex.Element
 	 */
 	ex.Element = {
 		defaults: {
@@ -352,11 +382,16 @@ if(!Array.indexOf){
 	
 	/**
 	 * Helper math functions
-	 * @class ex.Math
+	 * @class
+	 * @name ex.Math
 	 */
 	ex.Math = {
 		/**
 		 * Returns the average of an array of numbers.
+		 * 
+		 * @function
+		 * @name average
+		 * @memberOf ex.Math
 		 * 
 		 * @param {Array} array An array of numbers.
 		 * @return {Number} The result of the average.
@@ -377,6 +412,9 @@ if(!Array.indexOf){
 		/**
 		 * Floors a number using bitwise operators (faster).
 		 * 
+		 * @function
+		 * @name floor
+		 * @memberOf ex.Math
 		 * @param {Number} num The number to floor.
 		 * @return {Int} The resulting integer value.
 		 */
@@ -412,6 +450,10 @@ if(!Array.indexOf){
 	 * chains for proper use of instanceof and also supplies a _super method for
 	 * accessing base classes.
 	 * 
+	 * @function
+	 * @name ex.define
+	 * @memberOf ex
+	 * 
 	 * @param namespace
 	 *            The namespace of the new class
 	 * @param base
@@ -419,7 +461,7 @@ if(!Array.indexOf){
 	 *            not extending
 	 * @param extension
 	 *            The new class that will be extending base
-	 * @returns {Class} new class
+	 * @returns {ex.Class} new class
 	 */
 	ex.define = function(namespace, base, extension) {
 		if (typeof namespace != 'string') {
