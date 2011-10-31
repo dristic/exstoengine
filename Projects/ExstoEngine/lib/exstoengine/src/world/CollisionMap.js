@@ -27,6 +27,8 @@ ex.using([
 			this.tileHeight = tileHeight;
 			this.collides = true;
 			
+			this.type = "TileMap";
+			
 			this.position = new ex.base.Vector(0,0);
 			this.scrollFactor = new ex.base.Vector(1,1);
 			
