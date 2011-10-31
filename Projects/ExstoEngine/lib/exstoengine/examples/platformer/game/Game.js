@@ -317,8 +317,8 @@
 		var level2Map = new ex.display.SpriteMap(32, 32, level2Tiles, ex.Assets.getImage("Tiles"), "Base Map");
 		
 		// Load collision maps
-		var level1CollisionMap = new ex.world.CollisionMap(32, 32, level1Collision, true, edgeDebug);
-		var level2CollisionMap = new ex.world.CollisionMap(32, 32, level2Collision, true, edgeDebug);
+		var level1CollisionMap = new ex.world.CollisionMap(32, 32, level1Collision);
+		var level2CollisionMap = new ex.world.CollisionMap(32, 32, level2Collision);
 		
 		// Setup background sprite
 		var nebula = new ex.display.Sprite(new ex.base.Vector(0,0), ex.Assets.getImage("Nebula"));

@@ -20,7 +20,6 @@ ex.using([
 			_ready: true,
 			_assetsToLoad: 0,
 			_assetsLoaded: 0,
-			_eventTarget: new ex.event.EventTarget(),
 	
 			_supportedExtensions: {
 				video: [
@@ -79,6 +78,9 @@ ex.using([
 			 * @returns {Image} image file or null with error
 			 */
 			getImage: function(name) {
+				if(!this._ready){
+					console.log("Cannot retrieve " + name + " image. Assets are still loading.");
+				}
 				return this._images[name] || 
 					throwAssetDoesNotExistError(name, 'image');
 			},
@@ -118,6 +120,10 @@ ex.using([
 			},
 			
 			_loadImage: function(name, filePath, options) {
+				if(this._images[name]){
+					console.error(name + " cannot be loaded. This image already exists.");
+					return;
+				}
 				this._images[name] = new Image();
 				
 				this._ready = false;
@@ -129,12 +135,11 @@ ex.using([
 					that._assetsLoaded++;
 					if(that._assetsLoaded == that._assetsToLoad) {
 						that._ready = true;
-						this._eventTarget.dispatchEvent(that, 'ready');
 					}
 				};
 				
 				this._images[name].src = '';
-				this._images[name].src = filePath + '?ex=' + (new Date()).getTime();
+				this._images[name].src = filePath;
 			},
 			
 			_loadAudio: function(name, filePath, options) {
@@ -150,13 +155,12 @@ ex.using([
 				this._assetsToLoad++;
 				
 				that.audio.onError = throwFileUnableToLoadError;
-				that.audio.src = filePath + '?ex=' + (new Date()).getTime();
+				that.audio.src = filePath;
 				that.audio.addEventListener('canplaythrough', function (event) {
 					while(numChannels--) {
 						that.channels.push(that.audio.cloneNode(true));
 						that.readyChannels.push(true);
 						that.ready = true;
-						ex.event.dispatchEvent(that, 'ready');
 					}
 				});
 				

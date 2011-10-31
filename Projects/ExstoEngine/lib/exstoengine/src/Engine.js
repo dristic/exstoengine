@@ -121,18 +121,20 @@ ex.using([
 		loadLevel: function(levelName) {
 			var levelNamespace = "game.levels." + levelName;
 			
+			var that = this;
 			ex.using([levelNamespace], function(){
-				var level = new game.levels[levelName](this.input);
+				var level = new game.levels[levelName](that.input);
 				var assets = level.getAssets();
 
-				ex.event.listen(ex.Assets, 'ready', function(){
+				var thatOverThere = that;
+				var buildLevel = function(){
+					console.log("assets ready!");
 					var objects = level.getObjects();
-					this.currentWorld.addObjects(objects);
-				}, this);
-				
+					thatOverThere.currentWorld.addObjects(objects);
+				};
 				ex.Assets.loadBulk(assets);
 				
-				
+				setTimeout(buildLevel, 1000);
 			});
 			
 		},

@@ -31,6 +31,7 @@ ex.using([
 		},
 		
 		update: function(dt) {
+			console.log(this.position.x, this.position.y);
 			if(this.input.isKeyPressed(ex.util.Key.Spacebar)) {
 				this.jump();
 			}
@@ -68,7 +69,7 @@ ex.using([
 			}
 			
 			// Gravity
-			this.velocity.y += this.speed;
+			//this.velocity.y += this.speed;
 			
 			// Trim speed if past max speed
 			if(this.velocity.x < -this.maxSpeed) {

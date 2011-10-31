@@ -17,6 +17,7 @@ ex.using([
 		 */
 		constructor: function() {
 			this.activeLevel = null;
+			this.collisionGroups = [];
 			this.detector = new ex.util.CollisionDetector();
 			this.resolver = new ex.util.CollisionResolver();
 			
@@ -79,22 +80,29 @@ ex.using([
 		update: function(dt) {
 			ex.Debug.time('collision');
 			
-			// Do nothing if there is no active level
-			if(this.activeLevel == null){
-				return;
+			var collisions = [];
+			var index = 0;
+			
+			// If active level is set, use old layer-based collision detection
+			if(this.activeLevel instanceof ex.world.Map){
+				index = this.activeLevel.layers.length;
+				while(index--){
+					collisions.push.apply(
+							collisions,
+							this.detector.detectGroupCollisions(this.activeLevel.layers[index].items, dt));
+				}
+			} 
+			// Or if collision groups exist, use that
+			else if(this.collisionGroups.length > 0) {
+				index = this.collisionGroups.length;
+				while(index--) {
+					collisions.push.apply(
+							collisions,
+							this.collisionGroups[index], dt);
+				}
 			}
 			
-			var collisions = [];
-			// Loop through layers and detect collisions
-			var index = this.activeLevel.layers.length;
-			while(index--){
-				// Test spriteMap -> entities
-				collisions.push.apply(
-						collisions, 
-						this.detector.detectGroupCollisions(this.activeLevel.layers[index].items, dt));
-			}
-			this.resolver.resolveCollisions(collisions, dt);
-				
+			this.resolver.resolveCollisions(collisions, dt);	
 			ex.Debug.time('collision');
 		}
 	});	

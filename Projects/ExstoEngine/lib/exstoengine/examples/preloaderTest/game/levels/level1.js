@@ -1,6 +1,7 @@
 ex.using([
           "ex.world.CollisionMap",
           "ex.display.SpriteMap",
+          "ex.display.Sprite",
           
           "game.entities.Player",
   	      "game.entities.Teleporter"
@@ -24,6 +25,9 @@ ex.using([
 		
 		getObjects: function(){
 			return [
+        		new ex.display.Sprite(
+        				new ex.base.Vector(0,0), 
+        				ex.Assets.getImage("Nebula")),
 	            new ex.world.CollisionMap(
             		this.tileWidth,
             		this.tileHeight,
@@ -80,11 +84,14 @@ ex.using([
     				],
             		ex.Assets.getImage("tiles")),
         		new game.entities.Player(
-        				"Player", 
-        				new ex.base.Vector(50, 150), 
-        				ex.Assets.getImage("player"),
-        				true, 
-        				this.input)
+    				"Player", 
+    				new ex.base.Vector(50, 50), 
+    				new ex.display.AnimatedSprite(
+    						new ex.base.Vector(0,0),
+    						36, 40, 7,
+    						ex.Assets.getImage("player")),
+    				true, 
+    				this.input)
         	];
 		}
 	});
