@@ -52,7 +52,7 @@ window.startGame = function (canvas) {
 		_engine.input.listenOn(_engine.renderer.canvas);
 		
 		// Assets
-		ex.Assets.load('Player', '../assets/units/ship.png');
+		ex.Assets.load('Player', '../assets/units/Character%20Boy.png');
 		
 		//--Open base world
 		_engine.openWorld(ex.world.World);
@@ -62,14 +62,13 @@ window.startGame = function (canvas) {
 				"Player", 
 				new ex.base.Vector(0, 0), 
 				new ex.display.Sprite(
-						0,
-						0,
-						ex.Assets.getImage("Player"),
-						'Player'), 
+						new ex.base.Vector(0, 0),
+						ex.Assets.getImage("Player")), 
 				true, 
 				_engine.input);
 		
 		_engine.currentWorld.addObject(player);
+		_engine.renderer.renderables.push(player.sprite);
 		
 		_engine.camera.follow(player);
 		
