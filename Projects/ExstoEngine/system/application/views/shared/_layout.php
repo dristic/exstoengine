@@ -17,9 +17,14 @@
 	<link href="<?=base_url().'system/application/views/style/main.css'?>" rel="stylesheet" type="text/css" />
 	
 	<!-- jQuery library + UI -->
+	<link rel="stylesheet" href="<?=base_url().'system/application/views/lib/fancybox/jquery.fancybox-1.3.4.css'?>" type="text/css" media="screen" />
 	<!--<link href="<?=base_url().'system/application/views/style/slideshow.css'?>" rel="stylesheet" type="text/css" />-->
-	<!--<script src="<?=base_url().'lib/jquery-1.4.4.min.js'?>"></script>-->
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+	<script type="text/javascript" src="<?=base_url().'system/application/views/lib/fancybox/jquery.fancybox-1.3.4.pack.js'?>"></script>
 	<!--<script src="<?=base_url().'lib/slides.min.jquery.js'?>"></script>-->
+	
+	<!-- Page CSS -->
+	<script type="text/javascript" src="<?=base_url().'system/application/views/scripts/page.js'?>"></script>
 	
 	<!--[if IE]>
     	<script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -27,34 +32,17 @@
 </head>
 
 <body>
+	<a name="top"></a>
 	<header>
 		<div class="container_12">
 			<div class="grid_4">
-				<div id="logo"><span>Exsto Engine</span></div>
+				<a href="http://exstoengine.com"><div id="logo"><span>Exsto Engine</span></div></a>
 			</div>
 		
 		    <nav class="grid_8">
 	            <ul>
-	                <li><?= anchor("", "Home") ?></li>
-	                <li><?= anchor("", "About") ?></li>
-	                <li><a href="<?= base_url().'docs/' ?>">Documentation</a></li>
-	                <li><?= anchor("blog", "Blog") ?></li>
-	                <?php 
-	                	if($this->ion_auth->logged_in())
-	                	{
-	                		?>
-	                		<li><?= anchor('download', 'Download') ?></li>
-	                		<li>
-	                			<?= $this->ion_auth->get_user()->email ?>
-	                			<?= anchor("auth/logout", "Logout", 'class="button"', true) ?>
-	                	 	</li>
-	                	 	<?php
-	                	}
-	                	else
-	                	{
-	                		?><li><?= anchor("auth/login", "Login", 'class="button"', true) ?></li><?php
-	                	}
-	                ?>
+	                <li class="<?=($this->uri->segment(1)=='welcome')?'active':''?>"><?= anchor("welcome", "Home") ?></li>
+	                <li class="<?=($this->uri->segment(1)=='about')?'active':''?>"><?= anchor("about", "About") ?></li>
 	            </ul>
 			</nav>
 		</div>
@@ -65,32 +53,6 @@
 	</section>
 	
 	<footer class="container_12">
-		<div class="grid_4">
-			<h2>Engine</h2>
-			<ul>
-				<li><?= anchor("", "Download") ?></li>
-				<li><?= anchor("", "About") ?></li>
-			</ul>
-		</div>
-		
-		<div class="grid_4">
-			<h2>Support</h2>
-			<ul>
-				<li><?= anchor("", "Documentation") ?></li>
-				<li><?= anchor("", "Blog") ?></li>
-				<li><?= anchor("", "Support Tickets") ?></li>
-			</ul>
-		</div>
-		
-		<div class="grid_4">
-			<h2>About</h2>
-			<ul>
-				<li><?= anchor("", "Engine") ?></li>
-				<li><?= anchor("", "Editor") ?></li>
-				<li><?= anchor("", "Company") ?></li>
-			</ul>
-		</div>
-		
 		<div class="grid_12" id="legal">
 			<img src="<?=base_url().'system/application/views/content/images/watermark_logo.png'?>" alt="Exsto Engine Watermark" />
 			&copy; 2011 Shadow Rule LLC. All rights reserved. <?= anchor("legal", "Terms of Service / Privacy Policy") ?>
