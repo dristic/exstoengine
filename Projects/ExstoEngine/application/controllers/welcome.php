@@ -53,7 +53,7 @@ class Welcome extends CI_Controller {
 		$this->email->from('info@exstoengine.com', 'Exsto Engine Signup Form');
 		$this->email->to('danr@exstoengine.com');
 		$this->email->subject('Exsto Engine Signup Form: '.$email);
-		$this->email->message($email.'\n \n'.$comment);
+		$this->email->message($email.' : '.$comment);
 		$this->email->send();
 	}
 }
