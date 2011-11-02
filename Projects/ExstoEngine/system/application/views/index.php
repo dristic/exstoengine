@@ -1,11 +1,11 @@
 <div id="banner">
 	<div class="container_12">
 		<div class="grid_6">
-			<img src="<?=base_url()?>system/application/views/content/images/simplex_capture.png" width="460" height="300" alt="Simplex Editor">
+			<img src="<?=base_url()?>system/application/views/content/images/devices.jpg" width="460" height="334" alt="Devices">
 		</div>
 		<div class="grid_6">
-			<h1 style="color: #333; font-size: 34px;">Tagline</h1>
-			<h3 style="color: #777">Exsto engine is the next standard in HTML 5 and JavaScript game development.</h3>
+			<h1 style="color: #333; font-size: 32px;">Seriously Connected Games</h1>
+			<h3 style="color: #777">Our engine harnesses open web standards to make your game stand out and bring your gamers closer together.</h3>
 		</div>
 	</div>
 </div>
@@ -17,11 +17,10 @@
 		<div class="grid_12" style="padding-bottom: 10px">
 			<h1>Screenshots</h1>
 			<div id="image-strip">
-				<a title="Lorem Ipsum"><img src="<?=base_url()?>system/application/views/content/images/simplex_capture.png" alt="Simplex" /></a>
-				<a><img src="<?=base_url()?>system/application/views/content/images/simplex_capture.png" alt="Simplex" /></a>
-				<a><img src="<?=base_url()?>system/application/views/content/images/simplex_capture.png" alt="Simplex" /></a>
-				<a><img src="<?=base_url()?>system/application/views/content/images/simplex_capture.png" alt="Simplex" /></a>
-				<a><img src="<?=base_url()?>system/application/views/content/images/simplex_capture.png" alt="Simplex" /></a>
+				<a title="Mobile Support Using PhoneGap"><img src="<?=base_url()?>system/application/views/content/images/screens/mobile.png" alt="Mobile" /></a>
+				<a title="Using iPhone as a Controller"><img src="<?=base_url()?>system/application/views/content/images/screens/controller.jpg" alt="Controller" /></a>
+				<a title="Networking Using node.js"><img src="<?=base_url()?>system/application/views/content/images/screens/socket.png" alt="node.js" /></a>
+				<a title="Physics Support"><img src="<?=base_url()?>system/application/views/content/images/screens/physics.png" alt="Physics" /></a>
 			</div>
 		</div>
 		<div class="grid_8">
@@ -34,10 +33,10 @@
 	
 	
 		<div class="grid_4" style="padding-bottom: 10px;">
-			<form method="post" action="submit" target="_blank">
+			<?= form_open('welcome/signup'); ?>
 				<h1>Want More Info?</h1>
 				<div class="form-field-first">
-					<label for="email">Email Address</label>
+					<label for="email">Email address</label>
 					<br />
 					<input type="email" name="email" value="" />
 				</div>
@@ -49,7 +48,7 @@
 				<div class="form-field">
 					<input type="submit" value="Send" class="right" />
 				</div>
-			</form>
+			<?= form_close(); ?>
 		</div>
 		
 		<div class="clear"></div>

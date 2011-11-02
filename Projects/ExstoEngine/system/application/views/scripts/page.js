@@ -1,7 +1,7 @@
 $(document).ready(function () {
 	var $imageStrip = $('#image-strip');
 	
-	$('.grid_4 img').fadeFocus(0.5, function () {
+	$('.grid_4 img').fadeFocus(0.7, function () {
 		return this.closest('.grid_4');
 	});
 	

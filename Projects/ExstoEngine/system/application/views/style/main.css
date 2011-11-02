@@ -37,13 +37,15 @@ header
     position: relative;
     z-index: 2;
     margin: 0px auto 0px auto;
-    height: 80px;
+    height: 70px;
 }
 
 #logo
 {
     background: url(../content/images/logo.png) no-repeat;
-    height: 73px;
+    height: 64px;
+    cursor: pointer;
+    margin-top: 4px;
 }
 
 nav ul
@@ -51,7 +53,7 @@ nav ul
 	list-style: none;
 	height: 46px;
 	float: right;
-	margin-top: 25px;
+	margin-top: 23px;
 }
 
 nav ul li
@@ -117,7 +119,7 @@ a.button-large
 
 div.form-field
 {
-	padding: 5px 0 0 0;
+	padding: 10px 0 0 0;
 	display: block;
 }
 
@@ -176,16 +178,16 @@ input[type="email"]
 
 #banner
 {
-	background: rgba(0, 0, 0, 0.8) url(../content/images/bg_banner.png) repeat-x;
+	background: #FFF;
 	border-bottom: 5px solid #aaa;
 	width: 100%;
 }
 
 #banner img
 {
-	border-top: 1px solid #aaa;
+	/*border-top: 1px solid #aaa;
 	border-left: 1px solid #aaa;
-	border-right: 1px solid #aaa;
+	border-right: 1px solid #aaa;*/
 }
 
 #content
@@ -411,13 +413,13 @@ span
 	display: block;
 	width: 100%;
 	/* background: #332f29; */
-	height: 120px;
+	height: 145px;
 }
 
 #image-strip img
 {
-	width: 178px;
-	height: 110px;
+	width: 225px;
+	height: 135px;
 	float: left;
 	opacity: 0.5;
 	margin: 5px;
