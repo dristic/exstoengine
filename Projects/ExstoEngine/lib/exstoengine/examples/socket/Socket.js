@@ -40,7 +40,8 @@ window.startGame = function (canvas) {
           "ex.world.Map",
           "ex.world.Layer",
           
-          "game.entities.Player"
+          "game.entities.Player",
+          "game.entities.NetPlayer"
           	], 
   	function () {
 		//--Startup new engine
@@ -111,12 +112,22 @@ window.startGame = function (canvas) {
 		
 		_engine.camera.follow(player);
 		
+		var player2 = new game.entities.NetPlayer(
+				"NetPlayer", 
+				new ex.base.Vector(550, 30), 
+				new ex.display.Sprite(
+						new ex.base.Vector(0, 0),
+						ex.Assets.getImage("Player")), 
+				true, 
+				_engine.input);
+		
 		// Setup map
 		var map = new ex.world.Map('Level');
 		var layer = new ex.world.Layer('Layer1', collision, new ex.base.Vector(0, 0), new ex.base.Vector(1, 1));
 		map.addLayer(layer);
 		
 		layer.addItem(player);
+		layer.addItem(player2);
 		layer.addItem(floor);
 		
 		_engine.currentWorld.addLevel(map);
@@ -126,12 +137,21 @@ window.startGame = function (canvas) {
 		
 		_engine.onUpdate = function () {
 			if(_engine.input.isKeyDown(ex.util.Key.Spacebar)) {
-				client.messageTo('Dan', 'test', {});
+				//client.messageTo('Dan', 'test', {});
+			}
+			
+			if(_engine.input.isKeyDown(ex.util.Key.D)) {
+				client.message('position', { x: player.position.x, y: player.position.y });
 			}
 		};
 		
 		client.on('test', function (data) {
 			console.log('works');
+		});
+		
+		client.on('position', function (data) {
+			player2.position.x = data.x;
+			player2.position.y = data.y;
 		});
 	});
 };
