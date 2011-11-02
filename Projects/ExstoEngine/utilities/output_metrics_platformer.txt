@@ -1,0 +1,26 @@
+http://cloc.sourceforge.net v 1.55  T=0.5 s (18.0 files/s, 1546.0 lines/s)
+-------------------------------------------------------------------------------------------------------------------------
+File                                                                                  blank        comment           code
+-------------------------------------------------------------------------------------------------------------------------
+../lib/exstoengine/examples/platformer/game/Game.js                                      43             29            332
+../lib/exstoengine/examples/platformer/game/entities/Player.js                           14              9             80
+../lib/exstoengine/examples/platformer/game/levels/level1.js                              2              4             74
+../lib/exstoengine/examples/platformer/style.css                                          4             17             48
+../lib/exstoengine/examples/platformer/game/entities/MovingPlatform.js                    5              5             38
+../lib/exstoengine/examples/platformer/game/entities/Teleporter.js                        0              0             17
+../lib/exstoengine/examples/platformer/game/entities/Explosion.js                         0              0             17
+../lib/exstoengine/examples/platformer/game/entities/Asteroid.js                          0              0             14
+../lib/exstoengine/examples/platformer/index.html                                         4              4             13
+-------------------------------------------------------------------------------------------------------------------------
+SUM:                                                                                     72             68            633
+-------------------------------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+Javascript                       7             64             47            572
+CSS                              1              4             17             48
+HTML                             1              4              4             13
+-------------------------------------------------------------------------------
+SUM:                             9             72             68            633
+-------------------------------------------------------------------------------

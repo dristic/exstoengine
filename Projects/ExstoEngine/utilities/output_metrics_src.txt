@@ -1,0 +1,61 @@
+http://cloc.sourceforge.net v 1.55  T=0.5 s (92.0 files/s, 10320.0 lines/s)
+----------------------------------------------------------------------------------------------------
+File                                                             blank        comment           code
+----------------------------------------------------------------------------------------------------
+../lib/exstoengine/src/ExstoEngine.js                               69            222            298
+../lib/exstoengine/src/util/CollisionDetector.js                    20             27            203
+../lib/exstoengine/src/display/AnimatedSprite.js                    30            109            130
+../lib/exstoengine/src/util/AssetManager.js                         21             48            124
+../lib/exstoengine/src/plugins/Emitter2.js                          13             47            113
+../lib/exstoengine/src/Engine.js                                    31             21            107
+../lib/exstoengine/src/util/Key.js                                  11              0            103
+../lib/exstoengine/src/util/Input.js                                17              3             95
+../lib/exstoengine/src/display/SpriteMap.js                         15             69             95
+../lib/exstoengine/src/display/ui/TitleMenu.js                       9             55             93
+../lib/exstoengine/src/world/Tile.js                                10             91             92
+../lib/exstoengine/src/world/Layer.js                               12             76             91
+../lib/exstoengine/src/world/CollisionMap.js                        13             45             81
+../lib/exstoengine/src/util/Debug.js                                17              4             77
+../lib/exstoengine/src/world/TileMap.js                              7             46             75
+../lib/exstoengine/src/world/World.js                               16             81             74
+../lib/exstoengine/src/display/Sprite.js                            15             67             73
+../lib/exstoengine/src/util/CollisionManager.js                      9             33             67
+../lib/exstoengine/src/display/Emitter.js                           11             16             64
+../lib/exstoengine/src/util/CollisionResolver.js                     6             12             63
+../lib/exstoengine/src/novus/NovusClient.js                         15             54             60
+../lib/exstoengine/src/display/Particle.js                          12              0             60
+../lib/exstoengine/src/display/Image.js                             10             61             57
+../lib/exstoengine/src/plugins/Particle2.js                         12              7             54
+../lib/exstoengine/src/event/EventTarget.js                         13             26             54
+../lib/exstoengine/src/world/Entity.js                              10             93             50
+../lib/exstoengine/src/world/Map.js                                  8             74             50
+../lib/exstoengine/src/base/Vector.js                                8             75             44
+../lib/exstoengine/src/display/ui/StatusBar.js                       8              0             38
+../lib/exstoengine/src/base/Rectangle.js                             2             35             38
+../lib/exstoengine/src/sound/Sound.js                                5             30             31
+../lib/exstoengine/src/display/Renderable.js                         8             37             31
+../lib/exstoengine/src/display/Camera.js                             4             44             30
+../lib/exstoengine/src/display/Renderer.js                           5             35             27
+../lib/exstoengine/src/display/ImageRepository.js                    6             33             27
+../lib/exstoengine/src/util/Logger.js                                4              0             26
+../lib/exstoengine/src/world/Trigger.js                              8             14             25
+../lib/exstoengine/src/base/Point.js                                 2             27             16
+../lib/exstoengine/src/util/UIController.js                          3              0             10
+../lib/exstoengine/src/base/Component.js                             5             17              9
+../lib/exstoengine/src/base/GlobalComponent.js                       0              0              8
+../lib/exstoengine/src/util/Collidable.js                            3              5              8
+../lib/exstoengine/src/sound/SoundManager.js                         2              0              5
+../lib/exstoengine/src/plugins/Cloth.js                              0             12              0
+../lib/exstoengine/src/plugins/RigidBody.js                          0             13              0
+../lib/exstoengine/src/plugins/Physics.js                            0             15              0
+----------------------------------------------------------------------------------------------------
+SUM:                                                               505           1779           2876
+----------------------------------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+Javascript                      46            505           1779           2876
+-------------------------------------------------------------------------------
+SUM:                            46            505           1779           2876
+-------------------------------------------------------------------------------

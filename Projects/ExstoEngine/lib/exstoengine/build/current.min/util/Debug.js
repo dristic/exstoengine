@@ -1,0 +1,10 @@
+/*
+ * Packer
+ * Javascript Compressor
+ * http://dean.edwards.name/
+ * http://www.smallsharptools.com/Projects/Packer/
+*/
+
+// C:\Users\Nic\Desktop\SR\ExstoEngine\utilities\..\lib\exstoengine\src\util\Debug.js
+eval(function(p,a,c,k,e,d){e=function(c){return(c<a?"":e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)d[e(c)]=k[c]||e(c);k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1;};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p;}('3.1l([\'3.G.B\',\'3.7.q\'],f(){g h={};3.U("3.7.8",3.G.B,{V:{W:\'8\',I:T,Q:5,m:p 3.7.q(3.7.q.R),S:f(){3.7.8.I=11;3.7.8.J();3.7.8.m.12(3.7.8.a)},13:f(d){u(h[d]==w){h[d]=p y()}10{g x=p y(),e=x-h[d];3.7.8.t(\'X: \'+d+\' \'+e+\'e\');h[d]=w}},t:f(z){3.7.8.m.t(z)},Y:f(v){g 2=3.7.8;2.i.Z(v);u(2.i.P>N){2.i.O()}g e=3.M.14(2.i);g r=D.L(1/e);2.n.C="<b>"+r+" r </b>";2.n.C+=" | "+D.L(e*1o)+" e"},J:f(){g 2=3.7.8;2.4=j.k("s");2.4.E="2";2.4.6.A="#1p";2.4.6.1k="0.9";2.4.6.1q="1u 1v #1w";2.4.6.H="#1r";2.4.6.1s="1t";2.4.6.1j="19";2.4.6.1n="l";2.4.6.1b="l";2.4.6.K="l";2.n=j.k(\'s\');2.4.o(2.n);2.i=[];2.a=j.k("s");2.a.6.A="#18";2.a.6.K="l";2.a.6.H="#15";2.a.6.16="17";2.a.6.1g="1h";2.a.6.1f="1c";2.c=j.k("1d");2.c.1e="1i";2.c.d="c";2.c.1a="m";2.c.F="F";2.c.E="c";2.4.o(2.c);2.4.o(2.a);j.1m.o(2.4)}}});3.8=3.7.8});',62,95,'||debug|ex|domElement||style|util|Debug||loggerElement||writeLog|name|ms|function|var|times|logged|document|createElement|5px|logger|benchmarkElement|appendChild|new|Logger|fps|div|log|if|dt|null|endTime|Date|message|backgroundColor|GlobalComponent|innerHTML|Math|id|checked|base|color|_enabled|_createDebugWindow|padding|floor|Array|20|shift|length|_loggingLevel|BROWSER|enable|false|define|statics|componentName|Time|benchmarkEngine|push|else|true|enableDOM|time|average|FFFFFF|maxHeight|150px|111111|fixed|value|right|auto|input|type|overflow|maxWidth|200px|checkbox|position|opacity|using|body|bottom|1000|222526|border|f28d00|fontSize|10pt|1px|solid|ffbb6e'.split('|'),0,{}))
+
