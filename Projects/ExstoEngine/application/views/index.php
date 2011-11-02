@@ -27,7 +27,7 @@
 		    <h1>What is Exsto Engine?</h1>
 		
 		    <p>
-		     	Exsto Engine is a game development engine built with open web standards (HTML5/JavaScript/CSS3) to allow cross browser and platform games to be built without the use of external plugins and libraries. For more information, see our feature list below and our blog in the navigation menu above.
+		     	Exsto Engine is a game development tool built on top of the latest open web standards using HTML 5 and JavaScript. We want to give web games the power of serious desktop games while having the lightweight flexibility of the web. Our engine also gives users the power to network their game with others over the web and even social networks such as Facebook.
 		    </p>
 		</div>
 	
@@ -57,33 +57,43 @@
 		
 		<div class="grid_4">
 			<img src="<?=base_url()?>/application/views/content/images/icons/performance.png" width="64" height="64"/>
-			<h3>Cross-Browser & Cross-Platform</h3>
+			<h3>Powerful Features</h3>
 		
 			<p>
-				Support for IE9, Chrome, FireFox, Safari on PCs. Support for mobile devices such as iPhone, iPad, and Android.
+				Every game has their own needs and we strive to build an easy to use feature for every genre we can think of. We build our features from the ground up to maximize the performance of our engine.
 			</p>
 			<ul>
-				<li>Chrome</li>
-				<li>IE 9</li>
-				<li>FireFox</li>
+				<li>Collision Detection</li>
+				<li>Rigid Body Physics</li>
+				<li>Animated Sprites</li>
+				<li>User Interface Elements</li>
+				<li>Asset Management</li>
+				<li>Particle Effects</li>
 			</ul>
 		</div>
 		
 		<div class="grid_4">
 			<img src="<?=base_url()?>/application/views/content/images/icons/connectivity.png" width="64" height="64"/>
-			<h3>Integrated Network Capabilities</h3>
+			<h3>Integrated Network</h3>
 		
 			<p>
-				Multiplayer and MMO support. Take the guess work out of networking with fully featured plugins for node.js and ElectroServer.
+				With our packaged network capabilities it is easy to handle multiplayer and MMO grade games. Our server is built on top of the popular <a href="http://nodejs.org">node.js</a> which makes it scalable and fast.
 			</p>
+			<ul>
+				<li>User Management (bans, kicks, etc.)</li>
+				<li>Authentication</li>
+				<li>Persistant Storage</li>
+				<li>Room / Game Management</li>
+				<li>Remote Management Tools</li>
+			</ul>
 		</div> 
 		
 		<div class="grid_4">
-			<img src="<?=base_url()?>/application/views/content/images/icons/styling.png" width="64" height="64"/>
-			<h3>Simplex: Easy to Use Editor for Games</h3>
+			<img src="<?=base_url()?>/application/views/content/images/icons/logo.png" width="64" height="64"/>
+			<h3>Cross Platform</h3>
 		
 			<p>
-				Fully featured, easy to use development environment. Edit maps, add events, and test your game all in the same window. 
+				The HTML 5 specification allows web apps to be cross platform. This makes our engine supported on almost every major device including the iPhone, iPad, desktop, and Android. 
 			</p>
 		</div>
 	</div>
