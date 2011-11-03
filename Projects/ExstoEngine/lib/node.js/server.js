@@ -1,6 +1,6 @@
-var app = require('http').createServer(handler)
-  , fs = require('fs')
-  , nv = require('novus');
+var app = require('http').createServer(handler),
+    fs = require('fs'),
+    nv = require('novus');
 
 nv.configure({
 	db: {
@@ -14,14 +14,17 @@ app.listen(8080);
 nv.listen(app);
 
 function handler (req, res) {
-  fs.readFile(__dirname + '/index.html',
-  function (err, data) {
-    if (err) {
-      res.writeHead(500);
-      return res.end('Error loading index.html');
-    }
+  var parts = require('url').parse(req.url);
+  if(parts.pathname != '/socket.io' && parts.pathname != '/novus') {
+    fs.readFile(__dirname + '/index.html',
+        function (err, data) {
+          if (err) {
+            res.writeHead(500);
+            return res.end('Error loading index.html');
+          }
 
-    res.writeHead(200);
-    res.end(data);
-  });
-}
+          res.writeHead(200);
+          res.end(data);
+        });
+  }
+};
