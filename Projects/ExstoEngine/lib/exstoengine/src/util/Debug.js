@@ -3,7 +3,8 @@ ex.using([
   'ex.util.Logger'
 ], function() {
 	// Local private
-	var times = {};
+	var times = {},
+		timeLog = {};
 	
 	ex.define("ex.util.Debug", ex.base.GlobalComponent, {
 		statics: {
