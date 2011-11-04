@@ -18,6 +18,7 @@ ex.using([
 			_video: [],
 			_images: [],
 			_ready: true,
+			_readyListener: new ex.event.EventTarget(),
 			_assetsToLoad: 0,
 			_assetsLoaded: 0,
 	
@@ -133,9 +134,7 @@ ex.using([
 				this._images[name].onError = throwFileUnableToLoadError;
 				this._images[name].onload = function () {
 					that._assetsLoaded++;
-					if(that._assetsLoaded == that._assetsToLoad) {
-						that._ready = true;
-					}
+					that._checkReadyState();
 				};
 				
 				this._images[name].src = '';
@@ -148,8 +147,8 @@ ex.using([
 					numChannels = options.numChannels;
 				}
 				
-				var exSound = new ex.sound.Sound(new Audio()),
-					that = exSound;
+				var exSound = new ex.sound.Sound(new Audio());
+				var that = exSound;
 				
 				this._ready = false;
 				this._assetsToLoad++;
@@ -160,7 +159,7 @@ ex.using([
 					while(numChannels--) {
 						that.channels.push(that.audio.cloneNode(true));
 						that.readyChannels.push(true);
-						that.ready = true;
+						that._checkReadyState();
 					}
 				});
 				
@@ -169,6 +168,13 @@ ex.using([
 			
 			_loadVideo: function(name, filePath, options) {
 				console.error("No support for video loading yet. Maybe next time!");
+			},
+			
+			_checkReadyState: function() {
+				if(this._assetsLoaded == this._assetsToLoad) {
+					this._ready = true;
+					this._readyListener.dispatchEvent('ready');
+				}
 			}
 		}
 	});

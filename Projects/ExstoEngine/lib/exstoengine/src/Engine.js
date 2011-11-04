@@ -5,6 +5,7 @@ ex.using([
           "ex.util.Debug",
           "ex.util.AssetManager",
           "ex.display.ImageRepository",
+          "ex.display.Renderable",
           "ex.util.CollisionManager",
           "ex.display.Camera",
           "ex.display.Renderer"
@@ -103,7 +104,7 @@ ex.using([
 			
 			this.input.update(dt);
 			
-			ex.Debug.benchmarkEngine(dt);
+			if(this.debug) ex.Debug.benchmarkEngine(dt);
 		},
 		
 		onUpdate: function() {
@@ -119,23 +120,37 @@ ex.using([
 		},
 		
 		loadLevel: function(levelName) {
+			var loadingScreen = new ex.display.Renderable();
+			loadingScreen.render = function(context, camX, camY, camWidth, camHeight){
+				context.save();
+				context.font = '20pt Calibri';
+				context.fillStyle = '#FFFFFF';
+				context.fillText(
+						"Loading... " + ex.Assets._assetsLoaded + "/" + ex.Assets._assetsToLoad, 
+						100, 
+						50);
+				context.restore();
+			};
+			this.currentWorld.addObject(loadingScreen);
+			var that = this;
 			var levelNamespace = "game.levels." + levelName;
 			
-			var that = this;
+			// Loads level code and assets
 			ex.using([levelNamespace], function(){
-				var level = new game.levels[levelName](that.input);
-				var assets = level.getAssets();
-
-				var thatOverThere = that;
-				var buildLevel = function(){
+				var level = new game.levels[levelName](that);
+				ex.Assets._readyListener.addEventListener('ready', function(){
 					console.log("assets ready!");
 					var objects = level.getObjects();
-					thatOverThere.currentWorld.addObjects(objects);
-				};
-				ex.Assets.loadBulk(assets);
-				
-				setTimeout(buildLevel, 1000);
+					that.currentWorld.addObjects(objects);
+					//that.currentWorld.removeObject(loadingScreen);
+					level.finalSetup(that);
+				});
+				ex.Assets.loadBulk(level.getAssets());
 			});
+			
+		},
+		
+		unloadLevel: function() {
 			
 		},
 		

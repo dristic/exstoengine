@@ -1,0 +1,55 @@
+ex.using([
+          "ex.display.Image",
+          "ex.display.ui.TitleMenu"
+          ],
+		function(){
+	ex.define("game.levels.titleMenu", {
+		constructor: function(engine){
+			// Globals go here
+			this.engine = engine;
+		},
+		
+		getAssets: function(){
+			return [
+	       		{name: "logo", filePath: "assets/explode3.png"},
+	    		{name: "bg", filePath: "assets/bg.png"},
+	    	];
+		},
+		
+		getObjects: function(){
+			var objects = [];
+			var that = this;
+			
+			var titleMenu = new ex.display.ui.TitleMenu(
+				[{
+					text: "Start Game",
+					action: function() {
+						that.engine.loadLevel("level1");
+					}
+				}, {
+					text: "Options",
+					action: function() {
+						alert("Just kidding! You have no options!");
+					}
+				}, {
+					text: "Quit",
+					action: function() {
+						alert("You can't quit! You're miiiine!!!");
+					}
+				}], 
+				0, 
+				ex.Assets.getImage("bg"),
+				ex.Assets.getImage("logo"),
+				this.engine.input
+			);	
+			
+			objects.push(titleMenu);
+			
+			return objects;
+		},
+		
+		finalSetup: function(engine) {
+
+		}
+	});
+});

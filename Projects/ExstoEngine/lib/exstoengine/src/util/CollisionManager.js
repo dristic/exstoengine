@@ -84,7 +84,7 @@ ex.using([
 			var index = 0;
 			
 			// If active level is set, use old layer-based collision detection
-			if(this.activeLevel instanceof ex.world.Map){
+			if(this.activeLevel != null){
 				index = this.activeLevel.layers.length;
 				while(index--){
 					collisions.push.apply(

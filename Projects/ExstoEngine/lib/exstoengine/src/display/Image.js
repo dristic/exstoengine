@@ -27,6 +27,8 @@ ex.using([
 			this.width = image.naturalWidth;
 			this.height = image.naturalHeight;
 			this.image = image;
+			this.size = size || new ex.base.Vector(this.width, this.height);
+			this.scrollFactor = new ex.base.Vector(0,0);
 			
 			// If the image is not loaded reset size when it loads
 			if(this.image.complete == false) {
