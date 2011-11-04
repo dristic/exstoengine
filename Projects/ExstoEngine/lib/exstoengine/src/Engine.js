@@ -59,13 +59,11 @@ ex.using([
 		
 		enableDebugging: function(loggingLevel) {
 			this.debug = true;
-			
 			ex.Debug.enable(loggingLevel);
 		},
 		
 		setupCanvas: function (bgColor, canvas) {
 			this.renderer = new ex.display.Renderer(this.width, this.height, bgColor, canvas);
-			
 			this.camera.canvas = canvas || this.renderer.canvas;
 		},
 		
@@ -104,7 +102,9 @@ ex.using([
 			
 			this.input.update(dt);
 			
-			if(this.debug) ex.Debug.benchmarkEngine(dt);
+			if(this.debug){
+				ex.Debug.benchmarkEngine(dt);
+			}	
 		},
 		
 		onUpdate: function() {
@@ -119,7 +119,8 @@ ex.using([
 			this.currentWorld = new world(this.renderer);
 		},
 		
-		loadLevel: function(levelName) {
+		loadScene: function(sceneName) {
+			this.unloadScene();
 			var loadingScreen = new ex.display.Renderable();
 			loadingScreen.render = function(context, camX, camY, camWidth, camHeight){
 				context.save();
@@ -133,25 +134,24 @@ ex.using([
 			};
 			this.currentWorld.addObject(loadingScreen);
 			var that = this;
-			var levelNamespace = "game.levels." + levelName;
+			var sceneNamespace = "game.levels." + sceneName;
 			
 			// Loads level code and assets
-			ex.using([levelNamespace], function(){
-				var level = new game.levels[levelName](that);
+			ex.using([sceneNamespace], function(){
+				var scene = new game.levels[sceneName](that);
 				ex.Assets._readyListener.addEventListener('ready', function(){
 					console.log("assets ready!");
-					var objects = level.getObjects();
+					var objects = scene.getObjects();
 					that.currentWorld.addObjects(objects);
 					//that.currentWorld.removeObject(loadingScreen);
-					level.finalSetup(that);
+					scene.finalSetup(that);
 				});
-				ex.Assets.loadBulk(level.getAssets());
+				ex.Assets.loadBulk(scene.getAssets());
 			});
-			
 		},
 		
-		unloadLevel: function() {
-			
+		unloadScene: function() {
+			this.currentWorld.removeAllObjects();
 		},
 		
 		loadComponent: function(component) {

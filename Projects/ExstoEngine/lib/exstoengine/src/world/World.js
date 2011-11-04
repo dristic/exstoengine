@@ -164,6 +164,23 @@ ex.using([
 			}
 		},
 		
+		removeAllObjects: function() {
+			delete this.objects;
+			this.objects = [];
+			
+			delete this.renderer.renderables;
+			this.renderer.renderables = [];
+//			var index = this.objects.length;
+//			while(index--){
+//				this.objects.splice(index, 1);
+//			}
+//			
+//			index = this.renderer.renderables.length;
+//			while(index--){
+//				this.renderer.renderables.splice(index, 1);
+//			}
+		},
+		
 		destroy: function() {
 			
 		}

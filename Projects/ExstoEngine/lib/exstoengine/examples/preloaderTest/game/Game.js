@@ -10,6 +10,6 @@ ex.using([
 		_engine.openWorld(ex.world.World);
 		
 		//-- ENTRY POINT! ZOMG REALLY?! THAT'S IT?! AWESOME!!! I RUV YOU!! --//
-		_engine.loadLevel("titleMenu");
+		_engine.loadScene("titleMenu");
 	}
 );

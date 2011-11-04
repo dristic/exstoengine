@@ -41,6 +41,7 @@
 			// Display data
 			this.sprite = sprite;
 			this.sprite.position = this.position;	// pointer to this.position
+			this.visible = true;
 			
 			if(sprite.width == 0 && sprite.height == 0) {
 				ex.event.listen(sprite.img, 'load', function () {
@@ -118,19 +119,6 @@
 		},
 
 		/**
-		 * Checks properties and determines if entity is visible.
-		 * 
-		 * @function
-		 * @name isVisible
-		 * @memberOf ex.world.Entity
-		 * 
-		 * @returns {Boolean}
-		 */
-		isVisible: function() {
-			return this.visible;
-		},
-
-		/**
 		 * Supplies a canvas context and camera parameters for
 		 * rendering to the canvas. Can be overridden by subclasses
 		 * for customized rendering.
@@ -143,7 +131,7 @@
 		 */
 		render: function(context, camX, camY, camWidth, camHeight) {
 			// Don't render if it won't be seen
-			if (!this.isVisible())
+			if (this.visible == false)
 				return;
 
 			// Render code

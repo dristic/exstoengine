@@ -9,6 +9,10 @@ ex.using([
 			this.engine = engine;
 		},
 		
+		_startGame: function(){
+			this.engine.loadScene("level1");
+		},
+		
 		getAssets: function(){
 			return [
 	       		{name: "logo", filePath: "assets/explode3.png"},
@@ -24,7 +28,7 @@ ex.using([
 				[{
 					text: "Start Game",
 					action: function() {
-						that.engine.loadLevel("level1");
+						that._startGame();
 					}
 				}, {
 					text: "Options",

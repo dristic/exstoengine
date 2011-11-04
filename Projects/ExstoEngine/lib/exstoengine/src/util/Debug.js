@@ -59,6 +59,10 @@ ex.using([
 			},
 			
 			benchmarkEngine: function (dt) {
+				if(this._enabled == false){
+					return;
+				}
+				
 				var debug = ex.util.Debug;
 				
 				debug.logged.push(dt);
