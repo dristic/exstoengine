@@ -1,3 +1,5 @@
+<div class="container_12">
+  <div class="grid_12">
 
 <h2>
 	Web Site Terms and Conditions of Use
@@ -130,4 +132,7 @@
 
 <p>
 	We are committed to conducting our business in accordance with these principles in order to ensure that the confidentiality of personal information is protected and maintained. 
-</p>		
+</p>
+
+  </div>
+</div>		

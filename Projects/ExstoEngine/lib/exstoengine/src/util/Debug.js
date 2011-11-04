@@ -13,10 +13,12 @@ ex.using([
 			_loggingLevel: 5,
 			logger: new ex.util.Logger(ex.util.Logger.BROWSER),
 			
-			enable: function () {
+			enable: function (loggingLevel) {
 				ex.util.Debug._enabled = true;
 				ex.util.Debug._createDebugWindow();
 				ex.util.Debug.logger.enableDOM(ex.util.Debug.loggerElement);
+				
+				ex.util.Debug.logger.loggingLevel = loggingLevel;
 			},
 			
 			// Time tracking
