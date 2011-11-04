@@ -57,10 +57,10 @@ ex.using([
 			}
 		},
 		
-		enableDebugging: function() {
+		enableDebugging: function(loggingLevel) {
 			this.debug = true;
 			
-			ex.Debug.enable();
+			ex.Debug.enable(loggingLevel);
 		},
 		
 		setupCanvas: function (bgColor, canvas) {

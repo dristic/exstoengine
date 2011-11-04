@@ -17,7 +17,7 @@
 			this.loggingType = loggingType;
 			this.loggingLevel = level || 3;
 			this.defaultLoggingLevel = 4;
-			this.textLog = "--Logger Enabled \n";
+			this.textLog = "--Logger Enabled <br />";
 			this.logs = [];
 			
 			for(var i = 0; i < 6; i++) {
@@ -26,12 +26,12 @@
 		},
 		
 		enableDOM: function (loggingElement) {
-			this.loggingElement = this.defaultLoggingLevel;
+			this.loggingElement = loggingElement;
 			this.loggingType = ex.util.Logger.DOM;
 		},
 		
 		log: function(message, level) {
-			level = level || 4;
+			level = level || this.defaultLoggingLevel;
 			this.logs[level].push({
 				message: message,
 				date: new Date().getTime()

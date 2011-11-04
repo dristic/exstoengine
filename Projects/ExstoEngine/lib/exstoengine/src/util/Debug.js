@@ -3,8 +3,7 @@ ex.using([
   'ex.util.Logger'
 ], function() {
 	// Local private
-	var times = {},
-		timeLog = {};
+	var timeLog = {};
 	
 	ex.define("ex.util.Debug", ex.base.GlobalComponent, {
 		statics: {
@@ -12,6 +11,7 @@ ex.using([
 			
 			_enabled: false,
 			_loggingLevel: 5,
+			logTime: 3,
 			logger: new ex.util.Logger(ex.util.Logger.BROWSER),
 			
 			enable: function (loggingLevel) {
@@ -23,15 +23,34 @@ ex.using([
 			},
 			
 			// Time tracking
-			time: function (name) {
-				if(times[name] == null) {
-					times[name] = new Date();
+			time: function (name, instant) {
+				var time = timeLog[name];
+				if(time == null) {
+					time = {
+						currentTime: null,
+						timer: new Date(),
+						log: []
+					};
+					timeLog[name] = time;
+				}
+				
+				if(time.currentTime == null) {
+					time.currentTime = new Date();
 				} else {
 					var endTime = new Date(),
-						ms = endTime - times[name];
+						ms = endTime - time.currentTime;
 					
-					ex.util.Debug.log('Time: ' + name + ' ' + ms + 'ms');
-					times[name] = null;
+					time.log.push(ms);
+					if(time.log.length > 5) {
+						time.log.pop();
+					}
+					
+					if(endTime - time.timer > ex.util.Debug.logTime * 1000 || instant == true) {
+						ex.util.Debug.log('Time[' + name + ']: ' + ex.Array.average(time.log) + 'ms', ex.util.Logger.LEVEL.DEBUG);
+						time.timer = endTime;
+					}
+					
+					time.currentTime = null;
 				}
 			},
 			

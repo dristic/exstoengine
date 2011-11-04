@@ -5,7 +5,7 @@ ex.using([
 	function () {
 		var _engine = new ex.Engine(800, 500, 600);
 		_engine.setupCanvas("#000000");
-		//_engine.enableDebugging();
+		_engine.enableDebugging(ex.util.Logger.LEVEL.DEBUG);
 		_engine.input.listenOn(_engine.renderer.canvas);
 		_engine.openWorld(ex.world.World);
 		
