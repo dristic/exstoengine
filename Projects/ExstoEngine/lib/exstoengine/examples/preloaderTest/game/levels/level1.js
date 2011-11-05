@@ -65,6 +65,18 @@ ex.using([
 	    				])
 			);
 			
+			var player = new game.entities.Player(
+					"Player", 
+					new ex.base.Vector(50, 50), 
+					new ex.display.AnimatedSprite(
+							new ex.base.Vector(0,0),
+							36, 40, 7,
+							ex.Assets.getImage("player")),
+					true, 
+					this.engine.input);
+			this.followTarget = player;
+			objects.push(player);
+			
 			objects.push(
 					new ex.display.SpriteMap(
 	            		this.tileWidth,
@@ -96,17 +108,7 @@ ex.using([
 	            		ex.Assets.getImage("tiles"))
 					);
 			
-			var player = new game.entities.Player(
-				"Player", 
-				new ex.base.Vector(50, 50), 
-				new ex.display.AnimatedSprite(
-						new ex.base.Vector(0,0),
-						36, 40, 7,
-						ex.Assets.getImage("player")),
-				true, 
-				this.engine.input);
-			this.followTarget = player;
-			objects.push(player);
+			
 			
 			
 			

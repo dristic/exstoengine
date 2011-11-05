@@ -132,6 +132,7 @@ ex.using([
 						50);
 				context.restore();
 			};
+			
 			this.currentWorld.addObject(loadingScreen);
 			var that = this;
 			var sceneNamespace = "game.levels." + sceneName;
@@ -142,6 +143,9 @@ ex.using([
 				ex.Assets._readyListener.addEventListener('ready', function(){
 					console.log("assets ready!");
 					var objects = scene.getObjects();
+					
+					that.collisionManager.collisionGroups.push(objects);
+					
 					that.currentWorld.addObjects(objects);
 					//that.currentWorld.removeObject(loadingScreen);
 					scene.finalSetup(that);

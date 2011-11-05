@@ -98,7 +98,7 @@ ex.using([
 				while(index--) {
 					collisions.push.apply(
 							collisions,
-							this.collisionGroups[index], dt);
+							this.detector.detectGroupCollisions(this.collisionGroups[index], dt));
 				}
 			}
 			
