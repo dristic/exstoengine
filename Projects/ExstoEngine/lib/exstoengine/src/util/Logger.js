@@ -1,8 +1,6 @@
 (function () {
 	ex.define("ex.util.Logger", {
 		statics: {
-			BROWSER: 0,
-			DOM: 1,
 			MAX_LENGTH: 300,
 			LEVEL: {
 				ALL: 5,
@@ -27,7 +25,7 @@
 		
 		enableDOM: function (loggingElement) {
 			this.loggingElement = loggingElement;
-			this.loggingType = ex.util.Logger.DOM;
+			this.loggingType = ex.util.Debug.DOM;
 		},
 		
 		log: function(message, level) {
@@ -39,9 +37,9 @@
 			
 			if(this.loggingLevel >= level) {
 				this.textLog += "- " + message + "<br />";
-				if(this.loggingType == ex.util.Logger.BROWSER) {
+				if(this.loggingType == ex.util.Debug.BROWSER) {
 					console.log(message);
-				} else if(this.loggingType == ex.util.Logger.DOM) {
+				} else if(this.loggingType == ex.util.Debug.DOM) {
 					this.textLog = this.textLog.substring(this.textLog.length - ex.util.Logger.MAX_LENGTH, this.textLog.length);
 					this.loggingElement.innerHTML = this.textLog;
 				}

@@ -9,16 +9,24 @@ ex.using([
 		statics: {
 			componentName: 'Debug',
 			
+			DOM: 0,
+			BROWSER: 1,
+			
 			_enabled: false,
 			_loggingLevel: 5,
 			logTime: 3,
 			logger: new ex.util.Logger(ex.util.Logger.BROWSER),
 			
-			enable: function (loggingLevel) {
+			enable: function (loggingType, loggingLevel) {
 				ex.util.Debug._enabled = true;
 				ex.util.Debug._createDebugWindow();
-				ex.util.Debug.logger.enableDOM(ex.util.Debug.loggerElement);
 				
+				if(loggingType == ex.util.Debug.DOM) {
+				  ex.util.Debug.logger.enableDOM(ex.util.Debug.loggerElement);
+				  this.domElement.style.display = 'inherit';
+				}
+				
+				ex.util.Debug.logger.loggingType = loggingType;
 				ex.util.Debug.logger.loggingLevel = loggingLevel;
 			},
 			
@@ -114,6 +122,7 @@ ex.using([
 				debug.domElement.appendChild(debug.writeLog);
 				debug.domElement.appendChild(debug.loggerElement);
 				
+				debug.domElement.style.display = 'none';
 				document.body.appendChild(debug.domElement);
 			}
 		}

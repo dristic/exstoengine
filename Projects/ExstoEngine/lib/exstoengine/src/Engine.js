@@ -57,9 +57,9 @@ ex.using([
 			}
 		},
 		
-		enableDebugging: function(loggingLevel) {
+		enableDebugging: function(debugType, loggingLevel) {
 			this.debug = true;
-			ex.Debug.enable(loggingLevel);
+			ex.Debug.enable(debugType, loggingLevel);
 		},
 		
 		setupCanvas: function (bgColor, canvas) {
