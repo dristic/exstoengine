@@ -25,6 +25,10 @@ ex.using([
 				that.callback(data.success);
 			});
 			
+			this.socket.on('guestLogin', function (data) {
+			  that.callback(data.success);
+			});
+			
 			this.socket.on('roomList', function (data) {
 				that.callback(data.list);
 			});
@@ -74,6 +78,22 @@ ex.using([
 			this.socket.emit('login', { name: name, password: password });
 		},
 		
+		/**
+		 * Logs a user into the novus server as a guest.
+		 * 
+		 * @param {String} name The user name to login as.
+		 * @param {Function} callback What to call upon logging in.
+		 */
+		guestLogin: function (name, callback) {
+		  this.callback = callback;
+		  this.socket.emit('guestLogin', { name: name });
+		},
+		
+		/**
+		 * Gets the list of the currently created rooms.
+		 * 
+		 * @param {Function} callback The function to call upon getting the room list.
+		 */
 		roomList: function (callback) {
 			this.callback = callback;
 			this.socket.emit('roomList', {});
