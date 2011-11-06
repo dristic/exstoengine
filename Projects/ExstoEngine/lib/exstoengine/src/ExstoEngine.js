@@ -420,6 +420,21 @@ if(!Array.indexOf){
 		 */
 		floor: function (num) {
 			return num >> 0;
+		},
+		
+		/**
+		 * Returns a random integer between min and max
+		 * Using Math.round() will give you a non-uniform distribution!
+		 * 
+		 * @function
+		 * @name getRandomInt
+		 * @memberOf ex.Math
+		 * @param {Int} min The minimum random number.
+		 * @param {Int} max The maximum random number.
+		 * @return {Int} The resulting random number.
+		 */
+		getRandomInt: function(min, max) {
+		    return Math.floor(Math.random() * (max - min + 1)) + min;
 		}
 	};
 	
