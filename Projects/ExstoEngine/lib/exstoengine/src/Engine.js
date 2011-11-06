@@ -119,7 +119,7 @@ ex.using([
 			this.currentWorld = new world(this.renderer);
 		},
 		
-		loadScene: function(sceneName) {
+		loadScene: function(sceneName, callback) {
 			this.unloadScene();
 			var loadingScreen = new ex.display.Renderable();
 			loadingScreen.render = function(context, camX, camY, camWidth, camHeight){
@@ -138,7 +138,7 @@ ex.using([
 			var sceneNamespace = "game.levels." + sceneName;
 			
 			// Loads level code and assets
-			ex.using([sceneNamespace], function(){
+			ex.using([sceneNamespace], function() {
 				var scene = new game.levels[sceneName](that);
 				ex.Assets._readyListener.addEventListener('ready', function(){
 					console.log("assets ready!");
@@ -147,8 +147,12 @@ ex.using([
 					that.collisionManager.collisionGroups.push(objects);
 					
 					that.currentWorld.addObjects(objects);
-					//that.currentWorld.removeObject(loadingScreen);
+					that.currentWorld.removeObject(loadingScreen);
 					scene.finalSetup(that);
+					
+					if(callback) {
+					  callback();
+					}
 				});
 				ex.Assets.loadBulk(scene.getAssets());
 			});
