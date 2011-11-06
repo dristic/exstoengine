@@ -33,7 +33,7 @@ ex.using([
      * @name play
      * @memberOf ex.sound.Sound
      */
-    play: function () {
+    play: function (loop) {
       if(this.ready == true) {
         var i = 0;
         while(this.readyChannels[i] == false) {
@@ -45,7 +45,12 @@ ex.using([
         
         var _this = this;
         this.channels[i].addEventListener('ended', function (event) {
-          _this.readyChannels[i] = true;
+          console.log('end');
+          if(loop == true) {
+            _this.channels[i].play();
+          } else {
+            _this.readyChannels[i] = true;
+          }
         });
         this.readyChannels[i] = false;
         this.channels[i].play();
