@@ -4,7 +4,7 @@ var app = require('http').createServer(handler),
 
 nv.configure({
 	db: {
-		url: 'exsto-sharpper-data-0.dotcloud.com:17710',
+		url: 'mongo://nodejs:ShadowRule123@exsto-sharpper-data-0.dotcloud.com:17710',
 		name: 'exsto'
 	}
 });

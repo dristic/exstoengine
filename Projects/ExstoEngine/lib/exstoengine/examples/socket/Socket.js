@@ -140,7 +140,9 @@ window.startGame = function (canvas) {
 				//client.messageTo('Dan', 'test', {});
 			}
 			
-			if(_engine.input.isKeyDown(ex.util.Key.D)) {
+			if(_engine.input.isKeyDown(ex.util.Key.D) 
+			    || _engine.input.isKeyDown(ex.util.Key.A)
+			    || _engine.input.isKeyDown(ex.util.Key.Spacebar)) {
 				client.message('position', { x: player.position.x, y: player.position.y });
 			}
 		};
