@@ -1,3 +1,5 @@
 www:
   type: nodejs
   approot: node.js
+data:
+  type: mongodb

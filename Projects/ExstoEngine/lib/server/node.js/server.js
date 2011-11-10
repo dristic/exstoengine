@@ -4,7 +4,7 @@ var app = require('http').createServer(handler),
 
 nv.configure({
 	db: {
-		url: '127.0.0.1:27017',
+		url: 'exsto-sharpper-data-0.dotcloud.com:17710',
 		name: 'exsto'
 	}
 });
