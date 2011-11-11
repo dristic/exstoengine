@@ -70,6 +70,16 @@ ex.using([
           this._throwAssetDoesNotExistError(name, 'audio');
       },
       
+      /**
+       * Retrieves a video file by name from the asset manager.
+       * 
+       * @function
+       * @name getVideo
+       * @memberof ex.Assets
+       * 
+       * @param {String} name
+       * @returns {Boolean}
+       */
       getVideo: function(name) {
         return this._video[name] || 
           this._throwAssetDoesNotExistError(name, 'video');
@@ -150,6 +160,7 @@ ex.using([
           this._throwImageNameConflictError(name, filePath);
           return;
         }
+        
         this._images[name] = new Image();
         
         this._ready = false;
