@@ -7,10 +7,16 @@ ex.using([
 			this.target = targetEntity;
 			this.selector = statSelector;
 			
+			this.text = "";
+			
 			this.options = {
 				position: new ex.base.Vector(50,50),
 				color: '#FFFF00',
-				font: '40pt Calibri'
+				font: '40pt Calibri',
+				displayFormat: 'absolute',
+				maxSelector: null,
+				textBefore: null,
+				textAfter: null
 			};
 			
 			if(options != null){
@@ -26,6 +32,21 @@ ex.using([
 		},
 		
 		update: function(dt) {
+			// Show text in proper format
+			if(this.options.displayFormat == 'percentage') {
+				this.text = ex.toInt(this.target[this.selector] / this.target[this.options.maxSelector] * 100);
+				this.text += '%';
+			} else if (this.options.displayFormat == 'absolute') {
+				this.text = this.target[this.selector];
+			}
+			
+			// Add text before and after value
+			if(this.options.textBefore != null){
+				this.text = this.options.textBefore + this.text;
+			}
+			if(this.options.textAfter != null) {
+				this.text = this.text + this.options.textAfter;
+			}
 			
 		},
 		
@@ -37,7 +58,7 @@ ex.using([
 			context.save();
 			this._setStyle(context);
 			context.fillText(
-					this.target[this.selector], 
+					this.text, 
 					this.options.position.x, 
 					this.options.position.y);
 			context.restore();

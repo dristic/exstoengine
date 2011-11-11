@@ -8,7 +8,9 @@ ex.using([
           "ex.display.Renderable",
           "ex.util.CollisionManager",
           "ex.display.Camera",
-          "ex.display.Renderer"
+          "ex.display.Renderer",
+          
+          "ex.display.ui.LoadingScreen"
           ],
 	function () {
 	
@@ -50,8 +52,16 @@ ex.using([
 						this.width,
 						this.height);
 				
+				ex.Assets.load('__loadBG', 'assets/bg.png');
+				ex.Assets.load('__exstoLogo', 'assets/exstologo.png');
+				
+				this.loadingScreen = new ex.display.ui.LoadingScreen(
+						ex.Assets.getImage('__loadBG'),
+						ex.Assets.getImage('__exstoLogo'));
+				
 				//--Setup update interval
 				_gameInterval = setInterval(ex.bind(this, this.update), (1 / frameRate) * 1000);
+				
 			} else {
 				ex.Debug.log("Your browser does not support canvas!");
 			}
@@ -121,33 +131,21 @@ ex.using([
 		
 		loadScene: function(sceneName, callback) {
 			this.unloadScene();
-			var loadingScreen = new ex.display.Renderable();
-			loadingScreen.render = function(context, camX, camY, camWidth, camHeight){
-				context.save();
-				context.font = '20pt Calibri';
-				context.fillStyle = '#FFFFFF';
-				context.fillText(
-						"Loading... " + ex.Assets._assetsLoaded + "/" + ex.Assets._assetsToLoad, 
-						100, 
-						50);
-				context.restore();
-			};
-			
-			this.currentWorld.addObject(loadingScreen);
+			this.currentWorld.addObject(this.loadingScreen);
 			var that = this;
 			var sceneNamespace = "game.levels." + sceneName;
 			
 			// Loads level code and assets
 			ex.using([sceneNamespace], function() {
 				var scene = new game.levels[sceneName](that);
-				ex.Assets._readyListener.addEventListener('ready', function(){
+				ex.Assets._readyListener.addEventListener('ready', function() {
 					console.log("assets ready!");
 					var objects = scene.getObjects();
 					
 					that.collisionManager.collisionGroups.push(objects);
 					
 					that.currentWorld.addObjects(objects);
-					that.currentWorld.removeObject(loadingScreen);
+					that.currentWorld.removeObject(that.loadingScreen);
 					scene.finalSetup(that);
 					
 					if(callback) {
