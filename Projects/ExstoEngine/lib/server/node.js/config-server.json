@@ -2,5 +2,11 @@
   "db": {
     "url": "mongo://nodejs:ShadowRule123@exsto-sharpper-data-0.dotcloud.com:17710",
     "name": "exsto"
+  },
+  
+  "admin": {
+    "enabled": true,
+    "username": "admin",
+    "password": "admin"
   }
 }

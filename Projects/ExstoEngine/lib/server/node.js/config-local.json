@@ -5,6 +5,7 @@
   },
   
   "admin": {
+    "enabled": true,
     "username": "admin",
     "password": "admin"
   }
