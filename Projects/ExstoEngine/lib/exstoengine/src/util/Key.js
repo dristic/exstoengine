@@ -1,6 +1,6 @@
 (function () {
 	ex.define("ex.util.Key", {
-		statics: {
+		__statics: {
 			Backspace:		8,
 			 Tab:			9,
 			 Enter:			13,

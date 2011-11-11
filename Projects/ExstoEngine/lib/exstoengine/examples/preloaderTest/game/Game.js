@@ -6,7 +6,7 @@ ex.using([
 	function () {
 		var _engine = new ex.Engine(800, 500, 600);
 		
-		ex.Assets.load('__loadBG', 'assets/bg1.png');
+		ex.Assets.load('__loadBG', 'assets/loadingBG.jpg');
 		ex.Assets.load('__exstoLogo', 'assets/exstologo.png');
 		
 		_engine.loadingScreen = new ex.display.ui.LoadingScreen(
@@ -14,7 +14,7 @@ ex.using([
 				ex.Assets.getImage('__exstoLogo'));
 		
 		_engine.setupCanvas("#000000");
-		_engine.enableDebugging(ex.util.Debug.BROWSER, ex.util.Logger.LEVEL.DEBUG);
+		_engine.enableDebugging(ex.util.Debug.DOM, ex.util.Logger.LEVEL.DEBUG);
 		_engine.input.listenOn(_engine.renderer.canvas);
 		_engine.openWorld(ex.world.World);
 		

@@ -1,7 +1,8 @@
 ex.using([
     'ex.base.GlobalComponent',
     'ex.sound.Sound',
-    'ex.event.EventTarget'
+    'ex.event.EventTarget',
+    'ex.util.Debug'
 ],function () {
   ex.define("ex.util.AssetManager", ex.base.GlobalComponent, {
     __alias: 'ex.Assets',
@@ -18,7 +19,7 @@ ex.using([
       _video: [],
       _images: [],
       _ready: true,
-      _readyListener: new ex.event.EventTarget(),
+      _eventHandler: new ex.event.EventTarget(),
       _assetsToLoad: 0,
       _assetsLoaded: 0,
   
@@ -60,12 +61,12 @@ ex.using([
        */
       getAudio: function(name) {
         return this._audio[name] || 
-          throwAssetDoesNotExistError(name, 'audio');
+          this._throwAssetDoesNotExistError(name, 'audio');
       },
       
       getVideo: function(name) {
         return this._video[name] || 
-          throwAssetDoesNotExistError(name, 'video');
+          this._throwAssetDoesNotExistError(name, 'video');
       },
       
       /**
@@ -80,10 +81,10 @@ ex.using([
        */
       getImage: function(name) {
         if(!this._ready){
-          console.log("Cannot retrieve " + name + " image. Assets are still loading.");
+          this._throwImageNotReadyError(name);
         }
         return this._images[name] || 
-          throwAssetDoesNotExistError(name, 'image');
+          this._throwAssetDoesNotExistError(name, 'image');
       },
       
       /**
@@ -100,6 +101,9 @@ ex.using([
        *    by asset type.
        */
       load: function (name, filePath, options) {
+        if(this._ready == true) {
+          this._eventHandler.dispatchEvent('loadStart');
+        }
         // Determine file type and use proper loading method
         var extension = filePath.substring(filePath.lastIndexOf('.'));
         if(this._supportedExtensions.image.indexOf(extension) > -1) {
@@ -109,11 +113,26 @@ ex.using([
         } else if (this._supportedExtensions.video.indexOf(extension) > -1) {
           this._loadVideo(name, filePath, options);
         } else {
-          throwFileTypeNotSupportedError(name, filePath, extension);
+          this._throwFileTypeNotSupportedError(name, filePath, extension);
         }
       },
       
+      /**
+       * Loads a collection of files from the file system and adds
+       * them to the asset manager.
+       * 
+       * @function
+       * @name loadBulk
+       * @memberOf ex.Assets
+       * 
+       * @param {Array} list each item is formatted as {name, filePath, options}
+       */
       loadBulk: function(list){
+        if(this._ready == true) {
+          this._ready = false;
+          this._eventHandler.dispatchEvent('loadStart');
+        }
+        
         var index = list.length;
         while(index--){
           this.load(list[index].name, list[index].filePath, list[index].options);
@@ -122,7 +141,7 @@ ex.using([
       
       _loadImage: function(name, filePath, options) {
         if(this._images[name]){
-          console.error(name + " cannot be loaded. This image already exists.");
+          this._throwImageNameConflictError(name, filePath);
           return;
         }
         this._images[name] = new Image();
@@ -131,9 +150,12 @@ ex.using([
         this._assetsToLoad++;
         
         var that = this;
-        this._images[name].onError = throwFileUnableToLoadError;
+        this._images[name].onError = this._throwUnableToLoadFileError;
         this._images[name].onload = function () {
           that._assetsLoaded++;
+          that._eventHandler.dispatchEvent(
+              'assetLoaded', 
+              {type: 'Image', name: name, filePath: filePath, options: options});
           that._checkReadyState();
         };
         
@@ -154,14 +176,17 @@ ex.using([
         this._ready = false;
         this._assetsToLoad++;
         
-        that.audio.onError = throwFileUnableToLoadError;
+        that.audio.onError = this._throwUnableToLoadFileError;
         that.audio.src = filePath;
         that.audio.addEventListener('canplaythrough', function (event) {
+          that2._eventHandler.dispatchEvent(
+              'assetLoaded', 
+              {type: 'Audio', name: name, filePath: filePath, options: options});
+          that2._assetsLoaded++;
+          that2._checkReadyState();
           while(numChannels--) {
             that.channels.push(that.audio.cloneNode(true));
             that.readyChannels.push(true);
-            that2._assetsLoaded++;
-            that2._checkReadyState();
           }
         });
         
@@ -169,31 +194,56 @@ ex.using([
       },
       
       _loadVideo: function(name, filePath, options) {
-        console.error("No support for video loading yet. Maybe next time!");
+        this._throwVideoNotSupportedError();
       },
       
       _checkReadyState: function() {
         if(this._assetsLoaded == this._assetsToLoad) {
           this._ready = true;
-          this._readyListener.dispatchEvent('ready');
+          this._eventHandler.dispatchEvent('loadEnd');
         }
+      },
+      
+      
+      /*
+       * ERROR LOGGING
+       */
+      
+      _throwAssetDoesNotExistError: function(name, type) {
+        ex.Debug.log(
+          "The " + type + " file '" + name + "' does not exist. Maybe you forgot to load it.", 
+          'ERROR');
+      },
+      
+      _throwUnableToLoadFileError: function(filePath) {
+        ex.Debug.log(
+            "An error occured while loading the file at '" + filePath + "'.",
+            'ERROR');
+      },
+      
+      _throwFileTypeNotSupportedError: function(name, filePath, extension) {
+        ex.Debug.log(
+          'Not loading  "' + name + '" from "' + filePath + 
+          '" because the extension "' + extension + '" is not supported.',
+          'ERROR');
+      },
+      
+      _throwVideoNotSupportedError: function() {
+        ex.Debug.log("Sorry, video is not supported in this version of the engine.",
+            'ERROR');
+      },
+      
+      _throwImageNameConflictError: function(name, filePath) {
+        ex.Debug.log(
+            'An image by the name "' + name + '" already exists. Not loading "' + filePath + '".',
+            'INFO');
+      },
+      
+      _throwImageNotReadyError: function(name) {
+        ex.Debug.log(
+            "Retrieved image " + name + ", but it has not finished loading.",
+            'INFO');
       }
     }
   });
-  
-  function throwAssetDoesNotExistError(name, type) {
-    console.error("The " + type + " file '" + name + "' does not exist. Maybe you forgot to load it.");
-  };
-  
-  function throwFileUnableToLoadError(filePath) {
-    console.error("An error occured while loading the file at '" + filePath + "'.");
-  };
-  
-  function throwFileTypeNotSupportedError(name, filePath, extension) {
-    console.error(
-        'Not loading  "' + name + 
-        '" from "' + filePath + 
-        '" because the extension "' + extension + 
-        '" is not supported.');
-  }
 });

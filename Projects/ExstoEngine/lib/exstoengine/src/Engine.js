@@ -9,8 +9,6 @@ ex.using([
           "ex.util.CollisionManager",
           "ex.display.Camera",
           "ex.display.Renderer",
-          
-          "ex.display.ui.LoadingScreen"
           ],
 	function () {
 	
@@ -52,12 +50,7 @@ ex.using([
 						this.width,
 						this.height);
 				
-				ex.Assets.load('__loadBG', 'assets/bg.png');
-				ex.Assets.load('__exstoLogo', 'assets/exstologo.png');
-				
-				this.loadingScreen = new ex.display.ui.LoadingScreen(
-						ex.Assets.getImage('__loadBG'),
-						ex.Assets.getImage('__exstoLogo'));
+				this.loadingScreen = null;
 				
 				//--Setup update interval
 				_gameInterval = setInterval(ex.bind(this, this.update), (1 / frameRate) * 1000);
@@ -135,10 +128,18 @@ ex.using([
 			var that = this;
 			var sceneNamespace = "game.levels." + sceneName;
 			
+			ex.Assets._eventHandler.addEventListener('loadStart', function() {
+			  console.log('Began loading assets for scene "' + sceneName + '".');
+			});
+			
+			ex.Assets._eventHandler.addEventListener('assetLoaded', function(asset){ 
+			  console.log('Asset Loaded: ', asset.type, asset.name, asset.filePath, asset.options);
+			});
+			
 			// Loads level code and assets
 			ex.using([sceneNamespace], function() {
 				var scene = new game.levels[sceneName](that);
-				ex.Assets._readyListener.addEventListener('ready', function() {
+				ex.Assets._eventHandler.addEventListener('loadEnd', function() {
 					console.log("assets ready!");
 					var objects = scene.getObjects();
 					

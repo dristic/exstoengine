@@ -6,9 +6,11 @@ ex.using([
 	var timeLog = {};
 	
 	ex.define("ex.util.Debug", ex.base.GlobalComponent, {
-	  __alias: 'ex.Debug',
+		__alias: 'ex.Debug',
 	  
 		__statics: {
+			componentName: 'Debug',
+			
 			DOM: 0,
 			BROWSER: 1,
 			
@@ -62,8 +64,8 @@ ex.using([
 				}
 			},
 			
-			log: function (message) {
-				ex.util.Debug.logger.log(message);
+			log: function (message, loggingLevel) {
+			  ex.util.Debug.logger.log(message, ex.util.Logger.LEVEL[loggingLevel]);
 			},
 			
 			benchmarkEngine: function (dt) {
