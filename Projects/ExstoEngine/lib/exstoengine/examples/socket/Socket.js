@@ -4,7 +4,7 @@ window.login = function (data, callback, scope) {
 	ex.using([
 	      "ex.novus.NovusClient"
 	  ], function () {
-		client = new ex.novus.NovusClient('http://node.exstoengine.com/');
+		client = new ex.novus.NovusClient('http://localhost:8080/');
 		client.login(data.name, data.password, function (success) {
 			if(success == true) {
 				client.createRoom('Awesome Room');

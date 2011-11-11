@@ -2,12 +2,7 @@ var app = require('http').createServer(handler),
     fs = require('fs'),
     nv = require('novus');
 
-nv.configure({
-	db: {
-		url: 'mongo://nodejs:ShadowRule123@exsto-sharpper-data-0.dotcloud.com:17710',
-		name: 'exsto'
-	}
-});
+nv.configure('./config-local.json');
 
 app.listen(8080);
 
@@ -15,7 +10,7 @@ nv.listen(app);
 
 function handler (req, res) {
   var parts = require('url').parse(req.url);
-  if(parts.pathname != '/socket.io' && parts.pathname != '/novus') {
+  if(parts.pathname.substr(0, 10) != '/socket.io' && parts.pathname.substr(0, 6) != '/novus') {
     fs.readFile(__dirname + '/index.html',
         function (err, data) {
           if (err) {

@@ -6,9 +6,9 @@ ex.using([
 	var timeLog = {};
 	
 	ex.define("ex.util.Debug", ex.base.GlobalComponent, {
-		statics: {
-			componentName: 'Debug',
-			
+	  __alias: 'ex.Debug',
+	  
+		__statics: {
 			DOM: 0,
 			BROWSER: 1,
 			
@@ -127,7 +127,4 @@ ex.using([
 			}
 		}
 	});
-	
-	// Alias the debugger
-	ex.Debug = ex.util.Debug;
 });

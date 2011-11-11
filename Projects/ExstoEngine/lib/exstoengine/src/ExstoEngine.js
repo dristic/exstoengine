@@ -465,17 +465,26 @@ if(!Array.indexOf){
 	 * chains for proper use of instanceof and also supplies a _super method for
 	 * accessing base classes.
 	 * 
+	 * ::Example
+	 * ex.define('my.namespace.NewClass', ex.ExtendedClass, {
+	 *   constructor: function (param1, param2) {
+	 *     this.param1 = param1;
+	 *     this.param2 = param2;
+	 *   }
+	 * });
+	 * 
+	 * ::Compiler Commands
+	 * --__statics: Provide properties that get added to the namespace not the prototype.
+	 * --__alias: Alias the class to make it easier to access. Ex: 'ex.util.AssetManager'
+	 * is aliased to 'ex.Assets'
+	 * 
 	 * @function
 	 * @name ex.define
 	 * @memberOf ex
 	 * 
-	 * @param namespace
-	 *            The namespace of the new class
-	 * @param base
-	 *            The base class type to extend from or the class definition if
-	 *            not extending
-	 * @param extension
-	 *            The new class that will be extending base
+	 * @param {String} namespace The namespace of the new class
+	 * @param {Object} base The base class type to extend from or the class definition if not extending
+	 * @param {Object} extension The new class that will be extending base
 	 * @returns {ex.Class} new class
 	 */
 	ex.define = function(namespace, base, extension) {
@@ -519,6 +528,8 @@ if(!Array.indexOf){
 	 * @param base {Object} class prototype
 	 */
 	function createNewClass(namespace, base) {
+	  preCompile(namespace, null, base);
+	  
 		function NewClass() {
 			// empty function to hold new class
 		};
@@ -527,7 +538,10 @@ if(!Array.indexOf){
 			NewClass = base.constructor;
 		}
 		NewClass.prototype = base;
-		generateNamespace(namespace, NewClass);
+		
+		setNamespace(namespace, NewClass);
+		
+		postCompile(namespace, null, base, NewClass);
 	};
 	
 	/**
@@ -537,6 +551,8 @@ if(!Array.indexOf){
 	 * @param extension {Object} base class extension (new class)
 	 */
 	function extendBaseClass(namespace, base, extension) {
+	  preCompile(namespace, base, extension);
+	  
 		if (base == null) {
 			throw new Error("The base class has not been defined: "
 					+ extension.constructor);
@@ -569,32 +585,54 @@ if(!Array.indexOf){
 		};
 		NewClass.prototype._superTemp = NewClass.prototype._super;
 		
-		generateNamespace(namespace, NewClass);
+		setNamespace(namespace, NewClass);
+		
+		postCompile(namespace, base, extension, NewClass);
 	};
 	
-	/**
-	 * Generates the namespace tree in the DOMWindow for the
-	 * new class.
-	 * @param namespace {string} namespace of class
-	 * @param newClass {Object} class to be added to namespace
-	 */
-	function generateNamespace(namespace, newClass){
-		var context = window;
-		var parts = namespace.split('.');
-		for (var index = 0; index < parts.length; index++) {
-			var part = parts[index];
-			
-			context[part] = context[part] || {};
-			if (index == parts.length - 1) {
-				context[part] = newClass;
-				if('statics' in newClass.prototype) {
-					ex.extend(context[part], newClass.prototype.statics);
-				}
-			}
-			
-			context = context[part];
-		}
-	}
+	function preCompile(namespace, base, extension) {
+	  // No precompiler commands yet.
+	};
+	
+	function postCompile(namespace, base, extension, newClass) {
+	  // Add static methods to the namespace
+	  if('__statics' in newClass.prototype) {
+      setNamespace(namespace, newClass.prototype.__statics, true);
+    }
+	  
+	  // Alias the class if needed
+	  if('__alias' in newClass.prototype) {
+	    var alias = newClass.prototype.__alias;
+	    if(alias != namespace) {
+	      setNamespace(alias, newClass);
+	      postCompile(alias, base, extension, newClass);
+	    }
+	  }
+	};
+	
+	function setNamespace(namespace, object, extend) {
+	  var context = window,
+	      parts = namespace.split('.'),
+	      i = 0,
+	      ln = parts.length;
+	  
+	  for(; i < ln; i++) {
+	    var part = parts[i];
+	    
+	    context[part] = context[part] || {};
+	    if(i == ln - 1) {
+	      if(extend) {
+	        ex.extend(context[part], object);
+	      } else {
+	        context[part] = object;
+	      }
+	    }
+	    
+	    context = context[part];
+	  }
+	  
+	  return context;
+	};
 
 })();
 

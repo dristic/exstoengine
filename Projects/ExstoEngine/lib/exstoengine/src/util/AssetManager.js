@@ -4,6 +4,8 @@ ex.using([
     'ex.event.EventTarget'
 ],function () {
   ex.define("ex.util.AssetManager", ex.base.GlobalComponent, {
+    __alias: 'ex.Assets',
+    
     /**
      * The global asset manager, loads and retrieves audio, video, 
      * and image files.
@@ -11,9 +13,7 @@ ex.using([
      * @name ex.Assets
      * @class
      */
-    statics: {
-      componentName: 'Assets',
-      
+    __statics: {
       _audio: [],
       _video: [],
       _images: [],
@@ -196,6 +196,4 @@ ex.using([
         '" because the extension "' + extension + 
         '" is not supported.');
   }
-  
-  ex.Assets = ex.util.AssetManager;
 });

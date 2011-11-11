@@ -1,6 +1,6 @@
 (function () {
 	ex.define("ex.util.Logger", {
-		statics: {
+		__statics: {
 			MAX_LENGTH: 300,
 			LEVEL: {
 				ALL: 5,
