@@ -15,9 +15,15 @@ ex.using([
      * @class
      */
     __statics: {
-      _audio: [],
-      _video: [],
-      _images: [],
+      _audio: {
+        numAssets: 0
+      },
+      _video: {
+        numAssets: 0
+      },
+      _images: {
+        numAssets: 0
+      },
       _ready: true,
       _eventHandler: new ex.event.EventTarget(),
       _assetsToLoad: 0,
@@ -152,10 +158,11 @@ ex.using([
         var that = this;
         this._images[name].onError = this._throwUnableToLoadFileError;
         this._images[name].onload = function () {
+          var asset = {type: 'Image', name: name, filePath: filePath, options: options};
           that._assetsLoaded++;
-          that._eventHandler.dispatchEvent(
-              'assetLoaded', 
-              {type: 'Image', name: name, filePath: filePath, options: options});
+          that._images.numAssets++;
+          that._eventHandler.dispatchEvent('assetLoaded', asset);
+          that._debugOnAssetLoaded(asset);
           that._checkReadyState();
         };
         
@@ -179,10 +186,11 @@ ex.using([
         that.audio.onError = this._throwUnableToLoadFileError;
         that.audio.src = filePath;
         that.audio.addEventListener('canplaythrough', function (event) {
-          that2._eventHandler.dispatchEvent(
-              'assetLoaded', 
-              {type: 'Audio', name: name, filePath: filePath, options: options});
+          var asset = {type: 'Audio', name: name, filePath: filePath, options: options};
+          that2._eventHandler.dispatchEvent('assetLoaded',  asset);
+          that2._debugOnAssetLoaded(asset);
           that2._assetsLoaded++;
+          that2._audio.numAssets++;
           that2._checkReadyState();
           while(numChannels--) {
             that.channels.push(that.audio.cloneNode(true));
@@ -198,14 +206,34 @@ ex.using([
       },
       
       _checkReadyState: function() {
-        if(this._assetsLoaded == this._assetsToLoad) {
+        if(this._assetsLoaded == this._assetsToLoad && this._ready == false) {
           this._ready = true;
           this._eventHandler.dispatchEvent('loadEnd');
+          this._debugAssetCount();
         }
       },
       
-      
       /*
+       * DEBUG LOGGING
+       */
+      
+      _debugAssetCount: function() {
+        ex.Debug.log(
+            'Total Assets: ' + this._assetsLoaded +
+            ' | Audio: ' + this._audio.numAssets + 
+            ' | Image: ' + this._images.numAssets + 
+            ' | Video: ' + this._video.numAssets,
+            'INFO');
+      },
+      
+      _debugOnAssetLoaded: function(asset) {
+        ex.Debug.log(
+            'Asset Loaded: ' + asset.type + ' | ' + asset.name + ' | "' +
+            asset.filePath + '" | ' + asset.options,
+            'INFO');
+      },
+      
+      /*  
        * ERROR LOGGING
        */
       
