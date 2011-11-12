@@ -77,7 +77,19 @@ ex.using([
 			
 		},
 		
-		render: function(context, camX, camY){
+		setupDom: function (el) {
+		  
+		},
+		
+		renderDom: function (context, camX, camY, camWidth, camHeight) {
+		  
+		},
+		
+		destroyDom: function (el) {
+		  
+		},
+		
+		render2dCanvas: function(context, camX, camY){
 			// This has no render view
 		},
 		

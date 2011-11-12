@@ -1,10 +1,15 @@
 ex.using([
-        "ex.Engine",
+    "ex.Engine",
 		"ex.world.World",
 		"ex.display.ui.LoadingScreen"
 	], 
 	function () {
-		var _engine = new ex.Engine(800, 500, 60);
+		var _engine = new ex.Engine(800, 500, 600, '#000');
+		
+		_engine.renderer.setup(ex.display.rendering.Renderer.DOM, { canvas: null });
+    _engine.enableDebugging(ex.util.Debug.DOM, ex.util.Logger.LEVEL.DEBUG);
+    _engine.input.listenOn(_engine.renderer.renderingContext.el);
+    _engine.openWorld(ex.world.World);
 		
 		ex.Assets.load('__loadBG', 'assets/loadingBG.jpg');
 		ex.Assets.load('__exstoLogo', 'assets/exstologo.png');
@@ -12,11 +17,6 @@ ex.using([
 		_engine.loadingScreen = new ex.display.ui.LoadingScreen(
 				ex.Assets.getImage('__loadBG'),
 				ex.Assets.getImage('__exstoLogo'));
-		
-		_engine.setupCanvas("#000000");
-		_engine.enableDebugging(ex.util.Debug.DOM, ex.util.Logger.LEVEL.DEBUG);
-		_engine.input.listenOn(_engine.renderer.canvas);
-		_engine.openWorld(ex.world.World);
 		
 		//-- ENTRY POINT! ZOMG REALLY?! THAT'S IT?! AWESOME!!! I RUV YOU!! --//
 		_engine.loadScene("titleMenu");

@@ -29,6 +29,7 @@
 			this.width = width;
 			this.height = height;
 			this.mass = 1;
+			this.visible = true;
 
 			/**
 			 * @name neighbors

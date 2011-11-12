@@ -55,6 +55,29 @@ ex.using([
 			this.progressBar.update(dt);
 		},
 		
+		setupDom: function (el) {
+		  this.options.background.setupDom(el);
+		  this.options.logo.setupDom(el);
+		  this.progressBar.setupDom(el);
+		},
+		
+		renderDom: function (el, camX, camY) {
+		  this.options.background.renderDom(el, camX, camY);
+      this.options.logo.renderDom(el, camX, camY);
+      this.progressBar.renderDom(el, camX, camY);
+		},
+		
+		destroyDom: function (el) {
+		  this.options.background.destroyDom(el);
+      this.options.logo.destroyDom(el);
+      this.progressBar.destroyDom(el);
+		},
+		
+		setup2dCanvas: function (canvas) {
+		  this.options.background.setup2dCanvas(canvas);
+		  this.options.logo.setup2dCanvas(canvas);
+		},
+		
 		/**
 		 * Renders the TitleMenu to the screen.
 		 * @function
@@ -64,12 +87,10 @@ ex.using([
 		 * @param {Number} camX camera offset on x
 		 * @param {Number} camY camera offset on y
 		 */
-		render: function(context, camX, camY){
-			this.options.background.render(context, camX, camY);
-			this.options.logo.render(context, camX, camY);
-			this.progressBar.render(context, camX, camY);
-			
-			
+		render2dCanvas: function(context, camX, camY){
+			this.options.background.render2dCanvas(context, camX, camY);
+			this.options.logo.render2dCanvas(context, camX, camY);
+			this.progressBar.render2dCanvas(context, camX, camY);
 		}
 	});
 });

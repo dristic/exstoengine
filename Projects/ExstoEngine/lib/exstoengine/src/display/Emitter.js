@@ -82,7 +82,7 @@ ex.using([
 			}
 		},
   
-		render: function(context, camX, camY) {
+		render2dCanvas: function(context, camX, camY) {
 			for(var i = 0; i < this.particles.length; i++) {
 				this.particles[i].render(context, camX, camY);
 			}

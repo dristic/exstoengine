@@ -36,7 +36,19 @@ ex.using([
 			
 		},
 		
-		render: function() {
+		setupDom: function (el) {
+      
+    },
+    
+    renderDom: function (el, camX, camY, camWidth, camHeight) {
+      
+    },
+    
+    destroyDom: function (el) {
+      
+    },
+		
+		render2dCanvas: function() {
 			
 		},
 		

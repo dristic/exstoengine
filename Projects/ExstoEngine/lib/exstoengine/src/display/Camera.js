@@ -21,7 +21,6 @@ ex.using([
 			this.width = width;
 			this.height = height;
 			this.following = null;
-			this.canvas = null;
 		},
 		
 		/**
@@ -32,9 +31,9 @@ ex.using([
 		 * @param {Number} dt
 		 */
 		update: function(dt) {
-			if(this.following != null && this.canvas != null) {
-				this.position.x = this.following.position.x + (this.following.width >> 1) - (this.canvas.width >> 1);
-				this.position.y = this.following.position.y + (this.following.height >> 1) - (this.canvas.height >> 1);
+			if(this.following != null) {
+				this.position.x = this.following.position.x + (this.following.width >> 1) - (this.width >> 1);
+				this.position.y = this.following.position.y + (this.following.height >> 1) - (this.height >> 1);
 			}
 		},
 		

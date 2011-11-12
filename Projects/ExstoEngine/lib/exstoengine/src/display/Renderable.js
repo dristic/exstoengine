@@ -69,7 +69,7 @@
 			
 		},
 		
-		render: function(context, camX, camY) {
+		render2dCanvas: function(context, camX, camY) {
 			
 		}
 	});

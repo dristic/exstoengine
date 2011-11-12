@@ -117,6 +117,18 @@
 		onCollide: function(target, data) {
 			
 		},
+		
+		setupDom: function (el) {
+      this.sprite.setupDom(el);
+    },
+    
+    renderDom: function (el, camX, camY, camWidth, camHeight) {
+      this.sprite.renderDom(el, camX, camY, camWidth, camHeight);
+    },
+    
+    destroyDom: function (el) {
+      this.sprite.destroyDom(el);
+    },
 
 		/**
 		 * Supplies a canvas context and camera parameters for
@@ -129,13 +141,13 @@
 		 * @param {Number} camWidth viewport width
 		 * @param {Number} camHeight viewport height
 		 */
-		render: function(context, camX, camY, camWidth, camHeight) {
+		render2dCanvas: function(context, camX, camY, camWidth, camHeight) {
 			// Don't render if it won't be seen
 			if (this.visible == false)
 				return;
 
 			// Render code
-			this.sprite.render(context, camX, camY, camWidth, camHeight);
+			this.sprite.render2dCanvas(context, camX, camY, camWidth, camHeight);
 		}
 	});
 }());

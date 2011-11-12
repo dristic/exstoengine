@@ -49,6 +49,11 @@ ex.using([
 		autoSize: function () {
 			this.width = this.image.naturalWidth;
 			this.height = this.image.naturalHeight;
+			
+			if(this.rendering && this.rendering.el) {
+			  this.rendering.el.style.width = this.width + 'px';
+			  this.rendering.el.style.height = this.height + 'px';
+			}
 		},
 
 		/**
@@ -80,6 +85,47 @@ ex.using([
 		update : function(dt) {
 
 		},
+		
+		setupDom: function (el) {
+		  var thisEl = this.image;
+      thisEl.style.position = 'absolute';
+      thisEl.style.width = this.width + 'px';
+      thisEl.style.height = this.height + 'px';
+      thisEl.style.left = this.position.x + 'px';
+      thisEl.style.top = this.position.y + 'px';
+      
+      this.rendering = {
+        el: thisEl
+      };
+      
+      el.appendChild(this.rendering.el);
+		},
+		
+		renderDom: function (el, camX, camY, camWidth, camHeight) {
+		  if(!this.isVisible()){
+        return;
+      }
+      
+      // Position of the sprite in the viewport
+      var viewPortX = ex.toInt(this.position.x - (camX * this.scrollFactor.x)),
+          viewPortY = ex.toInt(this.position.y - (camY * this.scrollFactor.y));
+            
+      // Do nothing if sprite is out of the viewport
+      if((viewPortX + this.width) < 0
+          && viewPortX > camWidth
+          && (viewPortY + this.height) < 0
+          && viewPortY > camHeight) {
+        return;
+      } else {
+        this.rendering.el.style.left = viewPortX + 'px';
+        this.rendering.el.style.top = viewPortY + 'px';
+      }
+		},
+		
+		destroyDom: function (el) {
+		  el.removeChild(this.rendering.el);
+		  this.rendering = null;
+		},
 
 		/**
 		 * Supplies a canvas context and camera offset to each item and calls
@@ -95,7 +141,7 @@ ex.using([
 		 * @param {Number} camWidth viewport width
 		 * @param {Number} camHeight viewport height
 		 */
-		render : function(context, camX, camY, camWidth, camHeight) {
+		render2dCanvas: function(context, camX, camY, camWidth, camHeight) {
 			if(!this.isVisible()){
 				return;
 			}

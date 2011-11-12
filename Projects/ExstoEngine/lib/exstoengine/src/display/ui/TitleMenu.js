@@ -29,14 +29,8 @@ ex.using([
 			this.input = input;
 			
 			this.options = {
-				background: {
-					image: bgImage
-				},
-				logo: {
-					image: logoImage,
-					x: 300,
-					y: 100
-				},
+				background: new ex.display.Sprite(new ex.base.Vector(0, 0), bgImage),
+				logo: new ex.display.Sprite(new ex.base.Vector(300, 100), logoImage),
 				menu: {
 					x: 400,
 					y: 300,
@@ -110,6 +104,63 @@ ex.using([
 			}
 		},
 		
+		setupDom: function (el) {
+		  this.options.background.setupDom(el);
+		  this.options.logo.setupDom(el);
+		  
+		  function createTextEl(text, color, x, y) {
+		    var textEl = document.createElement('div');
+	      textEl.style.font = "40pt Calibri";
+	      textEl.style.color = color;
+	      textEl.style.textAlign = "center";
+	      textEl.innerHTML = text;
+	      textEl.style.position = 'absolute';
+	      el.appendChild(textEl);
+	      textEl.style.left = (x - (textEl.offsetWidth / 2)) + 'px';
+	      textEl.style.top = (y - (textEl.offsetHeight / 2)) + 'px';
+	      return textEl;
+		  };
+      
+      var xPos = this.options.menu.x,
+          yPos = this.options.menu.y,
+          index = 0,
+          els = [];
+      for(index; index < this.selections.length; index++) {
+        // Color current selection differently
+        if(index == this.currentSelection) {
+          els.push(createTextEl(this.selections[index].text, '#00FF00', xPos, yPos));
+        } else {
+          // Print non selected options in normal color
+          els.push(createTextEl(this.selections[index].text, '#FF0000', xPos, yPos));
+        }
+        yPos += this.options.selection.height;
+      }
+      
+      this.rendering = {
+        els: els
+      };
+		},
+		
+		renderDom: function (el, camX, camY, camWidth, camHeight) {
+		  this.options.background.renderDom(el, camX, camY, camWidth, camHeight);
+		  this.options.logo.renderDom(el, camX, camY, camWidth, camHeight);
+		  
+		  var index = 0;
+      for(index; index < this.selections.length; index++) {
+        // Color current selection differently
+        if(index == this.currentSelection) {
+          this.rendering.els[index].style.color = '#00FF00';
+        } else {
+          // Print non selected options in normal color
+          this.rendering.els[index].style.color = '#FF0000';
+        }
+      }
+		},
+		
+		destroyDom: function (el) {
+		  
+		},
+		
 		/**
 		 * Renders the TitleMenu to the screen.
 		 * @function
@@ -119,18 +170,13 @@ ex.using([
 		 * @param {Number} camX camera offset on x
 		 * @param {Number} camY camera offset on y
 		 */
-		render: function(context, camX, camY){
-			if(this.options.background.image != null) {
-				context.drawImage(
-						this.options.background.image,
-						0,0);
+		render2dCanvas: function(context, camX, camY){
+			if(this.options.background != null) {
+				this.options.background.render2dCanvas(context, camX, camY);
 			}
 			
-			if(this.options.logo.image != null) {
-				context.drawImage(
-						this.options.logo.image,
-						this.options.logo.x,
-						this.options.logo.y);
+			if(this.options.logo != null) {
+				this.options.logo.render2dCanvas(context, camX, camY);
 			}
 			
 			context.font = "40pt Calibri";

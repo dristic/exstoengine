@@ -128,7 +128,7 @@ ex.using([
      */
     addObject: function(object) {
       this.objects.push(object);
-      this.renderer.renderables.push(object);
+      this.renderer.addRenderable(object);
     },
     
     addObjects: function(objects) {
@@ -157,12 +157,7 @@ ex.using([
       }
       
       // Remove object from renderer
-      index = this.renderer.renderables.length;
-      while(index--) {
-        if(this.renderer.renderables[index] === object) {
-          this.renderer.renderables.splice(index, 1);
-        }
-      }
+      this.renderer.removeRenderable(object);
     },
     
     removeAllObjects: function() {

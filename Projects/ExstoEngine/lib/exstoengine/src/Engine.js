@@ -8,7 +8,7 @@ ex.using([
           "ex.display.Renderable",
           "ex.util.CollisionManager",
           "ex.display.Camera",
-          "ex.display.Renderer",
+          "ex.display.rendering.Renderer"
           ],
 	function () {
 	
@@ -22,7 +22,7 @@ ex.using([
 		 * @param {Int} frameRate The frame rate of the game
 		 * @constructor
 		 */
-		constructor: function (width, height, frameRate) {
+		constructor: function (width, height, frameRate, bgColor) {
 			//--Check for canvas support
 			if(document.createElement("canvas").getContext) {
 				//--Public
@@ -50,6 +50,9 @@ ex.using([
 						this.width,
 						this.height);
 				
+				// Create renderer
+				this.renderer = new ex.display.rendering.Renderer(this.width, this.height, bgColor);
+				
 				this.loadingScreen = null;
 				
 				//--Setup update interval
@@ -63,11 +66,6 @@ ex.using([
 		enableDebugging: function(debugType, loggingLevel) {
 			this.debug = true;
 			ex.Debug.enable(debugType, loggingLevel);
-		},
-		
-		setupCanvas: function (bgColor, canvas) {
-			this.renderer = new ex.display.Renderer(this.width, this.height, bgColor, canvas);
-			this.camera.canvas = canvas || this.renderer.canvas;
 		},
 		
 		update: function () {
