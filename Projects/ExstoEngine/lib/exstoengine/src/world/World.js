@@ -25,6 +25,7 @@ ex.using([
       this.renderer = renderer;
       this.levels = [];
       this.objects = [];
+      this.globalObjects = [];
     },
     
     /**

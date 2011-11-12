@@ -34,6 +34,7 @@ ex.using([
 		
 		getObjects: function(){
 			var objects = [];
+			var that = this;
 			
 			/*
 			 * Build all scene objects.
@@ -134,7 +135,7 @@ ex.using([
       );
 			
 			
-			var player = new game.entities.Player(
+			this.engine.currentWorld.globalObjects.player = new game.entities.Player(
         "Player", 
         new ex.base.Vector(50, 50), 
         new ex.display.AnimatedSprite(
@@ -144,7 +145,6 @@ ex.using([
         true, 
         this.engine.input
       );
-      this.followTarget = player;
 			
 			var teleporter = new game.entities.Teleporter(
         "Teleporter",
@@ -159,7 +159,7 @@ ex.using([
         if(target.name == "Player" && !teleporter.triggered){
           ex.Assets.getAudio("laser").play();
           teleporter.triggered = true;
-          //_engine.loadScene("level2");
+          that.engine.loadScene("level2");
         }
       };
       
@@ -178,7 +178,7 @@ ex.using([
 			// Background Image
 			objects.push(background);
 			objects.push(collisionMap);
-			objects.push(player);
+			objects.push(this.engine.currentWorld.globalObjects.player);
 	    objects.push(teleporter);
 	    objects.push(hiddenOverlayTrigger);
 			objects.push(platforms);
@@ -187,8 +187,8 @@ ex.using([
 			return objects;
 		},
 		
-		finalSetup: function(engine) {
-			engine.camera.follow(this.followTarget);
+		finalSetup: function() {
+			this.engine.camera.follow(this.engine.currentWorld.globalObjects.player);
 		}
 	});
 });

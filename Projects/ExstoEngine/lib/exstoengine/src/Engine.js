@@ -128,31 +128,27 @@ ex.using([
 			var that = this;
 			var sceneNamespace = "game.levels." + sceneName;
 			
-			ex.Assets._eventHandler.addEventListener('loadStart', function() {
+			ex.event.listenOnce(ex.Assets._eventHandler, 'loadStart', function() {
 			  console.log('Began loading assets for scene "' + sceneName + '".');
-			});
-			
-			ex.Assets._eventHandler.addEventListener('assetLoaded', function(asset){ 
-			  console.log('Asset Loaded: ', asset.type, asset.name, asset.filePath, asset.options);
-			});
+			}, this);
 			
 			// Loads level code and assets
 			ex.using([sceneNamespace], function() {
 				var scene = new game.levels[sceneName](that);
-				ex.Assets._eventHandler.addEventListener('loadEnd', function() {
-					console.log("assets ready!");
+				ex.event.listenOnce(ex.Assets._eventHandler, 'loadEnd', function() {
 					var objects = scene.getObjects();
 					
+					that.collisionManager.collisionGroups = [];
 					that.collisionManager.collisionGroups.push(objects);
 					
 					that.currentWorld.addObjects(objects);
 					that.currentWorld.removeObject(that.loadingScreen);
-					scene.finalSetup(that);
+					scene.finalSetup();
 					
 					if(callback) {
 					  callback();
 					}
-				});
+				}, this);
 				ex.Assets.loadBulk(scene.getAssets());
 			});
 		},

@@ -4,7 +4,7 @@ ex.using([
 		"ex.display.ui.LoadingScreen"
 	], 
 	function () {
-		var _engine = new ex.Engine(800, 500, 600);
+		var _engine = new ex.Engine(800, 500, 60);
 		
 		ex.Assets.load('__loadBG', 'assets/loadingBG.jpg');
 		ex.Assets.load('__exstoLogo', 'assets/exstologo.png');
