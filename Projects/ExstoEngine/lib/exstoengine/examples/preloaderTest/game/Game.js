@@ -4,7 +4,7 @@ ex.using([
 		"ex.display.ui.LoadingScreen"
 	], 
 	function () {
-		var _engine = new ex.Engine(800, 500, 600, '#000');
+		var _engine = new ex.Engine(800, 500, 60, '#000');
 		
 		_engine.renderer.setup(ex.display.rendering.Renderer.DOM, { canvas: null });
     _engine.enableDebugging(ex.util.Debug.DOM, ex.util.Logger.LEVEL.DEBUG);
