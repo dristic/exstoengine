@@ -9,6 +9,7 @@ ex.using([
 		_engine.renderer.setup(ex.display.rendering.Renderer.DOM, { canvas: null });
     _engine.enableDebugging(ex.util.Debug.DOM, ex.util.Logger.LEVEL.DEBUG);
     _engine.input.listenOn(_engine.renderer.renderingContext.el);
+    ex.Input._input.listenOn(_engine.renderer.renderingContext.el);
     _engine.openWorld(ex.world.World);
 		
 		ex.Assets.load('__loadBG', 'assets/loadingBG.jpg');

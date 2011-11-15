@@ -4,6 +4,7 @@ ex.using([
           "ex.util.Input",
           "ex.util.Debug",
           "ex.util.AssetManager",
+          "ex.util.InputController",
           "ex.display.ImageRepository",
           "ex.display.Renderable",
           "ex.util.CollisionManager",

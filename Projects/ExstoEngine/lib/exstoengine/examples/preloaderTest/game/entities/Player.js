@@ -16,6 +16,10 @@ ex.using([
 			this.speed = 10;
 			this.maxSpeed = 200;
 			this.score = 0;
+			
+			ex.Input.bindAction(this, this.moveRight, 'keydown Right');
+			ex.Input.bindAction(this, this.moveLeft, 'keydown Left');
+			ex.Input.bindAction(this, this.jump, 'keydown Spacebar');
 		},
 		
 		jump: function(){
@@ -31,21 +35,21 @@ ex.using([
 		},
 		
 		update: function(dt) {
-			if(this.input.isKeyPressed(ex.util.Key.Spacebar)) {
-				this.jump();
-			}
-			if(this.input.isKeyDown(ex.util.Key.W)) {
-				this.velocity.y -= this.speed;
-			}
-			if(this.input.isKeyDown(ex.util.Key.S)) {
-				this.velocity.y += this.speed;
-			}
-			if(this.input.isKeyDown(ex.util.Key.A)) {
-				this.moveLeft();
-			}
-			if(this.input.isKeyDown(ex.util.Key.D)) {
-				this.moveRight();
-			}
+//			if(this.input.isKeyPressed(ex.util.Key.Spacebar)) {
+//				this.jump();
+//			}
+//			if(this.input.isKeyDown(ex.util.Key.W)) {
+//				this.velocity.y -= this.speed;
+//			}
+//			if(this.input.isKeyDown(ex.util.Key.S)) {
+//				this.velocity.y += this.speed;
+//			}
+//			if(this.input.isKeyDown(ex.util.Key.A)) {
+//				this.moveLeft();
+//			}
+//			if(this.input.isKeyDown(ex.util.Key.D)) {
+//				this.moveRight();
+//			}
 			
 			// Move Right
 			if(this.input.dragging && this.input.mouseX > 600){
