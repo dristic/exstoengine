@@ -1,5 +1,7 @@
 ex.using([
   'ex.display.Sprite',
+  'ex.display.Rectangle',
+  'ex.display.ui.StatusText',
   'ex.display.ui.StatusBar',
   'ex.base.Component'
 ], function() {	
@@ -10,37 +12,37 @@ ex.using([
 		 * 
 		 * @constructor
 		 */
-		constructor: function(bgImage, logo, options){			
-			this.options = {
-				background: new ex.display.Sprite(
-					new ex.base.Vector(0, 0),
-					bgImage),
-				logo: new ex.display.Sprite(
-					new ex.base.Vector(50, 50),
-					logo),
-				status: {
-					message: "Loading... ",
-					x: 100,
-					y: 200
-				}
-			};
+		constructor: function(logo) {			
+	    this.background = new ex.display.Rectangle({
+				  x: 0, y: 0,
+				  width: 800, height: 600,
+				  fill: {
+				    type: 'radial-gradient',
+				    start: { x: 400, y: 300, radius: 0 },
+				    end: { x: 400, y: 300, radius: 500 },
+				    stops: [
+	            { position: 0, color: '#555' },
+	            { position: 1, color: '#000' }
+            ]
+				  }
+				});
+	    
+      this.logo = new ex.display.Sprite(
+					new ex.base.Vector(270, 230),
+					logo);
 			
-			if(options != null) {
-				ex.extend(this.options, options);
-			}
-			
-			this.progressBar = new ex.display.ui.StatusBar(
+			this.progressBar = new ex.display.ui.StatusText(
 				ex.Assets,
 				'_assetsLoaded',
 				{
 					position: new ex.base.Vector(
-							this.options.status.x, 
-							this.options.status.y),
+							340, 
+							300),
 					color: "#FFFFFF",
-					font: '24pt Calibri',
+					font: '12pt Arial',
 					displayFormat: 'percentage',
 					maxSelector: '_assetsToLoad',
-					textBefore: this.options.status.message
+					textBefore: "Loading.. "
 				});
 		},
 		
@@ -56,26 +58,26 @@ ex.using([
 		},
 		
 		setupDom: function (el) {
-		  this.options.background.setupDom(el);
-		  this.options.logo.setupDom(el);
+		  this.background.setupDom(el);
+		  this.logo.setupDom(el);
 		  this.progressBar.setupDom(el);
 		},
 		
 		renderDom: function (el, camX, camY) {
-		  this.options.background.renderDom(el, camX, camY);
-      this.options.logo.renderDom(el, camX, camY);
+		  this.background.renderDom(el, camX, camY);
+      this.logo.renderDom(el, camX, camY);
       this.progressBar.renderDom(el, camX, camY);
 		},
 		
 		destroyDom: function (el) {
-		  this.options.background.destroyDom(el);
-      this.options.logo.destroyDom(el);
+		  this.background.destroyDom(el);
+      this.logo.destroyDom(el);
       this.progressBar.destroyDom(el);
 		},
 		
 		setup2dCanvas: function (canvas) {
-		  this.options.background.setup2dCanvas(canvas);
-		  this.options.logo.setup2dCanvas(canvas);
+		  this.background.setup2dCanvas(canvas);
+		  this.logo.setup2dCanvas(canvas);
 		},
 		
 		/**
@@ -88,8 +90,8 @@ ex.using([
 		 * @param {Number} camY camera offset on y
 		 */
 		render2dCanvas: function(context, camX, camY){
-			this.options.background.render2dCanvas(context, camX, camY);
-			this.options.logo.render2dCanvas(context, camX, camY);
+			this.background.render2dCanvas(context, camX, camY);
+			this.logo.render2dCanvas(context, camX, camY);
 			this.progressBar.render2dCanvas(context, camX, camY);
 		}
 	});

@@ -15,8 +15,8 @@ ex.using([
 		
 		getAssets: function(){
 			return [
-	       		{name: "logo", filePath: "assets/explode3.png"},
-	    		{name: "bg", filePath: "assets/bg.png"},
+       		{name: "logo", filePath: "assets/explode3.png"},
+	    		{name: "bg", filePath: "assets/bg.png"}
 	    	];
 		},
 		
