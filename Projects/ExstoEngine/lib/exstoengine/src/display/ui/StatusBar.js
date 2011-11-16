@@ -1,34 +1,53 @@
 ex.using([
+  'ex.base.Vector',
   'ex.display.Sprite',
+  'ex.display.Rectangle',
   'ex.display.Renderable'
 ], function() { 
   ex.define("ex.display.ui.StatusBar", ex.display.Renderable, {
-    constructor: function(targetEntity, statSelector, options) {
-      this.target = targetEntity;
-      this.selector = statSelector;
-      
-      this.text = "";
-      
-      this.options = {
-        position: new ex.base.Vector(50,50),
-        color: '#FFFF00',
-        font: '40pt Calibri',
-        displayFormat: 'absolute',
-        maxSelector: null,
-        textBefore: null,
-        textAfter: null
+    constructor: function(options) {
+      this.defaults = {
+        position: new ex.Vector(50, 50),
+        offset: 3,
+        update: 'manual',
+        updateOptions: {
+          target: null,
+          currentSelector: '',
+          maxSelector: ''
+        },
+        outer: new ex.display.Rectangle({
+          x: 350, y: 300,
+          width: 200, height: 16,
+          fill: {
+            type: 'none'          
+          },
+          stroke: {
+            width: 2,
+            color: '#FFF'
+          }
+        }),
+        inner: new ex.display.Rectangle({
+          x: 353, y: 303,
+          width: 194, height: 10,
+          fill: {
+            type: 'solid',
+            color: '#FFF'
+          }
+        })
       };
       
-      if(options != null){
-        ex.extend(this.options, options);
-      }
+      this.options = {};
+      ex.extend(this.options, this.defaults);
+      ex.extend(this.options, options);
+      
+      this.options.outer.position = this.options.position;
+      this.options.inner.position = this.options.position.clone().addNumber(this.options.offset);
+      
+      this.totalWidth = this.options.inner.width;
+      this.currentWidth = 0;
+      this.options.inner.width = 0;
       
       this._super("constructor", [true, 1.0]);
-    },
-    
-    _setStyle: function(context) {
-      context.font = this.options.font;
-      context.fillStyle = this.options.color;
     },
     
     update: function(dt) {
@@ -40,41 +59,32 @@ ex.using([
         this.text = this.target[this.selector];
       }
       
-      // Add text before and after value
-      if(this.options.textBefore != null){
-        this.text = this.options.textBefore + this.text;
-      }
-      if(this.options.textAfter != null) {
-        this.text = this.text + this.options.textAfter;
+      if(this.options.update == 'auto') {
+        var options = this.options.updateOptions,
+            percent = options.target[options.currentSelector] / options.target[options.maxSelector];
+        
+        percent = ex.toInt(percent * 100);
+        this.updatePercentage(percent);
       }
       
+      this.options.inner.width = this.currentWidth;
+    },
+    
+    updatePercentage: function (percent) {
+      if(percent > 1) percent = percent / 100;
+      this.currentWidth = this.totalWidth * percent;
     },
     
     setupDom: function (el) {
-      var thisEl = document.createElement('div');
-      thisEl.innerHTML = this.text;
-      thisEl.style.position = 'absolute';
-      thisEl.style.left = this.options.position.x + 'px';
-      thisEl.style.top = this.options.position.y + 'px';
-      thisEl.style.font = this.options.font;
-      thisEl.style.color = this.options.color;
       
-      this.rendering = {
-        el: thisEl
-      };
-      
-      el.appendChild(this.rendering.el);
     },
     
     renderDom: function (el, camX, camY, camWidth, camHeight) {
-      this.rendering.el.innerHTML = this.text;
-      this.rendering.el.style.left = this.options.position.x + 'px';
-      this.rendering.el.style.top = this.options.position.y + 'px';
+      
     },
     
     destroyDom: function (el) {
-      el.removeChild(this.rendering.el);
-      this.rendering = null;
+      
     },
     
     render2dCanvas: function(context, camX, camY, camWidth, camHeight) {
@@ -82,13 +92,8 @@ ex.using([
         return;
       }
         
-      context.save();
-      this._setStyle(context);
-      context.fillText(
-          this.text, 
-          this.options.position.x, 
-          this.options.position.y);
-      context.restore();
+      this.options.outer.render2dCanvas(context, camX, camY, camWidth, camHeight);
+      this.options.inner.render2dCanvas(context, camX, camY, camWidth, camHeight);
     }
   });
 });

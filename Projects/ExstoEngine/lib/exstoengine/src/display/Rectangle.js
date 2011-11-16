@@ -10,10 +10,11 @@ ex.using([
         width: 50,
         height: 50,
         fill: {
-          type: 'solid',
+          type: 'solid',      // none, solid, linear-gradient, radial-gradient
           color: '#FF0000'
         },
         stroke: {
+          type: 'none',       // none, solid
           width: 0,
           color: '#00FF00'
         }
@@ -97,8 +98,16 @@ ex.using([
           || viewPortY > camHeight) {
       } else {
         if (this.rotationEnabled == false) {
-          context.fillStyle = this.getFillStyle(context);
-          context.fillRect(viewPortX, viewPortY, this.width, this.height);
+          if(this.options.stroke.type != 'none') {
+            context.strokeStyle = this.getStrokeStyle(context);
+            context.lineWidth = this.getLineWidth();
+            context.strokeRect(viewPortX, viewPortY, this.width, this.height);
+          }
+          
+          if(this.options.fill.type != 'none') {
+            context.fillStyle = this.getFillStyle(context);
+            context.fillRect(viewPortX, viewPortY, this.width, this.height); 
+          }
         } else {
           throw "Not implemented.";
         }
@@ -138,7 +147,11 @@ ex.using([
     },
     
     getStrokeStyle: function () {
-      
+      return this.options.stroke.color;
+    },
+    
+    getLineWidth: function () {
+      return this.options.stroke.width;
     },
 
     /**

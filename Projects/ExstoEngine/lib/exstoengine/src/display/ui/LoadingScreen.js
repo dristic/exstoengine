@@ -31,19 +31,29 @@ ex.using([
 					new ex.base.Vector(270, 230),
 					logo);
 			
-			this.progressBar = new ex.display.ui.StatusText(
+			this.progressText = new ex.display.ui.StatusText(
 				ex.Assets,
 				'_assetsLoaded',
 				{
 					position: new ex.base.Vector(
 							340, 
-							300),
+							295),
 					color: "#FFFFFF",
 					font: '12pt Arial',
 					displayFormat: 'percentage',
 					maxSelector: '_assetsToLoad',
 					textBefore: "Loading.. "
 				});
+			
+			this.progressBar = new ex.display.ui.StatusBar({
+			  position: new ex.Vector(340, 305),
+			  update: 'auto',
+			  updateOptions: {
+			    target: ex.Assets,
+			    currentSelector: '_assetsLoaded',
+			    maxSelector: '_assetsToLoad'
+			  }
+			});
 		},
 		
 		/**
@@ -55,6 +65,7 @@ ex.using([
 		 */
 		update: function(dt){
 			this.progressBar.update(dt);
+			this.progressText.update(dt);
 		},
 		
 		setupDom: function (el) {
@@ -93,6 +104,7 @@ ex.using([
 			this.background.render2dCanvas(context, camX, camY);
 			this.logo.render2dCanvas(context, camX, camY);
 			this.progressBar.render2dCanvas(context, camX, camY);
+			this.progressText.render2dCanvas(context, camX, camY);
 		}
 	});
 });

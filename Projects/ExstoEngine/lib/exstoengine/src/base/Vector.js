@@ -1,5 +1,7 @@
 (function () {
 	ex.define("ex.base.Vector", {
+	  __alias: 'ex.Vector',
+	  
 		/**
 		 * @name ex.base.Vector
 		 * @param {Number} x magnitude on x axis
@@ -42,6 +44,17 @@
 			this.x += (v.x * s);
 			this.y += (v.y * s);
 			return this;
+		},
+		
+		/** Adds a number to both the x and y value of this vector
+		 * 
+		 * @param {Number} n The number to add.
+		 * @returns {ex.base.Vector} The resulting vector.
+		 */
+		addNumber: function (n) {
+		  this.x += n;
+		  this.y += n;
+		  return this;
 		},
 		
 		/**
