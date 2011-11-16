@@ -1,15 +1,14 @@
 ex.using([
   'ex.base.GlobalComponent',
   'ex.util.Input',
-  'ex.util.GameController'
+  'ex.util.GameController',
+  'ex.base.Vector'
 ], function() {
 	ex.define("ex.util.InputController", ex.base.GlobalComponent, {
 		__alias: 'ex.Input',
 	  
 	  __statics: {
 	    _controllers: [],
-	    
-	    _input: new ex.util.Input(),
 	    
 	    _inputControllerMap: [],
 	    
@@ -21,7 +20,21 @@ ex.using([
 	      shoot: []
 	    },
 	    
-	    _pressed: {},
+	    // Mouse
+	    mouse: {
+	      position: new ex.base.Vector(0,0),
+	      lastPosition: new ex.base.Vector(0,0),
+	      pressed: {
+	        LMB: 0,    // left click
+	        MMB: 0,    // middle click
+	        RMB: 0     // right click
+	      }
+	    },
+	    
+	    // Keyboard
+	    keyboard: {
+	      pressed: {}
+	    },
 	    
 	    /**
 	     * Returns the gameController assigned to a specific
@@ -47,26 +60,27 @@ ex.using([
 	        
 	        switch(eventTokens[0]){
 	          case 'keypressed':
-	            if(this._pressed[eventTokens[1]] > 0) {
-	              console.log("firing", button, "on", eventTokens[0], eventTokens[1]);
+	            if(this.keyboard.pressed[eventTokens[1]] > 0) {
 	              this._sendCommandToControllers(button);
-	              this._pressed[eventTokens[1]] = 2;
+	              this.keyboard.pressed[eventTokens[1]] = 2;
 	            }
 	            break;
 	          case 'keydown':
-	            if(this._pressed[eventTokens[1]] == 1) {
-	              console.log("firing", button, "on", eventTokens[0], eventTokens[1]);
+	            if(this.keyboard.pressed[eventTokens[1]] == 1) {
 	              this._sendCommandToControllers(button);
-	              this._pressed[eventTokens[1]]++;
+	              this.keyboard.pressed[eventTokens[1]]++;
 	            }
 	            break;
 	          case 'keyup':
-	            if(this._pressed[eventTokens[1]] == -1) {
-	              console.log("firing", button, "on", eventTokens[0], eventTokens[1]);
+	            if(this.keyboard.pressed[eventTokens[1]] == -1) {
 	              this._sendCommandToControllers(button);
-	              this._pressed[eventTokens[1]] = 0;
+	              this.keyboard.pressed[eventTokens[1]] = 0;
 	            }
 	            break;
+	          case 'mousedown':
+	          case 'mouseup':
+	          case 'mousemove':
+	          case 'mousedrag':
 	        }
 	      }
 	    },
@@ -90,14 +104,14 @@ ex.using([
 	    
 	    _updatePressedKey: function(event) {
 	      var selector = ex.util.Key.names[event.keyCode];
-        if(ex.Input._pressed[selector] == null || ex.Input._pressed[selector] < 0){
-          ex.Input._pressed[selector] = 1;
+        if(ex.Input.keyboard.pressed[selector] == null || ex.Input.keyboard.pressed[selector] < 0){
+          ex.Input.keyboard.pressed[selector] = 1;
         }
 	    },
 	    
 	    _updateReleasedKey: function(event) {
 	      var selector = ex.util.Key.names[event.keyCode];
-        ex.Input._pressed[selector] = -1;
+        ex.Input.keyboard.pressed[selector] = -1;
 	    }
 		}
 	});
