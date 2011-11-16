@@ -1,90 +1,76 @@
 ex.using([
   'ex.base.GlobalComponent',
-  'ex.util.Input'
+  'ex.util.Input',
+  'ex.util.GameController'
 ], function() {
 	ex.define("ex.util.InputController", ex.base.GlobalComponent, {
 		__alias: 'ex.Input',
 	  
 	  __statics: {
-			/*
-			 * Possible Maps:
-			 *  - iOS
-			 *  - Android
-			 *  - Desktop
-			 *  
-			 *  GameMechanic: [ HardwareInput, <actionList> ]
-			 */
-			_defaultControlMaps: {},
-			
-			/*
-			 *  Starts with an empty actionList in each game mechanic. When
-			 *  controls are bound by entities, it will look as follows:
-			 *  map: {
-			 *  	jump: [ touchstart jumpButton, [player1.jump, jetpacks.on] ],
-			 *  }
-			 */
-			_selectedControlMap: {},
-			
-			/*
-			 * input class
-			 */
-			_input: new ex.util.Input(),
-			
-			/**
-	     * Loads a list of controlMaps for different devices.
-	     * 
-	     * @function
-	     * @name loadMaps
-	     * @memberOf ex.util.InputController
-	     * 
-	     * @param {Array} controlMaps
-	     */
-	    loadMaps: function(controlMaps){
-	      this._defaultControlMaps = controlMaps;
+	    _controllers: [],
+	    
+	    _input: new ex.util.Input(),
+	    
+	    _inputControllerMap: [],
+	    
+	    _playerControllerMap: {
+	      jump: [],
+	      left: [],
+	      right: [],
+	      down: [],
+	      shoot: []
 	    },
+	    
+	    _pressed: {},
 	    
 	    /**
-	     * Sets the active control map matching the device type passed
-	     * into the function.
+	     * Returns the gameController assigned to a specific
+	     * player.
 	     * 
-	     * @function
-	     * @name setDeviceType
-	     * @memberOf ex.util.InputController
-	     * 
-	     * @param {String} deviceType name of device
+	     * @returns {ex.util.GameController}
 	     */
-	    setDeviceType: function(deviceType) {
-	      this._selectedControlMap = 
-	        this._defaultControlMaps[deviceType];
+	    getController: function(playerId) {
+	      return this._controllers[playerId];
 	    },
 	    
-	    bindAction: function(target, action, input) {
-	      // if the input doesn't exist yet, initialize it and add a listener
-	      if(this._selectedControlMap[input] == null){
-	        this._selectedControlMap[input] = [];
-	        this._addListenerToBinding(input);
-	      } 
-	      
-	      // bind the action to the input
-	      this._selectedControlMap[input].push(ex.bind(target, action));
+	    addController: function(playerId) {
+	      this._controllers[playerId] = new ex.util.GameController(this._playerControllerMap);
 	    },
 	    
-	    _addListenerToBinding: function (input) {
-	      console.log('Adding listener to binding ' + input);
-	      // Split action into event and key pairs
-	      var inputTokens = input.split(' ');
-	      var inputCopy = input;
-	      var that = this;
-	      
-        document.addEventListener(inputTokens[0], function(){
-          if(that._input.isKeyDown(ex.util.Key[inputTokens[1]])){
-            var index = that._selectedControlMap[inputCopy].length;
-            while(index--) {
-              that._selectedControlMap[inputCopy][index]();
-            }
-          }
-        });
+	    update: function(dt) {
+	      var index = this._inputControllerMap.length;
+	      while(index--) {
+	        var selector = this._inputControllerMap[index][1].split(' ')[1];
+	        if(this._pressed[selector]) {
+	          var controllerIndex = this._controllers.length;
+	          while(controllerIndex--) {
+	            this._controllers[controllerIndex]._fireActions(this._inputControllerMap[index][0]);
+	          }
+	        }
+	      }
+	    },
+	    
+	    loadInputControllerMap: function(inputControllerMap) {
+	      this._inputControllerMap = inputControllerMap;
+	      this._addEventListenersOnInput();
+	    },
+	    
+	    _addEventListenersOnInput: function() {
+	      ex.event.listen(document, 'keydown', this._updatePressedKey);
+	      ex.event.listen(document, 'keyup', this._updateReleasedKey);
+	    },
+	    
+	    _updatePressedKey: function(event) {
+	      var selector = ex.util.Key.names[event.keyCode];
+        console.log('setting ', selector, " to true!");
+        ex.Input._pressed[selector] = true;
+	    },
+	    
+	    _updateReleasedKey: function(event) {
+	      var selector = ex.util.Key.names[event.keyCode];
+        console.log('setting ', selector, " to false!");
+        ex.Input._pressed[selector] = false;
 	    }
-		}		
+		}
 	});
 });

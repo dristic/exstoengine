@@ -97,7 +97,7 @@ ex.using([
 		},
 		
 		onKeyUp: function(event) {
-			this.keys[event.keyCode] = false;
+			this.keys[event.keyCode] = undefined;
 		},
 		
 		isKeyDown: function(keyCode) {

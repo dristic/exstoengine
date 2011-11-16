@@ -10,6 +10,18 @@ ex.using([
     _engine.enableDebugging(ex.util.Debug.DOM, ex.util.Logger.LEVEL.DEBUG);
     _engine.input.listenOn(_engine.renderer.renderingContext.canvas);
     ex.Input._input.listenOn(_engine.renderer.renderingContext.canvas);
+    
+    
+    ex.Input.loadInputControllerMap(
+      [ 
+        ['jump', 'keydown Spacebar'],
+        ['right', 'keypressed Right'],
+        ['left', 'keypressed Left'],
+        ['down', 'keypressed Down']
+      ]
+    );
+    
+    
     _engine.openWorld(ex.world.World);
 		
 		ex.Assets.load('__loadBG', 'assets/loadingBG.jpg');

@@ -103,6 +103,7 @@ ex.using([
 			this.onUpdate(dt);
 			
 			this.input.update(dt);
+			ex.Input.update(dt);
 			
 			if(this.debug){
 				ex.Debug.benchmarkEngine(dt);
