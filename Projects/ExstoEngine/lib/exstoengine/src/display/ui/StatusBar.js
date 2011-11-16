@@ -18,6 +18,7 @@ ex.using([
         outer: new ex.display.Rectangle({
           x: 350, y: 300,
           width: 200, height: 16,
+          alpha: 0.5,
           fill: {
             type: 'none'          
           },
@@ -29,6 +30,7 @@ ex.using([
         inner: new ex.display.Rectangle({
           x: 353, y: 303,
           width: 194, height: 10,
+          alpha: 0.5,
           fill: {
             type: 'solid',
             color: '#FFF'

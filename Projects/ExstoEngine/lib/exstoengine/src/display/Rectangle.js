@@ -9,6 +9,7 @@ ex.using([
         y: 10,
         width: 50,
         height: 50,
+        alpha: 1,
         fill: {
           type: 'solid',      // none, solid, linear-gradient, radial-gradient
           color: '#FF0000'
@@ -98,6 +99,12 @@ ex.using([
           || viewPortY > camHeight) {
       } else {
         if (this.rotationEnabled == false) {
+          context.save();
+          
+          if(this.options.alpha < 1) {
+            context.globalAlpha = this.options.alpha;
+          }
+          
           if(this.options.stroke.type != 'none') {
             context.strokeStyle = this.getStrokeStyle(context);
             context.lineWidth = this.getLineWidth();
@@ -108,6 +115,8 @@ ex.using([
             context.fillStyle = this.getFillStyle(context);
             context.fillRect(viewPortX, viewPortY, this.width, this.height); 
           }
+          
+          context.restore();
         } else {
           throw "Not implemented.";
         }
