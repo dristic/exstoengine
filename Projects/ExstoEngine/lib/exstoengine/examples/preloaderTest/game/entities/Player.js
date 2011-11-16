@@ -18,6 +18,10 @@ ex.using([
 			this.score = 0;
 			
 			ex.Input.addController(0);
+			this.controller = ex.Input.getController(0);
+			this.controller.on('jump', ex.bind(this, this.jump));
+			this.controller.on('right', ex.bind(this, this.moveRight));
+			this.controller.on('left', ex.bind(this, this.moveLeft));
 		},
 		
 		jump: function(){
@@ -32,23 +36,7 @@ ex.using([
 			this.velocity.x += this.speed;
 		},
 		
-		update: function(dt) {
-			if(this.input.isKeyPressed(ex.util.Key.Spacebar)) {
-				this.jump();
-			}
-			if(this.input.isKeyDown(ex.util.Key.W)) {
-				this.velocity.y -= this.speed;
-			}
-			if(this.input.isKeyDown(ex.util.Key.S)) {
-				this.velocity.y += this.speed;
-			}
-			if(this.input.isKeyDown(ex.util.Key.A)) {
-				this.moveLeft();
-			}
-			if(this.input.isKeyDown(ex.util.Key.D)) {
-				this.moveRight();
-			}
-			
+		update: function(dt) {			
 			// Move Right
 			if(this.input.dragging && this.input.mouseX > 600){
 				this.moveRight();

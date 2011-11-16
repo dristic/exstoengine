@@ -39,15 +39,43 @@ ex.using([
 	    
 	    update: function(dt) {
 	      var index = this._inputControllerMap.length;
+	      var button = '';
+	      var eventTokens = '';
 	      while(index--) {
-	        var selector = this._inputControllerMap[index][1].split(' ')[1];
-	        if(this._pressed[selector]) {
-	          var controllerIndex = this._controllers.length;
-	          while(controllerIndex--) {
-	            this._controllers[controllerIndex]._fireActions(this._inputControllerMap[index][0]);
-	          }
+	        button = this._inputControllerMap[index][0];
+	        eventTokens = this._inputControllerMap[index][1].split(' ');
+	        
+	        switch(eventTokens[0]){
+	          case 'keypressed':
+	            if(this._pressed[eventTokens[1]] > 0) {
+	              console.log("firing", button, "on", eventTokens[0], eventTokens[1]);
+	              this._sendCommandToControllers(button);
+	              this._pressed[eventTokens[1]] = 2;
+	            }
+	            break;
+	          case 'keydown':
+	            if(this._pressed[eventTokens[1]] == 1) {
+	              console.log("firing", button, "on", eventTokens[0], eventTokens[1]);
+	              this._sendCommandToControllers(button);
+	              this._pressed[eventTokens[1]]++;
+	            }
+	            break;
+	          case 'keyup':
+	            if(this._pressed[eventTokens[1]] == -1) {
+	              console.log("firing", button, "on", eventTokens[0], eventTokens[1]);
+	              this._sendCommandToControllers(button);
+	              this._pressed[eventTokens[1]] = 0;
+	            }
+	            break;
 	        }
 	      }
+	    },
+	    
+	    _sendCommandToControllers: function(button) {
+	      var controllerIndex = this._controllers.length;
+        while(controllerIndex--) {
+          this._controllers[controllerIndex]._fireActions(button);
+        }
 	    },
 	    
 	    loadInputControllerMap: function(inputControllerMap) {
@@ -62,14 +90,14 @@ ex.using([
 	    
 	    _updatePressedKey: function(event) {
 	      var selector = ex.util.Key.names[event.keyCode];
-        console.log('setting ', selector, " to true!");
-        ex.Input._pressed[selector] = true;
+        if(ex.Input._pressed[selector] == null || ex.Input._pressed[selector] < 0){
+          ex.Input._pressed[selector] = 1;
+        }
 	    },
 	    
 	    _updateReleasedKey: function(event) {
 	      var selector = ex.util.Key.names[event.keyCode];
-        console.log('setting ', selector, " to false!");
-        ex.Input._pressed[selector] = false;
+        ex.Input._pressed[selector] = -1;
 	    }
 		}
 	});

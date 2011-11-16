@@ -13,7 +13,10 @@ ex.using([
     },
     
     _fireActions: function(buttonSelector) {
-      console.log("firing actions on", buttonSelector, this.buttons[buttonSelector]);
+      if(this.buttons[buttonSelector] == null) {
+        console.error(buttonSelector, "does not exist in controller map -->", this.buttons);
+        return;
+      }
       var index = this.buttons[buttonSelector].length;
       while(index--) {
         this.buttons[buttonSelector][index]();

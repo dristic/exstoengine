@@ -17,7 +17,8 @@ ex.using([
         ['jump', 'keydown Spacebar'],
         ['right', 'keypressed Right'],
         ['left', 'keypressed Left'],
-        ['down', 'keypressed Down']
+        ['down', 'keypressed Down'],
+        ['crapPants', 'keypress C'] // test for error handling in GameController
       ]
     );
     
