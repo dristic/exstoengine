@@ -1,6 +1,7 @@
 ex.using([
   'ex.display.Sprite',
-  'ex.base.Component'
+  'ex.base.Component',
+  'ex.event.EventTarget'
 ], function() {	
 	ex.define("ex.display.ui.TitleMenu", ex.base.Component, {
 		/**
@@ -133,6 +134,8 @@ ex.using([
           // Print non selected options in normal color
           els.push(createTextEl(this.selections[index].text, '#FF0000', xPos, yPos));
         }
+        var textEl = els[els.length - 1];
+        ex.event.listen('mousedown', textEl, this.selections[index].action);
         yPos += this.options.selection.height;
       }
       

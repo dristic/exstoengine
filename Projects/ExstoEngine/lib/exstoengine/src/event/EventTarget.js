@@ -6,18 +6,20 @@ ex.using([], function () {
 		 * Listens to an event on a javascript object
 		 * or a DOM object
 		 */
-		listen: function (target, event, func, handler) {
+		listen: function (event, target, func, handler, useCapture) {
 			// Bind to a different handler if needed
 			if(handler != null) {
 				func = ex.bind(handler, func);
 			}
 			
+			useCapture = useCapture || false;
+			
 			// Figure out what event handling the object supports
 			// and use it to listen on
-			if(target.attachEvent) {
-				target.attachEvent('on' + event, func);
-			} else if(target.addEventListener) {
-				target.addEventListener(event, func);
+			if(typeof target.attachEvent != 'undefined') {
+				target.attachEvent('on' + event, func, useCapture);
+			} else if(typeof target.addEventListener != 'undefined') {
+				target.addEventListener(event, func, useCapture);
 			}
 		},
 		
@@ -29,17 +31,17 @@ ex.using([], function () {
 		 * @param func {Function} The function to call when the event happens.
 		 * @param handler {Object} [Optional] The object to bind to when calling the function.
 		 */
-		listenOnce: function (target, event, func, handler) {
+		listenOnce: function (event, target, func, handler) {
 			var newFunc = function () {
-				ex.event.unlisten(target, event, func);
+				ex.event.unlisten(event, target, func);
 				
 				func.call(this, arguments);
 			};
 			
-			ex.event.listen(target, event, newFunc, handler);
+			ex.event.listen(event, target, newFunc, handler);
 		},
 		
-		unlisten: function (target, event, func) {
+		unlisten: function (event, target, func) {
 			if(target.removeEventListener) {
 				target.removeEventListener(event, func);
 			}

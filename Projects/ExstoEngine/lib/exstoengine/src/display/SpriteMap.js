@@ -144,7 +144,7 @@ ex.using([
         this.rendering.el.style.display = 'inherit';
       }
       
-      /*var yPos = this.tileMap.data.length - 1,
+      var yPos = this.tileMap.data.length - 1,
           xPos = 0;
       for(yPos; yPos > -1; yPos--) {
         for(xPos; xPos < this.tileMap.data[yPos].length; xPos++) {
@@ -172,7 +172,7 @@ ex.using([
           }
         }
         xPos = 0;
-      }*/
+      }
       
       this.rendering.el.style.left = -camX + 'px';
       this.rendering.el.style.top = -camY + 'px';

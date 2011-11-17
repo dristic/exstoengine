@@ -26,7 +26,7 @@ ex.using([
     		{name: "teleport", filePath: "assets/teleport2.png"},
     		
     		// Audio
-    		{name: "laser", filePath: "assets/laser.ogg"}
+    		
     		
     		// Video
     	];

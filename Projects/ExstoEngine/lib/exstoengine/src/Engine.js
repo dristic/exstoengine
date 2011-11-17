@@ -128,14 +128,14 @@ ex.using([
 			var that = this;
 			var sceneNamespace = "game.levels." + sceneName;
 			
-			ex.event.listenOnce(ex.Assets._eventHandler, 'loadStart', function() {
+			ex.event.listenOnce('loadStart', ex.Assets._eventHandler, function() {
 			  console.log('Began loading assets for scene "' + sceneName + '".');
 			}, this);
 			
 			// Loads level code and assets
 			ex.using([sceneNamespace], function() {
 				var scene = new game.levels[sceneName](that);
-				ex.event.listenOnce(ex.Assets._eventHandler, 'loadEnd', function() {
+				ex.event.listenOnce('loadEnd', ex.Assets._eventHandler, function() {
 					var objects = scene.getObjects();
 					
 					that.collisionManager.collisionGroups = [];
