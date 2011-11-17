@@ -98,21 +98,43 @@ ex.using([
 	    },
 	    
 	    _addEventListenersOnInput: function() {
-	      ex.event.listen(document, 'keydown', this._updatePressedKey);
-	      ex.event.listen(document, 'keyup', this._updateReleasedKey);
+	      ex.event.listen(document, 'keydown', this._onKeyDown);
+	      ex.event.listen(document, 'keyup', this._onKeyUp);
+	      ex.event.listen(document, 'mousedown', this._onMouseDown);
+	      ex.event.listen(document, 'mouseup', this._onMouseUp);
+	      ex.event.listen(document, 'mousemove', this._onMouseMove);
 	    },
 	    
-	    _updatePressedKey: function(event) {
+	    _onKeyDown: function(event) {
 	      var selector = ex.util.Key.names[event.keyCode];
         if(ex.Input.keyboard.pressed[selector] == null || ex.Input.keyboard.pressed[selector] < 0){
           ex.Input.keyboard.pressed[selector] = 1;
         }
 	    },
 	    
-	    _updateReleasedKey: function(event) {
+	    _onKeyUp: function(event) {
 	      var selector = ex.util.Key.names[event.keyCode];
         ex.Input.keyboard.pressed[selector] = -1;
+	    },
+	    
+	    _onMouseDown: function(event) {
+	      console.log("mousedown!");
+	      ex.Input.mouse.pressed.LMB = true;
+	    },
+	    
+	    _onMouseUp: function(event) {
+	      console.log("mouseup!");
+	      ex.Input.mouse.pressed.LMB = false;
+	    },
+	    
+	    _onMouseMove: function(event) {
+	      if(ex.Input.mouse.pressed.LMB) {
+	        console.log("mousedrag!");
+	      } else {
+	        console.log("mousemove!");
+	      }
 	    }
+	    
 		}
 	});
 });
