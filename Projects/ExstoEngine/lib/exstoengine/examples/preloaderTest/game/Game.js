@@ -14,13 +14,17 @@ ex.using([
     ex.Input.loadInputControllerMap(
       [ 
         ['jump', 'keydown Spacebar'],
+        ['jump', 'mousedown LMB #jumpButton'],
+        
         ['right', 'keypressed Right'],
+        ['right', 'mousepressed #rightButton'],
+        
         ['left', 'keypressed Left'],
+        ['left', 'mousepressed #leftButton'],
+        
         ['down', 'keypressed Down'],
-        ['crapPants', 'keypress C'] // test for error handling in GameController
       ]
     );
-    
     
     _engine.openWorld(ex.world.World);
 		

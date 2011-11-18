@@ -27,7 +27,6 @@ ex.using([
     		
     		// Audio
     		
-    		
     		// Video
     	];
 		},
@@ -188,7 +187,7 @@ ex.using([
 		},
 		
 		finalSetup: function() {
-			this.engine.camera.follow(this.engine.currentWorld.globalObjects.player);
+			//this.engine.camera.follow(this.engine.currentWorld.globalObjects.player);
 		}
 	});
 });

@@ -8,6 +8,9 @@ ex.using([
 		__alias: 'ex.Input',
 	  
 	  __statics: {
+	    _inputTarget: document,
+	    clickableObjects: [],
+	    
 	    _controllers: [],
 	    
 	    _inputControllerMap: [],
@@ -77,10 +80,35 @@ ex.using([
 	              this.keyboard.pressed[eventTokens[1]] = 0;
 	            }
 	            break;
+            case 'mousepressed':
+              if(this.mouse.pressed[eventTokens[1]] > 0) {
+                this._pushClickEvents(eventTokens);
+              }
+              break;
 	          case 'mousedown':
+	            if(this.mouse.pressed[eventTokens[1]] == 1) {
+	              this._pushClickEvents(eventTokens);
+	            }
+	            break;
 	          case 'mouseup':
+	            if(this.mouse.pressed[eventTokens[1]] == -1) {
+                this._pushClickEvents(eventTokens);
+              }
+              break;
 	          case 'mousemove':
+	            if(this.mouse.pressed[eventTokens[1]] == 0) {
+	              if(!this.mouse.position.equals(this.mouse.lastPosition)) {
+	                this._pushClickEvents(eventTokens);
+	              }
+              }
+              break;
 	          case 'mousedrag':
+	            if(this.mouse.pressed[eventTokens[1]] > 0) {
+                if(!this.mouse.position.equals(this.mouse.lastPosition)) {
+                  this._pushClickEvents(eventTokens);
+                }
+              }
+              break;
 	        }
 	      }
 	    },
@@ -92,17 +120,76 @@ ex.using([
         }
 	    },
 	    
+	    _pushClickEvents: function(eventTokens) {
+	      var index = this.clickableObjects.length;
+	      var object = {};
+	      while(index--) {
+	        object = this.clickableObjects[index];
+	        if(object.position.x < this.mouse.position.x
+	            && (object.position.x + object.width) > this.mouse.position.x
+	            && object.position.y < this.mouse.position.y
+	            && (object.position.y + object.height) > this.mouse.position.y) {
+	          console.log("You clicked on", object, "!");
+	        }
+	      }
+	    },
+	    
+	    /**
+	     * Takes an array of objects and only tracks ones with 
+	     * the property 'clickable = true'.
+	     */
+	    trackClickableObjects: function(objects) {
+	      var index = objects.length;
+	      while(index--) {
+	        if(objects[index].clickable) {
+	          this.clickableObjects.push(objects[index]);
+	        }
+	      }
+	    },
+	    
+	    /**
+	     * Clears the reference array for all objects that can be clicked
+	     * in the scene.
+	     */
+	    untrackAllClickableObjects: function() {
+	      this.clickableObjects = [];
+	    },
+	    
+	    /**
+	     * Changes the target for the event listeners. Default is document.
+	     */
+	    changeInputTarget: function(element) {
+	      this._removeEventListenersFromInput();
+	      if(!element) {
+	        console.log("Cannot change input target to null, defaulting to document.");
+	        element = document;
+	      }
+	      this._inputTarget = element;
+	      this._addEventListenersOnInput();
+	    },
+	    
+	    /**
+	     * Loads a map that specifies the input event to controller mapping.
+	     */
 	    loadInputControllerMap: function(inputControllerMap) {
 	      this._inputControllerMap = inputControllerMap;
 	      this._addEventListenersOnInput();
 	    },
 	    
 	    _addEventListenersOnInput: function() {
-	      ex.event.listen(document, 'keydown', this._onKeyDown);
-	      ex.event.listen(document, 'keyup', this._onKeyUp);
+	      ex.event.listen(this._inputTarget, 'keydown', this._onKeyDown);
+	      ex.event.listen(this._inputTarget, 'keyup', this._onKeyUp);
 	      ex.event.listen(document, 'mousedown', this._onMouseDown);
 	      ex.event.listen(document, 'mouseup', this._onMouseUp);
 	      ex.event.listen(document, 'mousemove', this._onMouseMove);
+	    },
+	    
+	    _removeEventListenersFromInput: function() {
+	      ex.event.unlisten(this._inputTarget, 'keydown', this._onKeyDown);
+        ex.event.unlisten(this._inputTarget, 'keyup', this._onKeyUp);
+        ex.event.unlisten(document, 'mousedown', this._onMouseDown);
+        ex.event.unlisten(document, 'mouseup', this._onMouseUp);
+        ex.event.unlisten(document, 'mousemove', this._onMouseMove);
 	    },
 	    
 	    _onKeyDown: function(event) {
@@ -118,21 +205,18 @@ ex.using([
 	    },
 	    
 	    _onMouseDown: function(event) {
-	      console.log("mousedown!");
 	      ex.Input.mouse.pressed.LMB = true;
 	    },
 	    
 	    _onMouseUp: function(event) {
-	      console.log("mouseup!");
 	      ex.Input.mouse.pressed.LMB = false;
 	    },
 	    
 	    _onMouseMove: function(event) {
-	      if(ex.Input.mouse.pressed.LMB) {
-	        console.log("mousedrag!");
-	      } else {
-	        console.log("mousemove!");
-	      }
+	      ex.Input.mouse.lastPosition.x = ex.Input.mouse.position.x;
+	      ex.Input.mouse.lastPosition.y = ex.Input.mouse.position.y;
+	      ex.Input.mouse.position.x = event.x;
+	      ex.Input.mouse.position.y = event.y;
 	    }
 	    
 		}

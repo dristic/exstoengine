@@ -131,10 +131,30 @@
 		 * @returns {ex.base.Vector} this
 		 */
 		rotate: function(rad) {
-		    var cos = Math.cos(rad), sin = Math.sin(rad), x = this.x, y = this.y;
-		    this.x = x * cos - y * sin;
-		    this.y = x * sin + y * cos;
-		    return this;
-	  	}
+	    var cos = Math.cos(rad), sin = Math.sin(rad), x = this.x, y = this.y;
+	    this.x = x * cos - y * sin;
+	    this.y = x * sin + y * cos;
+	    return this;
+  	},
+  	
+  	/**
+  	 * Equality check between this vector and another.
+  	 * 
+  	 * @function
+  	 * @name equals
+  	 * @memberOf ex.base.Vector
+  	 * 
+  	 * @param {ex.base.Vector} vector2 vector to test equality against
+  	 * @returns {Boolean}
+  	 */
+  	equals: function(vector2) {
+  	  if(this.x != vector2.x){
+  	    return false;
+  	  } else if (this.y != vector2.y) {
+  	    return false;
+  	  } else {
+  	    return true;
+  	  }
+  	}
 	});
 }());

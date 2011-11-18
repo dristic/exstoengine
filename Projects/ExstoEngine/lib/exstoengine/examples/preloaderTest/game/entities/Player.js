@@ -17,6 +17,8 @@ ex.using([
 			this.maxSpeed = 200;
 			this.score = 0;
 			
+			this.clickable = true;
+			
 			ex.Input.addController(0);
 			this.controller = ex.Input.getController(0);
 			this.controller.on('jump', ex.bind(this, this.jump));
@@ -37,18 +39,18 @@ ex.using([
 		},
 		
 		update: function(dt) {			
-			// Move Right
-			if(this.input.dragging && this.input.mouseX > 600){
-				this.moveRight();
-			}
-			// Move left
-			if(this.input.dragging && this.input.mouseX < 200){
-				this.moveLeft();
-			}
-			// Jump
-			if(this.input.mouseDown && this.input.mouseY > 400){
-				this.jump();
-			}
+//			// Move Right
+//			if(this.input.dragging && this.input.mouseX > 600){
+//				this.moveRight();
+//			}
+//			// Move left
+//			if(this.input.dragging && this.input.mouseX < 200){
+//				this.moveLeft();
+//			}
+//			// Jump
+//			if(this.input.mouseDown && this.input.mouseY > 400){
+//				this.jump();
+//			}
 			
 			
 			if(this.velocity.x < 0.5 && this.velocity.x > -0.5){

@@ -143,6 +143,7 @@ ex.using([
 					
 					that.currentWorld.addObjects(objects);
 					that.currentWorld.removeObject(that.loadingScreen);
+					ex.Input.trackClickableObjects(objects);
 					scene.finalSetup();
 					
 					if(callback) {
@@ -155,6 +156,7 @@ ex.using([
 		
 		unloadScene: function() {
 			this.currentWorld.removeAllObjects();
+			ex.Input.untrackAllClickableObjects();
 		},
 		
 		loadComponent: function(component) {
