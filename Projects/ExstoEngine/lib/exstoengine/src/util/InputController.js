@@ -9,6 +9,7 @@ ex.using([
 	  
 	  __statics: {
 	    _inputTarget: document,
+	    _renderer: null,
 	    clickableObjects: [],
 	    
 	    _controllers: [],
@@ -166,6 +167,10 @@ ex.using([
 	      }
 	      this._inputTarget = element;
 	      this._addEventListenersOnInput();
+	    },
+	    
+	    linkToRenderer: function(renderer) {
+	      this._renderer = renderer;
 	    },
 	    
 	    /**
