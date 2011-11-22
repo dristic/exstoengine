@@ -9,6 +9,7 @@ ex.using([
 	  
 	  __statics: {
 	    _inputTarget: document,
+	    _engine: null,
 	    clickableObjects: [],
 	    
 	    _controllers: [],
@@ -123,12 +124,18 @@ ex.using([
 	    _pushClickEvents: function(eventTokens) {
 	      var index = this.clickableObjects.length;
 	      var object = {};
+	      var camX = this._engine.camera.position.x,
+	          camY = this._engine.camera.position.y;
+	      var objectX = 0,
+	          objectY = 0;
 	      while(index--) {
 	        object = this.clickableObjects[index];
-	        if(object.position.x < this.mouse.position.x
-	            && (object.position.x + object.width) > this.mouse.position.x
-	            && object.position.y < this.mouse.position.y
-	            && (object.position.y + object.height) > this.mouse.position.y) {
+	        objectX = object.position.x - camX;
+	        objectY = object.position.y - camY;
+	        if(objectX < this.mouse.position.x
+	            && (objectX + object.width) > this.mouse.position.x
+	            && objectY < this.mouse.position.y
+	            && (objectY + object.height) > this.mouse.position.y) {
 	          console.log("You clicked on", object, "!");
 	        }
 	      }
@@ -168,6 +175,11 @@ ex.using([
 	      this._addEventListenersOnInput();
 	    },
 	    
+	    linkToEngine: function(engine) {
+	      this._engine = engine;
+	      ex.Debug.log("ex.Input linked to engine.", ex.util.Logger.LEVEL.DEBUG);
+	    },
+	    
 	    /**
 	     * Loads a map that specifies the input event to controller mapping.
 	     */
@@ -177,19 +189,19 @@ ex.using([
 	    },
 	    
 	    _addEventListenersOnInput: function() {
-	      ex.event.listen(this._inputTarget, 'keydown', this._onKeyDown);
-	      ex.event.listen(this._inputTarget, 'keyup', this._onKeyUp);
-	      ex.event.listen(document, 'mousedown', this._onMouseDown);
-	      ex.event.listen(document, 'mouseup', this._onMouseUp);
-	      ex.event.listen(document, 'mousemove', this._onMouseMove);
+	      ex.event.listen('keydown', this._inputTarget, this._onKeyDown);
+	      ex.event.listen('keyup', this._inputTarget, this._onKeyUp);
+	      ex.event.listen('mousedown', document, this._onMouseDown);
+	      ex.event.listen('mouseup', document, this._onMouseUp);
+	      ex.event.listen('mousemove', document, this._onMouseMove);
 	    },
 	    
 	    _removeEventListenersFromInput: function() {
-	      ex.event.unlisten(this._inputTarget, 'keydown', this._onKeyDown);
-        ex.event.unlisten(this._inputTarget, 'keyup', this._onKeyUp);
-        ex.event.unlisten(document, 'mousedown', this._onMouseDown);
-        ex.event.unlisten(document, 'mouseup', this._onMouseUp);
-        ex.event.unlisten(document, 'mousemove', this._onMouseMove);
+	      ex.event.unlisten('keydown', this._inputTarget, this._onKeyDown);
+        ex.event.unlisten('keyup', this._inputTarget, this._onKeyUp);
+        ex.event.unlisten('mousedown', document, this._onMouseDown);
+        ex.event.unlisten('mouseup', document, this._onMouseUp);
+        ex.event.unlisten('mousemove', document, this._onMouseMove);
 	    },
 	    
 	    _onKeyDown: function(event) {
@@ -215,8 +227,20 @@ ex.using([
 	    _onMouseMove: function(event) {
 	      ex.Input.mouse.lastPosition.x = ex.Input.mouse.position.x;
 	      ex.Input.mouse.lastPosition.y = ex.Input.mouse.position.y;
-	      ex.Input.mouse.position.x = event.x;
-	      ex.Input.mouse.position.y = event.y;
+	      
+	      if(!event) {
+	        var event = window.event;
+	      }
+	      if(event.pageX || event.pageY) {
+	        ex.Input.mouse.position.x = event.pageX;
+	        ex.Input.mouse.position.y = event.pageY;
+	      } else if (event.clientX || event.clientY) {
+	        ex.Input.mouse.position.x = event.clientX
+	          + document.body.scrollLeft;
+	        ex.Input.mouse.position.y = event.clientY
+	          + document.body.scrollTop;
+	      }
+	      
 	    }
 	    
 		}

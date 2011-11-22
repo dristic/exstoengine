@@ -32,14 +32,17 @@
 			this.type = "Entity";
 			// Physical data
 			this.position = position;
+			this.scrollFactor = new ex.base.Vector(1,1);
 			this.width = sprite.width;
 			this.height = sprite.height;
 			this.velocity = new ex.base.Vector(0,0);
 			this.collides = collides;
 			this.anchored = anchored;
 			this.mass = 1;
+			
 			// Display data
 			this.sprite = sprite;
+			this.sprite.scrollFactor = this.scrollFactor; // pointer to this.scrollFactor
 			this.sprite.position = this.position;	// pointer to this.position
 			this.visible = true;
 			
