@@ -21,8 +21,9 @@ ex.using([
     render: function (items, camX, camY, camWidth, camHeight) {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
       
-      var i = items.length - 1;
-      for(; i >= 0; i--) {
+      var i = 0,
+          ln = items.length;
+      for(; i < ln; i++) {
         items[i].render2dCanvas(this.context, camX, camY, camWidth, camHeight);
       }
     },

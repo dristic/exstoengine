@@ -21,9 +21,10 @@ ex.using([
     },
     
     render: function (items, camX, camY, camWidth, camHeight) {
-      var index = items.length;
-      while(index--) {
-        items[index].renderDom(this.el, camX, camY, camWidth, camHeight);
+      var i = 0,
+          ln = items.length;
+      for(; i < ln; i++) {
+        items[i].renderDom(this.el, camX, camY, camWidth, camHeight);
       }
     }
   });

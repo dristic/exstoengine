@@ -110,11 +110,11 @@ ex.using([
           ex.Assets.getImage("platform"))
 	    );
 			
-			objects.push(background);
-			objects.push(collisionMap);
-			objects.push(platforms);
-			objects.push(movingPlatform);
 			objects.push(this.engine.currentWorld.globalObjects.player);
+      objects.push(movingPlatform);
+      objects.push(platforms);
+      objects.push(collisionMap);
+			objects.push(background);
 			
 			return objects;
 		},
