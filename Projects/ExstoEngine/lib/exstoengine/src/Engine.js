@@ -39,6 +39,8 @@ ex.using([
 				
 				//--Load up input class
 				this.input = new ex.util.Input();
+				ex.Input.linkToEngine(this);
+				console.log(ex.Input._engine);
 				
 				//--Load new image repository
 				this.imageRepository = new ex.display.ImageRepository();

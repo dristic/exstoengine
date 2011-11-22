@@ -9,7 +9,7 @@ ex.using([
 	  
 	  __statics: {
 	    _inputTarget: document,
-	    _renderer: null,
+	    _engine: null,
 	    clickableObjects: [],
 	    
 	    _controllers: [],
@@ -124,12 +124,18 @@ ex.using([
 	    _pushClickEvents: function(eventTokens) {
 	      var index = this.clickableObjects.length;
 	      var object = {};
+	      var camX = this._engine.camera.position.x,
+	          camY = this._engine.camera.position.y;
+	      var objectX = 0,
+	          objectY = 0;
 	      while(index--) {
 	        object = this.clickableObjects[index];
-	        if(object.position.x < this.mouse.position.x
-	            && (object.position.x + object.width) > this.mouse.position.x
-	            && object.position.y < this.mouse.position.y
-	            && (object.position.y + object.height) > this.mouse.position.y) {
+	        objectX = object.position.x - camX;
+	        objectY = object.position.y - camY;
+	        if(objectX < this.mouse.position.x
+	            && (objectX + object.width) > this.mouse.position.x
+	            && objectY < this.mouse.position.y
+	            && (objectY + object.height) > this.mouse.position.y) {
 	          console.log("You clicked on", object, "!");
 	        }
 	      }
@@ -169,8 +175,9 @@ ex.using([
 	      this._addEventListenersOnInput();
 	    },
 	    
-	    linkToRenderer: function(renderer) {
-	      this._renderer = renderer;
+	    linkToEngine: function(engine) {
+	      this._engine = engine;
+	      ex.Debug.log("ex.Input linked to engine.", ex.util.Logger.LEVEL.DEBUG);
 	    },
 	    
 	    /**
