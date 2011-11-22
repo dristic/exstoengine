@@ -39,7 +39,7 @@ ex.using([
         if(object.setup2dCanvas) {
           object.setup2dCanvas(this.renderingContext.canvas);
         }
-      } else if(this.type == ex.display.rendering.Renderer.CANVAS2D) {
+      } else if(this.type == ex.display.rendering.Renderer.CANVAS3D) {
         object.setup3dCanvas(this.renderingContext.canvas);
       }
 		  
@@ -53,7 +53,7 @@ ex.using([
 		  } else if(type == ex.display.rendering.Renderer.CANVAS2D) {
 		    this.renderingContext = 
 		      new ex.display.rendering.RenderingContext2dCanvas(this.width, this.height, params.canvas, this.bgColor);
-		  } else if(type == ex.display.rendering.Renderer.CANVAS2D) {
+		  } else if(type == ex.display.rendering.Renderer.CANVAS3D) {
 		    this.renderingContext = 
 		      new ex.display.rendering.RenderingContext3dCanvas(this.width, this.height, params.canvas, this.bgColor);
 		  }
@@ -66,7 +66,7 @@ ex.using([
         if(object.destroy2dCanvas) {
           object.destroy2dCanvas(this.renderingContext.canvas);
         }
-      } else if(this.type == ex.display.rendering.Renderer.CANVAS2D) {
+      } else if(this.type == ex.display.rendering.Renderer.CANVAS3D) {
         object.destroy3dCanvas(this.renderingContext.canvas);
       }
 		  

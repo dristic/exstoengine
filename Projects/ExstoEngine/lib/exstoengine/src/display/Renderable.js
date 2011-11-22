@@ -67,10 +67,6 @@
 		
 		update: function(dt) {
 			
-		},
-		
-		render2dCanvas: function(context, camX, camY) {
-			
 		}
 	});
 }());
