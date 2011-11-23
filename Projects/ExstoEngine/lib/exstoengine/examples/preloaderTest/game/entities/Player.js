@@ -19,7 +19,6 @@ ex.using([
 			
 			this.clickable = true;
 			
-			ex.Input.addController(0);
 			this.controller = ex.Input.getController(0);
 			this.controller.on('jump', ex.bind(this, this.jump));
 			this.controller.on('right', ex.bind(this, this.moveRight));
