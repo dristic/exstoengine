@@ -14,7 +14,8 @@ ex.using([
     
     _fireActions: function(buttonSelector) {
       if(this.buttons[buttonSelector] == null) {
-        console.error(buttonSelector, "does not exist in controller map -->", this.buttons);
+        ex.Debug.log(buttonSelector + "does not exist in controller map -->" + this.buttons,
+            ex.util.Logger.LEVELS.ERROR);
         return;
       }
       var index = this.buttons[buttonSelector].length;
