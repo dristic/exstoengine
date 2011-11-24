@@ -23,11 +23,12 @@ ex.using([
     render: function (items, camX, camY, camWidth, camHeight) {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
       
-      var i = items.length - 1,
+      var i = 0,
+          ln = items.length,
           item,
           renderers = this.renderers,
           context = this.context;
-      for(; i >= 0; i--) {
+      for(; i < ln; i++) {
         item = items[i];
         if(!item.renderer) {
           renderers[item.type].render2dCanvas.call(item, context, camX, camY, camWidth, camHeight);

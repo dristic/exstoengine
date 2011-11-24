@@ -44,7 +44,7 @@ ex.using([
       this.height = this.img.naturalHeight;
       
       if(this.width == 0  && this.height == 0) {
-      	ex.event.listen(img, 'load', function () {
+      	ex.event.listen('load', img, function () {
       		this._recalcDimensions();
       	}, this);
       }
@@ -63,15 +63,15 @@ ex.using([
      */
     _recalcDimensions: function () {
     	this.width = this.img.naturalWidth;
-        this.height = this.img.naturalHeight;
-        
-        if(this.rendering && this.rendering.rotationCanvas) {
-          this.rendering.rotationCanvas.width = this.width;
-          this.rendering.rotationCanvas.height = this.height;
-        } else if(this.rendering && this.rendering.el) {
-          this.rendering.el.style.width = this.width + 'px';
-          this.rendering.el.style.height = this.height + 'px';
-        }
+      this.height = this.img.naturalHeight;
+      
+      if(this.rendering && this.rendering.rotationCanvas) {
+        this.rendering.rotationCanvas.width = this.width;
+        this.rendering.rotationCanvas.height = this.height;
+      } else if(this.rendering && this.rendering.el) {
+        this.rendering.el.style.width = this.width + 'px';
+        this.rendering.el.style.height = this.height + 'px';
+      }
     },
 
     /**

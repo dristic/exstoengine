@@ -7,6 +7,11 @@ ex.using([], function () {
 		 * or a DOM object
 		 */
 		listen: function (event, target, func, handler, useCapture) {
+		  // Error handling
+		  if(typeof event != 'string') {
+		    ex.Debug.log('Event must be a string!');
+		  }
+		  
 			// Bind to a different handler if needed
 			if(handler != null) {
 				func = ex.bind(handler, func);

@@ -2,7 +2,7 @@ ex.using([
   'ex.display.Renderable'
 ], function () {
   ex.define('ex.display.Text', ex.display.Renderable, {
-    constructor: function (options) {
+    constructor: function (text, options) {
       this.type = "Text";
       
       this.defaults = {
@@ -19,7 +19,14 @@ ex.using([
       ex.extend(this.options, this.defaults);
       ex.extend(this.options, options);
       
+      this.text = text;
+      
       this._super("constructor", [true, 1.0]);
-    }
+    },
+    
+    _setStyle: function(context) {
+      context.font = this.options.font;
+      context.fillStyle = this.options.color;
+    },
   });
 });

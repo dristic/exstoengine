@@ -48,6 +48,46 @@ ex.using([
     update: function (dt) {
         if (typeof this.onUpdate === "function") this.onUpdate(dt);
     },
+    
+    getFillStyle: function (context) {
+      var fillStyle = "",
+          options = this.options.fill;
+      
+      if(options.type == 'solid') {
+        fillStyle = options.color;
+      } else if(options.type == 'linear-gradient' || options.type == 'radial-gradient') {
+        var grad,
+            i = 0,
+            ln = options.stops.length,
+            stop;
+        
+        if(options.type == 'linear-gradient') {
+          grad = context.createLinearGradient(
+              options.start.x, options.start.y, options.end.x, options.end.y);
+        } else {
+          grad = context.createRadialGradient(
+              options.start.x, options.start.y, options.start.radius,
+              options.end.x, options.end.y, options.end.radius);
+        }
+        
+        for(; i < ln; i++) {
+          stop = options.stops[i];
+          grad.addColorStop(stop.position, stop.color);
+        }
+        
+        fillStyle = grad;
+      }
+      
+      return fillStyle;
+    },
+    
+    getStrokeStyle: function () {
+      return this.options.stroke.color;
+    },
+    
+    getLineWidth: function () {
+      return this.options.stroke.width;
+    },
 
     /**
      * Returns bounding box of sprite.
