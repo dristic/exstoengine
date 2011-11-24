@@ -12,48 +12,52 @@ ex.using([
 		 * 
 		 * @constructor
 		 */
-		constructor: function(logo) {			
-	    this.background = new ex.display.Rectangle({
-				  x: 0, y: 0,
-				  width: 800, height: 600,
-				  fill: {
-				    type: 'radial-gradient',
-				    start: { x: 400, y: 300, radius: 0 },
-				    end: { x: 400, y: 300, radius: 500 },
-				    stops: [
-	            { position: 0, color: '#555' },
-	            { position: 1, color: '#000' }
+		constructor: function(logo) {
+		  this.items = [
+		    // Background
+        new ex.display.Rectangle({
+          x: 0, y: 0,
+          width: 800, height: 600,
+          fill: {
+            type: 'radial-gradient',
+            start: { x: 400, y: 300, radius: 0 },
+            end: { x: 400, y: 300, radius: 500 },
+            stops: [
+              { position: 0, color: '#555' },
+              { position: 1, color: '#000' }
             ]
-				  }
-				});
-	    
-      this.logo = new ex.display.Sprite(
-					new ex.base.Vector(270, 230),
-					logo);
-			
-			this.progressText = new ex.display.ui.StatusText(
-				ex.Assets,
-				'_assetsLoaded',
-				{
-					position: new ex.base.Vector(
-							340, 
-							295),
-					color: "#FFFFFF",
-					font: '12pt Arial',
-					displayFormat: 'percentage',
-					maxSelector: '_assetsToLoad',
-					textBefore: "Loading.. "
-				});
-			
-			this.progressBar = new ex.display.ui.StatusBar({
-			  position: new ex.Vector(340, 305),
-			  update: 'auto',
-			  updateOptions: {
-			    target: ex.Assets,
-			    currentSelector: '_assetsLoaded',
-			    maxSelector: '_assetsToLoad'
-			  }
-			});
+          }
+        }),
+        
+        // Logo
+        new ex.display.Sprite(
+            new ex.base.Vector(270, 230),
+            logo),
+            
+        new ex.display.ui.StatusText(
+            ex.Assets,
+            '_assetsLoaded',
+            {
+              position: new ex.base.Vector(
+                  340, 
+                  295),
+              color: "#FFFFFF",
+              font: '12pt Arial',
+              displayFormat: 'percentage',
+              maxSelector: '_assetsToLoad',
+              textBefore: "Loading.. "
+            }),
+            
+        new ex.display.ui.StatusBar({
+          position: new ex.Vector(340, 305),
+          update: 'auto',
+          updateOptions: {
+            target: ex.Assets,
+            currentSelector: '_assetsLoaded',
+            maxSelector: '_assetsToLoad'
+          }
+        })
+      ];
 		},
 		
 		/**
@@ -64,47 +68,8 @@ ex.using([
 		 * @param {Number} dt timestep
 		 */
 		update: function(dt){
-			this.progressBar.update(dt);
-			this.progressText.update(dt);
-		},
-		
-		setupDom: function (el) {
-		  this.background.setupDom(el);
-		  this.logo.setupDom(el);
-		  this.progressBar.setupDom(el);
-		},
-		
-		renderDom: function (el, camX, camY) {
-		  this.background.renderDom(el, camX, camY);
-      this.logo.renderDom(el, camX, camY);
-      this.progressBar.renderDom(el, camX, camY);
-		},
-		
-		destroyDom: function (el) {
-		  this.background.destroyDom(el);
-      this.logo.destroyDom(el);
-      this.progressBar.destroyDom(el);
-		},
-		
-		setup2dCanvas: function (canvas) {
-		  this.background.setup2dCanvas(canvas);
-		  this.logo.setup2dCanvas(canvas);
-		},
-		
-		/**
-		 * Renders the TitleMenu to the screen.
-		 * @function
-		 * @name render
-		 * @memberOf ex.display.ui.TitleMenu
-		 * @param {Canvas Context} context canvas context to render with
-		 * @param {Number} camX camera offset on x
-		 * @param {Number} camY camera offset on y
-		 */
-		render2dCanvas: function(context, camX, camY){
-			this.background.render2dCanvas(context, camX, camY);
-			this.logo.render2dCanvas(context, camX, camY);
-			this.progressBar.render2dCanvas(context, camX, camY);
-			this.progressText.render2dCanvas(context, camX, camY);
+			this.items[2].update(dt);
+			this.items[3].update(dt);
 		}
 	});
 });

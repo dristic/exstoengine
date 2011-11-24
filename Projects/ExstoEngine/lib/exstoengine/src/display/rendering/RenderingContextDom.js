@@ -2,7 +2,7 @@ ex.using([
     'ex.display.rendering.RenderingContext'
 ], function () {
   ex.define('ex.display.rendering.RenderingContextDom', ex.display.rendering.RenderingContext, {
-    constructor: function (width, height, el, bgColor) {
+    constructor: function (width, height, renderers, el, bgColor) {
       this._super('constructor', [width, height]);
       
       this.el = el || document.createElement('div');
@@ -18,13 +18,24 @@ ex.using([
       if(el == null) {
         document.body.appendChild(this.el);
       }
+      
+      this.renderers = renderers;
     },
     
     render: function (items, camX, camY, camWidth, camHeight) {
       var i = 0,
-          ln = items.length;
+          ln = items.length,
+          item,
+          el = this.el,
+          renderers = this.renderers;
+      
       for(; i < ln; i++) {
-        items[i].renderDom(this.el, camX, camY, camWidth, camHeight);
+        item = items[i];
+        if(!item.renderer) {
+          renderers[item.type].renderDom.call(item, el, camX, camY, camWidth, camHeight);
+        } else {
+          item.renderer.renderDom.call(item, el, camX, camY, camWidth, camHeight);
+        }
       }
     }
   });

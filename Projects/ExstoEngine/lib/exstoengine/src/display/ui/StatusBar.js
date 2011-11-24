@@ -49,6 +49,9 @@ ex.using([
       this.currentWidth = 0;
       this.options.inner.width = 0;
       
+      // Add to items list for rendering
+      this.items = [this.options.outer, this.options.inner];
+      
       this._super("constructor", [true, 1.0]);
     },
     
@@ -75,27 +78,6 @@ ex.using([
     updatePercentage: function (percent) {
       if(percent > 1) percent = percent / 100;
       this.currentWidth = this.totalWidth * percent;
-    },
-    
-    setupDom: function (el) {
-      
-    },
-    
-    renderDom: function (el, camX, camY, camWidth, camHeight) {
-      
-    },
-    
-    destroyDom: function (el) {
-      
-    },
-    
-    render2dCanvas: function(context, camX, camY, camWidth, camHeight) {
-      if(!this.isVisible()){
-        return;
-      }
-        
-      this.options.outer.render2dCanvas(context, camX, camY, camWidth, camHeight);
-      this.options.inner.render2dCanvas(context, camX, camY, camWidth, camHeight);
     }
   });
 });

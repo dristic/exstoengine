@@ -1,6 +1,6 @@
 ex.using([
-  'ex.display.Sprite',
-  'ex.display.Renderable'
+  'ex.display.Renderable',
+  'ex.display.Text'
 ], function() {	
 	ex.define("ex.display.ui.StatusText", ex.display.Renderable, {
 		constructor: function(targetEntity, statSelector, options) {
@@ -18,10 +18,11 @@ ex.using([
 				textBefore: null,
 				textAfter: null
 			};
+			ex.extend(this.options, options);
 			
-			if(options != null){
-				ex.extend(this.options, options);
-			}
+			this.items = [
+			  new ex.display.Text(this.options)           
+      ];
 			
 			this._super("constructor", [true, 1.0]);
 		},
@@ -48,47 +49,6 @@ ex.using([
 				this.text = this.text + this.options.textAfter;
 			}
 			
-		},
-		
-		setupDom: function (el) {
-		  var thisEl = document.createElement('div');
-		  thisEl.innerHTML = this.text;
-		  thisEl.style.position = 'absolute';
-		  thisEl.style.left = this.options.position.x + 'px';
-		  thisEl.style.top = this.options.position.y + 'px';
-		  thisEl.style.font = this.options.font;
-		  thisEl.style.color = this.options.color;
-		  
-		  this.rendering = {
-	      el: thisEl
-		  };
-		  
-		  el.appendChild(this.rendering.el);
-		},
-		
-		renderDom: function (el, camX, camY, camWidth, camHeight) {
-		  this.rendering.el.innerHTML = this.text;
-		  this.rendering.el.style.left = this.options.position.x + 'px';
-      this.rendering.el.style.top = this.options.position.y + 'px';
-		},
-		
-		destroyDom: function (el) {
-		  el.removeChild(this.rendering.el);
-		  this.rendering = null;
-		},
-		
-		render2dCanvas: function(context, camX, camY, camWidth, camHeight) {
-			if(!this.isVisible()){
-				return;
-			}
-				
-			context.save();
-			this._setStyle(context);
-			context.fillText(
-					this.text, 
-					this.options.position.x, 
-					this.options.position.y);
-			context.restore();
 		}
 	});
 });

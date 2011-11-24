@@ -28,26 +28,28 @@ ex.using([
 		 * @constructor
 		 */
     constructor: function (position, img) {
-        this.position = position;
-        this.img = img || new Image();
+      this.type = "Sprite";
+      
+      this.position = position;
+      this.img = img || new Image();
 
-        this.rotation = 0;
-        this.rotationEnabled = false;
-        
-        this.rendering = null;
-        
-        this.scrollFactor = new ex.base.Vector(1,1);
-        
-        this.width = this.img.naturalWidth;
-        this.height = this.img.naturalHeight;
-        
-        if(this.width == 0  && this.height == 0) {
-        	ex.event.listen(img, 'load', function () {
-        		this._recalcDimensions();
-        	}, this);
-        }
-        
-        this._super("constructor", [true, 1.0]);
+      this.rotation = 0;
+      this.rotationEnabled = false;
+      
+      this.rendering = null;
+      
+      this.scrollFactor = new ex.base.Vector(1,1);
+      
+      this.width = this.img.naturalWidth;
+      this.height = this.img.naturalHeight;
+      
+      if(this.width == 0  && this.height == 0) {
+      	ex.event.listen(img, 'load', function () {
+      		this._recalcDimensions();
+      	}, this);
+      }
+      
+      this._super("constructor", [true, 1.0]);
     },
     
     /**
@@ -83,73 +85,6 @@ ex.using([
      */
     update: function (dt) {
         if (typeof this.onUpdate === "function") this.onUpdate(dt);
-    },
-    
-    setup2dCanvas: function () {
-      this.rendering = {
-          rotationCanvas: document.createElement('canvas')  
-      };
-      
-      this.rendering.rotationCanvas.width = this.width;
-      this.rendering.rotationCanvas.height = this.height;
-      this.rendering.rotationContext = this.rendering.rotationCanvas.getContext("2d");
-    },
-    
-    /**
-     * Renders sprite, usually called by Renderer.
-     * 
-     * @function
-     * @name render
-     * @memberOf ex.display.Sprite
-     * 
-     * @param {Context} context canvas context to draw with
-		 * @param {Number} camX camera offset on x
-		 * @param {Number} camY camera offset on y
-		 * @param {Number} camWidth viewport width
-		 * @param {Number} camHeight viewport height
-		 */
-		render2dCanvas: function (context, camX, camY, camWidth, camHeight) {
-			// Do nothing if sprite is not visible
-			if(!this.isVisible()){
-				return;
-			}
-			
-			// Position of the sprite in the viewport
-			var viewPortX = ex.toInt(this.position.x - (camX * this.scrollFactor.x)),
-				  viewPortY = ex.toInt(this.position.y - (camY * this.scrollFactor.y));
-						
-			// Do nothing if sprite is out of the viewport
-			if((viewPortX + this.width) < 0
-					|| viewPortX > camWidth
-					|| (viewPortY + this.height) < 0
-					|| viewPortY > camHeight) {
-				return;
-			}
-            
-      if (this.rotationEnabled == false) {
-          context.drawImage(
-          		this.img, 
-          		viewPortX, 
-          		viewPortY);
-      } else {
-          //--Ensure width and height are not 0 to avoid INVALID_STATE_ERR
-        var rotCanvas = this.rendering.rotationCanvas,
-            rotContext = this.rendering.rotationContext;
-        rotCanvas.width = this.img.width || 1;
-        rotCanvas.height = this.img.height || 1;
-        
-        rotContext.save();
-        rotContext.translate(this.width / 2, this.height / 2);
-        rotContext.rotate(this.rotation);
-        rotContext.translate(-this.width / 2, -this.height / 2);
-        rotContext.drawImage(this.img, 0, 0);
-        rotContext.restore();
-
-        context.drawImage(
-        		rotCanvas, 
-        		viewPortX, 
-        		viewPortY);
-      }
     },
 
     /**

@@ -10,7 +10,6 @@ ex.using([
     _engine.enableDebugging(ex.util.Debug.DOM, ex.util.Logger.LEVEL.DEBUG);
     _engine.input.listenOn(_engine.renderer.renderingContext.el);
     
-    
     ex.Input.loadInputControllerMap(
       [ 
         ['jump', 'keydown Spacebar'],

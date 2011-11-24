@@ -2,7 +2,7 @@ ex.using([
     'ex.display.rendering.RenderingContext'
 ], function () {
   ex.define('ex.display.rendering.RenderingContext2dCanvas', ex.display.rendering.RenderingContext, {
-    constructor: function (width, height, canvas, bgColor) {
+    constructor: function (width, height, renderers, canvas, bgColor) {
       this._super('constructor', [width, height]);
       
       this.canvas = canvas || document.createElement("canvas");
@@ -16,14 +16,24 @@ ex.using([
       if(canvas == null) {
         document.body.appendChild(this.canvas);
       }
+      
+      this.renderers = renderers;
     },
     
     render: function (items, camX, camY, camWidth, camHeight) {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
       
-      var i = items.length - 1;
+      var i = items.length - 1,
+          item,
+          renderers = this.renderers,
+          context = this.context;
       for(; i >= 0; i--) {
-        items[i].render2dCanvas(this.context, camX, camY, camWidth, camHeight);
+        item = items[i];
+        if(!item.renderer) {
+          renderers[item.type].render2dCanvas.call(item, context, camX, camY, camWidth, camHeight);
+        } else {
+          item.renderer.render2dCanvas.call(item, context, camX, camY, camWidth, camHeight);
+        }
       }
     },
     
