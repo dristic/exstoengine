@@ -143,8 +143,8 @@ ex.using([
 					that.collisionManager.collisionGroups = [];
 					that.collisionManager.collisionGroups.push(objects);
 					
-					//that.currentWorld.addObjects(objects);
-					//that.currentWorld.removeObject(that.loadingScreen);
+					that.currentWorld.addObjects(objects);
+					that.currentWorld.removeObject(that.loadingScreen);
 					ex.Input.trackClickableObjects(objects);
 					scene.finalSetup();
 					
