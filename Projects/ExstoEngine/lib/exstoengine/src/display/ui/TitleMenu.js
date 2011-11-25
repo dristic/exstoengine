@@ -42,6 +42,11 @@ ex.using([
 					height: 70
 				},
 			};
+			
+			this.items = [
+        this.options.background,
+        this.options.logo
+      ];
 		},
 		
 		/**
@@ -102,104 +107,6 @@ ex.using([
 						this.selections[index].action();
 					}
 				}
-			}
-		},
-		
-		setupDom: function (el) {
-		  this.options.background.setupDom(el);
-		  this.options.logo.setupDom(el);
-		  
-		  function createTextEl(text, color, x, y) {
-		    var textEl = document.createElement('div');
-	      textEl.style.font = "40pt Calibri";
-	      textEl.style.color = color;
-	      textEl.style.textAlign = "center";
-	      textEl.innerHTML = text;
-	      textEl.style.position = 'absolute';
-	      el.appendChild(textEl);
-	      textEl.style.left = (x - (textEl.offsetWidth / 2)) + 'px';
-	      textEl.style.top = (y - (textEl.offsetHeight / 2)) + 'px';
-	      return textEl;
-		  };
-      
-      var xPos = this.options.menu.x,
-          yPos = this.options.menu.y,
-          index = 0,
-          els = [];
-      for(index; index < this.selections.length; index++) {
-        // Color current selection differently
-        if(index == this.currentSelection) {
-          els.push(createTextEl(this.selections[index].text, '#00FF00', xPos, yPos));
-        } else {
-          // Print non selected options in normal color
-          els.push(createTextEl(this.selections[index].text, '#FF0000', xPos, yPos));
-        }
-        var textEl = els[els.length - 1];
-        ex.event.listen('mousedown', textEl, this.selections[index].action);
-        yPos += this.options.selection.height;
-      }
-      
-      this.rendering = {
-        els: els
-      };
-		},
-		
-		renderDom: function (el, camX, camY, camWidth, camHeight) {
-		  this.options.background.renderDom(el, camX, camY, camWidth, camHeight);
-		  this.options.logo.renderDom(el, camX, camY, camWidth, camHeight);
-		  
-		  var index = 0;
-      for(index; index < this.selections.length; index++) {
-        // Color current selection differently
-        if(index == this.currentSelection) {
-          this.rendering.els[index].style.color = '#00FF00';
-        } else {
-          // Print non selected options in normal color
-          this.rendering.els[index].style.color = '#FF0000';
-        }
-      }
-		},
-		
-		destroyDom: function (el) {
-		  
-		},
-		
-		/**
-		 * Renders the TitleMenu to the screen.
-		 * @function
-		 * @name render
-		 * @memberOf ex.display.ui.TitleMenu
-		 * @param {Canvas Context} context canvas context to render with
-		 * @param {Number} camX camera offset on x
-		 * @param {Number} camY camera offset on y
-		 */
-		render2dCanvas: function(context, camX, camY){
-			if(this.options.background != null) {
-				this.options.background.render2dCanvas(context, camX, camY);
-			}
-			
-			if(this.options.logo != null) {
-				this.options.logo.render2dCanvas(context, camX, camY);
-			}
-			
-			context.font = "40pt Calibri";
-			context.fillStyle = "#FF0000";
-			context.textAlign = "center";
-			
-			var xPos = this.options.menu.x;
-			var yPos = this.options.menu.y;
-			var index = 0;
-			for(index; index < this.selections.length; index++) {
-				// Color current selection differently
-				if(index == this.currentSelection){
-					context.fillStyle = "#00FF00";
-					context.fillText(this.selections[index].text, xPos, yPos);
-					context.fillStyle = "#FF0000";
-				} else {
-					// Print non selected options in normal color
-					context.fillText(this.selections[index].text, xPos, yPos);
-				}
-				yPos += this.options.selection.height;
 			}
 		}
 	});

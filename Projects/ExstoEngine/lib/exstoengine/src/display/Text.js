@@ -7,12 +7,12 @@ ex.using([
       
       this.defaults = {
         position: new ex.base.Vector(50,50),
-        color: '#FFFF00',
-        font: '40pt Calibri',
-        displayFormat: 'absolute',
-        maxSelector: null,
-        textBefore: null,
-        textAfter: null
+        maxWidth: null,
+        color: '#FFFFFF',
+        font: '14pt Arial',
+        textAlign: 'left',
+        prefix: '',
+        suffix: ''
       };
       
       this.options = {};
@@ -22,11 +22,6 @@ ex.using([
       this.text = text;
       
       this._super("constructor", [true, 1.0]);
-    },
-    
-    _setStyle: function(context) {
-      context.font = this.options.font;
-      context.fillStyle = this.options.color;
-    },
+    }
   });
 });

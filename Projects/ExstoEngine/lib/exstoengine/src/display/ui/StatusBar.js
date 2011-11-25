@@ -56,14 +56,6 @@ ex.using([
     },
     
     update: function(dt) {
-      // Show text in proper format
-      if(this.options.displayFormat == 'percentage') {
-        this.text = ex.toInt(this.target[this.selector] / this.target[this.options.maxSelector] * 100);
-        this.text += '%';
-      } else if (this.options.displayFormat == 'absolute') {
-        this.text = this.target[this.selector];
-      }
-      
       if(this.options.update == 'auto') {
         var options = this.options.updateOptions,
             percent = options.target[options.currentSelector] / options.target[options.maxSelector];

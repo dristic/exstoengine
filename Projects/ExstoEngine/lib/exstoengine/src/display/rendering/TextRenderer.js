@@ -30,16 +30,21 @@ ex.using([
     },
     
     render2dCanvas: function(context, camX, camY, camWidth, camHeight) {
-      if(!this.isVisible()){
+      if(!this.isVisible()) {
         return;
       }
         
       context.save();
-      this._setStyle(context);
+      
+      context.font = this.options.font;
+      context.fillStyle = this.options.color;
+      
       context.fillText(
           this.text, 
           this.options.position.x, 
-          this.options.position.y);
+          this.options.position.y,
+          this.options.maxWidth);
+      
       context.restore();
     }
   });

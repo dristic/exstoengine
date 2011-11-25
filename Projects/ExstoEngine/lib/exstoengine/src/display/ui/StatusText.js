@@ -3,46 +3,57 @@ ex.using([
   'ex.display.Text'
 ], function() {	
 	ex.define("ex.display.ui.StatusText", ex.display.Renderable, {
-		constructor: function(targetEntity, statSelector, options) {
-			this.target = targetEntity;
-			this.selector = statSelector;
-			
-			this.text = "";
-			
+		constructor: function(options) {
 			this.options = {
 				position: new ex.base.Vector(50,50),
-				color: '#FFFF00',
-				font: '40pt Calibri',
-				displayFormat: 'absolute',
-				maxSelector: null,
-				textBefore: null,
-				textAfter: null
+				update: 'manual',
+        updateOptions: {
+          target: null,
+          currentSelector: '',
+          maxSelector: ''
+        },
+        displayFormat: 'absolute',
+        text: {
+          color: '#FFFFFF',
+          font: '12pt Calibri',
+          prefix: "",
+          suffix: ""
+        }
 			};
+			
 			ex.extend(this.options, options);
+			this.options.text.position = this.options.position;
 			
 			this.items = [
-			  new ex.display.Text('Loading...', this.options)           
+			  new ex.display.Text('Loading...', this.options.text)
       ];
 			
 			this._super("constructor", [true, 1.0]);
 		},
 		
-		update: function(dt) {
-			// Show text in proper format
-			if(this.options.displayFormat == 'percentage') {
-				this.items[0].text = ex.toInt(this.target[this.selector] / this.target[this.options.maxSelector] * 100);
-				this.items[0].text += '%';
-			} else if (this.options.displayFormat == 'absolute') {
-				this.items[0].text = this.target[this.selector];
-			}
-			
-			// Add text before and after value
-			if(this.options.textBefore != null){
-				this.items[0].text = this.options.textBefore + this.items[0].text;
-			}
-			if(this.options.textAfter != null) {
-				this.items[0].text = this.items[0].text + this.options.textAfter;
-			}
+		update: function (dt) {
+		  if(this.options.update == 'auto') {
+		    var options = this.options.updateOptions,
+		        current = options.target[options.currentSelector],
+		        max = options.target[options.maxSelector],
+		        text = "";
+		    
+		    // Show text in proper format
+	      if(this.options.displayFormat == 'percentage') {
+	        text = ex.toInt(current / max * 100);
+	        text += '%';
+	      } else if (this.options.displayFormat == 'absolute') {
+	        text = current;
+	      }
+	      
+	      this.setText(text);
+		  }
+		},
+		
+		setText: function (text) {
+		  text = this.options.text.prefix + text + this.options.text.suffix;
+		  
+		  this.items[0].text = text;
 		}
 	});
 });

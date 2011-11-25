@@ -34,19 +34,22 @@ ex.using([
             new ex.base.Vector(270, 230),
             logo),
             
-        new ex.display.ui.StatusText(
-            ex.Assets,
-            '_assetsLoaded',
-            {
-              position: new ex.base.Vector(
-                  340, 
-                  295),
-              color: "#FFFFFF",
-              font: '12pt Arial',
-              displayFormat: 'percentage',
-              maxSelector: '_assetsToLoad',
-              textBefore: "Loading.. "
-            }),
+        new ex.display.ui.StatusText({
+          position: new ex.Vector(340, 295),
+          update: 'auto',
+          updateOptions: {
+            target: ex.Assets,
+            currentSelector: '_assetsLoaded',
+            maxSelector: '_assetsToLoad'
+          },
+          displayFormat: 'percentage',
+          text: {
+            color: '#FFFFFF',
+            font: '12pt Arial',
+            prefix: 'Loading.. ',
+            suffix: ''
+          }
+        }),
             
         new ex.display.ui.StatusBar({
           position: new ex.Vector(340, 305),
