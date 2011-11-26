@@ -175,13 +175,13 @@ ex.using([
        */
       
 			// Background Image
-			objects.push(background);
-			objects.push(collisionMap);
-			objects.push(this.engine.currentWorld.globalObjects.player);
-	    objects.push(teleporter);
-	    objects.push(hiddenOverlayTrigger);
-			objects.push(platforms);
-			objects.push(hiddenOverlay);
+      objects.push(hiddenOverlay);
+      objects.push(platforms);
+      objects.push(hiddenOverlayTrigger);
+      objects.push(teleporter);
+      objects.push(this.engine.currentWorld.globalObjects.player);
+      objects.push(collisionMap);
+      objects.push(background);
 		
 			return objects;
 		},

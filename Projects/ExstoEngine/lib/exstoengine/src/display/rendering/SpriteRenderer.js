@@ -17,7 +17,20 @@ ex.using([
       el.appendChild(this.rendering.el);
     },
     
+    destroyDom: function (el) {
+      el.removeChild(this.rendering.el);
+      this.rendering = null;
+    },
+    
     renderDom: function (el, camX, camY, camWidth, camHeight) {
+      // Set opacity to 0 if not visible
+      if(!this.visible){
+        this.rendering.el.style.opacity = 0;
+        return;
+      } else {
+        this.rendering.el.style.opacity = this.opacity;
+      }
+      
       // Position of the sprite in the viewport
       var viewPortX = ex.toInt(this.position.x - (camX * this.scrollFactor.x)),
           viewPortY = ex.toInt(this.position.y - (camY * this.scrollFactor.y));
@@ -43,11 +56,6 @@ ex.using([
       } else {
         
       }
-    },
-    
-    destroyDom: function (el) {
-      el.removeChild(this.rendering.el);
-      this.rendering = null;
     },
     
     setup2dCanvas: function () {

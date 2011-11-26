@@ -102,8 +102,12 @@ ex.using([
 		},
 		
 		renderDom: function (el, camX, camY, camWidth, camHeight) {
-		  if(!this.isVisible()){
+		  // Set opacity to 0 if not visible
+      if(!this.visible){
+        this.rendering.el.style.opacity = 0;
         return;
+      } else {
+        this.rendering.el.style.opacity = this.opacity;
       }
       
       // Position of the sprite in the viewport
