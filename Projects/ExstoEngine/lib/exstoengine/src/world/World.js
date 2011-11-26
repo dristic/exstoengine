@@ -128,7 +128,10 @@ ex.using([
      */
     addObject: function(object) {
       this.objects.push(object);
-      this.renderer.addRenderable(object);
+      
+      if(object instanceof ex.display.Renderable || object.items != null) {
+        this.renderer.addRenderable(object);
+      }
     },
     
     addObjects: function(objects) {

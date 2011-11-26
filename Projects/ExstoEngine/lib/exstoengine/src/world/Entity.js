@@ -30,6 +30,7 @@
 			// Referencing data
 			this.name = name;
 			this.type = "Entity";
+			
 			// Physical data
 			this.position = position;
 			this.scrollFactor = new ex.base.Vector(1,1);
@@ -45,6 +46,7 @@
 			this.sprite.scrollFactor = this.scrollFactor; // pointer to this.scrollFactor
 			this.sprite.position = this.position;	// pointer to this.position
 			this.visible = true;
+			this.items = [this.sprite];
 			
 			if(sprite.width == 0 && sprite.height == 0) {
 				ex.event.listen(sprite.img, 'load', function () {
@@ -119,38 +121,6 @@
 		 */
 		onCollide: function(target, data) {
 			
-		},
-		
-		setupDom: function (el) {
-      this.sprite.setupDom(el);
-    },
-    
-    renderDom: function (el, camX, camY, camWidth, camHeight) {
-      this.sprite.renderDom(el, camX, camY, camWidth, camHeight);
-    },
-    
-    destroyDom: function (el) {
-      this.sprite.destroyDom(el);
-    },
-
-		/**
-		 * Supplies a canvas context and camera parameters for
-		 * rendering to the canvas. Can be overridden by subclasses
-		 * for customized rendering.
-		 * 
-		 * @param {Context} context canvas context to draw with
-		 * @param {Number} camX camera offset on x
-		 * @param {Number} camY camera offset on y
-		 * @param {Number} camWidth viewport width
-		 * @param {Number} camHeight viewport height
-		 */
-		render2dCanvas: function(context, camX, camY, camWidth, camHeight) {
-			// Don't render if it won't be seen
-			if (this.visible == false)
-				return;
-
-			// Render code
-			this.sprite.render2dCanvas(context, camX, camY, camWidth, camHeight);
 		}
 	});
 }());

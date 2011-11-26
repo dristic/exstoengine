@@ -5,7 +5,9 @@ ex.using([
     
     'ex.display.rendering.SpriteRenderer',
     'ex.display.rendering.RectangleRenderer',
-    'ex.display.rendering.TextRenderer'
+    'ex.display.rendering.TextRenderer',
+    'ex.display.rendering.AnimatedSpriteRenderer',
+    'ex.display.rendering.SpriteMapRenderer'
 ], function () {
 	ex.define("ex.display.rendering.Renderer", {
 	  __statics: {
@@ -39,7 +41,9 @@ ex.using([
 			this.renderers = {
 			  Sprite: new ex.display.rendering.SpriteRenderer(),
 			  Rectangle: new ex.display.rendering.RectangleRenderer(),
-			  Text: new ex.display.rendering.TextRenderer()
+			  Text: new ex.display.rendering.TextRenderer(),
+			  AnimatedSprite: new ex.display.rendering.AnimatedSpriteRenderer(),
+			  SpriteMap: new ex.display.rendering.SpriteMapRenderer()
 			};
 		},
 		
@@ -77,6 +81,11 @@ ex.using([
 		      this.addRenderable(object.items[i]);
 		    }
 		  } else {
+		    // Checking to see if a renderer exists for this object
+		    if(!object.renderer && !this.renderers[object.type]) {
+		      ex.Debug.log('There is no renderer setup for ' + object.type, 'ERROR');
+		    }
+		    
 		    if(this.type == ex.display.rendering.Renderer.DOM) {
 	        if(!object.renderer) {
 	          this.renderers[object.type].setupDom.call(object, this.renderingContext.el);

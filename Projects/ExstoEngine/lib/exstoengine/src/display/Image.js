@@ -22,6 +22,8 @@ ex.using([
 		 * @constructor
 		 */
 		constructor : function(image, position, size, name) {
+		  this.type = "Image";
+		  
 			this.name = name;
 			this.position = position || new ex.base.Point(0, 0);
 			this.width = image.naturalWidth;

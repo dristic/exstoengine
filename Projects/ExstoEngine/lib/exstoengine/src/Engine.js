@@ -143,6 +143,9 @@ ex.using([
 					that.collisionManager.collisionGroups = [];
 					that.collisionManager.collisionGroups.push(objects);
 					
+					// Reset camera position
+					that.camera.moveTo(0, 0);
+					
 					that.currentWorld.addObjects(objects);
 					that.currentWorld.removeObject(that.loadingScreen);
 					ex.Input.trackClickableObjects(objects);

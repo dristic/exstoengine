@@ -36,10 +36,11 @@ ex.using([
 		getObjects: function(){
 			var objects = [];
 			
-			var background = new ex.display.Image(
-				ex.Assets.getImage("background"),
-				new ex.base.Vector(0,0)
+			var background = new ex.display.Sprite(
+				new ex.base.Vector(0,0),
+				ex.Assets.getImage("background")
 			);
+			background.scrollFactor = new ex.Vector(0, 0);
 			
 			var collisionMap = new ex.world.CollisionMap(
 		    this.tileWidth,

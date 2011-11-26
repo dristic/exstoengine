@@ -26,6 +26,7 @@ ex.using([
     		{name: "teleport", filePath: "assets/teleport2.png"},
     		
     		// Audio
+    		{ name: "laser", filePath: "assets/laser.ogg" }
     		
     		// Video
     	];
@@ -39,10 +40,11 @@ ex.using([
 			 * Build all scene objects.
 			 */
 			
-			var background = new ex.display.Image(
-        ex.Assets.getImage("bg"),
-        new ex.base.Vector(0,0)
+			var background = new ex.display.Sprite(
+        new ex.base.Vector(0,0),
+        ex.Assets.getImage("bg")
       );
+			background.scrollFactor = new ex.Vector(0, 0);
 			
 			var collisionMap = new ex.world.CollisionMap(
         this.tileWidth,
