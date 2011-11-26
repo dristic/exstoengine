@@ -1,7 +1,8 @@
 ex.using([
   'ex.display.Sprite',
   'ex.base.Component',
-  'ex.event.EventTarget'
+  'ex.event.EventTarget',
+  'ex.display.Text'
 ], function() {	
 	ex.define("ex.display.ui.TitleMenu", ex.base.Component, {
 		/**
@@ -24,7 +25,7 @@ ex.using([
 		 * @constructor
 		 */
 		constructor: function(
-				selections, defaultSelection, bgImage, logoImage, input){
+				selections, defaultSelection, bgImage, logoImage, input) {
 			this.selections = selections;
 			this.currentSelection = defaultSelection;
 			this.input = input;
@@ -33,8 +34,8 @@ ex.using([
 				background: new ex.display.Sprite(new ex.base.Vector(0, 0), bgImage),
 				logo: new ex.display.Sprite(new ex.base.Vector(300, 100), logoImage),
 				menu: {
-					x: 400,
-					y: 300,
+					x: 100,
+					y: 320,
 					actionKey: ex.util.Key.Enter
 				},
 				selection: {
@@ -47,6 +48,29 @@ ex.using([
         this.options.background,
         this.options.logo
       ];
+			
+			// Add each selection as a renderable text item
+			var i = 0,
+			    ln = this.selections.length,
+			    selection,
+			    yPos = this.options.menu.y;
+			
+			for(; i < ln; i++) {
+			  selection = this.selections[i];
+			  this.items.push(new ex.display.Text(selection.text,
+    	      {
+    			    position: new ex.base.Vector(this.options.menu.x, yPos),
+    	        maxWidth: null,
+    	        color: i == defaultSelection ? '#FF0000' : '#00FF00',
+    	        font: '32pt Arial',
+    	        textAlign: 'left',
+    	        prefix: '',
+    	        suffix: ''
+    			  }));
+			  this.selections[i] = this.items[this.items.length - 1];
+			  this.selections[i].action = selection.action;
+			  yPos += 50;
+			}
 		},
 		
 		/**
@@ -56,8 +80,10 @@ ex.using([
 		 * @memberOf ex.display.ui.TitleMenu
 		 */
 		moveUpMenu: function() {
-			if(this.currentSelection != 0){
+			if(this.currentSelection != 0) {
+			  this.selections[this.currentSelection].options.color = '#00FF00';
 				this.currentSelection--;
+				this.selections[this.currentSelection].options.color = '#FF0000';
 			}
 		},
 		
@@ -69,7 +95,9 @@ ex.using([
 		 */
 		moveDownMenu: function() {
 			if(this.currentSelection < (this.selections.length - 1)) {
+			  this.selections[this.currentSelection].options.color = '#00FF00';
 				this.currentSelection++;
+				this.selections[this.currentSelection].options.color = '#FF0000';
 			}
 		},
 		
@@ -84,26 +112,22 @@ ex.using([
 			if(this.input.isKeyPressed(this.options.menu.actionKey)) {
 				this.selections[this.currentSelection].action();
 			}
+			
 			if(this.input.isKeyPressed(ex.util.Key.Up)) {
 				this.moveUpMenu();
 			}
+			
 			if(this.input.isKeyPressed(ex.util.Key.Down)) {
 				this.moveDownMenu();
 			}
 			
-			// Mouse events for mobile devices or people using mice
-			// should go here...
-			// 		Requirements:
-			//		 - bounding box
-			//		 - click event to run action
-			//		 - mouseover event to set currentSelection
-			if(this.input.mouseDown){
+			if(this.input.mouseDown) {
 				var index = this.selections.length;
-				while(index--){
+				while(index--) {
 					if(this.input.mouseX > (this.options.menu.x - this.options.selection.width) &&
 							this.input.mouseX < (this.options.menu.x + this.options.selection.width) &&
 							this.input.mouseY > (this.options.menu.y + (this.options.selection.height * (index - 1))) &&
-							this.input.mouseY < (this.options.menu.y + (this.options.selection.height * (index)))){
+							this.input.mouseY < (this.options.menu.y + (this.options.selection.height * (index)))) {
 						this.selections[index].action();
 					}
 				}

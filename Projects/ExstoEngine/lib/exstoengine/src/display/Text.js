@@ -22,6 +22,11 @@ ex.using([
       this.text = text;
       
       this._super("constructor", [true, 1.0]);
+      
+      var ctx = document.createElement('canvas').getContext('2d');
+      ctx.font = this.options.font;
+      this.height = ctx.measureText('m');
+      this.width = ctx.measureText(this.text);
     }
   });
 });
