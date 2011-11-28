@@ -116,6 +116,7 @@ ex.using([
 	    },
 	    
 	    _sendCommandToController: function(playerId, button) {
+	      console.log("controller", playerId, ", button", button);
         this._controllers[playerId]._fireActions(button);
 	    },
 	    
@@ -188,7 +189,7 @@ ex.using([
 	      var index = 0,
 	          ln = this._inputControllerMaps.length;
 	      for(; index < ln; index++) {
-	        this.addController(index, controllerButtonMap);
+	        this.addController(index, ex.clone(controllerButtonMap));
 	        ex.Debug.log("Player " + index + " controller created.", ex.util.Logger.LEVEL.DEBUG);
 	      }
 	    },
