@@ -8,23 +8,17 @@ ex.using([
 		__alias: 'ex.Input',
 	  
 	  __statics: {
+	    // References
 	    _inputTarget: document,
 	    _engine: null,
 	    clickableObjects: [],
 	    
+	    // Bindings and Controllers
+	    _inputControllerMaps: [],
+	    _playerControllerMap: {},
 	    _controllers: [],
 	    
-	    _inputControllerMap: [],
-	    
-	    _playerControllerMap: {
-	      jump: [],
-	      left: [],
-	      right: [],
-	      down: [],
-	      shoot: []
-	    },
-	    
-	    // Mouse
+	    // Mouse data
 	    mouse: {
 	      position: new ex.base.Vector(0,0),
 	      lastPosition: new ex.base.Vector(0,0),
@@ -35,7 +29,7 @@ ex.using([
 	      }
 	    },
 	    
-	    // Keyboard
+	    // Keyboard data
 	    keyboard: {
 	      pressed: {}
 	    },
@@ -50,75 +44,79 @@ ex.using([
 	      return this._controllers[playerId];
 	    },
 	    
-	    addController: function(playerId) {
-	      this._controllers[playerId] = new ex.util.GameController(this._playerControllerMap);
+	    addController: function(playerId, controlMap) {
+	      this._controllers[playerId] = new ex.util.GameController(controlMap);
 	    },
 	    
 	    update: function(dt) {
-	      var index = this._inputControllerMap.length;
-	      var button = '';
-	      var eventTokens = '';
+	      var index = this._inputControllerMaps.length;
 	      while(index--) {
-	        button = this._inputControllerMap[index][0];
-	        eventTokens = this._inputControllerMap[index][1].split(' ');
-	        
-	        switch(eventTokens[0]){
-	          case 'keypressed':
-	            if(this.keyboard.pressed[eventTokens[1]] > 0) {
-	              this._sendCommandToControllers(button);
-	              this.keyboard.pressed[eventTokens[1]] = 2;
-	            }
-	            break;
-	          case 'keydown':
-	            if(this.keyboard.pressed[eventTokens[1]] == 1) {
-	              this._sendCommandToControllers(button);
-	              this.keyboard.pressed[eventTokens[1]]++;
-	            }
-	            break;
-	          case 'keyup':
-	            if(this.keyboard.pressed[eventTokens[1]] == -1) {
-	              this._sendCommandToControllers(button);
-	              this.keyboard.pressed[eventTokens[1]] = 0;
-	            }
-	            break;
+	        this._updateController(index);
+	      }
+	    },
+	    
+	    _updateController: function(playerId) {
+	      var index = this._inputControllerMaps[playerId].length;
+        var button = '';
+        var eventTokens = '';
+        while(index--) {
+          button = this._inputControllerMaps[playerId][index][0];
+          eventTokens = this._inputControllerMaps[playerId][index][1].split(' ');
+          
+          switch(eventTokens[0]){
+            case 'keypressed':
+              if(this.keyboard.pressed[eventTokens[1]] > 0) {
+                this._sendCommandToController(playerId, button);
+                this.keyboard.pressed[eventTokens[1]] = 2;
+              }
+              break;
+            case 'keydown':
+              if(this.keyboard.pressed[eventTokens[1]] == 1) {
+                this._sendCommandToController(playerId, button);
+                this.keyboard.pressed[eventTokens[1]]++;
+              }
+              break;
+            case 'keyup':
+              if(this.keyboard.pressed[eventTokens[1]] == -1) {
+                this._sendCommandToController(playerId, button);
+                this.keyboard.pressed[eventTokens[1]] = 0;
+              }
+              break;
             case 'mousepressed':
               if(this.mouse.pressed[eventTokens[1]] > 0) {
                 this._pushClickEvents(eventTokens);
               }
               break;
-	          case 'mousedown':
-	            if(this.mouse.pressed[eventTokens[1]] == 1) {
-	              this._pushClickEvents(eventTokens);
-	            }
-	            break;
-	          case 'mouseup':
-	            if(this.mouse.pressed[eventTokens[1]] == -1) {
+            case 'mousedown':
+              if(this.mouse.pressed[eventTokens[1]] == 1) {
                 this._pushClickEvents(eventTokens);
               }
               break;
-	          case 'mousemove':
-	            if(this.mouse.pressed[eventTokens[1]] == 0) {
-	              if(!this.mouse.position.equals(this.mouse.lastPosition)) {
-	                this._pushClickEvents(eventTokens);
-	              }
+            case 'mouseup':
+              if(this.mouse.pressed[eventTokens[1]] == -1) {
+                this._pushClickEvents(eventTokens);
               }
               break;
-	          case 'mousedrag':
-	            if(this.mouse.pressed[eventTokens[1]] > 0) {
+            case 'mousemove':
+              if(this.mouse.pressed[eventTokens[1]] == 0) {
                 if(!this.mouse.position.equals(this.mouse.lastPosition)) {
                   this._pushClickEvents(eventTokens);
                 }
               }
               break;
-	        }
-	      }
+            case 'mousedrag':
+              if(this.mouse.pressed[eventTokens[1]] > 0) {
+                if(!this.mouse.position.equals(this.mouse.lastPosition)) {
+                  this._pushClickEvents(eventTokens);
+                }
+              }
+              break;
+          }
+        }
 	    },
 	    
-	    _sendCommandToControllers: function(button) {
-	      var controllerIndex = this._controllers.length;
-        while(controllerIndex--) {
-          this._controllers[controllerIndex]._fireActions(button);
-        }
+	    _sendCommandToController: function(playerId, button) {
+        this._controllers[playerId]._fireActions(button);
 	    },
 	    
 	    _pushClickEvents: function(eventTokens) {
@@ -183,9 +181,16 @@ ex.using([
 	    /**
 	     * Loads a map that specifies the input event to controller mapping.
 	     */
-	    loadInputControllerMap: function(inputControllerMap) {
-	      this._inputControllerMap = inputControllerMap;
+	    loadInputMaps: function(inputControllerMaps, controllerButtonMap) {
+	      this._inputControllerMaps = inputControllerMaps;
 	      this._addEventListenersOnInput();
+	      
+	      var index = 0,
+	          ln = this._inputControllerMaps.length;
+	      for(; index < ln; index++) {
+	        this.addController(index, controllerButtonMap);
+	        ex.Debug.log("Player " + index + " controller created.", ex.util.Logger.LEVEL.DEBUG);
+	      }
 	    },
 	    
 	    _addEventListenersOnInput: function() {

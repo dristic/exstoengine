@@ -19,11 +19,11 @@ ex.using([
 			
 			this.clickable = true;
 			
-			ex.Input.addController(0);
 			this.controller = ex.Input.getController(0);
 			this.controller.on('jump', ex.bind(this, this.jump));
 			this.controller.on('right', ex.bind(this, this.moveRight));
 			this.controller.on('left', ex.bind(this, this.moveLeft));
+			this.controller.on('down', ex.bind(this, this.moveDown));
 		},
 		
 		jump: function(){
@@ -38,22 +38,12 @@ ex.using([
 			this.velocity.x += this.speed;
 		},
 		
-		update: function(dt) {			
-//			// Move Right
-//			if(this.input.dragging && this.input.mouseX > 600){
-//				this.moveRight();
-//			}
-//			// Move left
-//			if(this.input.dragging && this.input.mouseX < 200){
-//				this.moveLeft();
-//			}
-//			// Jump
-//			if(this.input.mouseDown && this.input.mouseY > 400){
-//				this.jump();
-//			}
-			
-			
-			if(this.velocity.x < 0.5 && this.velocity.x > -0.5){
+		moveDown: function() {
+		  this.velocity.y += this.speed;
+		},
+		
+		update: function(dt) {
+			if(this.velocity.x < 0.5 && this.velocity.x > -0.5) {
 				this.sprite.play("Stand");
 			} else {
 				this.sprite.play("Walk");
