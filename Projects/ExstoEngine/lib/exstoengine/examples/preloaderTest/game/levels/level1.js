@@ -156,7 +156,7 @@ ex.using([
       );
       teleporter.onCollide = function(target, data){
         if(target.name == "Player" && !teleporter.triggered){
-          ex.Assets.getAudio("laser").play();
+//          ex.Assets.getAudio("laser").play();
           teleporter.triggered = true;
           that.engine.loadScene("level2");
         }

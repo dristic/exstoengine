@@ -51,68 +51,84 @@ ex.using([
 	    update: function(dt) {
 	      var index = this._inputControllerMaps.length;
 	      while(index--) {
-	        this._updateController(index);
+	        this._updateController(index, dt);
+	      }
+	      
+	      for(var property in this.keyboard.pressed) {
+	        if(typeof this.keyboard.pressed[property] == 'Number' 
+	          && this.keyboard.pressed[property] != 0) {
+	          this.keyboard.pressed[property]++;
+	        }
 	      }
 	    },
 	    
-	    _updateController: function(playerId) {
+	    _updateController: function(playerId, dt) {
 	      var index = this._inputControllerMaps[playerId].length;
-        var button = '';
+        var pressedButtons = {};
+	      var button = '';
         var eventTokens = '';
         while(index--) {
           button = this._inputControllerMaps[playerId][index][0];
           eventTokens = this._inputControllerMaps[playerId][index][1].split(' ');
           
-          switch(eventTokens[0]){
-            case 'keypressed':
-              if(this.keyboard.pressed[eventTokens[1]] > 0) {
-                this._sendCommandToController(playerId, button);
-                this.keyboard.pressed[eventTokens[1]] = 2;
-              }
-              break;
-            case 'keydown':
-              if(this.keyboard.pressed[eventTokens[1]] == 1) {
-                this._sendCommandToController(playerId, button);
-                this.keyboard.pressed[eventTokens[1]]++;
-              }
-              break;
-            case 'keyup':
-              if(this.keyboard.pressed[eventTokens[1]] == -1) {
-                this._sendCommandToController(playerId, button);
-                this.keyboard.pressed[eventTokens[1]] = 0;
-              }
-              break;
-            case 'mousepressed':
-              if(this.mouse.pressed[eventTokens[1]] > 0) {
-                this._pushClickEvents(eventTokens);
-              }
-              break;
-            case 'mousedown':
-              if(this.mouse.pressed[eventTokens[1]] == 1) {
-                this._pushClickEvents(eventTokens);
-              }
-              break;
-            case 'mouseup':
-              if(this.mouse.pressed[eventTokens[1]] == -1) {
-                this._pushClickEvents(eventTokens);
-              }
-              break;
-            case 'mousemove':
-              if(this.mouse.pressed[eventTokens[1]] == 0) {
-                if(!this.mouse.position.equals(this.mouse.lastPosition)) {
-                  this._pushClickEvents(eventTokens);
-                }
-              }
-              break;
-            case 'mousedrag':
-              if(this.mouse.pressed[eventTokens[1]] > 0) {
-                if(!this.mouse.position.equals(this.mouse.lastPosition)) {
-                  this._pushClickEvents(eventTokens);
-                }
-              }
-              break;
+          if(this.keyboard.pressed[eventTokens[1]] > 0) {
+            pressedButtons[button] = 1;
+          } else {
+            pressedButtons[button] = 0;
           }
+          
+//          switch(eventTokens[0]){
+//            case 'keypressed':
+//              if(this.keyboard.pressed[eventTokens[1]] > 0) {
+//                this._sendCommandToController(playerId, button);
+////                this.keyboard.pressed[eventTokens[1]] = 2;
+//              }
+//              break;
+//            case 'keydown':
+//              if(this.keyboard.pressed[eventTokens[1]] == 1) {
+//                this._sendCommandToController(playerId, button);
+////                this.keyboard.pressed[eventTokens[1]]++;
+//              }
+//              break;
+//            case 'keyup':
+//              if(this.keyboard.pressed[eventTokens[1]] == -1) {
+//                this._sendCommandToController(playerId, button);
+////                this.keyboard.pressed[eventTokens[1]] = 0;
+//              }
+//              break;
+//            case 'mousepressed':
+//              if(this.mouse.pressed[eventTokens[1]] > 0) {
+//                this._pushClickEvents(eventTokens);
+//              }
+//              break;
+//            case 'mousedown':
+//              if(this.mouse.pressed[eventTokens[1]] == 1) {
+//                this._pushClickEvents(eventTokens);
+//              }
+//              break;
+//            case 'mouseup':
+//              if(this.mouse.pressed[eventTokens[1]] == -1) {
+//                this._pushClickEvents(eventTokens);
+//              }
+//              break;
+//            case 'mousemove':
+//              if(this.mouse.pressed[eventTokens[1]] == 0) {
+//                if(!this.mouse.position.equals(this.mouse.lastPosition)) {
+//                  this._pushClickEvents(eventTokens);
+//                }
+//              }
+//              break;
+//            case 'mousedrag':
+//              if(this.mouse.pressed[eventTokens[1]] > 0) {
+//                if(!this.mouse.position.equals(this.mouse.lastPosition)) {
+//                  this._pushClickEvents(eventTokens);
+//                }
+//              }
+//              break;
+//          }
         }
+        
+        this._controllers[playerId].update(pressedButtons, dt);
 	    },
 	    
 	    _sendCommandToController: function(playerId, button) {
@@ -212,14 +228,12 @@ ex.using([
 	    
 	    _onKeyDown: function(event) {
 	      var selector = ex.util.Key.names[event.keyCode];
-        if(ex.Input.keyboard.pressed[selector] == null || ex.Input.keyboard.pressed[selector] < 0){
-          ex.Input.keyboard.pressed[selector] = 1;
-        }
+        ex.Input.keyboard.pressed[selector] = 1;
 	    },
 	    
 	    _onKeyUp: function(event) {
 	      var selector = ex.util.Key.names[event.keyCode];
-        ex.Input.keyboard.pressed[selector] = -1;
+        ex.Input.keyboard.pressed[selector] = 0;
 	    },
 	    
 	    _onMouseDown: function(event) {

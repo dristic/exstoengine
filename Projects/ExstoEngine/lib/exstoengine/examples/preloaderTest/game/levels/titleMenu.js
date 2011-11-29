@@ -47,9 +47,9 @@ ex.using([
 				ex.Assets.getImage("logo"),
 				{
 				  controls: {
-				    moveUp: 'up',
-				    moveDown: 'down',
-				    activate: 'use'
+				    moveUp: 'up once',
+				    moveDown: 'down once',
+				    activate: 'use once'
 				  }
 				}
 			);	
