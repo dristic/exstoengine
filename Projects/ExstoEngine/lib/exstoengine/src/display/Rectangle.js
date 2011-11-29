@@ -3,6 +3,31 @@ ex.using([
   "ex.display.Renderable"
 ], function () {
   ex.define("ex.display.Rectangle", ex.display.Renderable, {
+    /**
+     * Rectangle is used to compile drawn rectangles on the screen that are
+     * created through the drawing API.
+     * 
+     * @name ex.display.Rectangle
+     * @constructor
+     * 
+     * @param {Object} options The options used to draw the rectangle:
+     * {
+     *  x: x position
+     *  y: y position
+     *  width: Rectangle width
+     *  height: Rectangle height
+     *  alpha: Rectangle opacity or alpha (0.0 - 1.0)
+     *  fill: {
+     *    type: The type of fill (none, solid, linear-gradient, radial-gradient)
+     *    color: The color of the fill (solid fill only)
+     *  },
+     *  stroke: {
+     *    type: The type of stroke (none, solid)
+     *    width: The width of the stroke
+     *    color: The color of the stroke (solid fill only)
+     *  }
+     * }
+     */
     constructor: function (options) {
       this.type = "Rectangle";
       
@@ -41,7 +66,7 @@ ex.using([
      * 
      * @function
      * @name update
-     * @memberOf ex.display.Sprite
+     * @memberOf ex.display.Rectangle
      * 
      * @param {Number} dt timestep
      */
