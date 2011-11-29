@@ -8,6 +8,9 @@ ex.using([
 		 * Container class for HTML Images with additional position,
 		 * size, and name data.
 		 * 
+		 * @deprecated This class has too much in common with Sprite,
+		 * and we should just use Sprite instead.
+		 * 
 		 * @name ex.display.Image
 		 * 
 		 * @param {Image} image
