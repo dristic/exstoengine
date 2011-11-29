@@ -24,10 +24,9 @@ ex.using([
 		 * @constructor
 		 */
 		constructor: function(
-				selections, defaultSelection, bgImage, logoImage, input){
+				selections, defaultSelection, bgImage, logoImage, options){
 			this.selections = selections;
 			this.currentSelection = defaultSelection;
-			this.input = input;
 			
 			this.options = {
 				background: new ex.display.Sprite(new ex.base.Vector(0, 0), bgImage),
@@ -41,7 +40,21 @@ ex.using([
 					width: 150,
 					height: 70
 				},
+				controls: {
+				  moveUp: 'up',
+				  moveDown: 'down',
+				  activate: 'use'
+				}
 			};
+			
+			if(options != null) {
+			  ex.extend(this.options, options);
+			}
+			
+			this.controller = ex.Input.getController(0);
+			this.controller.on(this.options.controls.moveUp, ex.bind(this, this.moveUpMenu));
+			this.controller.on(this.options.controls.moveDown, ex.bind(this, this.moveDownMenu));
+			this.controller.on(this.options.controls.activate, ex.bind(this, this.activateCurrentSelection));
 		},
 		
 		/**
@@ -68,6 +81,10 @@ ex.using([
 			}
 		},
 		
+		activateCurrentSelection: function() {
+		  this.selections[this.currentSelection].action();
+		},
+		
 		/**
 		 * The update loop where user input is checked
 		 * @function
@@ -76,33 +93,33 @@ ex.using([
 		 * @param {Number} dt timestep
 		 */
 		update: function(dt){
-			if(this.input.isKeyPressed(this.options.menu.actionKey)) {
-				this.selections[this.currentSelection].action();
-			}
-			if(this.input.isKeyPressed(ex.util.Key.Up)) {
-				this.moveUpMenu();
-			}
-			if(this.input.isKeyPressed(ex.util.Key.Down)) {
-				this.moveDownMenu();
-			}
-			
-			// Mouse events for mobile devices or people using mice
-			// should go here...
-			// 		Requirements:
-			//		 - bounding box
-			//		 - click event to run action
-			//		 - mouseover event to set currentSelection
-			if(this.input.mouseDown){
-				var index = this.selections.length;
-				while(index--){
-					if(this.input.mouseX > (this.options.menu.x - this.options.selection.width) &&
-							this.input.mouseX < (this.options.menu.x + this.options.selection.width) &&
-							this.input.mouseY > (this.options.menu.y + (this.options.selection.height * (index - 1))) &&
-							this.input.mouseY < (this.options.menu.y + (this.options.selection.height * (index)))){
-						this.selections[index].action();
-					}
-				}
-			}
+//			if(this.input.isKeyPressed(this.options.menu.actionKey)) {
+//				this.activateCurrentSelection();
+//			}
+//			if(this.input.isKeyPressed(ex.util.Key.Up)) {
+//				this.moveUpMenu();
+//			}
+//			if(this.input.isKeyPressed(ex.util.Key.Down)) {
+//				this.moveDownMenu();
+//			}
+//			
+//			// Mouse events for mobile devices or people using mice
+//			// should go here...
+//			// 		Requirements:
+//			//		 - bounding box
+//			//		 - click event to run action
+//			//		 - mouseover event to set currentSelection
+//			if(this.input.mouseDown){
+//				var index = this.selections.length;
+//				while(index--){
+//					if(this.input.mouseX > (this.options.menu.x - this.options.selection.width) &&
+//							this.input.mouseX < (this.options.menu.x + this.options.selection.width) &&
+//							this.input.mouseY > (this.options.menu.y + (this.options.selection.height * (index - 1))) &&
+//							this.input.mouseY < (this.options.menu.y + (this.options.selection.height * (index)))){
+//						this.selections[index].action();
+//					}
+//				}
+//			}
 		},
 		
 		setupDom: function (el) {

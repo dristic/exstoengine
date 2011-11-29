@@ -6,31 +6,33 @@ ex.using([
 	function () {
 		var _engine = new ex.Engine(800, 500, 60, '#000');
 		
-		_engine.renderer.setup(ex.display.rendering.Renderer.DOM, { canvas: null });
-    _engine.enableDebugging(ex.util.Debug.BROWSER, ex.util.Logger.LEVEL.DEBUG);
-    _engine.input.listenOn(_engine.renderer.renderingContext.el);
+//		_engine.renderer.setup(ex.display.rendering.Renderer.DOM, { canvas: null });
+//    _engine.enableDebugging(ex.util.Debug.BROWSER, ex.util.Logger.LEVEL.DEBUG);
+//    _engine.input.listenOn(_engine.renderer.renderingContext.el);
     
-//    _engine.renderer.setup(ex.display.rendering.Renderer.CANVAS2D, { canvas: null });
-//    _engine.enableDebugging(ex.util.Debug.DOM, ex.util.Logger.LEVEL.DEBUG);
-//    _engine.input.listenOn(_engine.renderer.renderingContext.canvas);
+    _engine.renderer.setup(ex.display.rendering.Renderer.CANVAS2D, { canvas: null });
+    _engine.enableDebugging(ex.util.Debug.DOM, ex.util.Logger.LEVEL.DEBUG);
+    _engine.input.listenOn(_engine.renderer.renderingContext.canvas);
     
     ex.Input.loadInputMaps(
       [
         [ 
-          ['jump', 'keydown W'],
+          ['up', 'keydown W'],
           ['left', 'keypressed A'],
           ['down', 'keypressed S'],
           ['right', 'keypressed D'],
+          ['use', 'keydown E'],          
         ],
         [
-          ['jump', 'keydown Up'],
+          ['up', 'keydown Up'],
           ['left', 'keypressed Left'],
           ['down', 'keypressed Down'],
           ['right', 'keypressed Right'],
+          ['use', 'keydown Shift'],
         ]
       ],
       {
-        jump: [],
+        up: [],
         left: [],
         down: [],
         right: [],

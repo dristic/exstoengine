@@ -45,7 +45,13 @@ ex.using([
 				0, 
 				ex.Assets.getImage("bg"),
 				ex.Assets.getImage("logo"),
-				this.engine.input
+				{
+				  controls: {
+				    moveUp: 'up',
+				    moveDown: 'down',
+				    activate: 'use'
+				  }
+				}
 			);	
 			
 			objects.push(titleMenu);

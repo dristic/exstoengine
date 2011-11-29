@@ -20,7 +20,7 @@ ex.using([
 			this.clickable = true;
 			
 			this.controller = ex.Input.getController(0);
-			this.controller.on('jump', ex.bind(this, this.jump));
+			this.controller.on('up', ex.bind(this, this.jump));
 			this.controller.on('right', ex.bind(this, this.moveRight));
 			this.controller.on('left', ex.bind(this, this.moveLeft));
 			this.controller.on('down', ex.bind(this, this.moveDown));
