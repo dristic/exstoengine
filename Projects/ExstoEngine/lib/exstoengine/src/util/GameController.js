@@ -45,8 +45,8 @@ ex.using([
       var binding = '';
       while(index--) {
         binding = this.buttons[button].bindings[index];
-        if (this.input.keyboard.pressed[binding]
-          || this.input.mouse.pressed[binding]) {
+        if (this.input.keyboard.event[binding]
+          || this.input.mouse.event[binding]) {
           this.buttons[button].duration += dt;
           return;
         }
@@ -89,10 +89,10 @@ ex.using([
     },
     
     _fireActions: function(button, dt) {
-      if(this.buttons[button] == null) {
-        // No actions assigned to the selector, do nothing
-        return;
-      }
+//      if(this.buttons[button] == null) {
+//        // No actions assigned to the selector, do nothing
+//        return;
+//      }
       var actionList = this.buttons[button].actionList;
       var index = actionList.length;
       while(index--) {

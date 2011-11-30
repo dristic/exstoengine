@@ -21,7 +21,7 @@ ex.using([
 	    mouse: {
 	      position: new ex.base.Vector(0,0),
 	      lastPosition: new ex.base.Vector(0,0),
-	      pressed: {
+	      event: {
 	        LMB: 0,    // left click
 	        MMB: 0,    // middle click
 	        RMB: 0     // right click
@@ -30,7 +30,7 @@ ex.using([
 	    
 	    // Keyboard data
 	    keyboard: {
-	      pressed: {}
+	      event: {}
 	    },
 	    
 	    /**
@@ -127,22 +127,20 @@ ex.using([
 	    
 	    _onKeyDown: function(event) {
 	      var selector = ex.util.Key.names[event.keyCode];
-        ex.Input.keyboard.pressed[selector] = true;
+        ex.Input.keyboard.event[selector] = true;
 	    },
 	    
 	    _onKeyUp: function(event) {
 	      var selector = ex.util.Key.names[event.keyCode];
-        ex.Input.keyboard.pressed[selector] = false;
+        ex.Input.keyboard.event[selector] = false;
 	    },
 	    
 	    _onMouseDown: function(event) {
-	      ex.Input.mouse.pressed.LMB = true;
-        console.log("mousedown", ex.Input.mouse.pressed.LMB);
+	      ex.Input.mouse.event.LMB = true;
 	    },
 	    
 	    _onMouseUp: function(event) {
-	      ex.Input.mouse.pressed.LMB = false;
-        console.log("mouseup", ex.Input.mouse.pressed.LMB);
+	      ex.Input.mouse.event.LMB = false;
 	    },
 	    
 	    _onMouseMove: function(event) {
