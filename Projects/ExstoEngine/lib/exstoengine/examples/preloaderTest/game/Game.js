@@ -17,8 +17,7 @@ ex.using([
     ex.Input.loadInputMaps(
       [
         [ 
-          ['up', 'W'],
-          ['up', 'LMB'],
+          ['up', 'W LMB'],
           ['left', 'A'],
           ['down', 'S'],
           ['right', 'D'],

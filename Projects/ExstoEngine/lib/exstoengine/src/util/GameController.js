@@ -2,30 +2,56 @@ ex.using([
 
 ], function() {
   ex.define("ex.util.GameController", ex.base.Component, {
-    constructor: function(buttons) {
+    constructor: function(inputMap, inputReference) {
       // Lazy Initialization
       this.buttons = {};
+      this.input = inputReference;
       
-      // Normal Initialization, results in all controllers mirroring actions
-      // this.buttons = buttons;
+      this._setupController(inputMap);
     },
     
-    update: function(pressed, dt) {
+    _setupController: function(inputMap) {
+      var mapIndex = inputMap.length,
+          inputIndex = 0;
+      var buttonName = '';
+      var inputTokens = [];
+      while(mapIndex--) {
+        buttonName = inputMap[mapIndex][0];
+        this.buttons[buttonName] = {
+            actionList: [],
+            duration: 0,
+            bindings: []
+        };  
+        
+        inputTokens = inputMap[mapIndex][1].split(' ');
+        inputIndex = inputTokens.length;
+        while(inputIndex--) {
+          this.buttons[buttonName].bindings.push(inputTokens[inputIndex]);
+        }
+      }
+    },
+    
+    update: function(dt) {
       for(var button in this.buttons) {
-        this._updateButton(button, pressed[button], dt);
+        this._updateButton(button, dt);
         if(this.buttons[button].duration > 0) {
           this._fireActions(button, dt);
         }
       }
     },
     
-    _updateButton: function(button, value, dt) {
-      if(!value) {
-        this.buttons[button].duration = 0;
-      } else if(this.buttons[button].duration == null){
-        this.buttons[button].duration = dt;
-      } else {
-        this.buttons[button].duration += dt;
+    _updateButton: function(button, dt) {
+      var index = this.buttons[button].bindings.length;
+      var binding = '';
+      while(index--) {
+        binding = this.buttons[button].bindings[index];
+        if(!this.input.keyboard.pressed[binding]
+          && !this.input.mouse.pressed[binding]) {
+          this.buttons[button].duration = 0;
+        } else {
+          this.buttons[button].duration += dt;
+          return;
+        }
       }
     },
     
@@ -42,13 +68,13 @@ ex.using([
         repeat = true;
       }
       
-      // Lazy Initialization
-      if(!this.buttons[button]) { 
-        this.buttons[button] = {
-            actionList: [],
-            duration: 0
-        };  
-      }  
+//      // Lazy Initialization
+//      if(!this.buttons[button]) { 
+//        this.buttons[button] = {
+//            actionList: [],
+//            duration: 0
+//        };  
+//      }  
       
       // push the action onto the button's actionList
       this.buttons[button].actionList.push({

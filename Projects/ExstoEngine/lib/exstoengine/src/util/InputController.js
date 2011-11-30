@@ -15,7 +15,6 @@ ex.using([
 	    
 	    // Bindings and Controllers
 	    _inputControllerMaps: [],
-	    _playerControllerMap: {},
 	    _controllers: [],
 	    
 	    // Mouse data
@@ -45,37 +44,38 @@ ex.using([
 	    },
 	    
 	    addController: function(playerId, controlMap) {
-	      this._controllers[playerId] = new ex.util.GameController(controlMap);
+	      this._controllers[playerId] = new ex.util.GameController(
+	          this._inputControllerMaps[playerId], this);
 	    },
 	    
 	    update: function(dt) {
-	      var index = this._inputControllerMaps.length;
+	      var index = this._controllers.length;
 	      while(index--) {
-	        this._updateController(index, dt);
+	        this._controllers[index].update(dt);
 	      }
 	    },
 	    
-	    _updateController: function(playerId, dt) {
-	      var index = this._inputControllerMaps[playerId].length;
-        var pressedButtons = {};
-	      var button = '';
-        var eventTokens = '';
-        while(index--) {
-          button = this._inputControllerMaps[playerId][index][0];
-          eventTokens = this._inputControllerMaps[playerId][index][1].split(' ');
-          
-          // If bound keyboard/mouse button is pressed, add it to pressedButtons
-          if(this.keyboard.pressed[eventTokens[0]] > 0
-              || this.mouse.pressed[eventTokens[0]]) {
-            pressedButtons[button] = 1;
-          } else {
-            pressedButtons[button] = 0;
-          }        
-        }
-        
-        this._controllers[playerId].update(pressedButtons, dt);
-	    },
-	    
+//	    _updateController: function(playerId, dt) {
+//	      var index = this._inputControllerMaps[playerId].length;
+//        var pressedButtons = {};
+//	      var button = '';
+//        var eventTokens = '';
+//        while(index--) {
+//          button = this._inputControllerMaps[playerId][index][0];
+//          eventTokens = this._inputControllerMaps[playerId][index][1].split(' ');
+//          
+//          // If bound keyboard/mouse button is pressed, add it to pressedButtons
+//          if(this.keyboard.pressed[eventTokens[0]] > 0
+//              || this.mouse.pressed[eventTokens[0]]) {
+//            pressedButtons[button] = 1;
+//          } else {
+//            pressedButtons[button] = 0;
+//          }        
+//        }
+//        
+//        this._controllers[playerId].update(pressedButtons, dt);
+//	    },
+//	    
 //	    _sendCommandToController: function(playerId, button) {
 //	      console.log("controller", playerId, ", button", button);
 //        this._controllers[playerId]._fireActions(button);
