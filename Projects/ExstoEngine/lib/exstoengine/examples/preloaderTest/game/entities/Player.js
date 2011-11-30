@@ -26,19 +26,19 @@ ex.using([
 			this.controller.on('down', ex.bind(this, this.moveDown));
 		},
 		
-		jump: function(){
+		jump: function(dt){
 			this.velocity.y -= this.speed * 80;
 		},
 		
-		moveLeft: function() {
+		moveLeft: function(dt) {
 			this.velocity.x -= this.speed;
 		},
 		
-		moveRight: function() {
+		moveRight: function(dt) {
 			this.velocity.x += this.speed;
 		},
 		
-		moveDown: function() {
+		moveDown: function(dt) {
 		  this.velocity.y += this.speed;
 		},
 		

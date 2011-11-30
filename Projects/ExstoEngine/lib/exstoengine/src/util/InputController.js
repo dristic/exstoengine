@@ -76,30 +76,30 @@ ex.using([
         this._controllers[playerId].update(pressedButtons, dt);
 	    },
 	    
-	    _sendCommandToController: function(playerId, button) {
-	      console.log("controller", playerId, ", button", button);
-        this._controllers[playerId]._fireActions(button);
-	    },
-	    
-	    _pushClickEvents: function(eventTokens) {
-	      var index = this.clickableObjects.length;
-	      var object = {};
-	      var camX = this._engine.camera.position.x,
-	          camY = this._engine.camera.position.y;
-	      var objectX = 0,
-	          objectY = 0;
-	      while(index--) {
-	        object = this.clickableObjects[index];
-	        objectX = object.position.x - camX;
-	        objectY = object.position.y - camY;
-	        if(objectX < this.mouse.position.x
-	            && (objectX + object.width) > this.mouse.position.x
-	            && objectY < this.mouse.position.y
-	            && (objectY + object.height) > this.mouse.position.y) {
-	          console.log("You clicked on", object, "!");
-	        }
-	      }
-	    },
+//	    _sendCommandToController: function(playerId, button) {
+//	      console.log("controller", playerId, ", button", button);
+//        this._controllers[playerId]._fireActions(button);
+//	    },
+//	    
+//	    _pushClickEvents: function(eventTokens) {
+//	      var index = this.clickableObjects.length;
+//	      var object = {};
+//	      var camX = this._engine.camera.position.x,
+//	          camY = this._engine.camera.position.y;
+//	      var objectX = 0,
+//	          objectY = 0;
+//	      while(index--) {
+//	        object = this.clickableObjects[index];
+//	        objectX = object.position.x - camX;
+//	        objectY = object.position.y - camY;
+//	        if(objectX < this.mouse.position.x
+//	            && (objectX + object.width) > this.mouse.position.x
+//	            && objectY < this.mouse.position.y
+//	            && (objectY + object.height) > this.mouse.position.y) {
+//	          console.log("You clicked on", object, "!");
+//	        }
+//	      }
+//	    },
 	    
 	    /**
 	     * Takes an array of objects and only tracks ones with 

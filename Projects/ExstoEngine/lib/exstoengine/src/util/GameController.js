@@ -80,7 +80,7 @@ ex.using([
       while(index--) {
         if(actionList[index].repeat == true
             || this.buttons[button].duration == dt){
-          actionList[index].run();
+          actionList[index].run(dt);
         }
       }
     }
