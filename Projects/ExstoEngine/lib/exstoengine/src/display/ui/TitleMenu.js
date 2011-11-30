@@ -43,7 +43,8 @@ ex.using([
 				controls: {
 				  moveUp: 'up',
 				  moveDown: 'down',
-				  activate: 'use'
+				  activate: 'use',
+				  updateSelection: 'move'
 				}
 			};
 			
@@ -62,6 +63,9 @@ ex.using([
         }, {
           selector: this.options.controls.activate,
           action: ex.bind(this, this.activateCurrentSelection)
+        }, {
+          selector: this.options.controls.updateSelection,
+          action: ex.bind(this, this.onMouseMove)
         }
       ];
 			this._addInputBindings();
@@ -83,6 +87,20 @@ ex.using([
           this.bindings[index].selector, 
           this.bindings[index].action);
       }
+		},
+		
+		onMouseMove: function(dt, data) {
+		  if(data){
+		    var index = this.selections.length;
+        while(index--){
+          if(this.input.mouseX > (this.options.menu.x - this.options.selection.width) &&
+              this.input.mouseX < (this.options.menu.x + this.options.selection.width) &&
+              this.input.mouseY > (this.options.menu.y + (this.options.selection.height * (index - 1))) &&
+              this.input.mouseY < (this.options.menu.y + (this.options.selection.height * (index)))){
+            this.currentSelection = index;
+          }
+        }
+		  }
 		},
 		
 		/**

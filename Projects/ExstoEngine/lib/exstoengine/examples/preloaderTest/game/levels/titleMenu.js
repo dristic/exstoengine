@@ -47,7 +47,8 @@ ex.using([
 				  controls: {
 				    moveUp: 'up once',
 				    moveDown: 'down once',
-				    activate: 'use once'
+				    activate: 'use once',
+				    updateSelection: 'mousemove'
 				  }
 				}
 			);	

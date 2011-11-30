@@ -45,10 +45,15 @@ ex.using([
       var binding = '';
       while(index--) {
         binding = this.buttons[button].bindings[index];
-        if (this.input.keyboard.event[binding]
-          || this.input.mouse.event[binding]) {
+        if (this.input.keyboard.event[binding]){
           this.buttons[button].duration += dt;
           return;
+        } else if (this.input.mouse.event[binding]) {
+          this.buttons[button].data = {
+              position: this.input.mouse.position,
+              lastPosition: this.input.mouse.lastPosition
+          }
+          this.buttons[button].duration += dt;
         }
       }
       
@@ -99,7 +104,7 @@ ex.using([
         if(actionList[index].repeat == true
             || this.buttons[button].duration == dt){
           console.log(dt, this.buttons[button].duration);
-          actionList[index].run(dt);
+          actionList[index].run(dt, actionList[index].data);
         }
       }
     }

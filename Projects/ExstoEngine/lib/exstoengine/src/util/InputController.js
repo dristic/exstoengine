@@ -22,9 +22,11 @@ ex.using([
 	      position: new ex.base.Vector(0,0),
 	      lastPosition: new ex.base.Vector(0,0),
 	      event: {
-	        LMB: 0,    // left click
-	        MMB: 0,    // middle click
-	        RMB: 0     // right click
+	        LMB: false,  // left click
+	        MMB: false,  // middle click
+	        RMB: false,  // right click
+	        move: false,
+	        drag: false
 	      }
 	    },
 	    
@@ -144,9 +146,17 @@ ex.using([
 	    },
 	    
 	    _onMouseMove: function(event) {
+	      // Update last mouse position
 	      ex.Input.mouse.lastPosition.x = ex.Input.mouse.position.x;
 	      ex.Input.mouse.lastPosition.y = ex.Input.mouse.position.y;
 	      
+	      // Set event flags
+        ex.Input.mouse.event.move = true;
+	      if(ex.Input.mouse.event.LMB) {
+	        ex.Input.mouse.event.drag = true;
+	      }
+	      	      
+        // Update current mouse position
 	      if(!event) {
 	        var event = window.event;
 	      }
@@ -159,9 +169,7 @@ ex.using([
 	        ex.Input.mouse.position.y = event.clientY
 	          + document.body.scrollTop;
 	      }
-	      
 	    }
-	    
 		}
 	});
 });
