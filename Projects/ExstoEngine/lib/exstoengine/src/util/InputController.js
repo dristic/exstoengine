@@ -53,13 +53,6 @@ ex.using([
 	      while(index--) {
 	        this._updateController(index, dt);
 	      }
-	      
-	      for(var property in this.keyboard.pressed) {
-	        if(typeof this.keyboard.pressed[property] == 'Number' 
-	          && this.keyboard.pressed[property] != 0) {
-	          this.keyboard.pressed[property]++;
-	        }
-	      }
 	    },
 	    
 	    _updateController: function(playerId, dt) {
@@ -71,31 +64,17 @@ ex.using([
           button = this._inputControllerMaps[playerId][index][0];
           eventTokens = this._inputControllerMaps[playerId][index][1].split(' ');
           
-          if(this.keyboard.pressed[eventTokens[1]] > 0) {
+          // If bound keyboard/mouse button is pressed, add it to pressedButtons
+          if(this.keyboard.pressed[eventTokens[0]] > 0
+              || this.mouse.pressed[eventTokens[0]]) {
             pressedButtons[button] = 1;
           } else {
             pressedButtons[button] = 0;
-          }
-          
+          }        
+        }
+        
+        
 //          switch(eventTokens[0]){
-//            case 'keypressed':
-//              if(this.keyboard.pressed[eventTokens[1]] > 0) {
-//                this._sendCommandToController(playerId, button);
-////                this.keyboard.pressed[eventTokens[1]] = 2;
-//              }
-//              break;
-//            case 'keydown':
-//              if(this.keyboard.pressed[eventTokens[1]] == 1) {
-//                this._sendCommandToController(playerId, button);
-////                this.keyboard.pressed[eventTokens[1]]++;
-//              }
-//              break;
-//            case 'keyup':
-//              if(this.keyboard.pressed[eventTokens[1]] == -1) {
-//                this._sendCommandToController(playerId, button);
-////                this.keyboard.pressed[eventTokens[1]] = 0;
-//              }
-//              break;
 //            case 'mousepressed':
 //              if(this.mouse.pressed[eventTokens[1]] > 0) {
 //                this._pushClickEvents(eventTokens);
@@ -126,7 +105,7 @@ ex.using([
 //              }
 //              break;
 //          }
-        }
+//        }
         
         this._controllers[playerId].update(pressedButtons, dt);
 	    },

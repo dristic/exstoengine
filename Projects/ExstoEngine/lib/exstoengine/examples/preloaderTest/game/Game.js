@@ -17,18 +17,19 @@ ex.using([
     ex.Input.loadInputMaps(
       [
         [ 
-          ['up', 'keydown W'],
-          ['left', 'keypressed A'],
-          ['down', 'keypressed S'],
-          ['right', 'keypressed D'],
-          ['use', 'keydown E'],          
+          ['up', 'W'],
+          ['up', 'LMB'],
+          ['left', 'A'],
+          ['down', 'S'],
+          ['right', 'D'],
+          ['use', 'E'],          
         ],
         [
-          ['up', 'keydown Up'],
-          ['left', 'keypressed Left'],
-          ['down', 'keypressed Down'],
-          ['right', 'keypressed Right'],
-          ['use', 'keydown Shift'],
+          ['up', 'Up'],
+          ['left', 'Left'],
+          ['down', 'Down'],
+          ['right', 'Right'],
+          ['use', 'Shift'],
         ]
       ],
       {
