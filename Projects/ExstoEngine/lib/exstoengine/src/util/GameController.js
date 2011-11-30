@@ -45,14 +45,14 @@ ex.using([
       var binding = '';
       while(index--) {
         binding = this.buttons[button].bindings[index];
-        if(!this.input.keyboard.pressed[binding]
-          && !this.input.mouse.pressed[binding]) {
-          this.buttons[button].duration = 0;
-        } else {
+        if (this.input.keyboard.pressed[binding]
+          || this.input.mouse.pressed[binding]) {
           this.buttons[button].duration += dt;
           return;
         }
       }
+      
+      this.buttons[button].duration = 0;
     },
     
     on: function(selector, action) {
@@ -67,14 +67,6 @@ ex.using([
       } else {
         repeat = true;
       }
-      
-//      // Lazy Initialization
-//      if(!this.buttons[button]) { 
-//        this.buttons[button] = {
-//            actionList: [],
-//            duration: 0
-//        };  
-//      }  
       
       // push the action onto the button's actionList
       this.buttons[button].actionList.push({
@@ -106,6 +98,7 @@ ex.using([
       while(index--) {
         if(actionList[index].repeat == true
             || this.buttons[button].duration == dt){
+          console.log(dt, this.buttons[button].duration);
           actionList[index].run(dt);
         }
       }

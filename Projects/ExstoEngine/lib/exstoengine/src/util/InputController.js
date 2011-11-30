@@ -55,52 +55,6 @@ ex.using([
 	      }
 	    },
 	    
-//	    _updateController: function(playerId, dt) {
-//	      var index = this._inputControllerMaps[playerId].length;
-//        var pressedButtons = {};
-//	      var button = '';
-//        var eventTokens = '';
-//        while(index--) {
-//          button = this._inputControllerMaps[playerId][index][0];
-//          eventTokens = this._inputControllerMaps[playerId][index][1].split(' ');
-//          
-//          // If bound keyboard/mouse button is pressed, add it to pressedButtons
-//          if(this.keyboard.pressed[eventTokens[0]] > 0
-//              || this.mouse.pressed[eventTokens[0]]) {
-//            pressedButtons[button] = 1;
-//          } else {
-//            pressedButtons[button] = 0;
-//          }        
-//        }
-//        
-//        this._controllers[playerId].update(pressedButtons, dt);
-//	    },
-//	    
-//	    _sendCommandToController: function(playerId, button) {
-//	      console.log("controller", playerId, ", button", button);
-//        this._controllers[playerId]._fireActions(button);
-//	    },
-//	    
-//	    _pushClickEvents: function(eventTokens) {
-//	      var index = this.clickableObjects.length;
-//	      var object = {};
-//	      var camX = this._engine.camera.position.x,
-//	          camY = this._engine.camera.position.y;
-//	      var objectX = 0,
-//	          objectY = 0;
-//	      while(index--) {
-//	        object = this.clickableObjects[index];
-//	        objectX = object.position.x - camX;
-//	        objectY = object.position.y - camY;
-//	        if(objectX < this.mouse.position.x
-//	            && (objectX + object.width) > this.mouse.position.x
-//	            && objectY < this.mouse.position.y
-//	            && (objectY + object.height) > this.mouse.position.y) {
-//	          console.log("You clicked on", object, "!");
-//	        }
-//	      }
-//	    },
-	    
 	    /**
 	     * Takes an array of objects and only tracks ones with 
 	     * the property 'clickable = true'.
@@ -173,20 +127,22 @@ ex.using([
 	    
 	    _onKeyDown: function(event) {
 	      var selector = ex.util.Key.names[event.keyCode];
-        ex.Input.keyboard.pressed[selector] = 1;
+        ex.Input.keyboard.pressed[selector] = true;
 	    },
 	    
 	    _onKeyUp: function(event) {
 	      var selector = ex.util.Key.names[event.keyCode];
-        ex.Input.keyboard.pressed[selector] = 0;
+        ex.Input.keyboard.pressed[selector] = false;
 	    },
 	    
 	    _onMouseDown: function(event) {
 	      ex.Input.mouse.pressed.LMB = true;
+        console.log("mousedown", ex.Input.mouse.pressed.LMB);
 	    },
 	    
 	    _onMouseUp: function(event) {
 	      ex.Input.mouse.pressed.LMB = false;
+        console.log("mouseup", ex.Input.mouse.pressed.LMB);
 	    },
 	    
 	    _onMouseMove: function(event) {
