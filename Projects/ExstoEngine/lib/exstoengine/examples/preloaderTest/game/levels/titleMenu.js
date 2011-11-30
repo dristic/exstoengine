@@ -28,9 +28,7 @@ ex.using([
 			var titleMenu = new ex.display.ui.TitleMenu(
 				[{
 					text: "Start Game",
-					action: function() {
-						that._startGame();
-					}
+					action: null
 				}, {
 					text: "Options",
 					action: function() {
@@ -53,6 +51,11 @@ ex.using([
 				  }
 				}
 			);	
+			
+			titleMenu.selections[0].action = function() {
+        titleMenu._removeInputBindings();
+        that._startGame();
+      };
 			
 			objects.push(titleMenu);
 			

@@ -57,6 +57,20 @@ ex.using([
       });
     },
     
+    removeAction: function(selector, action) {
+      var tokens = selector.split(' ');
+      var button = this.buttons[tokens[0]];
+            
+      var index = button.actionList.length;
+      while(index--) {
+        console.log(button.actionList[index], action);
+        if(button.actionList[index].run == action) {
+          console.log('Removing', action, "from", selector);
+          button.actionList.splice(index, 1);
+        }
+      }
+    },
+    
     _fireActions: function(button, dt) {
       if(this.buttons[button] == null) {
         // No actions assigned to the selector, do nothing

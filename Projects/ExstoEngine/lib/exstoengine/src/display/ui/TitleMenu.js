@@ -52,9 +52,19 @@ ex.using([
 			}
 			
 			this.controller = ex.Input.getController(0);
-			this.controller.on(this.options.controls.moveUp, ex.bind(this, this.moveUpMenu));
-			this.controller.on(this.options.controls.moveDown, ex.bind(this, this.moveDownMenu));
-			this.controller.on(this.options.controls.activate, ex.bind(this, this.activateCurrentSelection));
+			this._addInputBindings();
+		},
+		
+		_addInputBindings: function() {
+		  this.controller.on(this.options.controls.moveUp, ex.bind(this, this.moveUpMenu));
+      this.controller.on(this.options.controls.moveDown, ex.bind(this, this.moveDownMenu));
+      this.controller.on(this.options.controls.activate, ex.bind(this, this.activateCurrentSelection));
+		},
+		
+		_removeInputBindings: function() {
+		  this.controller.removeAction(this.options.controls.moveUp, ex.bind(this, this.moveUpMenu));
+      this.controller.removeAction(this.options.controls.moveDown, ex.bind(this, this.moveDownMenu));
+      this.controller.removeAction(this.options.controls.activate, ex.bind(this, this.activateCurrentSelection));
 		},
 		
 		/**
