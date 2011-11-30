@@ -65,7 +65,6 @@ ex.using([
       while(index--) {
         console.log(button.actionList[index], action);
         if(button.actionList[index].run == action) {
-          console.log('Removing', action, "from", selector);
           button.actionList.splice(index, 1);
         }
       }

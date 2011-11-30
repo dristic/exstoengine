@@ -52,19 +52,37 @@ ex.using([
 			}
 			
 			this.controller = ex.Input.getController(0);
+			this.bindings = [
+        {
+          selector: this.options.controls.moveUp,
+          action: ex.bind(this, this.moveUpMenu)
+        }, {
+          selector: this.options.controls.moveDown,
+          action: ex.bind(this, this.moveDownMenu)
+        }, {
+          selector: this.options.controls.activate,
+          action: ex.bind(this, this.activateCurrentSelection)
+        }
+      ];
 			this._addInputBindings();
 		},
 		
 		_addInputBindings: function() {
-		  this.controller.on(this.options.controls.moveUp, ex.bind(this, this.moveUpMenu));
-      this.controller.on(this.options.controls.moveDown, ex.bind(this, this.moveDownMenu));
-      this.controller.on(this.options.controls.activate, ex.bind(this, this.activateCurrentSelection));
+		  var index = this.bindings.length;
+		  while(index--) {
+		    this.controller.on(
+	        this.bindings[index].selector, 
+	        this.bindings[index].action);
+		  }
 		},
 		
 		_removeInputBindings: function() {
-		  this.controller.removeAction(this.options.controls.moveUp, ex.bind(this, this.moveUpMenu));
-      this.controller.removeAction(this.options.controls.moveDown, ex.bind(this, this.moveDownMenu));
-      this.controller.removeAction(this.options.controls.activate, ex.bind(this, this.activateCurrentSelection));
+		  var index = this.bindings.length;
+      while(index--) {
+        this.controller.removeAction(
+          this.bindings[index].selector, 
+          this.bindings[index].action);
+      }
 		},
 		
 		/**
