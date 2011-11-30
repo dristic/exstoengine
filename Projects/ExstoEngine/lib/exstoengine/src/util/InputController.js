@@ -73,40 +73,6 @@ ex.using([
           }        
         }
         
-        
-//          switch(eventTokens[0]){
-//            case 'mousepressed':
-//              if(this.mouse.pressed[eventTokens[1]] > 0) {
-//                this._pushClickEvents(eventTokens);
-//              }
-//              break;
-//            case 'mousedown':
-//              if(this.mouse.pressed[eventTokens[1]] == 1) {
-//                this._pushClickEvents(eventTokens);
-//              }
-//              break;
-//            case 'mouseup':
-//              if(this.mouse.pressed[eventTokens[1]] == -1) {
-//                this._pushClickEvents(eventTokens);
-//              }
-//              break;
-//            case 'mousemove':
-//              if(this.mouse.pressed[eventTokens[1]] == 0) {
-//                if(!this.mouse.position.equals(this.mouse.lastPosition)) {
-//                  this._pushClickEvents(eventTokens);
-//                }
-//              }
-//              break;
-//            case 'mousedrag':
-//              if(this.mouse.pressed[eventTokens[1]] > 0) {
-//                if(!this.mouse.position.equals(this.mouse.lastPosition)) {
-//                  this._pushClickEvents(eventTokens);
-//                }
-//              }
-//              break;
-//          }
-//        }
-        
         this._controllers[playerId].update(pressedButtons, dt);
 	    },
 	    
