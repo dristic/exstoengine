@@ -54,6 +54,7 @@ ex.using([
               lastPosition: this.input.mouse.lastPosition
           }
           this.buttons[button].duration += dt;
+          return;
         }
       }
       
@@ -104,7 +105,7 @@ ex.using([
         if(actionList[index].repeat == true
             || this.buttons[button].duration == dt){
           console.log(dt, this.buttons[button].duration);
-          actionList[index].run(dt, actionList[index].data);
+          actionList[index].run(dt, this.buttons[button].data);
         }
       }
     }

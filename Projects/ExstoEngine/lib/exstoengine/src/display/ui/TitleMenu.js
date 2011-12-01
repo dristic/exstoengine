@@ -90,13 +90,14 @@ ex.using([
 		},
 		
 		onMouseMove: function(dt, data) {
+		  console.log("titlemenu.onMouseMove!");
 		  if(data){
 		    var index = this.selections.length;
         while(index--){
-          if(this.input.mouseX > (this.options.menu.x - this.options.selection.width) &&
-              this.input.mouseX < (this.options.menu.x + this.options.selection.width) &&
-              this.input.mouseY > (this.options.menu.y + (this.options.selection.height * (index - 1))) &&
-              this.input.mouseY < (this.options.menu.y + (this.options.selection.height * (index)))){
+          if(data.position.x > (this.options.menu.x - this.options.selection.width) &&
+              data.position.x < (this.options.menu.x + this.options.selection.width) &&
+              data.position.y > (this.options.menu.y + (this.options.selection.height * (index - 1))) &&
+              data.position.y < (this.options.menu.y + (this.options.selection.height * (index)))){
             this.currentSelection = index;
           }
         }
@@ -139,33 +140,7 @@ ex.using([
 		 * @param {Number} dt timestep
 		 */
 		update: function(dt){
-//			if(this.input.isKeyPressed(this.options.menu.actionKey)) {
-//				this.activateCurrentSelection();
-//			}
-//			if(this.input.isKeyPressed(ex.util.Key.Up)) {
-//				this.moveUpMenu();
-//			}
-//			if(this.input.isKeyPressed(ex.util.Key.Down)) {
-//				this.moveDownMenu();
-//			}
-//			
-//			// Mouse events for mobile devices or people using mice
-//			// should go here...
-//			// 		Requirements:
-//			//		 - bounding box
-//			//		 - click event to run action
-//			//		 - mouseover event to set currentSelection
-//			if(this.input.mouseDown){
-//				var index = this.selections.length;
-//				while(index--){
-//					if(this.input.mouseX > (this.options.menu.x - this.options.selection.width) &&
-//							this.input.mouseX < (this.options.menu.x + this.options.selection.width) &&
-//							this.input.mouseY > (this.options.menu.y + (this.options.selection.height * (index - 1))) &&
-//							this.input.mouseY < (this.options.menu.y + (this.options.selection.height * (index)))){
-//						this.selections[index].action();
-//					}
-//				}
-//			}
+
 		},
 		
 		setupDom: function (el) {

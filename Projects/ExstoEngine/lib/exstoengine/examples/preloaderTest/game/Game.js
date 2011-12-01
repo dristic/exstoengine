@@ -22,7 +22,7 @@ ex.using([
           ['down', 'S'],
           ['right', 'D'],
           ['mousemove', 'move'],
-          ['use', 'E'],          
+          ['use', 'E LMB'],          
         ],
         [
           ['up', 'Up'],
