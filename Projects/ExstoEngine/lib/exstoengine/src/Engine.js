@@ -71,8 +71,14 @@ ex.using([
 		},
 		
 		_setupFullscreenViewport: function() {
+		  this._resizeViewport();
+		  ex.event.listen('resize', window, ex.bind(this, this._resizeViewport), true);
+		},
+		
+		_resizeViewport: function() {
 		  this.renderer._resizeViewport();
-		  ex.event.listen('resize', window, ex.bind(this.renderer, this.renderer._resizeViewport), true);
+		  this.camera.width = this.width;
+		  this.camera.height = this.height;
 		},
 		
 		enableDebugging: function(debugType, loggingLevel) {
