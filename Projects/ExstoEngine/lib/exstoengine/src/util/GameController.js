@@ -87,7 +87,6 @@ ex.using([
             
       var index = button.actionList.length;
       while(index--) {
-        console.log(button.actionList[index], action);
         if(button.actionList[index].run == action) {
           button.actionList.splice(index, 1);
         }
