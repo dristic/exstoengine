@@ -1,7 +1,6 @@
 ex.using([
           "ex.base.Component",
           "ex.base.Point",
-          "ex.util.Input",
           "ex.util.Debug",
           "ex.util.AssetManager",
           "ex.util.InputController",
@@ -24,46 +23,41 @@ ex.using([
 		 * @constructor
 		 */
 		constructor: function (width, height, frameRate, bgColor) {
-			//--Check for canvas support
-			if(document.createElement("canvas").getContext) {
-				//--Public
-				this.frameRate = frameRate || 50;
-				this.width = width;
-				this.height = height;
-				this.currentWorld = null;
-				this.lastTime = (new Date()).getTime();
-				this.components = [];
-				this.debug = false;
-				
-				var _gameInterval = null;
-				
-				//--Load up input class
-				this.input = new ex.util.Input();
-				ex.Input.linkToEngine(this);
-				console.log(ex.Input._engine);
-				
-				//--Load new image repository
-				this.imageRepository = new ex.display.ImageRepository();
-				
-				this.collisionManager = new ex.util.CollisionManager();
-				
-				//--Load new camera
-				this.camera = new ex.display.Camera(
-						new ex.base.Point(0,0),
-						this.width,
-						this.height);
-				
-				// Create renderer
-				this.renderer = new ex.display.rendering.Renderer(this.width, this.height, bgColor);
-				
-				this.loadingScreen = null;
-				
-				//--Setup update interval
-				_gameInterval = setInterval(ex.bind(this, this.update), (1 / frameRate) * 1000);
-				
-			} else {
-				ex.Debug.log("Your browser does not support canvas!");
+			//--Fail if canvas is not supported
+			if(!document.createElement("canvas").getContext) {
+			  ex.Debug.log("Your browser does not support canvas!");
+			  return;
 			}
+			
+			//--Public
+			this.frameRate = frameRate || 50;
+			this.width = width;
+			this.height = height;
+			this.currentWorld = null;
+			this.lastTime = (new Date()).getTime();
+			this.components = [];
+			this.debug = false;
+			
+			var _gameInterval = null;
+			
+			//--Load up input class
+			ex.Input.linkToEngine(this);
+			
+			this.collisionManager = new ex.util.CollisionManager();
+			
+			//--Load new camera
+			this.camera = new ex.display.Camera(
+					new ex.base.Point(0,0),
+					this.width,
+					this.height);
+			
+			// Create renderer
+			this.renderer = new ex.display.rendering.Renderer(this.width, this.height, bgColor);
+			
+			this.loadingScreen = null;
+			
+			//--Setup update interval
+			_gameInterval = setInterval(ex.bind(this, this.update), (1 / frameRate) * 1000);
 		},
 		
 		enableDebugging: function(debugType, loggingLevel) {
@@ -104,7 +98,6 @@ ex.using([
 			
 			this.onUpdate(dt);
 			
-			this.input.update(dt);
 			ex.Input.update(dt);
 			
 			if(this.debug){
