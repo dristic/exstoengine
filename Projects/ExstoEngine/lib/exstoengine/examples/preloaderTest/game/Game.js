@@ -4,12 +4,18 @@ ex.using([
 		"ex.display.ui.LoadingScreen"
 	], 
 	function () {
-		var _engine = new ex.Engine(800, 500, 60, '#000');
-		
-//		_engine.renderer.setup(ex.display.rendering.Renderer.DOM, { canvas: null });
-//    _engine.enableDebugging(ex.util.Debug.BROWSER, ex.util.Logger.LEVEL.DEBUG);
-    
-    _engine.renderer.setup(ex.display.rendering.Renderer.CANVAS2D, { canvas: null });
+		var _engine = new ex.Engine(
+	    800, 500, 
+	    60, 
+	    '#000', 
+	    {
+	      renderingContext: ex.display.rendering.Renderer.CANVAS2D,
+	      renderingParams: { canvas: null },
+	      fullscreen: true,
+	      fullscreenType: 'resize'
+	    }
+		);
+
     _engine.enableDebugging(ex.util.Debug.DOM, ex.util.Logger.LEVEL.DEBUG);
 
     ex.Input.loadInputMaps(

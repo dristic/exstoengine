@@ -22,7 +22,7 @@ ex.using([
 		 * @param {Int} frameRate The frame rate of the game
 		 * @constructor
 		 */
-		constructor: function (width, height, frameRate, bgColor) {
+		constructor: function (width, height, frameRate, bgColor, options) {
 			//--Fail if canvas is not supported
 			if(!document.createElement("canvas").getContext) {
 			  ex.Debug.log("Your browser does not support canvas!");
@@ -33,16 +33,24 @@ ex.using([
 			this.frameRate = frameRate || 50;
 			this.width = width;
 			this.height = height;
+			this.fullscreen = false;
+			this.fullscreenType = false;
+			this.renderingContext = ex.display.rendering.Renderer.CANVAS2D;
+			this.renderingParams = {canvas: null};
+			
+			this.loadingScreen = null;
 			this.currentWorld = null;
+			
 			this.lastTime = (new Date()).getTime();
 			this.components = [];
 			this.debug = false;
 			
-			var _gameInterval = null;
+			ex.extend(this, options);
 			
-			//--Load up input class
+			//--Link input to engine
 			ex.Input.linkToEngine(this);
 			
+			//--Load collision manager
 			this.collisionManager = new ex.util.CollisionManager();
 			
 			//--Load new camera
@@ -51,13 +59,20 @@ ex.using([
 					this.width,
 					this.height);
 			
-			// Create renderer
-			this.renderer = new ex.display.rendering.Renderer(this.width, this.height, bgColor);
+			//--Load renderer
+			this.renderer = new ex.display.rendering.Renderer(this);
 			
-			this.loadingScreen = null;
+			if(this.fullscreen) {
+        this._setupFullscreenViewport();
+      }
 			
 			//--Setup update interval
-			_gameInterval = setInterval(ex.bind(this, this.update), (1 / frameRate) * 1000);
+			var _gameInterval = setInterval(ex.bind(this, this.update), (1 / frameRate) * 1000);
+		},
+		
+		_setupFullscreenViewport: function() {
+		  this.renderer._resizeViewport();
+		  window.addEventListener('resize', ex.bind(this.renderer, this.renderer._resizeViewport));
 		},
 		
 		enableDebugging: function(debugType, loggingLevel) {

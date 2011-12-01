@@ -30,12 +30,18 @@ ex.using([
 		 * @property {Context} context
 		 * @property {ex.display.Renderable[]} renderables objects to render
 		 */
-		constructor: function (width, height, bgColor) {
-		  this.width = width;
-		  this.height = height;
-		  this.bgColor = bgColor;
-			this.renderables = [];
+		constructor: function (engine) {
+		  this.engine = engine;
+		  // Set dimensions and background color
+		  this.width = engine.width;
+		  this.height = engine.height;
+		  this.bgColor = engine.bgColor;
+		  this.fullscreen = engine.fullscreen;
+		  this.fullscreenType = engine.fullscreenType;
+		  
+		  this.renderables = [];
 			this.renderingContext = null;
+			this.type = engine.renderingContext;
 			
 			// Setup the default renderers
 			this.renderers = {
@@ -45,6 +51,8 @@ ex.using([
 			  AnimatedSprite: new ex.display.rendering.AnimatedSpriteRenderer(),
 			  SpriteMap: new ex.display.rendering.SpriteMapRenderer()
 			};
+			
+			this.setup(engine.renderingParams);
 		},
 		
 		/**
@@ -52,17 +60,37 @@ ex.using([
      * @param {Int} type The type of rendering.
      * @param {Object} params The parameters to pass into the context.
      */
-    setup: function (type, params) {
-      this.type = type;
-      if(type == ex.display.rendering.Renderer.DOM) {
+    setup: function (params) {
+      if(this.type == ex.display.rendering.Renderer.DOM) {
         this.renderingContext = 
           new ex.display.rendering.RenderingContextDom(this.width, this.height, this.renderers, params.el, this.bgColor);
-      } else if(type == ex.display.rendering.Renderer.CANVAS2D) {
+      } else if(this.type == ex.display.rendering.Renderer.CANVAS2D) {
         this.renderingContext = 
           new ex.display.rendering.RenderingContext2dCanvas(this.width, this.height, this.renderers, params.canvas, this.bgColor);
-      } else if(type == ex.display.rendering.Renderer.CANVAS3D) {
+      } else if(this.type == ex.display.rendering.Renderer.CANVAS3D) {
         this.renderingContext = 
           new ex.display.rendering.RenderingContext3dCanvas(this.width, this.height, this.renderers, params.canvas, this.bgColor);
+      }
+    },
+    
+    _resizeViewport: function() {
+      if(this.type == ex.display.rendering.Renderer.DOM) {
+        
+      } else if (this.type == ex.display.rendering.Renderer.CANVAS2D) {
+        console.log('canvas resizing!');
+        switch(this.fullscreenType) {
+          case 'resize':
+            console.log('resizing set to resize!');
+            this.width = this.engine.width = window.innerWidth;
+            this.height = this.engine.height = window.innerHeight;
+            this.renderingContext.resizeCanvas(this.width, this.height);
+            break;
+          case 'scale':
+            // Do nothing, CSS will auto scale it
+            break;
+        }
+      } else if (this.type == ex.display.rendering.Renderer.CANVAS3D) {
+        
       }
     },
 		
