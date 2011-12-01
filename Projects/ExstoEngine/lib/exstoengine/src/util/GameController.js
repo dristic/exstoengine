@@ -87,7 +87,6 @@ ex.using([
             
       var index = button.actionList.length;
       while(index--) {
-        console.log(button.actionList[index], action);
         if(button.actionList[index].run == action) {
           button.actionList.splice(index, 1);
         }
@@ -104,7 +103,6 @@ ex.using([
       while(index--) {
         if(actionList[index].repeat == true
             || this.buttons[button].duration == dt){
-          console.log(dt, this.buttons[button].duration);
           actionList[index].run(dt, this.buttons[button].data);
         }
       }

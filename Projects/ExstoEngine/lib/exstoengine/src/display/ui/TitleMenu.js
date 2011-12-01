@@ -90,7 +90,6 @@ ex.using([
 		},
 		
 		onMouseMove: function(dt, data) {
-		  console.log("titlemenu.onMouseMove!");
 		  if(data){
 		    var index = this.selections.length;
         while(index--){
