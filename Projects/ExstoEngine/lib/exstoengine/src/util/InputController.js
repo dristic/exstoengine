@@ -15,23 +15,24 @@ ex.using([
 	    
 	    // Bindings and Controllers
 	    _inputControllerMaps: [],
-	    _playerControllerMap: {},
 	    _controllers: [],
 	    
 	    // Mouse data
 	    mouse: {
 	      position: new ex.base.Vector(0,0),
 	      lastPosition: new ex.base.Vector(0,0),
-	      pressed: {
-	        LMB: 0,    // left click
-	        MMB: 0,    // middle click
-	        RMB: 0     // right click
+	      event: {
+	        LMB: false,  // left click
+	        MMB: false,  // middle click
+	        RMB: false,  // right click
+	        move: false,
+	        drag: false
 	      }
 	    },
 	    
 	    // Keyboard data
 	    keyboard: {
-	      pressed: {}
+	      event: {}
 	    },
 	    
 	    /**
@@ -45,97 +46,14 @@ ex.using([
 	    },
 	    
 	    addController: function(playerId, controlMap) {
-	      this._controllers[playerId] = new ex.util.GameController(controlMap);
+	      this._controllers[playerId] = new ex.util.GameController(
+	          this._inputControllerMaps[playerId], this);
 	    },
 	    
 	    update: function(dt) {
-	      var index = this._inputControllerMaps.length;
+	      var index = this._controllers.length;
 	      while(index--) {
-	        this._updateController(index);
-	      }
-	    },
-	    
-	    _updateController: function(playerId) {
-	      var index = this._inputControllerMaps[playerId].length;
-        var button = '';
-        var eventTokens = '';
-        while(index--) {
-          button = this._inputControllerMaps[playerId][index][0];
-          eventTokens = this._inputControllerMaps[playerId][index][1].split(' ');
-          
-          switch(eventTokens[0]){
-            case 'keypressed':
-              if(this.keyboard.pressed[eventTokens[1]] > 0) {
-                this._sendCommandToController(playerId, button);
-                this.keyboard.pressed[eventTokens[1]] = 2;
-              }
-              break;
-            case 'keydown':
-              if(this.keyboard.pressed[eventTokens[1]] == 1) {
-                this._sendCommandToController(playerId, button);
-                this.keyboard.pressed[eventTokens[1]]++;
-              }
-              break;
-            case 'keyup':
-              if(this.keyboard.pressed[eventTokens[1]] == -1) {
-                this._sendCommandToController(playerId, button);
-                this.keyboard.pressed[eventTokens[1]] = 0;
-              }
-              break;
-            case 'mousepressed':
-              if(this.mouse.pressed[eventTokens[1]] > 0) {
-                this._pushClickEvents(eventTokens);
-              }
-              break;
-            case 'mousedown':
-              if(this.mouse.pressed[eventTokens[1]] == 1) {
-                this._pushClickEvents(eventTokens);
-              }
-              break;
-            case 'mouseup':
-              if(this.mouse.pressed[eventTokens[1]] == -1) {
-                this._pushClickEvents(eventTokens);
-              }
-              break;
-            case 'mousemove':
-              if(this.mouse.pressed[eventTokens[1]] == 0) {
-                if(!this.mouse.position.equals(this.mouse.lastPosition)) {
-                  this._pushClickEvents(eventTokens);
-                }
-              }
-              break;
-            case 'mousedrag':
-              if(this.mouse.pressed[eventTokens[1]] > 0) {
-                if(!this.mouse.position.equals(this.mouse.lastPosition)) {
-                  this._pushClickEvents(eventTokens);
-                }
-              }
-              break;
-          }
-        }
-	    },
-	    
-	    _sendCommandToController: function(playerId, button) {
-        this._controllers[playerId]._fireActions(button);
-	    },
-	    
-	    _pushClickEvents: function(eventTokens) {
-	      var index = this.clickableObjects.length;
-	      var object = {};
-	      var camX = this._engine.camera.position.x,
-	          camY = this._engine.camera.position.y;
-	      var objectX = 0,
-	          objectY = 0;
-	      while(index--) {
-	        object = this.clickableObjects[index];
-	        objectX = object.position.x - camX;
-	        objectY = object.position.y - camY;
-	        if(objectX < this.mouse.position.x
-	            && (objectX + object.width) > this.mouse.position.x
-	            && objectY < this.mouse.position.y
-	            && (objectY + object.height) > this.mouse.position.y) {
-	          console.log("You clicked on", object, "!");
-	        }
+	        this._controllers[index].update(dt);
 	      }
 	    },
 	    
@@ -188,7 +106,7 @@ ex.using([
 	      var index = 0,
 	          ln = this._inputControllerMaps.length;
 	      for(; index < ln; index++) {
-	        this.addController(index, controllerButtonMap);
+	        this.addController(index, ex.clone(controllerButtonMap));
 	        ex.Debug.log("Player " + index + " controller created.", ex.util.Logger.LEVEL.DEBUG);
 	      }
 	    },
@@ -211,28 +129,34 @@ ex.using([
 	    
 	    _onKeyDown: function(event) {
 	      var selector = ex.util.Key.names[event.keyCode];
-        if(ex.Input.keyboard.pressed[selector] == null || ex.Input.keyboard.pressed[selector] < 0){
-          ex.Input.keyboard.pressed[selector] = 1;
-        }
+        ex.Input.keyboard.event[selector] = true;
 	    },
 	    
 	    _onKeyUp: function(event) {
 	      var selector = ex.util.Key.names[event.keyCode];
-        ex.Input.keyboard.pressed[selector] = -1;
+        ex.Input.keyboard.event[selector] = false;
 	    },
 	    
 	    _onMouseDown: function(event) {
-	      ex.Input.mouse.pressed.LMB = true;
+	      ex.Input.mouse.event.LMB = true;
 	    },
 	    
 	    _onMouseUp: function(event) {
-	      ex.Input.mouse.pressed.LMB = false;
+	      ex.Input.mouse.event.LMB = false;
 	    },
 	    
 	    _onMouseMove: function(event) {
+	      // Update last mouse position
 	      ex.Input.mouse.lastPosition.x = ex.Input.mouse.position.x;
 	      ex.Input.mouse.lastPosition.y = ex.Input.mouse.position.y;
 	      
+	      // Set event flags
+        ex.Input.mouse.event.move = true;
+	      if(ex.Input.mouse.event.LMB) {
+	        ex.Input.mouse.event.drag = true;
+	      }
+	      	      
+        // Update current mouse position
 	      if(!event) {
 	        var event = window.event;
 	      }
@@ -245,9 +169,7 @@ ex.using([
 	        ex.Input.mouse.position.y = event.clientY
 	          + document.body.scrollTop;
 	      }
-	      
 	    }
-	    
 		}
 	});
 });

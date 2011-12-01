@@ -25,10 +25,9 @@ ex.using([
 		 * @constructor
 		 */
 		constructor: function(
-				selections, defaultSelection, bgImage, logoImage, input) {
+				selections, defaultSelection, bgImage, logoImage, options) {
 			this.selections = selections;
 			this.currentSelection = defaultSelection;
-			this.input = input;
 			
 			this.options = {
 				background: new ex.display.Sprite(new ex.base.Vector(0, 0), bgImage),
@@ -42,6 +41,12 @@ ex.using([
 					width: 150,
 					height: 70
 				},
+				controls: {
+				  moveUp: 'up',
+				  moveDown: 'down',
+				  activate: 'use',
+				  updateSelection: 'move'
+				}
 			};
 			
 			this.items = [
@@ -71,6 +76,60 @@ ex.using([
 			  this.selections[i].action = selection.action;
 			  yPos += 50;
 			}
+			
+			ex.extend(this.options, options);
+			
+			this.controller = ex.Input.getController(0);
+			this.bindings = [
+        {
+          selector: this.options.controls.moveUp,
+          action: ex.bind(this, this.moveUpMenu)
+        }, {
+          selector: this.options.controls.moveDown,
+          action: ex.bind(this, this.moveDownMenu)
+        }, {
+          selector: this.options.controls.activate,
+          action: ex.bind(this, this.activateCurrentSelection)
+        }, {
+          selector: this.options.controls.updateSelection,
+          action: ex.bind(this, this.onMouseMove)
+        }
+      ];
+			this._addInputBindings();
+		},
+		
+		_addInputBindings: function() {
+		  var index = this.bindings.length;
+		  while(index--) {
+		    this.controller.on(
+	        this.bindings[index].selector, 
+	        this.bindings[index].action);
+		  }
+		},
+		
+		_removeInputBindings: function() {
+		  var index = this.bindings.length;
+      while(index--) {
+        this.controller.removeAction(
+          this.bindings[index].selector, 
+          this.bindings[index].action);
+      }
+		},
+		
+		onMouseMove: function(dt, data) {
+		  if(data){
+		    var index = this.selections.length;
+        while(index--){
+          if(data.position.x > (this.options.menu.x - this.options.selection.width) &&
+              data.position.x < (this.options.menu.x + this.options.selection.width) &&
+              data.position.y > (this.options.menu.y + (this.options.selection.height * (index - 1))) &&
+              data.position.y < (this.options.menu.y + (this.options.selection.height * (index)))){
+            this.selections[this.currentSelection].options.color = '#00FF00';
+            this.currentSelection = index;
+            this.selections[this.currentSelection].options.color = '#FF0000';
+          }
+        }
+		  }
 		},
 		
 		/**
@@ -101,6 +160,10 @@ ex.using([
 			}
 		},
 		
+		activateCurrentSelection: function() {
+		  this.selections[this.currentSelection].action();
+		},
+		
 		/**
 		 * The update loop where user input is checked
 		 * @function
@@ -108,30 +171,8 @@ ex.using([
 		 * @memberOf ex.display.ui.TitleMenu
 		 * @param {Number} dt timestep
 		 */
-		update: function(dt){
-			if(this.input.isKeyPressed(this.options.menu.actionKey)) {
-				this.selections[this.currentSelection].action();
-			}
-			
-			if(this.input.isKeyPressed(ex.util.Key.Up)) {
-				this.moveUpMenu();
-			}
-			
-			if(this.input.isKeyPressed(ex.util.Key.Down)) {
-				this.moveDownMenu();
-			}
-			
-			if(this.input.mouseDown) {
-				var index = this.selections.length;
-				while(index--) {
-					if(this.input.mouseX > (this.options.menu.x - this.options.selection.width) &&
-							this.input.mouseX < (this.options.menu.x + this.options.selection.width) &&
-							this.input.mouseY > (this.options.menu.y + (this.options.selection.height * (index - 1))) &&
-							this.input.mouseY < (this.options.menu.y + (this.options.selection.height * (index)))) {
-						this.selections[index].action();
-					}
-				}
-			}
+		update: function(dt) {
+		  
 		}
 	});
 });

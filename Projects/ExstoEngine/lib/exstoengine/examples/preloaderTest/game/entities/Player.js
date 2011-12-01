@@ -20,25 +20,25 @@ ex.using([
 			this.clickable = true;
 			
 			this.controller = ex.Input.getController(0);
-			this.controller.on('jump', ex.bind(this, this.jump));
+			this.controller.on('up once', ex.bind(this, this.jump));
 			this.controller.on('right', ex.bind(this, this.moveRight));
 			this.controller.on('left', ex.bind(this, this.moveLeft));
 			this.controller.on('down', ex.bind(this, this.moveDown));
 		},
 		
-		jump: function(){
+		jump: function(dt){
 			this.velocity.y -= this.speed * 80;
 		},
 		
-		moveLeft: function() {
+		moveLeft: function(dt) {
 			this.velocity.x -= this.speed;
 		},
 		
-		moveRight: function() {
+		moveRight: function(dt) {
 			this.velocity.x += this.speed;
 		},
 		
-		moveDown: function() {
+		moveDown: function(dt) {
 		  this.velocity.y += this.speed;
 		},
 		
