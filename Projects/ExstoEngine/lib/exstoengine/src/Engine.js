@@ -72,7 +72,7 @@ ex.using([
 		
 		_setupFullscreenViewport: function() {
 		  this.renderer._resizeViewport();
-		  window.addEventListener('resize', ex.bind(this.renderer, this.renderer._resizeViewport));
+		  ex.event.listen('resize', window, ex.bind(this.renderer, this.renderer._resizeViewport), true);
 		},
 		
 		enableDebugging: function(debugType, loggingLevel) {
