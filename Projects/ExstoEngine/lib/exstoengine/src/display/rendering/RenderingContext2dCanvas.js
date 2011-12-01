@@ -48,7 +48,7 @@ ex.using([
      * @param {Number} newWidth
      * @param {Number} newHeight
      */
-    resizeCanvas: function (newWidth, newHeight) {
+    resizeViewport: function (newWidth, newHeight) {
       this.canvas.width = newWidth;
       this.canvas.height = newHeight;
     }

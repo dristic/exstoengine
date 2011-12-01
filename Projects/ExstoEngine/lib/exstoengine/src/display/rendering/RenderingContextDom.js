@@ -22,6 +22,11 @@ ex.using([
       this.renderers = renderers;
     },
     
+    resizeViewport: function(newWidth, newHeight) {
+      this.el.style.width = newWidth + 'px';
+      this.el.style.height = newHeight + 'px';
+    },
+    
     render: function (items, camX, camY, camWidth, camHeight) {
       var i = 0,
           ln = items.length,

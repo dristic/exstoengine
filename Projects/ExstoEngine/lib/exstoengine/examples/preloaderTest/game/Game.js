@@ -9,7 +9,7 @@ ex.using([
 	    60, 
 	    '#000', 
 	    {
-	      renderingContext: ex.display.rendering.Renderer.CANVAS2D,
+	      renderingContext: ex.display.rendering.Renderer.DOM,
 	      renderingParams: { canvas: null },
 	      fullscreen: true,
 	      fullscreenType: 'resize'

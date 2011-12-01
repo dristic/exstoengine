@@ -75,15 +75,18 @@ ex.using([
     
     _resizeViewport: function() {
       if(this.type == ex.display.rendering.Renderer.DOM) {
-        
-      } else if (this.type == ex.display.rendering.Renderer.CANVAS2D) {
-        console.log('canvas resizing!');
         switch(this.fullscreenType) {
           case 'resize':
-            console.log('resizing set to resize!');
             this.width = this.engine.width = window.innerWidth;
             this.height = this.engine.height = window.innerHeight;
-            this.renderingContext.resizeCanvas(this.width, this.height);
+            this.renderingContext.resizeViewport(this.width, this.height);
+        }
+      } else if (this.type == ex.display.rendering.Renderer.CANVAS2D) {
+        switch(this.fullscreenType) {
+          case 'resize':
+            this.width = this.engine.width = window.innerWidth;
+            this.height = this.engine.height = window.innerHeight;
+            this.renderingContext.resizeViewport(this.width, this.height);
             break;
           case 'scale':
             // Do nothing, CSS will auto scale it
