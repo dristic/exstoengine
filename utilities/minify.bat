@@ -1,5 +1,5 @@
 echo off
 
-minifyToDirectory.py "..\lib\exstoengine\src" "..\lib\exstoengine\build\current.min"
+minifyToDirectory.py "..\src" "..\build\current.min"
 
 pause

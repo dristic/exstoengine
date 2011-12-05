@@ -24,7 +24,7 @@ def minify(originDirectory, inputDirectory, inputFiles, outputDirectory, inType 
             open(outputFile, 'w+').close()
                 
         options[0] = '-o \"\"{0}\"'.format(outputFile)
-        os.system('\"\"C:/Program Files (x86)/SmallSharpTools/Packer for .Net/bin/Packer.exe\" {0[0]} {0[1]} {1}'.format(
+        os.system('\"\"C:/Program Files (x86)/SmallSharpTools/Packer for .NET/bin/Packer.exe\" {0[0]} {0[1]} {1}'.format(
             options,
             os.path.join(originDirectory, inputDirectory, file)))
         fileMetrics.append(

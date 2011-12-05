@@ -1,70 +1,77 @@
-http://cloc.sourceforge.net v 1.55  T=0.5 s (110.0 files/s, 13506.0 lines/s)
------------------------------------------------------------------------------------------------------------------------
-File                                                                                blank        comment           code
------------------------------------------------------------------------------------------------------------------------
-../lib/exstoengine/src/ExstoEngine.js                                                  80            239            323
-../lib/exstoengine/src/util/CollisionDetector.js                                       20             27            203
-../lib/exstoengine/src/display/SpriteMap.js                                            25             72            196
-../lib/exstoengine/src/util/AssetManager.js                                            30             74            184
-../lib/exstoengine/src/display/AnimatedSprite.js                                       37            111            170
-../lib/exstoengine/src/util/InputController.js                                         28             25            160
-../lib/exstoengine/src/display/ui/TitleMenu.js                                         21             80            150
-../lib/exstoengine/src/display/Sprite.js                                               27             70            129
-../lib/exstoengine/src/util/Key.js                                                      9              0            128
-../lib/exstoengine/src/Engine.js                                                       33             23            125
-../lib/exstoengine/src/display/Rectangle.js                                            27             34            120
-../lib/exstoengine/src/plugins/Emitter2.js                                             13             47            113
-../lib/exstoengine/src/util/Debug.js                                                   24              3            105
-../lib/exstoengine/src/display/Image.js                                                18             64             98
-../lib/exstoengine/src/util/Input.js                                                   17              3             95
-../lib/exstoengine/src/world/Tile.js                                                   10             91             93
-../lib/exstoengine/src/world/Layer.js                                                  12             76             91
-../lib/exstoengine/src/world/CollisionMap.js                                           19             45             87
-../lib/exstoengine/src/world/World.js                                                  19             81             85
-../lib/exstoengine/src/display/ui/StatusBar.js                                         17              1             83
-../lib/exstoengine/src/display/ui/LoadingScreen.js                                      9             22             79
-../lib/exstoengine/src/display/ui/StatusText.js                                        15              2             77
-../lib/exstoengine/src/world/TileMap.js                                                 7             46             75
-../lib/exstoengine/src/util/GameController.js                                          11              8             69
-../lib/exstoengine/src/novus/NovusClient.js                                            17             65             67
-../lib/exstoengine/src/util/CollisionManager.js                                         9             33             67
-../lib/exstoengine/src/display/Emitter.js                                              11             16             64
-../lib/exstoengine/src/display/rendering/Renderer.js                                    7             24             64
-../lib/exstoengine/src/util/CollisionResolver.js                                        6             12             63
-../lib/exstoengine/src/display/Particle.js                                             12              0             60
-../lib/exstoengine/src/base/Vector.js                                                  11             90             59
-../lib/exstoengine/src/world/Entity.js                                                 13             84             59
-../lib/exstoengine/src/event/EventTarget.js                                            14             26             55
-../lib/exstoengine/src/plugins/Particle2.js                                            12              7             54
-../lib/exstoengine/src/world/Map.js                                                     8             74             50
-../lib/exstoengine/src/util/Logger.js                                                   5              0             44
-../lib/exstoengine/src/base/Rectangle.js                                                2             35             38
-../lib/exstoengine/src/sound/Sound.js                                                   5             30             36
-../lib/exstoengine/src/world/Trigger.js                                                14             14             31
-../lib/exstoengine/src/display/Renderable.js                                            8             37             31
-../lib/exstoengine/src/display/rendering/RenderingContext2dCanvas.js                    5             11             30
-../lib/exstoengine/src/display/Camera.js                                                4             44             29
-../lib/exstoengine/src/display/ImageRepository.js                                       6             33             27
-../lib/exstoengine/src/display/rendering/RenderingContextDom.js                         3              1             27
-../lib/exstoengine/src/base/Point.js                                                    2             27             16
-../lib/exstoengine/src/display/rendering/RenderingContext.js                            1              1             10
-../lib/exstoengine/src/util/UIController.js                                             3              0             10
-../lib/exstoengine/src/base/Component.js                                                5             17              9
-../lib/exstoengine/src/base/GlobalComponent.js                                          1              0              8
-../lib/exstoengine/src/util/Collidable.js                                               3              5              8
-../lib/exstoengine/src/display/rendering/RenderingContext3dCanvas.js                    1              0              6
-../lib/exstoengine/src/sound/SoundManager.js                                            2              0              5
-../lib/exstoengine/src/plugins/Cloth.js                                                 0             12              0
-../lib/exstoengine/src/plugins/RigidBody.js                                             0             13              0
-../lib/exstoengine/src/plugins/Physics.js                                               0             15              0
------------------------------------------------------------------------------------------------------------------------
-SUM:                                                                                  718           1970           4065
------------------------------------------------------------------------------------------------------------------------
+http://cloc.sourceforge.net v 1.55  T=1.0 s (62.0 files/s, 6880.0 lines/s)
+-------------------------------------------------------------------------------------------------------
+File                                                                blank        comment           code
+-------------------------------------------------------------------------------------------------------
+../src/ExstoEngine.js                                                  80            239            323
+../src/util/CollisionDetector.js                                       20             27            203
+../src/util/AssetManager.js                                            30             74            184
+../src/display/rendering/SpriteMapRenderer.js                          18             30            181
+../src/display/rendering/Renderer.js                                   14             46            141
+../src/Engine.js                                                       37             24            137
+../src/util/Key.js                                                      9              0            128
+../src/util/InputController.js                                         22             27            126
+../src/display/ui/TitleMenu.js                                         14             39            125
+../src/plugins/Emitter2.js                                             13             47            113
+../src/display/AnimatedSprite.js                                       28             98            110
+../src/util/Debug.js                                                   24              3            105
+../src/display/Image.js                                                19             67             99
+../src/util/Input.js                                                   17              3             95
+../src/world/Tile.js                                                   10             91             93
+../src/display/rendering/SpriteRenderer.js                             16             20             92
+../src/world/Layer.js                                                  12             76             91
+../src/util/GameController.js                                          13              8             90
+../src/world/World.js                                                  20             81             87
+../src/world/CollisionMap.js                                           19             45             87
+../src/display/Rectangle.js                                            14             42             76
+../src/world/TileMap.js                                                 7             46             75
+../src/novus/NovusClient.js                                            17             65             67
+../src/util/CollisionManager.js                                         9             33             67
+../src/display/rendering/AnimatedSpriteRenderer.js                      9             13             67
+../src/display/ui/StatusBar.js                                          9              1             65
+../src/display/Emitter.js                                              11             16             64
+../src/util/CollisionResolver.js                                        6             12             63
+../src/display/Particle.js                                             12              0             60
+../src/display/ui/LoadingScreen.js                                      4             15             59
+../src/base/Vector.js                                                  11             90             59
+../src/event/EventTarget.js                                            15             27             58
+../src/plugins/Particle2.js                                            12              7             54
+../src/display/rendering/RectangleRenderer.js                          13             17             51
+../src/world/Map.js                                                     8             74             50
+../src/display/ui/StatusText.js                                         8              1             50
+../src/world/Entity.js                                                  9             71             46
+../src/display/Sprite.js                                               11             50             44
+../src/util/Logger.js                                                   5              0             44
+../src/display/rendering/TextRenderer.js                                9              0             42
+../src/display/rendering/RenderingContextDom.js                         6              1             40
+../src/display/rendering/RenderingContext2dCanvas.js                    6             11             39
+../src/base/Rectangle.js                                                2             35             38
+../src/sound/Sound.js                                                   5             30             36
+../src/world/Trigger.js                                                14             14             31
+../src/display/Camera.js                                                4             44             29
+../src/display/Renderable.js                                            6             37             29
+../src/display/Text.js                                                  5              0             27
+../src/display/ImageRepository.js                                       6             33             27
+../src/display/rendering/ObjectRenderer.js                             18              3             23
+../src/display/SpriteMap.js                                             7             42             22
+../src/base/Point.js                                                    2             27             16
+../src/util/UIController.js                                             3              0             10
+../src/display/rendering/RenderingContext.js                            1              1             10
+../src/base/Component.js                                                5             17              9
+../src/base/GlobalComponent.js                                          1              0              8
+../src/util/Collidable.js                                               3              5              8
+../src/display/rendering/RenderingContext3dCanvas.js                    1              0              6
+../src/sound/SoundManager.js                                            2              0              5
+../src/plugins/RigidBody.js                                             0             13              0
+../src/plugins/Physics.js                                               0             15              0
+../src/plugins/Cloth.js                                                 0             12              0
+-------------------------------------------------------------------------------------------------------
+SUM:                                                                  731           1965           4184
+-------------------------------------------------------------------------------------------------------
 
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Javascript                      55            718           1970           4065
+Javascript                      62            731           1965           4184
 -------------------------------------------------------------------------------
-SUM:                            55            718           1970           4065
+SUM:                            62            731           1965           4184
 -------------------------------------------------------------------------------
