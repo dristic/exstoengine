@@ -28,11 +28,27 @@ ex.using([
 			};
 		},
 		
+		/**
+		 * Sets the level for the manager to handle collisions on.
+		 * 
+		 * @function
+		 * @name setActiveLevel
+		 * @memberOf ex.util.CollisionManager
+		 * 
+		 * @param {ex.simplex.Map} level
+		 */
+		setActiveLevel: function(level) {
+			this.activeLevel = level;
+			console.log("Active Level: " + this.activeLevel.name);
+		},
+		
 		addCollidable: function(object) {
-		  if(this.collisionGroups.length < 1) {
+		  var index = this.collisionGroups.length - 1;
+		  if(index == -1) {
 		    this.collisionGroups.push([]);
+		    index++;
 		  }
-		  this.collisionGroups[0].push(object);
+		  this.collisionGroups[index].push(object);
 		},
 		
 		removeCollidable: function(object) {
@@ -41,7 +57,7 @@ ex.using([
 		  while(groupIndex--) {
 		    objectIndex = this.collisionGroups[groupIndex].length;
 		    while(objectIndex--) {
-		      if(this.collisionGroups[groupIndex][objectIndex] === object) {
+		      if(object === this.collisionGroups[groupIndex][objectIndex]) {
 		        this.collisionGroups[groupIndex].splice(objectIndex, 1);
 		      }
 		    }
