@@ -135,7 +135,7 @@ ex.using([
 				this.currentWorld.destroy();
 			}
 			
-			this.currentWorld = new world(this.renderer);
+			this.currentWorld = new world(this.renderer, this.collisionManager);
 		},
 		
 		loadScene: function(sceneName, callback) {
@@ -153,16 +153,13 @@ ex.using([
 				var scene = new game.levels[sceneName](that);
 				ex.event.listenOnce('loadEnd', ex.Assets._eventHandler, function() {
 					var objects = scene.getObjects();
+          that.currentWorld.addObjects(objects);
+          that.currentWorld.removeObject(that.loadingScreen);
+          ex.Input.trackClickableObjects(objects);
 					
-					that.collisionManager.collisionGroups = [];
-					that.collisionManager.collisionGroups.push(objects);
-					
-					// Reset camera position
+          // Reset camera position
 					that.camera.moveTo(0, 0);
-					
-					that.currentWorld.addObjects(objects);
-					that.currentWorld.removeObject(that.loadingScreen);
-					ex.Input.trackClickableObjects(objects);
+
 					scene.finalSetup();
 					
 					if(callback) {
