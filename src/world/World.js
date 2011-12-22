@@ -23,6 +23,7 @@ ex.using([
      * @constructor
      */
     constructor: function(renderer, collisionManager) {
+      this.active = true;
       this.renderer = renderer;
       this.collisionManager = collisionManager;
       this.objects = [];
@@ -39,6 +40,9 @@ ex.using([
      * @param {Number} dt timestep
      */
     update: function(dt) {
+      if(!this.active) {
+        return;
+      }
       // update objects
       var i = this.objects.length;
       while(i--) {
