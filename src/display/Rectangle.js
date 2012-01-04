@@ -55,7 +55,7 @@ ex.using([
       this.position = new ex.base.Vector(this.options.x, this.options.y);
       this.width = this.options.width;
       this.height = this.options.height;
-      this.scrollFactor = new ex.base.Vector(1, 1);
+      this.scrollFactor = this.options.scrollFactor || new ex.base.Vector(1, 1);
       this.rotationEnabled = false;
         
       this._super("constructor", [true, 1.0]);

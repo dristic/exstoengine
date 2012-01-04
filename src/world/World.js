@@ -11,19 +11,21 @@ ex.using([
      * 
      * @param {ex.display.Renderer} renderer the renderer to call
      *    to render each frame
+     * @param {ex.util.CollisionManager} collisionManager the collision
+     *    manager to use on the world
      * 
-     * @property {ex.simplex.Map} activeLevel the current level
      * @proeprty {ex.display.Renderer} renderer
      * @property {ex.simplex.Map[]} levels all levels in the world
-     * @property {Object[]} objects all global data such as player
-     *    stats, game stats, and menus.
+     * @property {Object[]} objects all objects in the current scene
+     * @property {Object[]} globalobjects all objects that persist 
+     *    between scenes
      * 
      * @constructor
      */
-    constructor: function(renderer) {
-      this.activeLevel = null;
+    constructor: function(renderer, collisionManager) {
+      this.active = true;
       this.renderer = renderer;
-      this.levels = [];
+      this.collisionManager = collisionManager;
       this.objects = [];
       this.globalObjects = [];
     },
@@ -38,83 +40,14 @@ ex.using([
      * @param {Number} dt timestep
      */
     update: function(dt) {
-      // update level
-      if(this.activeLevel)
-        this.activeLevel.update(dt);
-      
+      if(!this.active) {
+        return;
+      }
       // update objects
       var i = this.objects.length;
       while(i--) {
         this.objects[i].update(dt);
       }
-    },
-
-    /**
-     * Retrieves a level by name.
-     * 
-     * @function
-     * @name getLevel
-     * @memberOf ex.world.World
-     * 
-     * @param {String} name
-     * 
-     * @returns {ex.simplex.Map}
-     */
-    getLevel: function(name){
-      var index = this.levels.length;
-      while(index--){
-        if(this.levels[index].name == name){
-          return this.levels[index];
-        }
-      }
-      
-      //if not found
-      return null;
-    },
-    
-    /**
-     * Sets the active level to the level with the given name.
-     * 
-     * @function
-     * @name loadLevel
-     * @memberOf ex.world.World
-     * 
-     * @param {String} name
-     */
-    loadLevel: function(name){
-      this._setActiveLevel(this.getLevel(name));
-      console.log("World activeLevel: " + this.activeLevel.name);
-    },
-    
-    _setActiveLevel: function(level){
-      if(this.activeLevel != null){
-        // unload renderables
-        var index = this.renderer.renderables.length;
-        while(index--){
-          if(this.renderer.renderables[index] === this.activeLevel){
-            this.renderer.renderables.splice(index, 1);
-          } 
-        }
-      }
-      
-      // set activeLevel
-      this.activeLevel = level;
-      
-      // add renderables
-      this.renderer.renderables.push(level);
-    },
-    
-    /**
-     * Adds a level to the world.
-     * 
-     * @function
-     * @name addLevel
-     * @memberOf ex.world.World
-     * 
-     * @param {ex.simplex.Map} level
-     */
-    addLevel: function(level) {
-      this.levels.push(level);
     },
     
     /**
@@ -132,8 +65,24 @@ ex.using([
       if(object instanceof ex.display.Renderable || object.items != null) {
         this.renderer.addRenderable(object);
       }
+      
+      if(this.collisionManager){
+        if(object.collides) {
+          this.collisionManager.addCollidable(object);
+        }
+      }
     },
     
+    /**
+     * Adds a list of objects to the world using the addObject function
+     * on each item in the list.
+     * 
+     * @function
+     * @name addObjects
+     * @memberOf ex.world.World
+     * 
+     * @param {Object[]} objects
+     */
     addObjects: function(objects) {
       var index = objects.length;
       while(index--){
@@ -159,16 +108,47 @@ ex.using([
         }
       }
       
-      // Remove object from renderer
+      // Remove object from renderer and collisionManager
       this.renderer.removeRenderable(object);
+      this.collisionManager.removeCollidable(object);
     },
     
+    /**
+     * Removes all objects from the world. Generally only called
+     * during scene desctruction.
+     * 
+     * @function
+     * @name removeAllObjects
+     * @memberOf ex.world.World
+     * 
+     */
     removeAllObjects: function() {
-      delete this.objects;
-      this.objects = [];
-      
-      delete this.renderer.renderables;
-      this.renderer.renderables = [];
+      var index = this.objects.length;
+      while(index--) {
+        this.removeObject(this.objects[index]);
+      }
+    },
+    
+    show: function() {
+      var index = this.objects.length;
+      while(index--) {
+        if(this.objects[index] instanceof ex.display.Renderable 
+            || this.objects[index].items != null) {
+          this.renderer.addRenderable(this.objects[index]);
+        }
+      }
+      this.active = true;
+    },
+    
+    hide: function() {
+      var index = this.objects.length;
+      while(index--) {
+        if(this.objects[index] instanceof ex.display.Renderable 
+            || this.objects[index].items != null) {
+          this.renderer.removeRenderable(this.objects[index]);
+        }
+      }
+      this.active = false;
     },
     
     getObject: function(name) {

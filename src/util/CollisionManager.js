@@ -42,6 +42,28 @@ ex.using([
 			console.log("Active Level: " + this.activeLevel.name);
 		},
 		
+		addCollidable: function(object) {
+		  var index = this.collisionGroups.length - 1;
+		  if(index == -1) {
+		    this.collisionGroups.push([]);
+		    index++;
+		  }
+		  this.collisionGroups[index].push(object);
+		},
+		
+		removeCollidable: function(object) {
+		  var groupIndex = this.collisionGroups.length,
+		      objectIndex = 0;
+		  while(groupIndex--) {
+		    objectIndex = this.collisionGroups[groupIndex].length;
+		    while(objectIndex--) {
+		      if(object === this.collisionGroups[groupIndex][objectIndex]) {
+		        this.collisionGroups[groupIndex].splice(objectIndex, 1);
+		      }
+		    }
+		  }
+		},
+		
 		updateBenchmark: function(newTime, newCollisionCount) {
 			if(this.benchmarkData.length > 200){
 				this.updateBenchmarkAverage();
