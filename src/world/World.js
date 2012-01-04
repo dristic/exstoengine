@@ -109,8 +109,15 @@ ex.using([
       }
       
       // Remove object from renderer and collisionManager
-      this.renderer.removeRenderable(object);
-      this.collisionManager.removeCollidable(object);
+      if(object instanceof ex.display.Renderable || object.items != null) {
+        this.renderer.removeRenderable(object);
+      }
+      
+      if(this.collisionManager){
+        if(object.collides) {
+          this.collisionManager.removeCollidable(object);
+        }
+      }
     },
     
     /**
