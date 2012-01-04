@@ -138,12 +138,15 @@ ex.using([
 			this.currentWorld = new world(this.renderer, this.collisionManager);
 		},
 		
-		loadScene: function(sceneName, callback) {
-			this.unloadScene();
-			this.currentWorld.addObject(this.loadingScreen);
+		loadScene: function(sceneName, callback, world) {
+		  if(!world) {
+		    world = this.currentWorld;
+		    world.addObject(this.loadingScreen);
+		  }
+			this.unloadScene(world);
 			var that = this;
 			var sceneNamespace = "game.levels." + sceneName;
-			
+			  
 			ex.event.listenOnce('loadStart', ex.Assets._eventHandler, function() {
 			  console.log('Began loading assets for scene "' + sceneName + '".');
 			}, this);
@@ -153,8 +156,9 @@ ex.using([
 				var scene = new game.levels[sceneName](that);
 				ex.event.listenOnce('loadEnd', ex.Assets._eventHandler, function() {
 					var objects = scene.getObjects();
-          that.currentWorld.addObjects(objects);
-          that.currentWorld.removeObject(that.loadingScreen);
+					console.log(sceneName, objects);
+					world.addObjects(objects);
+					world.removeObject(that.loadingScreen);
           ex.Input.trackClickableObjects(objects);
 					
           // Reset camera position
@@ -170,8 +174,11 @@ ex.using([
 			});
 		},
 		
-		unloadScene: function() {
-			this.currentWorld.removeAllObjects();
+		unloadScene: function(world) {
+		  if(!world) {
+		    world = this.currentWorld;
+		  }
+			world.removeAllObjects();
 			ex.Input.untrackAllClickableObjects();
 		},
 		

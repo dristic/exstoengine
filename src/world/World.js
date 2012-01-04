@@ -66,8 +66,10 @@ ex.using([
         this.renderer.addRenderable(object);
       }
       
-      if(object.collides) {
-        this.collisionManager.addCollidable(object);
+      if(this.collisionManager){
+        if(object.collides) {
+          this.collisionManager.addCollidable(object);
+        }
       }
     },
     
@@ -125,6 +127,28 @@ ex.using([
       while(index--) {
         this.removeObject(this.objects[index]);
       }
+    },
+    
+    show: function() {
+      var index = this.objects.length;
+      while(index--) {
+        if(this.objects[index] instanceof ex.display.Renderable 
+            || this.objects[index].items != null) {
+          this.renderer.addRenderable(this.objects[index]);
+        }
+      }
+      this.active = true;
+    },
+    
+    hide: function() {
+      var index = this.objects.length;
+      while(index--) {
+        if(this.objects[index] instanceof ex.display.Renderable 
+            || this.objects[index].items != null) {
+          this.renderer.removeRenderable(this.objects[index]);
+        }
+      }
+      this.active = false;
     },
     
     getObject: function(name) {
