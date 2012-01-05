@@ -50,7 +50,7 @@ ex.using([
         this.rendering.el.style.display = 'inherit';
       }
       
-      if(this.rotationEnabled = false) {
+      if(this.rotationEnabled == false) {
         this.rendering.el.style.left = viewPortX + 'px';
         this.rendering.el.style.top = viewPortY + 'px';
       } else {
