@@ -156,15 +156,20 @@ ex.using([
       },
       
       _loadImage: function(name, filePath, options) {
-        if(this._images[name]){
+        this._assetsToLoad++;
+        this._ready = false;
+        
+        if(this._images[name]) {
+          var asset = this._images[name];
           this._throwImageNameConflictError(name, filePath);
+          this._assetsLoaded++;
+          this._eventHandler.dispatchEvent('assetLoaded', asset);
+          this._debugOnAssetLoaded(asset);
+          this._checkReadyState();
           return;
         }
         
         this._images[name] = new Image();
-        
-        this._ready = false;
-        this._assetsToLoad++;
         
         var that = this;
         this._images[name].onError = this._throwUnableToLoadFileError;
