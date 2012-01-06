@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Exsto Engine - ExFont Converter</title>
+  
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  <script type="text/javascript" src="converter.js"></script>
+</head>
+<body onload="init();">
+  <h2>Font Converter</h2>
+  <p>
+    Font: <input type="text" id="font" title="Font Face" value="Arial" />
+    Size: <input type="number" id="size" min="1" step="1" value="12" title="Size" />
+    Color: <input type="text" id="color" title="Color" value="#000" />
+    <input type="button" value="Convert" id="convert" />
+    <input type="button" value="Save" id="save" />
+  </p>
+  <canvas width="100" height="15" id="font-canvas"></canvas>
+  <br />
+  <textarea cols="100" rows="30" id="save-data"></textarea>
+</body>
+</html>
