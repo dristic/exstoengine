@@ -2,3 +2,13 @@ input#size
 {
 	width: 40px;
 }
+
+body
+{
+	background: #C2C3D1;
+}
+
+canvas
+{
+	background: #C2C3D1;
+}

@@ -7,12 +7,14 @@ ex.using([
       
       this.defaults = {
         position: new ex.base.Vector(50,50),
+        type: 'canvas',   // 'canvas' or 'sprite'
         maxWidth: null,
         color: '#FFFFFF',
         font: '14pt Arial',
         textAlign: 'left',
         prefix: '',
-        suffix: ''
+        suffix: '',
+        fontData: {}
       };
       
       this.options = {};
@@ -22,6 +24,14 @@ ex.using([
       this.text = text;
       
       this._super("constructor", [true, 1.0]);
+      
+      // If we are using a sprite font generate the font's Image object.
+      if(this.options.type == 'sprite') {
+        var imgData = options.fontData.data,
+            img = new Image();
+        img.src = imgData;
+        this.img = img;
+      }
       
       var ctx = document.createElement('canvas').getContext('2d');
       ctx.font = this.options.font;

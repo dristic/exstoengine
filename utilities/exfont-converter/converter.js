@@ -1,21 +1,21 @@
 function init() {
   // Grab all the needed elements on the interface.
   var convertButton = $('convert'),
-      saveButton = $('save'),
       canvas = $('font-canvas'),
       context = canvas.getContext('2d'),
       saveData = $('save-data');
 
   // Add click listeners
   convertButton.addEventListener('mousedown', generateFont);
-  saveButton.addEventListener('mousedown', saveFont);
   
   // Generates the font into the canvas.
   function generateFont() {
     var face = $('font').value,
         size = $('size').value,
         color = $('color').value,
-        chars = "";
+        chars = "",
+        widths = [],
+        positions = [];
     
     // Grab all the characters we want to draw.
     var i = 0,
@@ -44,24 +44,23 @@ function init() {
     for(; i < ln; i++) {
       char = chars.charAt(i);
       context.fillText(char, curX, 0);
+      positions.push(curX);
+      widths.push(context.measureText(char).width);
       curX += context.measureText(char).width;
     }
+    
+    saveFont(widths, positions);
   };
   
   // Saves the font to a png.
-  function saveFont() {
+  function saveFont(widths, positions) {
     var img = canvas.toDataURL('image/png'),
         data = {
-          width: 100,
-          height: 200,
+          widths: widths,
+          positions: positions,
           data: img
         };
     saveData.innerHTML = JSON.stringify(data);
-    
-    /*imgTag = document.createElement('img');
-    imgTag.src = img;
-    document.getElementsByTagName('body')[0].appendChild(imgTag);
-    */
   }
   
   // Sets the style for drawing fonts.
@@ -74,27 +73,5 @@ function init() {
   // Utility functions.
   function $(id) {
     return document.getElementById(id);
-  };
-  
-  JSON = {};
-  // implement JSON.stringify serialization
-  JSON.stringify = JSON.stringify || function (obj) {
-      var t = typeof (obj);
-      if (t != "object" || obj === null) {
-          // simple data type
-          if (t == "string") obj = '"'+obj+'"';
-          return String(obj);
-      }
-      else {
-          // recurse array or object
-          var n, v, json = [], arr = (obj && obj.constructor == Array);
-          for (n in obj) {
-              v = obj[n]; t = typeof(v);
-              if (t == "string") v = '"'+v+'"';
-              else if (t == "object" && v !== null) v = JSON.stringify(v);
-              json.push((arr ? "" : '"' + n + '":') + String(v));
-          }
-          return (arr ? "[" : "{") + String(json) + (arr ? "]" : "}");
-      }
   };
 };
