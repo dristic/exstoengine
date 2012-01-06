@@ -1,4 +1,6 @@
-(function() {
+ex.using([
+  'ex.base.Vector'
+], function () {
 	ex.define("ex.display.Renderable", {
 		/**
 		 * An interface for objects to use when they need to be
@@ -7,9 +9,15 @@
 		 * @name ex.display.Renderable
 		 * @constructor
 		 */
-		constructor: function(visible, opacity) {
+		constructor: function(visible, opacity, position, width, height) {
 			this.visible = visible;
 			this.opacity = opacity;
+			position = position || new ex.Vector(0, 0);
+			width = width || 0;
+			height = height || 0;
+			this.position = this.position || position;
+			this.width = this.width || width;
+			this.height = this.height || height;
 		},
 		
 		/**
@@ -65,8 +73,19 @@
 			this.visible = false;
 		},
 		
+		containsPoint: function (x, y) {
+		  if(x < (this.position.x + this.width) &&
+		     x > this.position.x &&
+		     y < (this.position.y + this.height) &&
+		     y > this.position.y) {
+		    return true;
+		  } else {
+		    return false;
+		  }
+		},
+		
 		update: function(dt) {
 			
 		}
 	});
-}());
+});

@@ -6,8 +6,8 @@ ex.using([
       var thisEl = document.createElement('div');
       thisEl.innerHTML = this.text;
       thisEl.style.position = 'absolute';
-      thisEl.style.left = this.options.position.x + 'px';
-      thisEl.style.top = this.options.position.y + 'px';
+      thisEl.style.left = this.position.x + 'px';
+      thisEl.style.top = this.position.y + 'px';
       thisEl.style.font = this.options.font;
       thisEl.style.color = this.options.color;
       
@@ -20,8 +20,8 @@ ex.using([
     
     renderDom: function (el, camX, camY, camWidth, camHeight) {
       this.rendering.el.innerHTML = this.text;
-      this.rendering.el.style.left = this.options.position.x + 'px';
-      this.rendering.el.style.top = this.options.position.y + 'px';
+      this.rendering.el.style.left = this.position.x + 'px';
+      this.rendering.el.style.top = this.position.y + 'px';
     },
     
     destroyDom: function (el) {
@@ -42,13 +42,13 @@ ex.using([
         
         context.fillText(
             this.text, 
-            this.options.position.x, 
-            this.options.position.y,
+            this.position.x, 
+            this.position.y,
             this.options.maxWidth);
       } else if(this.options.type == 'sprite') {
         var i = 0,
             ln = this.text.length,
-            charCode, width, x, objX = this.options.position.x;
+            charCode, width, x, objX = this.position.x;
         for(; i < ln; i++) {
           charCode = this.text.charCodeAt(i);
           width = this.options.fontData.widths[charCode];
@@ -59,7 +59,7 @@ ex.using([
               width,
               this.img.height,
               objX,
-              this.options.position.y,
+              this.position.y,
               width,
               this.img.height);
           objX += width;

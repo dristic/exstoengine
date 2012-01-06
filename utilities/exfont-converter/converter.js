@@ -18,8 +18,8 @@ function init() {
         lineWidth = $('line-width').value,
         shadow = {
           color: $('shadow-color').value,
-          x: $('shadow-x').value,
-          y: $('shadow-y').value,
+          x: parseInt($('shadow-x').value),
+          y: parseInt($('shadow-y').value),
           blur: $('shadow-blur').value
         },
         clear = $('clear').checked,
@@ -39,7 +39,7 @@ function init() {
     
     // Resize the canvas
     var height = context.measureText('m').width,
-        width = context.measureText(chars).width;
+        width = context.measureText(chars).width + ((shadow.x + 1) * chars.length);
     canvas.height = height + parseInt(heightPad);
     canvas.width = width;
     
@@ -57,8 +57,8 @@ function init() {
       context.fillText(char, curX, 0);
       context.strokeText(char, curX, 0);
       positions.push(curX);
-      widths.push(context.measureText(char).width);
-      curX += context.measureText(char).width;
+      widths.push(context.measureText(char).width + (shadow.x + 1));
+      curX += context.measureText(char).width + (shadow.x + 1);
     }
     
     saveFont(widths, positions);
