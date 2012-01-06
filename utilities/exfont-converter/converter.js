@@ -13,6 +13,17 @@ function init() {
     var face = $('font').value,
         size = $('size').value,
         color = $('color').value,
+        weight = $('weight').value,
+        strokeColor = $('stroke-color').value,
+        lineWidth = $('line-width').value,
+        shadow = {
+          color: $('shadow-color').value,
+          x: $('shadow-x').value,
+          y: $('shadow-y').value,
+          blur: $('shadow-blur').value
+        },
+        clear = $('clear').checked,
+        heightPad = $('height-pad').value,
         chars = "",
         widths = [],
         positions = [];
@@ -24,17 +35,17 @@ function init() {
       chars += String.fromCharCode(i);
     }
     
-    setFontStyle(face, size, color);
+    setFontStyle(face, size, color, weight, strokeColor, lineWidth, shadow);
     
     // Resize the canvas
     var height = context.measureText('m').width,
         width = context.measureText(chars).width;
-    canvas.height = height + 10;
+    canvas.height = height + parseInt(heightPad);
     canvas.width = width;
     
-    setFontStyle(face, size, color);
+    setFontStyle(face, size, color, weight, strokeColor, lineWidth, shadow);
     
-    context.clearRect(0, 0, width, height);
+    if(clear) context.clearRect(0, 0, width, height);
     
     // Draw all the characters.
     i = 0;
@@ -44,6 +55,7 @@ function init() {
     for(; i < ln; i++) {
       char = chars.charAt(i);
       context.fillText(char, curX, 0);
+      context.strokeText(char, curX, 0);
       positions.push(curX);
       widths.push(context.measureText(char).width);
       curX += context.measureText(char).width;
@@ -64,10 +76,17 @@ function init() {
   }
   
   // Sets the style for drawing fonts.
-  function setFontStyle(face, size, color) {
-    context.font = size + 'pt ' + face;
+  function setFontStyle(face, size, color, weight, strokeColor, lineWidth, shadow) {
+    context.font = weight + ' ' + size + 'pt ' + face;
     context.fillStyle = color;
     context.textBaseline = 'top';
+    context.strokeStyle = strokeColor;
+    context.lineWidth = lineWidth;
+    
+    context.shadowColor = shadow.color;
+    context.shadowOffsetX = shadow.x;
+    context.shadowOffsetY = shadow.y;
+    context.shadowBlur = shadow.blur;
   };
   
   // Utility functions.
