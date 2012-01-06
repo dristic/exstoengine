@@ -24,6 +24,9 @@ ex.using([
       _images: {
         numAssets: 0
       },
+      _files: {
+        numAssets: 0
+      },
       _ready: true,
       _eventHandler: new ex.event.EventTarget(),
       _assetsToLoad: 0,
@@ -103,6 +106,14 @@ ex.using([
           this._throwAssetDoesNotExistError(name, 'image');
       },
       
+      getFile: function (name) {
+        if(!this._ready) {
+          this._throwFileNotReadyError(name);
+        }
+        return this._files[name] ||
+          this._throwAssetDoesNotExistError(name, 'file');
+      },
+      
       /**
        * Loads a file from the file system and adds it to the
        * asset manager.
@@ -129,7 +140,9 @@ ex.using([
         } else if (this._supportedExtensions.video.indexOf(extension) > -1) {
           this._loadVideo(name, filePath, options);
         } else {
-          this._throwFileTypeNotSupportedError(name, filePath, extension);
+          this._loadFile(name, filePath, options);
+          // Technically if we add the "File" type we can load anything into text format.
+          //this._throwFileTypeNotSupportedError(name, filePath, extension);
         }
       },
       
@@ -153,6 +166,35 @@ ex.using([
         while(index--){
           this.load(list[index].name, list[index].filePath, list[index].options);
         }
+      },
+      
+      _loadFile: function (name, filePath, options) {
+        this._assetsToLoad++;
+        this._ready = false;
+        
+        function completeAsset(asset) {
+          that._assetsLoaded++;
+          that._eventHandler.dispatchEvent('assetLoaded', asset);
+          that._debugOnAssetLoaded(asset);
+          that._checkReadyState();
+        };
+        
+        if(this._files[name]) {
+          var asset = this._files[name];
+          completeAsset(asset);
+          return;
+        }
+        
+        this._files[name] = {};
+        
+        // Load the file using AJAX
+        var that = this;
+        ex.Loader.ajax(filePath, {}, function (data) {
+          if(filePath.substr(filePath.length - 3) == 'exf') data = JSON.parse(data);
+          that._files[name] = data;
+          that._files.numAssets++;
+          completeAsset(that._files[name]);
+        });
       },
       
       _loadImage: function(name, filePath, options) {
@@ -238,7 +280,8 @@ ex.using([
             'Total Assets: ' + this._assetsLoaded +
             ' | Audio: ' + this._audio.numAssets + 
             ' | Image: ' + this._images.numAssets + 
-            ' | Video: ' + this._video.numAssets,
+            ' | Video: ' + this._video.numAssets +
+            ' | File: ' + this._files.numAssets,
             'INFO');
       },
       
@@ -286,6 +329,12 @@ ex.using([
       _throwImageNotReadyError: function(name) {
         ex.Debug.log(
             "Retrieved image " + name + ", but it has not finished loading.",
+            'INFO');
+      },
+      
+      _throwFileNotReadyError: function(name) {
+        ex.Debug.log(
+            "Retrieved file " + name + ", but it has not finished loading.",
             'INFO');
       }
     }

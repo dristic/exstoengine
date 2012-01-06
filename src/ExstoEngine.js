@@ -353,7 +353,25 @@ if(!Array.indexOf){
 			head.appendChild(script);
 			
 			return script;
-		}
+		},
+		
+		ajax: function (url, data, callback) {
+      var xmlHttp;
+      if(window.XMLHttpRequest) {
+        xmlHttp = new XMLHttpRequest();
+      } else {
+        xmlHttp = new ActiveXObject('Microsoft.XMLHTTP');
+      }
+      
+      xmlHttp.open('GET', url, true);
+      xmlHttp.send();
+      
+      xmlHttp.onreadystatechange = function () {
+        if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+          callback(xmlHttp.responseText);
+        }
+      }
+    }
 	};
 	
 	/**
