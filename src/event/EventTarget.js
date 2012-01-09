@@ -55,8 +55,6 @@ ex.using([], function () {
   
   // The extendable event target object
     ex.define("ex.event.EventTarget", {
-        _listeners: {},
-      
         constructor: function () {
           this._listeners = {};
         },

@@ -29,6 +29,8 @@ ex.using([
      * @constructor
      */
     constructor : function(name, position, sprite, collides, anchored) {
+      this._super('constructor', []);
+      
       // Referencing data
       this.name = name;
       this.type = "Entity";
