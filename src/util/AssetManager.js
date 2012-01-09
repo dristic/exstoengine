@@ -202,11 +202,8 @@ ex.using([
         this._ready = false;
         
         if(this._images[name]) {
-          var asset = this._images[name];
           this._throwImageNameConflictError(name, filePath);
-          this._assetsLoaded++;
-          this._eventHandler.dispatchEvent('assetLoaded', asset);
-          this._debugOnAssetLoaded(asset);
+          this._assetsToLoad--;
           this._checkReadyState();
           return;
         }
