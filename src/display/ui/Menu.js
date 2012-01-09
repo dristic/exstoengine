@@ -11,6 +11,7 @@ ex.using([
           item: null,
           action: null
         }],
+        position: 'center',
         onOver: function (item) {},
         onOut: function (item) {},
         defaultSelection: 0,
@@ -40,6 +41,8 @@ ex.using([
         }
         this.items.push(item);
       }
+      
+      this._calculateOffset();
       
       this.controller = ex.Input.getController(0);
       this.bindings = [
@@ -76,6 +79,14 @@ ex.using([
           this.bindings[index].selector, 
           this.bindings[index].action);
       }
+    },
+    
+    /**
+     * Calculates viewable browser window width and height,
+     * then calculates the required offset on the menu
+     */
+    _calculateOffset: function() {
+      
     },
     
     onMouseMove: function(dt, data) {

@@ -160,9 +160,9 @@ ex.using([
 		loadScene: function(sceneName, callback, world) {
 		  if(!world) {
 		    world = this.currentWorld;
-		    world.addObject(this.loadingScreen);
 		  }
 			this.unloadScene(world);
+      world.addObject(this.loadingScreen);
 			var that = this;
 			var sceneNamespace = "game.levels." + sceneName;
 			  
