@@ -11,6 +11,8 @@ ex.using([
           "ex.display.rendering.Renderer"
           ],
 	function () {
+  
+  var MAX_FRAME_TIME = 5;
 	
 	ex.define("ex.Engine", {
 		/**
@@ -95,6 +97,9 @@ ex.using([
 			var frameTime = dt;
 			this.lastTime = newTime;
 			
+			// Limit frame time to avoid spiral of death.
+			if(frameTime > MAX_FRAME_TIME) frameTime = MAX_FRAME_TIME;
+			
 			while(frameTime > 0) {
 			  var deltaTime = Math.min(frameTime, this.deltaTime);
 			  this.integrate(this.deltaTime);
@@ -102,10 +107,6 @@ ex.using([
 			}
 			
 			this.render(dt);
-			
-			this.onUpdate(dt);
-			
-			ex.Input.update(dt);
 			
 			if(this.debug){
 				ex.Debug.benchmarkEngine(dt);
@@ -128,6 +129,10 @@ ex.using([
       if(this.collisionManager != null) {
         this.collisionManager.update(dt);
       }
+      
+      this.onUpdate(dt);
+      
+      ex.Input.update(dt);
 		},
 		
 		render: function (dt) {
