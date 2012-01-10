@@ -162,9 +162,9 @@ ex.using([
 		    world = this.currentWorld;
 		  }
 			this.unloadScene(world);
-			
-			world.addObject(this.loadingScreen);
-			
+
+      world.addObject(this.loadingScreen);
+      
 			var that = this;
 			var sceneNamespace = "game.levels." + sceneName;
 			  
