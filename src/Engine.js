@@ -160,9 +160,11 @@ ex.using([
 		loadScene: function(sceneName, callback, world) {
 		  if(!world) {
 		    world = this.currentWorld;
-		    world.addObject(this.loadingScreen);
 		  }
 			this.unloadScene(world);
+			
+			world.addObject(this.loadingScreen);
+			
 			var that = this;
 			var sceneNamespace = "game.levels." + sceneName;
 			  
@@ -179,9 +181,6 @@ ex.using([
 					world.addObjects(objects);
 					world.removeObject(that.loadingScreen);
           ex.Input.trackClickableObjects(objects);
-					
-          // Reset camera position
-					that.camera.moveTo(0, 0);
 
 					scene.finalSetup();
 					
@@ -199,6 +198,9 @@ ex.using([
 		  }
 			world.removeAllObjects();
 			ex.Input.untrackAllClickableObjects();
+			
+			// Reset camera position
+      this.camera.moveTo(0, 0);
 		},
 		
 		loadComponent: function(component) {

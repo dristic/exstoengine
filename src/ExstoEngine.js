@@ -469,8 +469,6 @@ if(!Array.indexOf){
 				ex.config.baseUrl = script.src.split("/ExstoEngine.js", 1)[0];
 			}
 		}
-		
-		ex.using([ 'ex.event.EventTarget' ], function () {});
 	}
 	
 })();

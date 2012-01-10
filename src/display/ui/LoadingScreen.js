@@ -61,6 +61,20 @@ ex.using([
           }
         })
       ];
+		  
+		  var i = 0,
+		      ln = this.items.length,
+		      item;
+		  for(; i < ln; i++) {
+		    item = this.items[i];
+		    if(item.scrollFactor) {
+		      item.scrollFactor.x = 0;
+		      item.scrollFactor.y = 0;
+		    }
+		  }
+		  
+		  this.items[this.items.length - 1].options.outer.scrollFactor = new ex.Vector(0, 0);
+		  this.items[this.items.length - 1].options.inner.scrollFactor = new ex.Vector(0, 0);
 		},
 		
 		/**

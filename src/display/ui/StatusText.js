@@ -22,10 +22,9 @@ ex.using([
 			};
 			
 			ex.extend(this.options, options);
-			this.options.text.position = this.options.position;
 			
 			this.items = [
-			  new ex.display.Text('Loading...', this.options.text)
+			  new ex.display.Text('Loading...', this.options.position, this.options.text)
       ];
 			
 			this._super("constructor", [true, 1.0]);
