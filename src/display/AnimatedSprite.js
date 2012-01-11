@@ -41,7 +41,10 @@ ex.using([
 			this.frameRate = frameRate;
 
 			this.animations = {};
-			this.curAnimation = [];
+			this.curAnimation = {
+			    sheet: null,
+			    frames: null
+			};
 			this.curFrame = 0;
 			this.playing = true;
 			
@@ -67,8 +70,16 @@ ex.using([
 		 * @param {Number[]} frames array of frame numbers to be played
 		 * in order 
 		 */
-		createAnimation: function(name, frames) {
-			this.animations[name] = frames;
+		createAnimation: function(name, sheet, frames) {
+		  if(ex.isArray(sheet)) {
+		    frames = sheet;
+		    sheet = 0;
+		  }
+		  
+	    this.animations[name] = {
+	      sheet: this.images[sheet],
+	      frames: frames
+	    };
 		},
 		
 		/**
@@ -84,10 +95,13 @@ ex.using([
 		play: function(name, override) {
 			if(override == null || override == false)
 			{
-				if(this.curAnimation == this.animations[name] && this.playing == true) return;
+				if(this.curAnimation == this.animations[name] && this.playing == true) {
+				  return;
+				}
 			}
 			
 			this.curAnimation = this.animations[name];
+			this.currentImage = this.animations[name].sheet;
 			this.curFrame = 0;
 			this.playing = true;	
 		},
@@ -127,9 +141,9 @@ ex.using([
 				if(dt > (1 / this.frameRate)) {
 					var skips = Math.floor(dt / (1 / this.frameRate));
 					while(skips--) {
-						var index = array_index_of(this.curAnimation, this.curFrame) + 1;
-						if(index > this.curAnimation.length - 1) index = 0;
-						this.curFrame = this.curAnimation[index];
+						var index = array_index_of(this.curAnimation.frames, this.curFrame) + 1;
+						if(index > this.curAnimation.frames.length - 1) index = 0;
+						this.curFrame = this.curAnimation.frames[index];
 					}
 					dt = dt % (1 / this.frameRate);
 				}
@@ -138,11 +152,11 @@ ex.using([
 				if(this.timer < 0) {
 					this.timer += (1 / this.frameRate);
 					//--Ensure image is available
-					if(this.img.width > 0 && this.img.height > 0) {
+					if(this.currentImage.width > 0 && this.currentImage.height > 0) {
 						//--Go to correct frame
-						var index = array_index_of(this.curAnimation, this.curFrame) + 1;
-						if(index > this.curAnimation.length - 1) index = 0;
-						this.curFrame = this.curAnimation[index];
+						var index = array_index_of(this.curAnimation.frames, this.curFrame) + 1;
+						if(index > this.curAnimation.frames.length - 1) index = 0;
+						this.curFrame = this.curAnimation.frames[index];
 						
 						this.goToFrame(this.curFrame);
 					}
@@ -160,7 +174,7 @@ ex.using([
 		 * @param {Number} frame number of the frame to move to
 		 */
 		goToFrame: function(frame) {
-			var xNumFrames = this.img.width / this.renderingRect.width;
+			var xNumFrames = this.currentImage.width / this.renderingRect.width;
 			
 			var xFrame = frame % xNumFrames;
 			var yFrame = Math.floor(frame / xNumFrames);
@@ -180,7 +194,7 @@ ex.using([
 			this.renderingRect.position.x += this.renderingRect.width;
 			
 			//--If that frame is outside the bounds, try to go down a row
-			if((this.renderingRect.position.x + this.renderingRect.width) > this.img.width)
+			if((this.renderingRect.position.x + this.renderingRect.width) > this.currentImage.width)
 			{
 				//--Reset column position
 				this.renderingRect.position.x = 0;
@@ -189,7 +203,7 @@ ex.using([
 				this.renderingRect.position.y += this.renderingRect.height;
 				
 				//--If that frame is outside bounds, return to the beginning
-				if((this.renderingRect.position.y + this.renderingRect.height) > this.img.height)
+				if((this.renderingRect.position.y + this.renderingRect.height) > this.currentImage.height)
 				{
 					this.renderingRect.position.y = 0;
 				}
@@ -204,8 +218,8 @@ ex.using([
 		 * @returns {Number} number of frames in the image
 		 */
 		numFrames: function () {
-			var xNumFrames = this.img.width / this.renderingRect.width;
-			var yNumFrames = this.img.height / this.renderingRect.height;
+			var xNumFrames = this.currentImage.width / this.renderingRect.width;
+			var yNumFrames = this.currentImage.height / this.renderingRect.height;
 			
 			return xNumFrames * yNumFrames;
 		}

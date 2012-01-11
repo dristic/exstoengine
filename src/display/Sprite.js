@@ -31,7 +31,9 @@ ex.using([
       this.type = "Sprite";
       
       this.position = position;
-      this.img = img || new Image();
+      
+      this.images = [];
+      this.currentImage = this._prepareImages(img) || new Image();
 
       this.rotation = 0;
       this.rotationEnabled = false;
@@ -40,16 +42,29 @@ ex.using([
       
       this.scrollFactor = new ex.base.Vector(1,1);
       
-      this.width = this.img.naturalWidth;
-      this.height = this.img.naturalHeight;
+      this.width = this.currentImage.naturalWidth;
+      this.height = this.currentImage.naturalHeight;
       
       if(this.width == 0  && this.height == 0) {
-      	ex.event.listen('load', img, function () {
+      	ex.event.listen('load', this.currentImage, function () {
       		this._recalcDimensions();
       	}, this);
       }
       
       this._super("constructor", [true, 1.0]);
+    },
+    
+    _prepareImages: function(images) {
+      if(ex.isArray(images)) {
+        this.images.concat(images);
+      } else {
+        this.images.push(images);
+      }
+      if(this.images.length > 0) {
+        return this.images[0];
+      } else {
+        return null;
+      }
     },
     
     /**
@@ -62,8 +77,8 @@ ex.using([
      * @memberOf ex.display.Sprite
      */
     _recalcDimensions: function () {
-    	this.width = this.img.naturalWidth;
-      this.height = this.img.naturalHeight;
+    	this.width = this.currentImage.naturalWidth;
+      this.height = this.currentImage.naturalHeight;
       
       if(this.rendering && this.rendering.rotationCanvas) {
         this.rendering.rotationCanvas.width = this.width;
