@@ -130,39 +130,14 @@ ex.using([
      * as a single image.
      */
     setup2dCanvas: function (canvas) {
-      // Used to pre-render the whole map as an image
-      this.preRenderCanvas = document.createElement("canvas");
-      this.preRenderCanvas.width = this.tileMap.width;
-      this.preRenderCanvas.height = this.tileMap.height;
-      this.preRenderContext = this.preRenderCanvas.getContext('2d');
-      
-      var yPos = this.tileMap.data.length - 1,
-          xPos = 0;
-      for(yPos; yPos > -1; yPos--) {
-        for(xPos; xPos < this.tileMap.data[yPos].length; xPos++) {
-          var tile = this.tileMap.data[yPos][xPos], sx = 0, sy = 0;
-          var tileValue = tile.value;
-          if(tileValue != 0) {
-            while(--tileValue) {
-              sx += this.tileMap.tileWidth;
-              if(sx >= this.tileSet.width) {
-                sy += this.tileMap.tileHeight;
-                sx = 0;
-              }
-            }
-            this.preRenderContext.drawImage(
-                this.tileSet,
-                sx,
-                sy,
-                this.tileMap.tileWidth,
-                this.tileMap.tileHeight,
-                tile.position.x,
-                tile.position.y - (this.yOffset * yPos),
-                tile.width,
-                tile.height);
-          }
-        }
-        xPos = 0;
+      if(this.options.preRender == true) {
+        // Used to pre-render the whole map as an image
+        this.preRenderCanvas = document.createElement("canvas");
+        this.preRenderCanvas.width = this.tileMap.width;
+        this.preRenderCanvas.height = this.tileMap.height;
+        this.preRenderContext = this.preRenderCanvas.getContext('2d');
+        
+        ex.display.rendering.SpriteMapRenderer.renderSpriteMapToContext(this, this.preRenderContext);
       }
     },
     
@@ -187,43 +162,133 @@ ex.using([
       
       // Position of the sprite in the viewport
       var viewPortX = ex.toInt(this.position.x - (camX * this.scrollFactor.x)),
-        viewPortY = ex.toInt(this.position.y - (camY * this.scrollFactor.y));
+          viewPortY = ex.toInt(this.position.y - (camY * this.scrollFactor.y));
             
       // Do nothing if sprite map is out of the viewport
-      if((viewPortX + this.preRenderCanvas.width) < 0
+      if((viewPortX + this.tileMap.width) < 0
           || viewPortX > camWidth
-          ||(viewPortY + this.preRenderCanvas.height) < 0
+          ||(viewPortY + this.tileMap.height) < 0
           || viewPortY > camHeight) {
-        return;
+        if(this.options.repeat == false) {
+          return;
+        }
       }
       
-      // Calculate section of preRenderCanvas to draw
-      var sourceX = -viewPortX,
-        sourceY = -viewPortY,
-        sourceWidth = camWidth - viewPortX,
-        sourceHeight = camWidth - viewPortY;
-      var destX = viewPortX,
-        destY = viewPortY;
+      var SpriteMapRenderer = ex.display.rendering.SpriteMapRenderer;
       
-      // Constrain values to image size
-      if(sourceX < 0) sourceX = 0;
-      if(sourceY < 0) sourceY = 0;
-      if((sourceX + sourceWidth) > this.preRenderCanvas.width) sourceWidth = this.preRenderCanvas.width - sourceX;
-      if((sourceY + sourceHeight) > this.preRenderCanvas.height) sourceHeight = this.preRenderCanvas.height - sourceY;
-      if(destX < 0) destX = 0;
-      if(destY < 0) destY = 0;
+      if(this.options.repeat == false) {
+        if(this.options.preRender == true) {
+          SpriteMapRenderer.renderPreRenderedSpriteMapToContext(this, context, { x: viewPortX, y: viewPortY }, camWidth, camHeight);
+        } else {
+          // Render all the tiles on the map at once.
+          SpriteMapRenderer.renderSpriteMapToContext(this, context, { x: viewPortX, y: viewPortY });
+        }
+      } else {
+        // The starting x and y is equal to the remainder of how many times the tile
+        // map can fit between its position and the camera top left.
+        var startX = viewPortX % this.tileMap.width, 
+            startY = viewPortY % this.tileMap.height,
+            curX, curY;
+        
+        // Subtract one more tile if the tiles need to repeat negatively.
+        if(viewPortX > 0) startX -= this.tileMap.width;
+        if(viewPortY > 0) startY -= this.tileMap.height;
+        
+        curX = startX;
+        curY = startY;
+        
+        while(curX < camWidth) {
+          while(curY < camHeight) {
+            // Copied from after if(this.options.repeat == false)
+            if(this.options.preRender == true) {
+              SpriteMapRenderer.renderPreRenderedSpriteMapToContext(this, context, { x: curX, y: curY }, camWidth, camHeight);
+            } else {
+              // Render all the tiles on the map at once.
+              SpriteMapRenderer.renderSpriteMapToContext(this, context, { x: curX, y: curY });
+            }
+            curY += this.tileMap.height;
+          }
+          curY = startY;
+          curX += this.tileMap.width;
+        }
+      }
+    },
+    
+    // Global static functions.
+    __statics: {
+      renderPreRenderedSpriteMapToContext: function (spriteMap, context, position, width, height) {
+        position = position || {
+          x: 0,
+          y: 0
+        };
+        
+        // Calculate section of preRenderCanvas to draw
+        var sourceX = -position.x,
+            sourceY = -position.y,
+            sourceWidth = width - position.x,
+            sourceHeight = height - position.y;
+        var destX = position.x,
+            destY = position.y;
+        
+        // Constrain values to image size
+        if(sourceX < 0) sourceX = 0;
+        if(sourceY < 0) sourceY = 0;
+        if((sourceX + sourceWidth) > spriteMap.preRenderCanvas.width) sourceWidth = spriteMap.preRenderCanvas.width - sourceX;
+        if((sourceY + sourceHeight) > spriteMap.preRenderCanvas.height) sourceHeight = spriteMap.preRenderCanvas.height - sourceY;
+        if(destX < 0) destX = 0;
+        if(destY < 0) destY = 0;
+        
+        // Draw image
+        if(sourceWidth == 0 || sourceHeight == 0) console.log(arguments);
+        context.drawImage(
+                  spriteMap.preRenderCanvas,
+                  sourceX,
+                  sourceY,
+                  sourceWidth,
+                  sourceHeight,
+                  destX, 
+                  destY,
+                  sourceWidth,  //destWidth and Height == sourceWidth and Height
+                  sourceHeight);
+      },
       
-      // Draw image
-      context.drawImage(
-                this.preRenderCanvas,
-                sourceX,
-                sourceY,
-                sourceWidth,
-                sourceHeight,
-                destX, 
-                destY,
-                sourceWidth,  //destWidth and Height == sourceWidth and Height
-                sourceHeight);
+      renderSpriteMapToContext: function (spriteMap, context, offset) {
+        var yPos = spriteMap.tileMap.data.length - 1,
+            xPos = 0;
+        
+        offset = offset || {
+          x: 0,
+          y: 0
+        };
+        
+        // Loop through all the tiles and draw them onto the context.
+        for(yPos; yPos > -1; yPos--) {
+          for(xPos; xPos < spriteMap.tileMap.data[yPos].length; xPos++) {
+            var tile = spriteMap.tileMap.data[yPos][xPos], sx = 0, sy = 0;
+            var tileValue = tile.value;
+            if(tileValue != 0) {
+              while(--tileValue) {
+                sx += spriteMap.tileMap.tileWidth;
+                if(sx >= spriteMap.tileSet.width) {
+                  sy += spriteMap.tileMap.tileHeight;
+                  sx = 0;
+                }
+              }
+              context.drawImage(
+                  spriteMap.tileSet,
+                  sx,
+                  sy,
+                  spriteMap.tileMap.tileWidth,
+                  spriteMap.tileMap.tileHeight,
+                  tile.position.x + offset.x,
+                  tile.position.y - (spriteMap.options.offset.y * yPos) + offset.y,
+                  tile.width,
+                  tile.height);
+            }
+          }
+          xPos = 0;
+        }
+      }
     }
   });
 });
