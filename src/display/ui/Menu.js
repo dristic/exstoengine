@@ -133,8 +133,18 @@ ex.using([
       }
     },
     
-    activateCurrentSelection: function() {
-      this.options.items[this.currentSelection].action();
+    activateCurrentSelection: function(dt, data) {
+      
+      // if mouse or touch event
+      if(data != null) {
+        console.log("mouse event");
+        if(this._isPointerOnCurrentSelection(data.position)) {
+          this.options.items[this.currentSelection].action();
+        }
+      } else { // if key event
+        console.log("key event");
+        this.options.items[this.currentSelection].action();
+      }
     },
     
     /**
@@ -146,6 +156,20 @@ ex.using([
      */
     update: function(dt) {
       
+    },
+    
+    _isPointerOnCurrentSelection: function(position) {
+      var selection = this.options.items[this.currentSelection];
+      console.log("Mouse", position.x, position.y, 
+          "Selection", selection.item.position.x, selection.item.position.y);
+      if(position.x > selection.item.position.x
+          && position.x < selection.item.position.x + selection.item.width
+          && position.y > selection.item.position.y
+          && position.y < selection.item.position.y + selection.item.height) {
+        return true;
+      } else {
+        return false;
+      }
     },
     
     _throwNotRenderableError: function (item) {

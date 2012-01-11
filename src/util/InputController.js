@@ -1,6 +1,7 @@
 ex.using([
   'ex.base.GlobalComponent',
   'ex.util.Input',
+  'ex.util.DOMTools',
   'ex.util.GameController',
   'ex.base.Vector'
 ], function() {
@@ -112,19 +113,21 @@ ex.using([
 	    },
 	    
 	    _addEventListenersOnInput: function() {
+	      var canvasElement = document.getElementById('mainCanvas');
 	      ex.event.listen('keydown', this._inputTarget, this._onKeyDown);
 	      ex.event.listen('keyup', this._inputTarget, this._onKeyUp);
-	      ex.event.listen('mousedown', document, this._onMouseDown);
-	      ex.event.listen('mouseup', document, this._onMouseUp);
-	      ex.event.listen('mousemove', document, this._onMouseMove);
+	      ex.event.listen('mousedown', canvasElement, this._onMouseDown);
+	      ex.event.listen('mouseup', canvasElement, this._onMouseUp);
+	      ex.event.listen('mousemove', canvasElement, this._onMouseMove);
 	    },
 	    
 	    _removeEventListenersFromInput: function() {
+	      var canvasElement = document.getElementById('mainCanvas');
 	      ex.event.unlisten('keydown', this._inputTarget, this._onKeyDown);
         ex.event.unlisten('keyup', this._inputTarget, this._onKeyUp);
-        ex.event.unlisten('mousedown', document, this._onMouseDown);
-        ex.event.unlisten('mouseup', document, this._onMouseUp);
-        ex.event.unlisten('mousemove', document, this._onMouseMove);
+        ex.event.unlisten('mousedown', canvasElement, this._onMouseDown);
+        ex.event.unlisten('mouseup', canvasElement, this._onMouseUp);
+        ex.event.unlisten('mousemove', canvasElement, this._onMouseMove);
 	    },
 	    
 	    _onKeyDown: function(event) {
@@ -155,20 +158,12 @@ ex.using([
 	      if(ex.Input.mouse.event.LMB) {
 	        ex.Input.mouse.event.drag = true;
 	      }
-	      	      
+	      
+	      var element = document.getElementById('mainCanvas');
+	      
         // Update current mouse position
-	      if(!event) {
-	        var event = window.event;
-	      }
-	      if(event.pageX || event.pageY) {
-	        ex.Input.mouse.position.x = event.pageX;
-	        ex.Input.mouse.position.y = event.pageY;
-	      } else if (event.clientX || event.clientY) {
-	        ex.Input.mouse.position.x = event.clientX
-	          + document.body.scrollLeft;
-	        ex.Input.mouse.position.y = event.clientY
-	          + document.body.scrollTop;
-	      }
+        ex.Input.mouse.position.x = event.clientX - element.offsetLeft;
+        ex.Input.mouse.position.y = event.clientY - element.offsetTop; 
 	    }
 		}
 	});
