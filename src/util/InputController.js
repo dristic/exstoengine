@@ -11,6 +11,7 @@ ex.using([
 	  __statics: {
 	    // References
 	    _inputTarget: document,
+	    _canvasElement: null,
 	    _engine: null,
 	    clickableObjects: [],
 	    
@@ -52,6 +53,11 @@ ex.using([
 	    },
 	    
 	    update: function(dt) {
+	      if(!this._canvasElement) {
+	        this._canvasElement = document.getElementById('mainCanvas');
+	        ex.Debug.log("ex.Input is now tracking mouse events on the canvas.", "INFO");
+	      }
+	      
 	      var index = this._controllers.length;
 	      while(index--) {
 	        this._controllers[index].update(dt);
@@ -159,11 +165,11 @@ ex.using([
 	        ex.Input.mouse.event.drag = true;
 	      }
 	      
-	      var element = document.getElementById('mainCanvas');
-	      
         // Update current mouse position
-        ex.Input.mouse.position.x = event.clientX - element.offsetLeft;
-        ex.Input.mouse.position.y = event.clientY - element.offsetTop; 
+        ex.Input.mouse.position.x = 
+          event.clientX - ex.Input._canvasElement.offsetLeft;
+        ex.Input.mouse.position.y = 
+           event.clientY - ex.Input._canvasElement.offsetTop; 
 	    }
 		}
 	});
