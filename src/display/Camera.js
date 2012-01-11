@@ -21,6 +21,7 @@ ex.using([
 			this.width = width;
 			this.height = height;
 			this.following = null;
+			this.bounds = null;
 		},
 		
 		/**
@@ -34,6 +35,13 @@ ex.using([
 			if(this.following != null) {
 				this.position.x = this.following.position.x + (this.following.width >> 1) - (this.width >> 1);
 				this.position.y = this.following.position.y + (this.following.height >> 1) - (this.height >> 1);
+			}
+			
+			if(this.bounds != null) {
+			  if(this.position.x < this.bounds.minX) this.position.x = this.bounds.minX;
+			  else if(this.position.x > this.bounds.maxX) this.position.x = this.bounds.maxX;
+			  if(this.position.y < this.bounds.minY) this.position.y = this.bounds.minY;
+			  else if(this.position.y > this.bounds.maxY) this.position.y = this.bounds.maxY;
 			}
 		},
 		
@@ -72,6 +80,25 @@ ex.using([
 		 */
 		follow: function (object) {
 			this.following = object;
+		},
+		
+		/**
+		 * Calculates the bounds that the camera cannot go beyond.
+		 * @function
+		 * @name bind
+		 * @memberOf ex.display.Camera
+		 * @param {Number} x The x position of the rectangle.
+		 * @param {Number} y The y position of the rectangle.
+		 * @param {Number} width The width of the rectangle.
+		 * @param {Number} height The height of the rectangle.
+		 */
+		bind: function (x, y, width, height) {
+		  this.bounds = {
+	      minX: x,
+	      minY: y,
+	      maxX: x + width - this.width,
+	      maxY: y + height - this.height
+		  }
 		}
 	});
 });
