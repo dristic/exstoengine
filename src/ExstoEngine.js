@@ -153,6 +153,13 @@ if(!Array.indexOf){
 	};
 	
 	/**
+	 * Returns true of object is an Array
+	 */
+	ex.isArray = function(object) {
+    return object.constructor == Array;
+	}
+	
+	/**
 	 * The main namespace for all engine classes and global functions.
 	 * 
 	 */

@@ -4,7 +4,7 @@ ex.using([
   ex.define('ex.display.rendering.AnimatedSpriteRenderer', ex.display.rendering.ObjectRenderer, {
     setupDom: function (el) {
       var thisEl = document.createElement('div');
-      thisEl.style.backgroundImage = 'url(' + this.img.src + ')';
+      thisEl.style.backgroundImage = 'url(' + this.currentImage.src + ')';
       thisEl.style.display = 'block';
       thisEl.style.width = this.renderingRect.width + 'px';
       thisEl.style.height = this.renderingRect.height + 'px';
@@ -74,7 +74,7 @@ ex.using([
           && viewPortX < camWidth
           && (viewPortY + this.renderingRect.height) > 0
           && viewPortY < camHeight) {
-        context.drawImage(this.img, 
+        context.drawImage(this.currentImage, 
                   this.renderingRect.position.x, 
                   this.renderingRect.position.y,
                   this.renderingRect.width,
