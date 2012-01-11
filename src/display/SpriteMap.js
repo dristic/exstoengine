@@ -24,18 +24,29 @@ ex.using([
 		 * @property {ex.base.Vector} position
 		 * @property {ex.base.Vector} scrollFactor
 		 */
-		constructor: function(tileWidth, tileHeight, map, tileSet, name, yOffset) {
+		constructor: function(tileWidth, tileHeight, map, tileSet, options) {
 		  this.type = "SpriteMap";
 		  
 			this.collides = false;
-			this.name = name;
 			this.tileSet = tileSet;
 			this.position = new ex.base.Vector(0,0);
 			this.scrollFactor = new ex.base.Vector(1,1);
-			this.yOffset = yOffset || 0;
 
 			// Call Renderable constructor (visibility, opacity)
 			this._super("constructor", [true, 1.0]);
+			
+			this.defaults = {
+		    repeat: false,
+		    preRender: true,
+		    offset: {
+		      x: 0,
+		      y: 0
+		    }
+			};
+			
+			this.options = {};
+			ex.extend(this.options, this.defaults);
+			ex.extend(this.options, options);
 			
 			// Create TileMap
 			this.tileMap = new ex.world.TileMap(tileWidth, tileHeight, map);
