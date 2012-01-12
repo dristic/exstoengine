@@ -172,6 +172,8 @@ ex.using([
         this._assetsToLoad++;
         this._ready = false;
         
+        var that = this;
+        
         function completeAsset(asset) {
           that._assetsLoaded++;
           that._eventHandler.dispatchEvent('assetLoaded', asset);
