@@ -32,8 +32,7 @@ ex.using([
       
       this.position = position;
       
-      this.images = [];
-      this.currentImage = this._prepareImages(img) || new Image();
+      this.currentImage = img|| new Image();
 
       this.rotation = 0;
       this.rotationEnabled = false;
@@ -52,19 +51,6 @@ ex.using([
       }
       
       this._super("constructor", [true, 1.0]);
-    },
-    
-    _prepareImages: function(images) {
-      if(ex.isArray(images)) {
-        this.images.concat(images);
-      } else {
-        this.images.push(images);
-      }
-      if(this.images.length > 0) {
-        return this.images[0];
-      } else {
-        return null;
-      }
     },
     
     /**

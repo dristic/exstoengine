@@ -3,11 +3,12 @@ ex.using([
 ], function () {
   ex.define('ex.display.rendering.AnimatedSpriteRenderer', ex.display.rendering.ObjectRenderer, {
     setupDom: function (el) {
+      var spriteSheet = this.currentAnimation.sheet;
       var thisEl = document.createElement('div');
-      thisEl.style.backgroundImage = 'url(' + this.currentImage.src + ')';
+      thisEl.style.backgroundImage = 'url(' + spriteSheet.image.src + ')';
       thisEl.style.display = 'block';
-      thisEl.style.width = this.renderingRect.width + 'px';
-      thisEl.style.height = this.renderingRect.height + 'px';
+      thisEl.style.width = spriteSheet.renderingRect.width + 'px';
+      thisEl.style.height = spriteSheet.renderingRect.height + 'px';
       thisEl.style.position = 'absolute';
       thisEl.style.left = this.position.x + 'px';
       thisEl.style.top = this.position.y + 'px';
@@ -26,6 +27,8 @@ ex.using([
     },
     
     renderDom: function (el, camX, camY, camWidth, camHeight) {
+      var spriteSheet = this.currentAnimation.sheet;
+      
       // Position of the sprite in the viewport
       var viewPortX = ex.toInt(this.position.x - (camX * this.scrollFactor.x)),
           viewPortY = ex.toInt(this.position.y - (camY * this.scrollFactor.y));
@@ -46,7 +49,7 @@ ex.using([
       }
       
       this.rendering.el.style.backgroundPosition = 
-        this.renderingRect.position.x + 'px' + ' ' + this.renderingRect.position.y + 'px';
+        spriteSheet.renderingRect.position.x + 'px' + ' ' + spriteSheet.renderingRect.position.y + 'px';
       this.rendering.el.style.left = viewPortX + 'px';
       this.rendering.el.style.top = viewPortY + 'px';
     },
@@ -61,6 +64,7 @@ ex.using([
      * @param {Number} camHeight viewport height
      */
     render2dCanvas: function (context, camX, camY, camWidth, camHeight) {
+      var spriteSheet = this.currentAnimation.sheet;
       if(!this.isVisible()){
         return;
       }
@@ -70,19 +74,19 @@ ex.using([
         viewPortY = ex.toInt(this.position.y - (camY * this.scrollFactor.y));
       
       // Render only if the animated sprite is within the viewport
-      if((viewPortX + this.renderingRect.width) > 0
+      if((viewPortX + spriteSheet.renderingRect.width) > 0
           && viewPortX < camWidth
-          && (viewPortY + this.renderingRect.height) > 0
+          && (viewPortY + spriteSheet.renderingRect.height) > 0
           && viewPortY < camHeight) {
-        context.drawImage(this.currentImage, 
-                  this.renderingRect.position.x, 
-                  this.renderingRect.position.y,
-                  this.renderingRect.width,
-                  this.renderingRect.height,
+        context.drawImage(spriteSheet.image, 
+                  spriteSheet.renderingRect.position.x, 
+                  spriteSheet.renderingRect.position.y,
+                  spriteSheet.renderingRect.width,
+                  spriteSheet.renderingRect.height,
                   viewPortX, 
                   viewPortY,
-                  this.renderingRect.width,
-                  this.renderingRect.height);
+                  spriteSheet.renderingRect.width,
+                  spriteSheet.renderingRect.height);
       }
     }
   });

@@ -1,9 +1,9 @@
 ex.using([
-  "ex.display.Sprite",
+  "ex.display.Renderable",
   "ex.base.Rectangle",
   "ex.base.Point"
 ], function () {
-	ex.define("ex.display.AnimatedSprite", ex.display.Sprite, {
+	ex.define("ex.display.AnimatedSprite", ex.display.Renderable, {
 		/**
 		 * An extension of ex.display.Sprite that is able to animate sprites by
 		 * stepping through a tileset.
@@ -21,44 +21,39 @@ ex.using([
 		 * @property {Number} frameRate Number of frames to wait per
 		 * 		sprite tile.
 		 * @property {Object} Associative array of animations (name : frames).
-		 * @property {Number[]} curAnimation The frames of the selected
+		 * @property {Number[]} currentAnimation The frames of the selected
 		 * 		animation.
-		 * @property {Number} curFrame the current frame in the animation.
+		 * @property {Number} currentFrame the current frame in the animation.
 		 * 		Initializes to 0.
 		 * @property {Boolean} playing Controls animation playback (on/off).
 		 * @property {ex.base.Rectangle} renderingRect Frame dimensions used
 		 * 		in rendering from the sprite image.
-		 * @property {Number} width
-		 * @property {Number} height
 		 * @constructor
 		 */
-		constructor: function(position, frameWidth, frameHeight, frameRate, img) {
-		  this._super("constructor", [position, img]);
-		  
+		constructor: function(spriteSheets) {
+		  this._super("constructor", [true, 1.0, ex.Vector(0,0), 1, 1]);
 		  this.type = "AnimatedSprite";
-		  
-			this.timer = (1 / frameRate);
-			this.frameRate = frameRate;
 
+		  this.position = new ex.Vector(0,0);
+		  
+			this.spriteSheets = this._prepareSpriteSheets(spriteSheets);
 			this.animations = {};
-			this.curAnimation = {
-			    sheet: null,
-			    frames: null
-			};
-			this.curFrame = 0;
-			this.playing = true;
+			this.currentAnimation = null;
+			this.currentFrame = 0;
+			this.playing = false;
 			
-			this.renderingRect = new ex.base.Rectangle(
-					new ex.base.Point(0,0),
-					frameWidth,
-					frameHeight);
-			
-			this.width = frameWidth;
-			this.height = frameHeight;
+			this.timer = 0; // will be (1 / frameRate)
 		},
 		
-		_recalcDimensions: function () {
-			// Overridden because we already have the dimensions
+		_prepareSpriteSheets: function(spriteSheets) {
+		  if(ex.isArray(spriteSheets)) {
+		    return spriteSheets;
+		  } else if (spriteSheets instanceof ex.display.SpriteSheet) {
+		    return [spriteSheets];
+		  } else {
+		    ex.Debug.log("AnimatedSprite received spriteSheets in wrong format.", 'ERROR');
+		    return [];
+		  }
 		},
 		
 		/**
@@ -70,14 +65,9 @@ ex.using([
 		 * @param {Number[]} frames array of frame numbers to be played
 		 * in order 
 		 */
-		createAnimation: function(name, sheet, frames) {
-		  if(ex.isArray(sheet)) {
-		    frames = sheet;
-		    sheet = 0;
-		  }
-		  
+		createAnimation: function(name, sheetNumber, frames) {		  
 	    this.animations[name] = {
-	      sheet: this.images[sheet],
+	      sheet: this.spriteSheets[sheetNumber],
 	      frames: frames
 	    };
 		},
@@ -93,16 +83,16 @@ ex.using([
 		 * of allowing it to continue
 		 */
 		play: function(name, override) {
-			if(override == null || override == false)
-			{
-				if(this.curAnimation == this.animations[name] && this.playing == true) {
+			if(override == null || override == false) {
+				if(this.currentAnimation == this.animations[name] && this.playing == true) {
 				  return;
 				}
 			}
 			
-			this.curAnimation = this.animations[name];
-			this.currentImage = this.animations[name].sheet;
-			this.curFrame = 0;
+			this.currentAnimation = this.animations[name];
+			this.currentFrame = 0;
+			this.timer = (1 / this.animations[name].sheet.frameRate);
+			
 			this.playing = true;	
 		},
 		
@@ -135,35 +125,34 @@ ex.using([
 		 * @param {Number} dt timestep
 		 */
 		update: function(dt) {
+		  var frameRate = this.currentAnimation.sheet.frameRate;
 			//--Ensure we are playing and frameRate > 0
-			if(this.playing == true && this.frameRate > 0) {
+			if(this.playing == true && frameRate > 0) {
 				// Check for frame skipping due to inactive tab
-				if(dt > (1 / this.frameRate)) {
-					var skips = Math.floor(dt / (1 / this.frameRate));
+				if(dt > (1 / frameRate)) {
+					var skips = Math.floor(dt / (1 / frameRate));
 					while(skips--) {
-						var index = array_index_of(this.curAnimation.frames, this.curFrame) + 1;
-						if(index > this.curAnimation.frames.length - 1) index = 0;
-						this.curFrame = this.curAnimation.frames[index];
+						var index = array_index_of(this.currentAnimation.frames, this.currentFrame) + 1;
+						if(index > this.currentAnimation.frames.length - 1) index = 0;
+						this.currentFrame = this.currentAnimation.frames[index];
 					}
 					dt = dt % (1 / this.frameRate);
 				}
 				this.timer -= dt;
 				//--If it is time to go to the next frame
 				if(this.timer < 0) {
-					this.timer += (1 / this.frameRate);
+					this.timer += (1 / frameRate);
 					//--Ensure image is available
-					if(this.currentImage.width > 0 && this.currentImage.height > 0) {
+					if(this.currentAnimation.sheet.isReady()) {
 						//--Go to correct frame
-						var index = array_index_of(this.curAnimation.frames, this.curFrame) + 1;
-						if(index > this.curAnimation.frames.length - 1) index = 0;
-						this.curFrame = this.curAnimation.frames[index];
+						var index = array_index_of(this.currentAnimation.frames, this.currentFrame) + 1;
+						if(index > this.currentAnimation.frames.length - 1) index = 0;
+						this.currentFrame = this.currentAnimation.frames[index];
 						
-						this.goToFrame(this.curFrame);
+						this.goToFrame(this.currentFrame);
 					}
 				}
 			}
-			
-			this._super("update", [dt]);
 		},
 		
 		/**
@@ -174,13 +163,15 @@ ex.using([
 		 * @param {Number} frame number of the frame to move to
 		 */
 		goToFrame: function(frame) {
-			var xNumFrames = this.currentImage.width / this.renderingRect.width;
+		  var image = this.currentAnimation.sheet.image,
+		      renderingRect = this.currentAnimation.sheet.renderingRect;
+			var xNumFrames = image.width / renderingRect.width;
 			
 			var xFrame = frame % xNumFrames;
 			var yFrame = Math.floor(frame / xNumFrames);
 			
-			this.renderingRect.position.x = xFrame * this.renderingRect.width;
-			this.renderingRect.position.y = yFrame * this.renderingRect.height;
+			renderingRect.position.x = xFrame * renderingRect.width;
+			renderingRect.position.y = yFrame * renderingRect.height;
 		},
 		
 		/**
@@ -190,22 +181,20 @@ ex.using([
 		 * @memberOf ex.display.AnimatedSprite
 		 */
 		goToNextFrame: function() {
-			//--Slide to the right to the next frame
-			this.renderingRect.position.x += this.renderingRect.width;
+		  var image = this.currentAnimation.sheet.image,
+		      renderingRect = this.currentAnimation.sheet.renderingRect;
+			
+		  //--Slide to the right to the next frame
+			renderingRect.position.x += renderingRect.width;
 			
 			//--If that frame is outside the bounds, try to go down a row
-			if((this.renderingRect.position.x + this.renderingRect.width) > this.currentImage.width)
-			{
-				//--Reset column position
-				this.renderingRect.position.x = 0;
-				
-				//--Move down to next row
-				this.renderingRect.position.y += this.renderingRect.height;
+			if((renderingRect.position.x + renderingRect.width) > image.width) {
+				renderingRect.position.x = 0; //--Reset column position
+				renderingRect.position.y += renderingRect.height; //--Move down to next row
 				
 				//--If that frame is outside bounds, return to the beginning
-				if((this.renderingRect.position.y + this.renderingRect.height) > this.currentImage.height)
-				{
-					this.renderingRect.position.y = 0;
+				if((renderingRect.position.y + renderingRect.height) > image.height) {
+					renderingRect.position.y = 0;
 				}
 			}
 		},
@@ -218,8 +207,9 @@ ex.using([
 		 * @returns {Number} number of frames in the image
 		 */
 		numFrames: function () {
-			var xNumFrames = this.currentImage.width / this.renderingRect.width;
-			var yNumFrames = this.currentImage.height / this.renderingRect.height;
+		  var sheet = this.currentAnimation.sheet;
+			var xNumFrames = sheet.image.width / sheet.renderingRect.width;
+			var yNumFrames = sheet.image.height / sheet.renderingRect.height;
 			
 			return xNumFrames * yNumFrames;
 		}
@@ -246,5 +236,4 @@ ex.using([
 		
 		return i;
 	}
-	
 });

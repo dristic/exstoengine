@@ -28,7 +28,7 @@ ex.using([
      * @property {ex.display.Sprite} sprite
      * @constructor
      */
-    constructor : function(name, position, sprite, collides, anchored) {
+    constructor : function(name, position, width, height, sprite, collides, anchored) {
       this._super('constructor', []);
       
       // Referencing data
@@ -38,8 +38,8 @@ ex.using([
       // Physical data
       this.position = position;
       this.scrollFactor = new ex.base.Vector(1,1);
-      this.width = sprite.width;
-      this.height = sprite.height;
+      this.width = width;
+      this.height = height;
       this.velocity = new ex.base.Vector(0,0);
       this.collides = collides;
       this.anchored = anchored;
@@ -51,13 +51,6 @@ ex.using([
       this.sprite.position = this.position; // pointer to this.position
       this.visible = true;
       this.items = [this.sprite];
-      
-      if(sprite.width == 0 && sprite.height == 0) {
-        ex.event.listen(sprite.img, 'load', function () {
-          this.width = sprite.width;
-          this.height = sprite.height;
-              }, this);
-      }
     },
 
     /**

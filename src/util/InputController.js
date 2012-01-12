@@ -52,12 +52,7 @@ ex.using([
 	          this._inputControllerMaps[playerId], this);
 	    },
 	    
-	    update: function(dt) {
-	      if(!this._canvasElement) {
-	        this._canvasElement = document.getElementById('mainCanvas');
-	        ex.Debug.log("ex.Input is now tracking mouse events on the canvas.", "INFO");
-	      }
-	      
+	    update: function(dt) {	      
 	      var index = this._controllers.length;
 	      while(index--) {
 	        this._controllers[index].update(dt);
@@ -155,6 +150,16 @@ ex.using([
 	    },
 	    
 	    _onMouseMove: function(event) {
+	      if(!ex.Input._canvasElement) {
+	        ex.Input._canvasElement = document.getElementById('mainCanvas');
+          if(!ex.Input._canvasElement) {
+            ex.Debug.log("ex.Input is not able to track mouse movements.", 'INFO');
+            return;
+          } else {
+            ex.Debug.log("ex.Input is now tracking mouse events on the canvas.", "INFO");
+          }
+        }
+	      
 	      // Update last mouse position
 	      ex.Input.mouse.lastPosition.x = ex.Input.mouse.position.x;
 	      ex.Input.mouse.lastPosition.y = ex.Input.mouse.position.y;
