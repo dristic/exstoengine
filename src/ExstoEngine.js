@@ -402,6 +402,14 @@ if(!Array.indexOf){
 		
 		getByTagName: function (name) {
 			return document.getElementsByTagName(name)[0];
+		},
+		
+		getById: function (id) {
+		  var el = document.getElementById(id);
+		  if(!el) {
+		    ex.Debug.log('ex.Element.getById: Could not find element with id ' + id, 'WARNING');
+		  }
+		  return el;
 		}
 	};
 	

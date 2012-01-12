@@ -1,32 +1,10 @@
 (function () {
 	ex.define("ex.util.Key", {
 		__statics: {
-		  names: ['', '', '', '', '', '', '', '', 'Backspace', 'Tab',
-		          '', '', '', 'Enter', '', '', 'Shift', 'Control', '', 'PauseBreak',
-		          'CapsLock', '', '', '', '', '', '', 'Esc', '', '',
-		          '', '', 'Spacebar', 'PageUp', 'PageDown', 'End', 'Home', 'Left', 'Up', 'Right',
-		          'Down', '', '', '', '', 'Insert', 'Delete', '', 'Keyb0', 'Keyb1',
-		          'Keyb2', 'Keyb3', 'Keyb4', 'Keyb5', 'Keyb6', 'Keyb7', 'Keyb8', 'Keyb9', '', '',
-		          '', '', '', '', '', 'A', 'B', 'C', 'D', 'E',
-		          'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
-		          'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y',
-		          'Z', '', '', '', '', '', 'Numpad0', 'Numpad1', 'Numpad2', 'Numpad3', 
-		          'Numpad4', 'Numpad5', 'Numpad6', 'Numpad7', 'Numpad8', 'Numpad9', 'NumpadStar', 'NumpadPlus', '', 'NumpadMinus', 
-		          'NumpadPeriod', 'NumpadSlash', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8',
-		          'F9', 'F10', 'F11', 'F12', 'F13', 'F14', 'F15', '', '', '',
-		          '', '', '', '', '', '', '', '', '', '',
-		          '', '', '', '', 'NumLck', 'ScrLck', '', '', '', '',
-		          '', '', '', '', '', '', '', '', '', '',
-		          '', '', '', '', '', '', '', '', '', '',
-		          '', '', '', '', '', '', '', '', '', '',
-		          '', '', '', '', '', '', 'SemiColon', 'Equal', 'Comma', 'Minus',
-		          'Period', 'Question','BackQuote', '', '', '', '', '', '', '', 
-		          '', '', '', '', '', '', '', '', '', '', 
-		          '', '', '', '', '', '', '', '', '', 'LeftBrace',
-		          'Pipe', 'RightBrace', 'SingleQuote'
-		          
-		          
-		          ],
+		  LMB: 0,
+		  MMB: 1,
+		  RMB: 2,
+		  
 		  Backspace:	 8,
 		  Tab:			   9,
 		  Enter:		  13,

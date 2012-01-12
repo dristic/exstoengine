@@ -50,9 +50,6 @@ ex.using([
 			
 			ex.extend(this, options);
 			
-			//--Link input to engine
-			ex.Input.linkToEngine(this);
-			
 			//--Load collision manager
 			this.collisionManager = new ex.util.CollisionManager();
 			
@@ -183,7 +180,6 @@ ex.using([
 					console.log(sceneName, objects);
 					world.addObjects(objects);
 					world.removeObject(that.loadingScreen);
-          ex.Input.trackClickableObjects(objects);
 
 					scene.finalSetup();
 					
@@ -200,7 +196,6 @@ ex.using([
 		    world = this.currentWorld;
 		  }
 			world.removeAllObjects();
-			ex.Input.untrackAllClickableObjects();
 			
 			// Reset camera position
       this.camera.moveTo(0, 0);

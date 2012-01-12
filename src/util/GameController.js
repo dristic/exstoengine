@@ -68,7 +68,7 @@ ex.using([
       // second parameter in selector is the optional repeat,
       // if the value is 'once', repeat is set to false
       var repeat = tokens[1];
-      if(repeat == 'once'){
+      if(repeat == 'once') {
         repeat = false;
       } else {
         repeat = true;
