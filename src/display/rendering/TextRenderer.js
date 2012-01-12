@@ -36,6 +36,8 @@ ex.using([
         
       context.save();
       
+      context.globalAlpha = this.options.alpha;
+      
       if(this.options.type == 'canvas') {
         context.font = this.options.font;
         context.fillStyle = this.options.color;

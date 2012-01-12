@@ -1,13 +1,14 @@
-
-(function() {
-	ex.define("ex.base.Component", {
+ex.using([
+  'ex.event.EventTarget'
+], function () {
+	ex.define("ex.base.Component", ex.event.EventTarget, {
 		/**
 		 * Interface for engine components.
 		 * @name ex.base.Component
 		 * @constructor
 		 */
 		constructor: function() {
-			
+			this._super('constructor');
 		},
 		
 		/**
@@ -28,4 +29,4 @@
 		 */
 		name: "Component"
 	});
-}());
+});

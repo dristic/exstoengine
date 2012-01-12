@@ -13,7 +13,8 @@ ex.using([
         textAlign: 'left',
         prefix: '',
         suffix: '',
-        fontData: {}
+        fontData: {},
+        alpha: 1
       };
       
       this.options = {};
