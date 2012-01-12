@@ -6,7 +6,6 @@ ex.using([
       this._super('constructor', [width, height]);
       
       this.canvas = canvas || document.createElement("canvas");
-      this.canvas.id = "mainCanvas";
       this.canvas.width = width;
       this.canvas.height = height;
       this.canvas.style.backgroundColor = bgColor;

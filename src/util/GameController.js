@@ -1,5 +1,5 @@
 ex.using([
-
+  'ex.base.Component'
 ], function() {
   ex.define("ex.util.GameController", ex.base.Component, {
     constructor: function(inputMap, inputReference) {

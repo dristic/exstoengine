@@ -73,6 +73,16 @@ ex.using([
       }
     },
     
+    getRenderingElement: function () {
+      if(this.renderingContext.el) {
+        return this.renderingContext.el;
+      } else if(this.renderingContext.canvas) {
+        return this.renderingContext.canvas;
+      }
+      
+      return null;
+    },
+    
     _resizeViewport: function() {
       if(this.type == ex.display.rendering.Renderer.DOM) {
         switch(this.fullscreenType) {

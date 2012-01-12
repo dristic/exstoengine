@@ -1,8 +1,8 @@
 ex.using([
-
+  'ex.base.GlobalComponent'
 ], function() {
-  ex.define('ex.util.DOMTools', ex.base.GlobalComponent, {
-    __alias: 'ex.DOM',
+  ex.define('ex.util.DOM', ex.base.GlobalComponent, {
+    
     __statics: {
       __browser: null,
       

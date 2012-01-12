@@ -68,6 +68,7 @@ function init() {
   function saveFont(widths, positions) {
     var img = canvas.toDataURL('image/png'),
         data = {
+          height: canvas.height,
           widths: widths,
           positions: positions,
           data: img

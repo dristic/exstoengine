@@ -577,8 +577,7 @@ if(!Array.indexOf){
 	  preCompile(namespace, base, extension);
 	  
 		if (base == null) {
-			throw new Error("The base class has not been defined: "
-					+ extension.constructor);
+			throw new Error("The base class has not been defined for " + namespace);
 		}
 
 		var _base = ex.clone(base.prototype);

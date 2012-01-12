@@ -40,13 +40,16 @@ ex.using([
     loadFontData: function (fontData) {
       this.options.fontData = fontData;
       
-      var imgData = fontData.data,
-          img = new Image();
-      img.src = imgData;
-      this.img = img;
+      if(!fontData.img) {
+        var imgData = fontData.data,
+            img = new Image();
+        img.src = imgData;
+        fontData.img = img;
+      }
+      this.img = fontData.img;
       
-      // Height is always equal to the height of the image.
-      this.height = this.img.height;
+      // Height is pre-calculated.
+      this.height = fontData.height;
       
       // Width has to be calculated by character.
       this.width = 0;

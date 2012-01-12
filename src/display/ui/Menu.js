@@ -90,17 +90,25 @@ ex.using([
     },
     
     onMouseMove: function(dt, data) {
-      if(data){
+      if(data) {
         var i = 0,
             ln = this.options.items.length,
-            item;
+            item,
+            found = false;
         for(; i < ln; i++) {
           item = this.options.items[i].item;
           if(item.containsPoint(data.position.x, data.position.y)) {
+            found = true;
+            ex.Input.changeCursor(ex.Input.CURSOR.POINTER);
             this.options.onOut(this.options.items[this.currentSelection].item);
             this.currentSelection = i;
             this.options.onOver(this.options.items[this.currentSelection].item);
           }
+        }
+        
+        // Change the cursor back if we need to.
+        if(found == false && ex.Input.getCursorType() == ex.Input.CURSOR.POINTER) {
+          ex.Input.changeCursor(ex.Input.CURSOR.AUTO);
         }
       }
     },

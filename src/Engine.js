@@ -3,7 +3,7 @@ ex.using([
           "ex.base.Point",
           "ex.util.Debug",
           "ex.util.AssetManager",
-          "ex.util.InputController",
+          "ex.util.Input",
           "ex.display.ImageRepository",
           "ex.display.Renderable",
           "ex.util.CollisionManager",
@@ -64,6 +64,9 @@ ex.using([
 			
 			//--Load renderer
 			this.renderer = new ex.display.rendering.Renderer(this);
+			
+			// Switch input to focus on the main game element.
+			ex.Input.changeInputTarget(this.renderer.getRenderingElement());
 			
 			if(this.fullscreen) {
         this._setupFullscreenViewport();
