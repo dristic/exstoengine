@@ -16,10 +16,9 @@ ex.using([
         onOut: function (item) {},
         defaultSelection: 0,
         controls: {
-          moveUp: 'up once',
-          moveDown: 'down once',
-          activate: 'use once',
-          updateSelection: 'mousemove'
+          moveUp: 'up',
+          moveDown: 'down',
+          activate: 'use'
         }
       };
       
@@ -55,9 +54,6 @@ ex.using([
         }, {
           selector: this.options.controls.activate,
           action: ex.bind(this, this.activateCurrentSelection)
-        }, {
-          selector: this.options.controls.updateSelection,
-          action: ex.bind(this, this.onMouseMove)
         }
       ];
       this._addInputBindings();
@@ -66,7 +62,8 @@ ex.using([
     _addInputBindings: function() {
       var index = this.bindings.length;
       while(index--) {
-        this.controller.on(
+        this.controller.bindAction(
+          'pressed',
           this.bindings[index].selector, 
           this.bindings[index].action);
       }
@@ -75,7 +72,8 @@ ex.using([
     _removeInputBindings: function() {
       var index = this.bindings.length;
       while(index--) {
-        this.controller.removeAction(
+        this.controller.unbindAction(
+          'pressed',
           this.bindings[index].selector, 
           this.bindings[index].action);
       }
@@ -87,30 +85,6 @@ ex.using([
      */
     _calculateOffset: function() {
       
-    },
-    
-    onMouseMove: function(dt, data) {
-      if(data) {
-        var i = 0,
-            ln = this.options.items.length,
-            item,
-            found = false;
-        for(; i < ln; i++) {
-          item = this.options.items[i].item;
-          if(item.containsPoint(data.position.x, data.position.y)) {
-            found = true;
-            ex.Input.changeCursor(ex.Input.CURSOR.POINTER);
-            this.options.onOut(this.options.items[this.currentSelection].item);
-            this.currentSelection = i;
-            this.options.onOver(this.options.items[this.currentSelection].item);
-          }
-        }
-        
-        // Change the cursor back if we need to.
-        if(found == false && ex.Input.getCursorType() == ex.Input.CURSOR.POINTER) {
-          ex.Input.changeCursor(ex.Input.CURSOR.AUTO);
-        }
-      }
     },
     
     /**
@@ -163,7 +137,25 @@ ex.using([
      * @param {Number} dt timestep
      */
     update: function(dt) {
+      var i = 0,
+          ln = this.options.items.length,
+          item,
+          found = false;
+      for(; i < ln; i++) {
+        item = this.options.items[i].item;
+        if(item.containsPoint(ex.Input.mouse.x, ex.Input.mouse.y)) {
+          found = true;
+          ex.Input.changeCursor(ex.Input.CURSOR.POINTER);
+          this.options.onOut(this.options.items[this.currentSelection].item);
+          this.currentSelection = i;
+          this.options.onOver(this.options.items[this.currentSelection].item);
+        }
+      }
       
+      // Change the cursor back if we need to.
+      if(found == false && ex.Input.getCursorType() == ex.Input.CURSOR.POINTER) {
+        ex.Input.changeCursor(ex.Input.CURSOR.AUTO);
+      }
     },
     
     _isPointerOnCurrentSelection: function(position) {

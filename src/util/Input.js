@@ -43,12 +43,6 @@ ex.using([
 	    },
 	    
 	    update: function(dt) {
-	      // Update all our controllers.
-	      var index = this._controllers.length;
-	      while(index--) {
-	        //this._controllers[index].update(dt);
-	      }
-	      
 	      // Set the new state and then update the current state.
 	      ex.extend(this._previousState, this._inputState);
 	      var i = 0,
@@ -57,6 +51,12 @@ ex.using([
 	        this._inputState[this._released[i]] = false;
 	      }
 	      this._released = [];
+	      
+	      // Update all our controllers.
+        var index = this._controllers.length;
+        while(index--) {
+          this._controllers[index].update(dt);
+        }
 	    },
 	    
 	    /**
@@ -91,6 +91,7 @@ ex.using([
 	     * @param {String} key The button to check.
 	     */
 	    isDown: function (key) {
+	      if(key.charAt(0) != '#') key = ex.util.Key[key];
 	      return this._inputState[key];
 	    },
 	    
@@ -99,6 +100,7 @@ ex.using([
 	     * @param {String} key The button to check.
 	     */
 	    isPressed: function (key) {
+	      if(key.charAt(0) != '#') key = ex.util.Key[key];
 	      return this._inputState[key] == true && (this._previousState[key] == false || this._previousState[key] == null);
 	    },
 	    
@@ -107,24 +109,29 @@ ex.using([
 	     * @param {String} key The button to check.
 	     */
 	    isReleased: function (key) {
+	      if(key.charAt(0) != '#') key = ex.util.Key[key];
 	      return this._inputState[key] == false && this._previousState[key] == true;
 	    },
 	    
 	    bindElement: function (downEvent, upEvent, elementId) {
+	      elementId = elementId.substr(1);
 	      var element = ex.Element.getById(elementId);
 	      ex.event.listen(downEvent, element, this._onElementDown);
 	      ex.event.listen(upEvent, element, this._onElementUp);
 	    },
 	    
 	    _onElementDown: function (event) {
-	      ex.Input._inputState[event.target.id] = true;
+	      ex.Input._inputState['#' + event.target.id] = true;
+	      ex.Input._controllerButtonDown('#' + event.target.id);
 	    },
 	    
 	    _onElementUp: function (event) {
-	      ex.Input._released.push(event.target.id);
+	      ex.Input._released.push('#' + event.target.id);
+	      ex.Input._controllerButtonUp('#' + event.target.id);
 	    },
 	    
 	    unbindElement: function (downEvent, upEvent, elementId) {
+	      elementId = elementId.substr(1);
 	      var element = ex.Element.getById(elementId);
 	      ex.event.unlisten(downEvent, element, this._onElementDown);
         ex.event.unlisten(upEvent, element, this._onElementUp);
@@ -148,18 +155,22 @@ ex.using([
 	    
 	    _onKeyDown: function(event) {
         ex.Input._inputState[event.keyCode] = true;
+        ex.Input._controllerButtonDown(event.keyCode);
 	    },
 	    
 	    _onKeyUp: function(event) {
         ex.Input._released.push(event.keyCode);
+        ex.Input._controllerButtonUp(event.keyCode);
 	    },
 	    
 	    _onMouseDown: function(event) {
 	      ex.Input._inputState[event.button] = true;
+	      ex.Input._controllerButtonDown(event.button);
 	    },
 	    
 	    _onMouseUp: function(event) {
 	      ex.Input._released.push(event.button);
+	      ex.Input._controllerButtonUp(event.button);
 	    },
 	    
 	    _onMouseMove: function(event) {
@@ -170,6 +181,30 @@ ex.using([
         if(ex.Input._inputTarget.offsetLeft && ex.Input._inputTarget.offsetTop) {
           ex.Input.mouse.x -= ex.Input._inputTarget.offsetLeft;
           ex.Input.mouse.y -= ex.Input._inputTarget.offsetTop;
+        }
+	    },
+	    
+	    /**
+	     * Notifies the controllers that a button has been pressed
+	     * so they can update their actions bound to the event.
+	     */
+	    _controllerButtonDown: function (button) {
+	      var i = 0,
+	          ln = this._controllers.length;
+	      for(; i < ln; i++) {
+	        this._controllers[i]._onButtonDown(button);
+	      }
+	    },
+	    
+	    /**
+	     * Notifies the controllers that a button has been released
+	     * so they can update their actions bound to the event.
+	     */
+	    _controllerButtonUp: function (button) {
+	      var i = 0,
+            ln = this._controllers.length;
+        for(; i < ln; i++) {
+          this._controllers[i]._onButtonUp(button);
         }
 	    },
 	    

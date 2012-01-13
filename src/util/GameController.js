@@ -4,106 +4,152 @@ ex.using([
   ex.define("ex.util.GameController", ex.base.Component, {
     constructor: function(inputMap, inputReference) {
       // Lazy Initialization
-      this.buttons = {};
+      this.bindings = {};
+      this.released = [];
+      this.buttonState = {};
+      this.previousState = {};
+      this.actions = {};
       this.input = inputReference;
       
-      this._setupController(inputMap);
+      this.loadInputMap(inputMap);
     },
     
-    _setupController: function(inputMap) {
-      var mapIndex = inputMap.length,
-          inputIndex = 0;
-      var buttonName = '';
-      var inputTokens = [];
-      while(mapIndex--) {
-        buttonName = inputMap[mapIndex][0];
-        this.buttons[buttonName] = {
-            actionList: [],
-            duration: 0,
-            bindings: []
-        };  
+    loadInputMap: function(inputMap) {
+      for(var key in inputMap) {
+        var binding = inputMap[key];
         
-        inputTokens = inputMap[mapIndex][1].split(' ');
-        inputIndex = inputTokens.length;
-        while(inputIndex--) {
-          this.buttons[buttonName].bindings.push(inputTokens[inputIndex]);
+        if(binding instanceof Array == true) {
+          var i = 0,
+              ln = binding.length;
+          for(; i < ln; i++) {
+            this.bind(key, binding[i]);
+          }
+        } else {
+          this.bind(key, binding);
         }
       }
+    },
+    
+    bind: function (button, event) {
+      // Check for binding to div elements as we have to add them to the
+      // input class binding list.
+      if(event.charAt(0) == '#') {
+        var parts = event.split(' '),
+            id = parts[0],
+            type = parts[1];
+        if(type == 'touch') {
+          this.input.bindElement('touchstart', 'touchstop', id);
+        } else if(type == 'mouse') {
+          this.input.bindElement('mousedown', 'mouseup', id);
+        } else {
+          ex.Debug.log('ex.util.GameController.bind: Unrecognized input type ' + type + ' on ' + id, 'WARNING');
+        }
+        
+        event = id;
+      } else {
+        event = ex.util.Key[event];
+      }
+      
+      if(typeof this.bindings[event] == 'undefined') {
+        this.bindings[event] = [];
+      }
+      this.bindings[event].push(button);
     },
     
     update: function(dt) {
-      for(var button in this.buttons) {
-        this._updateButton(button, dt);
-        if(this.buttons[button].duration > 0) {
-          this._fireActions(button, dt);
+      // Fire actions based on the current controller state.
+      for(var key in this.actions) {
+        i = 0;
+        ln = this.actions[key].length;
+        var action;
+        for(; i < ln; i++) {
+          action = this.actions[key][i];
+          //console.log(key, this.isDown(key));
+          if(action.event == 'pressed') {
+            if(this.isPressed(key)) action.action();
+          } else if(action.event == 'down') {
+            if(this.isDown(key)) action.action();
+          } else if(action.event == 'released') {
+            if(this.isReleased(key)) action.action();
+          }
+        }
+      }
+      
+      // Set the new state and then update the current state.
+      ex.extend(this.previousState, this.buttonState);
+      var i = 0,
+          ln = this.released.length;
+      for(; i < ln; i++) {
+        this.buttonState[this.released[i]] = false;
+      }
+      this.released = [];
+    },
+    
+    /**
+     * Checks if the button is pressed or held down.
+     * @param {String} key The button to check.
+     */
+    isDown: function (button) {
+      return this.buttonState[button];
+    },
+    
+    /**
+     * Checks if the button was just pressed this frame.
+     * @param {String} key The button to check.
+     */
+    isPressed: function (button) {
+      return this.buttonState[button] == true && (this.previousState[button] == false || this.previousState[button] == null);
+    },
+    
+    /**
+     * Checks if the button was just released this frame.
+     * @param {String} key The button to check.
+     */
+    isReleased: function (button) {
+      return this.buttonState[button] == false && this.previousState[button] == true;
+    },
+    
+    _onButtonDown: function (button) {
+      if(this.bindings[button]) {
+        var i = 0,
+            ln = this.bindings[button].length;
+        for(; i < ln; i++) {
+          console.log(this.bindings[button][i]);
+          this.buttonState[this.bindings[button][i]] = true;
         }
       }
     },
     
-    _updateButton: function(button, dt) {
-      var index = this.buttons[button].bindings.length;
-      var binding = '';
-      while(index--) {
-        binding = this.buttons[button].bindings[index];
-        if (this.input.keyboard.event[binding]){
-          this.buttons[button].duration += dt;
-          return;
-        } else if (this.input.mouse.event[binding]) {
-          this.buttons[button].data = {
-              position: this.input.mouse.position,
-              lastPosition: this.input.mouse.lastPosition
-          };
-          this.buttons[button].duration += dt;
-          return;
+    _onButtonUp: function (button) {
+      if(this.bindings[button]) {
+        var i = 0,
+            ln = this.bindings[button].length;
+        for(; i < ln; i++) {
+          this.released.push(this.bindings[button][i]);
         }
       }
-      
-      this.buttons[button].duration = 0;
     },
     
-    on: function(selector, action) {
-      var tokens = selector.split(' ');
-      var button = tokens[0];
-      
-      // second parameter in selector is the optional repeat,
-      // if the value is 'once', repeat is set to false
-      var repeat = tokens[1];
-      if(repeat == 'once') {
-        repeat = false;
-      } else {
-        repeat = true;
+    bindAction: function (event, button, action) {
+      if(typeof this.actions[button] == 'undefined') {
+        this.actions[button] = [];
       }
       
-      // push the action onto the button's actionList
-      this.buttons[button].actionList.push({
-        run: action,
-        repeat: repeat
+      this.actions[button].push({
+        event: event,
+        action: action
       });
     },
     
-    removeAction: function(selector, action) {
-      var tokens = selector.split(' ');
-      var button = this.buttons[tokens[0]];
-            
-      var index = button.actionList.length;
-      while(index--) {
-        if(button.actionList[index].run == action) {
-          button.actionList.splice(index, 1);
-        }
-      }
-    },
-    
-    _fireActions: function(button, dt) {
-//      if(this.buttons[button] == null) {
-//        // No actions assigned to the selector, do nothing
-//        return;
-//      }
-      var actionList = this.buttons[button].actionList;
-      var index = actionList.length;
-      while(index--) {
-        if(actionList[index].repeat == true
-            || this.buttons[button].duration == dt) {
-          actionList[index].run(dt, this.buttons[button].data);
+    unbindAction: function (event, button, action) {
+      var i = 0,
+          ln = this.actions[button].length;
+      for(; i < ln; i++) {
+        if(this.actions[button][i].event == event && this.actions[button][i].action == action) {
+          this.actions[button].splice(i, 1);
+          if(this.actions[button].length == 0) {
+            delete this.actions[button];
+          }
         }
       }
     }
