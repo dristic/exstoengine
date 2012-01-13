@@ -56,6 +56,42 @@ ex.using([
       this.bindings[event].push(button);
     },
     
+    unbind: function (button, event) {
+      // Check for binding to div elements as we have to add them to the
+      // input class binding list.
+      if(event.charAt(0) == '#') {
+        var parts = event.split(' '),
+            id = parts[0],
+            type = parts[1];
+        if(type == 'touch') {
+          this.input.unbindElement('touchstart', 'touchstop', id);
+        } else if(type == 'mouse') {
+          this.input.unbindElement('mousedown', 'mouseup', id);
+        } else {
+          ex.Debug.log('ex.util.GameController.unbind: Unrecognized input type ' + type + ' on ' + id, 'WARNING');
+        }
+        
+        event = id;
+      } else {
+        event = ex.util.Key[event];
+      }
+      
+      this.bindings[event].splice(this.bindings[event].indexOf(button), 1);
+      if(this.bindings[event].length == 0) {
+        delete this.bindings[event];
+      }
+    },
+    
+    unbindAll: function () {
+      for(var key in this.bindings) {
+        var i = 0,
+            ln = this.bindings[key].length;
+        for(; i < ln; i++) {
+          this.unbind(this.bindings[key][i], key);
+        }
+      }
+    },
+    
     update: function(dt) {
       // Fire actions based on the current controller state.
       for(var key in this.actions) {
@@ -64,7 +100,6 @@ ex.using([
         var action;
         for(; i < ln; i++) {
           action = this.actions[key][i];
-          //console.log(key, this.isDown(key));
           if(action.event == 'pressed') {
             if(this.isPressed(key)) action.action();
           } else if(action.event == 'down') {
@@ -114,7 +149,6 @@ ex.using([
         var i = 0,
             ln = this.bindings[button].length;
         for(; i < ln; i++) {
-          console.log(this.bindings[button][i]);
           this.buttonState[this.bindings[button][i]] = true;
         }
       }
@@ -152,6 +186,17 @@ ex.using([
           }
         }
       }
+    },
+    
+    destroy: function () {
+      this.unbindAll();
+      
+      this.bindings = null;
+      this.released = null;
+      this.buttonState = null;
+      this.previousState = null;
+      this.actions = null;
+      this.input = null;
     }
   });
 });

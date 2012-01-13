@@ -42,6 +42,11 @@ ex.using([
 	          buttonMappings, this);
 	    },
 	    
+	    removeController: function (playerId) {
+	      this._controllers[playerId].destroy();
+	      this._controllers[playerId] = null;
+	    },
+	    
 	    update: function(dt) {
 	      // Set the new state and then update the current state.
 	      ex.extend(this._previousState, this._inputState);
@@ -131,6 +136,8 @@ ex.using([
 	    },
 	    
 	    unbindElement: function (downEvent, upEvent, elementId) {
+	      delete ex.Input._inputState[elementId];
+	      delete ex.Input._previousState[elementId];
 	      elementId = elementId.substr(1);
 	      var element = ex.Element.getById(elementId);
 	      ex.event.unlisten(downEvent, element, this._onElementDown);
