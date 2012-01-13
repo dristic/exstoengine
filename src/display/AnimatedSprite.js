@@ -39,8 +39,10 @@ ex.using([
 			this.spriteSheets = this._prepareSpriteSheets(spriteSheets);
 			this.animations = {};
 			this.currentAnimation = null;
+			this.currentIndex = 0;
 			this.currentFrame = 0;
 			this.playing = false;
+			this.playQueue = [];
 			
 			this.timer = 0; // will be (1 / frameRate)
 		},
@@ -83,17 +85,27 @@ ex.using([
 		 * of allowing it to continue
 		 */
 		play: function(name, override) {
-			if(override == null || override == false) {
-				if(this.currentAnimation == this.animations[name] && this.playing == true) {
-				  return;
-				}
+			if(override == true) {
+	      this.playQueue = [];
+			} else {
+			  if(this.currentAnimation == this.animations[name] && this.playQueue.length == 0) {
+          return;
+        }
 			}
 			
 			this.currentAnimation = this.animations[name];
-			this.currentFrame = 0;
-			this.timer = (1 / this.animations[name].sheet.frameRate);
-			
-			this.playing = true;	
+      this.currentFrame = 0;
+      this.currentIndex = 0;
+      this.timer = (1 / this.animations[name].sheet.frameRate);
+      this.playing = true;
+		},
+		
+		/**
+		 * Puts a function into the play queue.
+		 * @param {String} name The name of the animation to play.
+		 */
+		queue: function (name) {
+		  this.playQueue.push(name);
 		},
 		
 		/**
@@ -128,29 +140,27 @@ ex.using([
 		  var frameRate = this.currentAnimation.sheet.frameRate;
 			//--Ensure we are playing and frameRate > 0
 			if(this.playing == true && frameRate > 0) {
-				// Check for frame skipping due to inactive tab
-				if(dt > (1 / frameRate)) {
-					var skips = Math.floor(dt / (1 / frameRate));
-					while(skips--) {
-						var index = array_index_of(this.currentAnimation.frames, this.currentFrame) + 1;
-						if(index > this.currentAnimation.frames.length - 1) index = 0;
-						this.currentFrame = this.currentAnimation.frames[index];
-					}
-					dt = dt % (1 / this.frameRate);
-				}
 				this.timer -= dt;
 				//--If it is time to go to the next frame
 				if(this.timer < 0) {
-					this.timer += (1 / frameRate);
 					//--Ensure image is available
 					if(this.currentAnimation.sheet.isReady()) {
 						//--Go to correct frame
-						var index = array_index_of(this.currentAnimation.frames, this.currentFrame) + 1;
-						if(index > this.currentAnimation.frames.length - 1) index = 0;
+						var index = this.currentIndex++;
+						if(index > this.currentAnimation.frames.length - 1) {
+						  // Check to see if we need to play a different animation.
+						  if(this.playQueue.length > 0) {
+						    this.play(this.playQueue.shift());
+						  }
+						  index = this.currentIndex = 0;
+						}
 						this.currentFrame = this.currentAnimation.frames[index];
 						
 						this.goToFrame(this.currentFrame);
 					}
+					
+					// Add this after in case the animation changed.
+					this.timer += (1 / this.currentAnimation.sheet.frameRate);
 				}
 			}
 		},
@@ -214,26 +224,4 @@ ex.using([
 			return xNumFrames * yNumFrames;
 		}
 	});
-	
-	function array_contains(array, value) {
-		var i = array.length;
-		while(i--) {
-			if(array[i] == value) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
-	
-	function array_index_of(array, value) {
-		var i = array.length;
-		while(i--) {
-			if(array[i] == value) {
-				return i;
-			}
-		}
-		
-		return i;
-	}
 });
