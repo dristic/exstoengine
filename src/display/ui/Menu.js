@@ -1,10 +1,10 @@
 ex.using([
   'ex.display.Sprite',
-  'ex.base.Component',
   'ex.event.EventTarget',
-  'ex.display.Text'
+  'ex.display.Text',
+  'ex.display.Renderable'
 ], function() { 
-  ex.define("ex.display.ui.Menu", ex.base.Component, {
+  ex.define("ex.display.ui.Menu", ex.display.Renderable, {
     constructor: function(options) {
       this.defaults = {
         items: [{
@@ -162,6 +162,12 @@ ex.using([
       ex.Debug.log(
           "Menu item passed in does not extend Renderable: " + item,
           'ERROR');
+    },
+    
+    destroy: function () {
+      ex.Input.changeCursor(ex.Input.CURSOR.AUTO);
+      
+      this._super('destroy');
     }
   });
 });

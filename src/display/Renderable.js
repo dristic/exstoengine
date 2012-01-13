@@ -86,6 +86,10 @@ ex.using([
 		
 		update: function(dt) {
 			
+		},
+		
+		destroy: function () {
+		  
 		}
 	});
 });

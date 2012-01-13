@@ -32,7 +32,7 @@ ex.using([
       
       this.position = position;
       
-      this.currentImage = img|| new Image();
+      this.img = img|| new Image();
 
       this.rotation = 0;
       this.rotationEnabled = false;
@@ -41,11 +41,11 @@ ex.using([
       
       this.scrollFactor = new ex.base.Vector(1,1);
       
-      this.width = this.currentImage.naturalWidth;
-      this.height = this.currentImage.naturalHeight;
+      this.width = this.img.naturalWidth;
+      this.height = this.img.naturalHeight;
       
       if(this.width == 0  && this.height == 0) {
-      	ex.event.listen('load', this.currentImage, function () {
+      	ex.event.listen('load', this.img, function () {
       		this._recalcDimensions();
       	}, this);
       }
@@ -63,8 +63,8 @@ ex.using([
      * @memberOf ex.display.Sprite
      */
     _recalcDimensions: function () {
-    	this.width = this.currentImage.naturalWidth;
-      this.height = this.currentImage.naturalHeight;
+    	this.width = this.img.naturalWidth;
+      this.height = this.img.naturalHeight;
       
       if(this.rendering && this.rendering.rotationCanvas) {
         this.rendering.rotationCanvas.width = this.width;

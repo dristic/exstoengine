@@ -3,7 +3,7 @@ ex.using([
 ], function () {
   ex.define('ex.display.rendering.SpriteRenderer', ex.display.rendering.ObjectRenderer, {
     setupDom: function (el) {
-      var thisEl = this.currentImage;
+      var thisEl = this.img;
       thisEl.style.position = 'absolute';
       thisEl.style.width = this.width + 'px';
       thisEl.style.height = this.height + 'px';
@@ -101,21 +101,21 @@ ex.using([
             
       if (this.rotationEnabled == false) {
           context.drawImage(
-              this.currentImage, 
+              this.img, 
               viewPortX, 
               viewPortY);
       } else {
           //--Ensure width and height are not 0 to avoid INVALID_STATE_ERR
         var rotCanvas = this.rendering.rotationCanvas,
             rotContext = this.rendering.rotationContext;
-        rotCanvas.width = this.currentImage.width || 1;
-        rotCanvas.height = this.currentImage.height || 1;
+        rotCanvas.width = this.img.width || 1;
+        rotCanvas.height = this.img.height || 1;
         
         rotContext.save();
         rotContext.translate(this.width / 2, this.height / 2);
         rotContext.rotate(this.rotation);
         rotContext.translate(-this.width / 2, -this.height / 2);
-        rotContext.drawImage(this.currentImage, 0, 0);
+        rotContext.drawImage(this.img, 0, 0);
         rotContext.restore();
 
         context.drawImage(

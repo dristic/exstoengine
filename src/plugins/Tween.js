@@ -79,8 +79,11 @@ ex.using([
             tween.element[key] += dd;
           }
           
-          // Remove tween if needed.
+          // Remove tween if needed and complete it.
           if(remove == true) {
+            if(ex.Tween.tweens[i].options.callback) {
+              ex.Tween.tweens[i].options.callback();
+            }
             ex.Tween.tweens.splice(i, 1);
             i--;
             ln--;

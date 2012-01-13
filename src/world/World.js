@@ -118,6 +118,10 @@ ex.using([
           this.collisionManager.removeCollidable(object);
         }
       }
+      
+      if(object.destroy) {
+        object.destroy();
+      }
     },
     
     /**
