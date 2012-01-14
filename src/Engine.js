@@ -102,7 +102,7 @@ ex.using([
 			
 			while(frameTime > 0) {
 			  var deltaTime = Math.min(frameTime, this.deltaTime);
-			  this.integrate(this.deltaTime);
+			  this.integrate(deltaTime);
 			  frameTime -= this.deltaTime;
 			}
 			
