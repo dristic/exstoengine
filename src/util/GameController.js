@@ -95,17 +95,24 @@ ex.using([
     update: function(dt) {
       // Fire actions based on the current controller state.
       for(var key in this.actions) {
-        i = 0;
-        ln = this.actions[key].length;
-        var action;
-        for(; i < ln; i++) {
-          action = this.actions[key][i];
-          if(action.event == 'pressed') {
-            if(this.isPressed(key)) action.action();
-          } else if(action.event == 'down') {
-            if(this.isDown(key)) action.action();
-          } else if(action.event == 'released') {
-            if(this.isReleased(key)) action.action();
+        var index = this.actions[key].length,
+            action,
+            passthrough = true;
+        
+        // Fire all actions on the key, 
+        // stopping if a blocking event is found.
+        while(passthrough != false && index--) {
+          action = this.actions[key][index];
+          switch(action.event) {
+            case 'pressed':
+              if(this.isPressed(key)) passthrough = action.action();
+              break;
+            case 'down':
+              if(this.isDown(key)) passthrough = action.action();
+              break;
+            case 'released':
+              if(this.isReleased(key)) passthrough = action.action();
+              break;
           }
         }
       }
