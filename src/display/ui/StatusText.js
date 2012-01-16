@@ -50,9 +50,11 @@ ex.using([
 		},
 		
 		setText: function (text) {
-		  text = this.options.text.prefix + text + this.options.text.suffix;
+		  // Build text using prefix/suffix.
+		  if(this.options.text.prefix) text = this.options.text.prefix + text;
+		  if(this.options.text.suffix) text = text + this.options.text.suffix;
 		  
-		  this.items[0].text = text;
+		  this.items[0].setText(text);
 		}
 	});
 });
