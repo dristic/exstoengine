@@ -12,6 +12,9 @@ ex.using([
           ],
 	function () {
   
+  var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||  
+                              window.webkitRequestAnimationFrame || window.msRequestAnimationFrame; 
+  
   var MAX_FRAME_TIME = 5;
 	
 	ex.define("ex.Engine", {
@@ -132,16 +135,19 @@ ex.using([
       
       this.onUpdate(dt);
       
+      //--Step camera
+      this.camera.update(dt);
+      
       ex.Input.update(dt);
 		},
 		
 		render: function (dt) {
-		  //--Step camera
-      this.camera.update(dt);
-      
+      var that = this;
       //--Step renderer
       if(this.renderer != null) {
-        this.renderer.update(dt, this.camera);
+        requestAnimationFrame(function () {
+          that.renderer.update(dt, that.camera);
+        });
       }
 		},
 		

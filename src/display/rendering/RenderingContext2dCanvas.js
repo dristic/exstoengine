@@ -11,6 +11,12 @@ ex.using([
       this.canvas.style.backgroundColor = bgColor;
       this.context = this.canvas.getContext("2d");
       
+      this.bufferCanvas = document.createElement("canvas");
+      this.bufferCanvas.width = width;
+      this.bufferCanvas.height = height;
+      this.bufferCanvas.style.backgroundColor = bgColor;
+      this.buffer = this.bufferCanvas.getContext("2d");
+      
       // If a canvas was not passed in, add a new one to the page
       if(canvas == null) {
         document.body.appendChild(this.canvas);
@@ -20,13 +26,17 @@ ex.using([
     },
     
     render: function (items, camX, camY, camWidth, camHeight) {
+      // Move buffer to front.
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.context.drawImage(this.bufferCanvas, 0, 0);
       
+      // Draw everything else to the back buffer.
+      this.buffer.clearRect(0, 0, this.canvas.width, this.canvas.height);
       var i = 0,
           ln = items.length,
           item,
           renderers = this.renderers,
-          context = this.context;
+          context = this.buffer;
       for(; i < ln; i++) {
         item = items[i];
         if(!item.renderer) {

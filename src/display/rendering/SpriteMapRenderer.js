@@ -239,7 +239,6 @@ ex.using([
         if(destY < 0) destY = 0;
         
         // Draw image
-        if(sourceWidth == 0 || sourceHeight == 0) console.log(arguments);
         context.drawImage(
                   spriteMap.preRenderCanvas,
                   sourceX,

@@ -96,7 +96,7 @@ ex.using([
 	     * @param {String} key The button to check.
 	     */
 	    isDown: function (key) {
-	      if(key.charAt(0) != '#') key = ex.util.Key[key];
+	      if(key instanceof String == true && key.charAt(0) != '#') key = ex.util.Key[key];
 	      return this._inputState[key];
 	    },
 	    

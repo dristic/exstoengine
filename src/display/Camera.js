@@ -21,6 +21,7 @@ ex.using([
 			this.width = width;
 			this.height = height;
 			this.following = null;
+			this.offset = null;
 			this.bounds = null;
 		},
 		
@@ -33,8 +34,24 @@ ex.using([
 		 */
 		update: function(dt) {
 			if(this.following != null) {
-				this.position.x = this.following.position.x + (this.following.width >> 1) - (this.width >> 1);
-				this.position.y = this.following.position.y + (this.following.height >> 1) - (this.height >> 1);
+			  var halfWidth = (this.width >> 1),
+			      halfHeight = (this.height >> 1),
+			      followX = this.following.position.x + (this.following.width >> 1),
+			      followY = this.following.position.y + (this.following.height >> 1),
+			      camX = this.position.x + halfWidth - followX,
+			      camY = this.position.y + halfHeight - followY;
+			  
+			  if(camX > this.offset.x) {
+			    this.position.x = followX  + this.offset.x - halfWidth;
+		    } else if(camX < -this.offset.x) {
+		      this.position.x = followX - this.offset.x - halfWidth;
+		    }
+				
+			  if(camY > this.offset.y) {
+			    this.position.y = followY + this.offset.y - halfHeight;
+			  } else if(camY < -this.offset.y) {
+			    this.position.y = followY - this.offset.y - halfHeight;
+			  }
 			}
 			
 			if(this.bounds != null) {
@@ -77,8 +94,10 @@ ex.using([
 		 * @name follow
 		 * @memberOf ex.display.AnimatedSprite
 		 * @param {Entity} object entity to follow
+		 * @param {Number} offset The dead zone offset on each side.
 		 */
-		follow: function (object) {
+		follow: function (object, offset) {
+		  this.offset = offset || 0;
 			this.following = object;
 		},
 		
