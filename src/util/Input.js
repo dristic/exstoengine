@@ -96,7 +96,7 @@ ex.using([
 	     * @param {String} key The button to check.
 	     */
 	    isDown: function (key) {
-	      if(key instanceof String == true && key.charAt(0) != '#') key = ex.util.Key[key];
+	      if(key.charAt && key.charAt(0) != '#') key = ex.util.Key[key];
 	      return this._inputState[key];
 	    },
 	    
@@ -105,7 +105,7 @@ ex.using([
 	     * @param {String} key The button to check.
 	     */
 	    isPressed: function (key) {
-	      if(key.charAt(0) != '#') key = ex.util.Key[key];
+	      if(key.charAt && key.charAt(0) != '#') key = ex.util.Key[key];
 	      return this._inputState[key] == true && (this._previousState[key] == false || this._previousState[key] == null);
 	    },
 	    
@@ -114,7 +114,7 @@ ex.using([
 	     * @param {String} key The button to check.
 	     */
 	    isReleased: function (key) {
-	      if(key.charAt(0) != '#') key = ex.util.Key[key];
+	      if(key.charAt && key.charAt(0) != '#') key = ex.util.Key[key];
 	      return this._inputState[key] == false && this._previousState[key] == true;
 	    },
 	    
