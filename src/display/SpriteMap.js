@@ -38,6 +38,7 @@ ex.using([
 			this.defaults = {
 		    repeat: false,
 		    preRender: true,
+		    alpha: 1,
 		    offset: {
 		      x: 0,
 		      y: 0

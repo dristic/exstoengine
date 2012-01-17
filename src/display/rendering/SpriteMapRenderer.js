@@ -137,7 +137,11 @@ ex.using([
         this.preRenderCanvas.height = this.tileMap.height;
         this.preRenderContext = this.preRenderCanvas.getContext('2d');
         
+        // Set alpha to 1 to prevent doubling alpha value.
+        var alpha = this.options.alpha;
+        this.options.alpha = 1;
         ex.display.rendering.SpriteMapRenderer.renderSpriteMapToContext(this, this.preRenderContext);
+        this.options.alpha = alpha;
       }
     },
     
@@ -217,6 +221,9 @@ ex.using([
     // Global static functions.
     __statics: {
       renderPreRenderedSpriteMapToContext: function (spriteMap, context, position, width, height) {
+        context.save();
+        context.globalAlpha = spriteMap.options.alpha;
+        
         position = position || {
           x: 0,
           y: 0
@@ -249,9 +256,14 @@ ex.using([
                   destY,
                   sourceWidth,  //destWidth and Height == sourceWidth and Height
                   sourceHeight);
+        
+        context.restore();
       },
       
       renderSpriteMapToContext: function (spriteMap, context, offset) {
+        context.save();
+        context.globalAlpha = spriteMap.options.alpha;
+        
         var yPos = spriteMap.tileMap.data.length - 1,
             xPos = 0;
         
@@ -287,6 +299,8 @@ ex.using([
           }
           xPos = 0;
         }
+        
+        context.restore();
       }
     }
   });
