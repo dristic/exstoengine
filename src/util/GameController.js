@@ -195,6 +195,12 @@ ex.using([
       }
     },
     
+    unbindAllActions: function() {
+      for(var button in this.actions) {
+        this.actions[button] = [];
+      }
+    },
+    
     destroy: function () {
       this.unbindAll();
       

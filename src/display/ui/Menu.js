@@ -60,7 +60,20 @@ ex.using([
           action: ex.bind(this, this.onClick)
         }
       ];
+      this._activateMenuControls();
+    },
+    
+    _activateMenuControls: function() {
+      console.log("Switching to menu controls.");
+      this.storedControls = {};
+      ex.extend(this.storedControls, this.controller.actions);
       this._addInputBindings();
+    },
+    
+    _deactivateMenuControls: function() {
+      console.log("Switching back to game controls.");
+      this.controller.actions = {};
+      ex.extend(this.controller.actions, this.storedControls);
     },
     
     _addInputBindings: function() {
@@ -166,6 +179,7 @@ ex.using([
     
     destroy: function () {
       ex.Input.changeCursor(ex.Input.CURSOR.AUTO);
+      this._deactivateMenuControls();
       
       this._super('destroy');
     }
