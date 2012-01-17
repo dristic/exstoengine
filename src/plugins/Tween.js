@@ -75,8 +75,12 @@ ex.using([
           
           // Update the properties of the element.
           for(var key in tween.properties) {
-            var dd = ((tween.properties[key] - tween.starting[key]) / tween.duration) * delta;
-            tween.element[key] += dd;
+            if(remove == false) {
+              var dd = ((tween.properties[key] - tween.starting[key]) / tween.duration) * delta;
+              tween.element[key] += dd;
+            } else {
+              tween.element[key] = tween.properties[key];
+            }
           }
           
           // Remove tween if needed and complete it.

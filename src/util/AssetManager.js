@@ -127,10 +127,15 @@ ex.using([
        * @param {Object} [options] extra parameters, varies
        *    by asset type.
        */
-      load: function (name, filePath, options) {
+      load: function (name, filePath, options, bulkLoading) {
         if(this._ready == true) {
           this._eventHandler.dispatchEvent('loadStart');
         }
+        
+        if(bulkLoading != true) {
+          this._assetsToLoad++;
+        }
+        
         // Determine file type and use proper loading method
         var extension = filePath.substring(filePath.lastIndexOf('.'));
         if(this._supportedExtensions.image.indexOf(extension) > -1) {
@@ -162,14 +167,15 @@ ex.using([
           this._eventHandler.dispatchEvent('loadStart');
         }
         
+        this._assetsToLoad += list.length;
+        
         var index = list.length;
         while(index--){
-          this.load(list[index].name, list[index].filePath, list[index].options);
+          this.load(list[index].name, list[index].filePath, list[index].options, true);
         }
       },
       
       _loadFile: function (name, filePath, options) {
-        this._assetsToLoad++;
         this._ready = false;
         
         var that = this;
@@ -200,12 +206,11 @@ ex.using([
       },
       
       _loadImage: function(name, filePath, options) {
-        this._assetsToLoad++;
         this._ready = false;
         
         if(this._images[name]) {
           this._throwImageNameConflictError(name, filePath);
-          this._assetsToLoad--;
+          this._assetsLoaded++;
           this._checkReadyState();
           return;
         }
@@ -238,7 +243,6 @@ ex.using([
         var that2 = this;
         
         this._ready = false;
-        this._assetsToLoad++;
         
         that.audio.onError = this._throwUnableToLoadFileError;
         that.audio.src = filePath;
@@ -263,6 +267,7 @@ ex.using([
       },
       
       _checkReadyState: function() {
+        console.log(this._assetsToLoad, this._assetsLoaded);
         if(this._assetsLoaded == this._assetsToLoad && this._ready == false) {
           this._ready = true;
           this._eventHandler.dispatchEvent('loadEnd');
