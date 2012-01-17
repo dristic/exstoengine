@@ -267,7 +267,6 @@ ex.using([
       },
       
       _checkReadyState: function() {
-        console.log(this._assetsToLoad, this._assetsLoaded);
         if(this._assetsLoaded == this._assetsToLoad && this._ready == false) {
           this._ready = true;
           this._eventHandler.dispatchEvent('loadEnd');
