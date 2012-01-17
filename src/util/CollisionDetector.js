@@ -240,7 +240,7 @@
 				target: map,
 				data: {
 					pen: penVector,
-					tile: collidedTiles[0]
+					tiles: collidedTiles
 				}
 			};
 		} else {
