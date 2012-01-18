@@ -18,7 +18,7 @@ ex.using([
 	    
 	    _keyListenerElement: document,
 	    _inputTarget: document,
-	    _controllers: [],
+	    _controllers: {},
 	    
 	    // Keeping the current and previous state allows us to detect
 	    // all forms of input. (pressed, released, down)
@@ -37,14 +37,12 @@ ex.using([
 	      return this._controllers[playerId];
 	    },
 	    
-	    addController: function(playerId, buttonMappings) {
-	      this._controllers[playerId] = new ex.util.GameController(
-	          buttonMappings, this);
+	    registerController: function(controller) {
+	      this._controllers[controller.name] = controller;
 	    },
 	    
-	    removeController: function (playerId) {
-	      this._controllers[playerId].destroy();
-	      this._controllers[playerId] = null;
+	    unregisterController: function (name) {
+	      delete this._controllers[name];
 	    },
 	    
 	    update: function(dt) {
@@ -56,12 +54,6 @@ ex.using([
 	        this._inputState[this._released[i]] = false;
 	      }
 	      this._released = [];
-	      
-	      // Update all our controllers.
-        var index = this._controllers.length;
-        while(index--) {
-          this._controllers[index].update(dt);
-        }
 	    },
 	    
 	    /**
@@ -196,10 +188,8 @@ ex.using([
 	     * so they can update their actions bound to the event.
 	     */
 	    _controllerButtonDown: function (button) {
-	      var i = 0,
-	          ln = this._controllers.length;
-	      for(; i < ln; i++) {
-	        this._controllers[i]._onButtonDown(button);
+	      for(var controller in this._controllers) {
+	        this._controllers[controller]._onButtonDown(button);
 	      }
 	    },
 	    
@@ -208,10 +198,8 @@ ex.using([
 	     * so they can update their actions bound to the event.
 	     */
 	    _controllerButtonUp: function (button) {
-	      var i = 0,
-            ln = this._controllers.length;
-        for(; i < ln; i++) {
-          this._controllers[i]._onButtonUp(button);
+	      for(var controller in this._controllers) {
+          this._controllers[controller]._onButtonUp(button);
         }
 	    },
 	    

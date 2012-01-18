@@ -2,7 +2,9 @@ ex.using([
   'ex.base.Component'
 ], function() {
   ex.define("ex.util.GameController", ex.base.Component, {
-    constructor: function(inputMap, inputReference) {
+    constructor: function(name, inputMap, inputReference) {
+      this.name = name;
+      
       // Lazy Initialization
       this.bindings = {};
       this.released = [];
@@ -202,7 +204,7 @@ ex.using([
     },
     
     destroy: function () {
-      this.unbindAll();
+      ex.Input.unregisterController(this.name);
       
       this.bindings = null;
       this.released = null;
