@@ -107,13 +107,19 @@ ex.using([
           action = this.actions[key][index];
           switch(action.event) {
             case 'pressed':
-              if(this.isPressed(key)) passthrough = action.action();
+              if(this.isPressed(key)) {
+                passthrough = action.action();
+              }
               break;
             case 'down':
-              if(this.isDown(key)) passthrough = action.action();
+              if(this.isDown(key)) {
+                passthrough = action.action();
+              }
               break;
             case 'released':
-              if(this.isReleased(key)) passthrough = action.action();
+              if(this.isReleased(key)) {
+                passthrough = action.action();
+              }
               break;
           }
         }
