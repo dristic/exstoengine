@@ -95,6 +95,22 @@ ex.using([
     },
     
     update: function(dt) {
+      // Update button states
+      for(var key in this.bindings) {
+        var keyCode = parseInt(key) || key;
+        if(ex.Input.isPressed(keyCode)) {
+          var i = this.bindings[key].length;
+          while(i--) {
+            this.buttonState[this.bindings[key][i]] = true;
+          }
+        } else if(ex.Input.isReleased(keyCode)) {
+          var i = this.bindings[key].length;
+          while(i--) {
+            this.released.push(this.bindings[key][i]);
+          }
+        }
+      }
+      
       // Fire actions based on the current controller state.
       for(var key in this.actions) {
         var index = this.actions[key].length,
@@ -160,23 +176,23 @@ ex.using([
     },
     
     _onButtonDown: function (button) {
-      if(this.bindings[button]) {
-        var i = 0,
-            ln = this.bindings[button].length;
-        for(; i < ln; i++) {
-          this.buttonState[this.bindings[button][i]] = true;
-        }
-      }
+//      if(this.bindings[button]) {
+//        var i = 0,
+//            ln = this.bindings[button].length;
+//        for(; i < ln; i++) {
+//          this.buttonState[this.bindings[button][i]] = true;
+//        }
+//      }
     },
     
     _onButtonUp: function (button) {
-      if(this.bindings[button]) {
-        var i = 0,
-            ln = this.bindings[button].length;
-        for(; i < ln; i++) {
-          this.released.push(this.bindings[button][i]);
-        }
-      }
+//      if(this.bindings[button]) {
+//        var i = 0,
+//            ln = this.bindings[button].length;
+//        for(; i < ln; i++) {
+//          this.released.push(this.bindings[button][i]);
+//        }
+//      }
     },
     
     bindAction: function (event, button, action) {

@@ -154,6 +154,7 @@ ex.using([
     hide: function() {
       if(!this.objects) {
         console.log("no objects", this);
+        this.active = false;
         return;
       }
       var index = this.objects.length;
