@@ -92,6 +92,28 @@ ex.using([
 			ex.Debug.enable(debugType, loggingLevel);
 		},
 		
+		pause: function(world) {
+		  var worldToPause = world;
+		  if(!world) {
+		    worldToPause = this.currentWorld;
+		  }
+		  
+		  if(worldToPause.active) {
+		    worldToPause.active = false;
+		  }
+		},
+		
+		unpause: function(world) {
+		  var worldToUnpause = world;
+		  if(!world) {
+		    worldToUnpause = this.currentWorld;
+		  }
+		  
+		  if(!worldToUnpause.active) {
+		    worldToUnpause.active = true;
+		  }
+		},
+		
 		update: function () {
 			//--Calculate delta time
 			var newTime = (new Date()).getTime();

@@ -315,7 +315,8 @@ if(!Array.indexOf){
 				this._callbacks[url] = callback;
 			}
 			
-			this._queue.push(url + "? ex=" + this._date.getTime());
+			this._queue.push(url);
+			//this._queue.push(url + "? ex=" + this._date.getTime());
 		},
 		
 		startQueue: function () {

@@ -15,6 +15,7 @@ ex.using([
         onOver: function (item) {},
         onOut: function (item) {},
         defaultSelection: 0,
+        controller: ex.Input.getController(0),
         controls: {
           moveUp: 'up',
           moveDown: 'down',
@@ -44,7 +45,6 @@ ex.using([
       
       this._calculateOffset();
       
-      this.controller = ex.Input.getController(0);
       this.bindings = [
         {
           selector: this.options.controls.moveUp,
@@ -60,26 +60,13 @@ ex.using([
           action: ex.bind(this, this.onClick)
         }
       ];
-      this._activateMenuControls();
-    },
-    
-    _activateMenuControls: function() {
-      console.log("Switching to menu controls.");
-      this.storedControls = {};
-      ex.extend(this.storedControls, this.controller.actions);
       this._addInputBindings();
-    },
-    
-    _deactivateMenuControls: function() {
-      console.log("Switching back to game controls.");
-      this.controller.actions = {};
-      ex.extend(this.controller.actions, this.storedControls);
     },
     
     _addInputBindings: function() {
       var index = this.bindings.length;
       while(index--) {
-        this.controller.bindAction(
+        this.options.controller.bindAction(
           'pressed',
           this.bindings[index].selector, 
           this.bindings[index].action);
@@ -89,7 +76,7 @@ ex.using([
     _removeInputBindings: function() {
       var index = this.bindings.length;
       while(index--) {
-        this.controller.unbindAction(
+        this.options.controller.unbindAction(
           'pressed',
           this.bindings[index].selector, 
           this.bindings[index].action);
@@ -179,7 +166,6 @@ ex.using([
     
     destroy: function () {
       ex.Input.changeCursor(ex.Input.CURSOR.AUTO);
-      this._deactivateMenuControls();
       
       this._super('destroy');
     }
