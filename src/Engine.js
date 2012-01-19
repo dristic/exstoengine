@@ -145,9 +145,10 @@ ex.using([
       var that = this;
       //--Step renderer
       if(this.renderer != null) {
-        requestAnimationFrame(function () {
-          that.renderer.update(dt, that.camera);
-        });
+        that.renderer.update(dt, that.camera);
+        /*requestAnimationFrame(function () {
+          
+        });*/
       }
 		},
 		
