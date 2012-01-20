@@ -1,9 +1,9 @@
 (function () {
 	ex.define("ex.util.Key", {
 		__statics: {
-		  LMB: 0,
-		  MMB: 1,
-		  RMB: 2,
+		  LMB: 0,     //// Chrome mouse button values.
+		  MMB: 1,     // We will have to synthesize these values
+		  RMB: 2,     // to be cross-browser compliant.
 		  
 		  Backspace:	 8,
 		  Tab:			   9,
