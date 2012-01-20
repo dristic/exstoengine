@@ -157,10 +157,10 @@ ex.using([
       
       this.onUpdate(dt);
       
+      ex.Input.update(dt);
+      
       //--Step camera
       this.camera.update(dt);
-      
-      ex.Input.update(dt);
 		},
 		
 		render: function (dt) {
