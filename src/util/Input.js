@@ -154,22 +154,18 @@ ex.using([
 	    
 	    _onKeyDown: function(event) {
         ex.Input._inputState[event.keyCode] = true;
-        ex.Input._controllerButtonDown(event.keyCode);
 	    },
 	    
 	    _onKeyUp: function(event) {
         ex.Input._released.push(event.keyCode);
-        ex.Input._controllerButtonUp(event.keyCode);
-	    },
+      },
 	    
 	    _onMouseDown: function(event) {
 	      ex.Input._inputState[event.button] = true;
-	      ex.Input._controllerButtonDown(event.button);
 	    },
 	    
 	    _onMouseUp: function(event) {
 	      ex.Input._released.push(event.button);
-	      ex.Input._controllerButtonUp(event.button);
 	    },
 	    
 	    _onMouseMove: function(event) {
@@ -180,26 +176,6 @@ ex.using([
         if(ex.Input._inputTarget.offsetLeft && ex.Input._inputTarget.offsetTop) {
           ex.Input.mouse.x -= ex.Input._inputTarget.offsetLeft;
           ex.Input.mouse.y -= ex.Input._inputTarget.offsetTop;
-        }
-	    },
-	    
-	    /**
-	     * Notifies the controllers that a button has been pressed
-	     * so they can update their actions bound to the event.
-	     */
-	    _controllerButtonDown: function (button) {
-	      for(var controller in this._controllers) {
-	        this._controllers[controller]._onButtonDown(button);
-	      }
-	    },
-	    
-	    /**
-	     * Notifies the controllers that a button has been released
-	     * so they can update their actions bound to the event.
-	     */
-	    _controllerButtonUp: function (button) {
-	      for(var controller in this._controllers) {
-          this._controllers[controller]._onButtonUp(button);
         }
 	    },
 	    

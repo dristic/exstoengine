@@ -97,7 +97,8 @@ ex.using([
     update: function(dt) {
       // Update button states
       for(var key in this.bindings) {
-        var keyCode = parseInt(key) || key;
+        var keyCode = parseInt(key);
+        if(isNaN(keyCode)) keyCode = key;
         if(ex.Input.isPressed(keyCode)) {
           var i = this.bindings[key].length;
           while(i--) {
@@ -173,26 +174,6 @@ ex.using([
      */
     isReleased: function (button) {
       return this.buttonState[button] == false && this.previousState[button] == true;
-    },
-    
-    _onButtonDown: function (button) {
-//      if(this.bindings[button]) {
-//        var i = 0,
-//            ln = this.bindings[button].length;
-//        for(; i < ln; i++) {
-//          this.buttonState[this.bindings[button][i]] = true;
-//        }
-//      }
-    },
-    
-    _onButtonUp: function (button) {
-//      if(this.bindings[button]) {
-//        var i = 0,
-//            ln = this.bindings[button].length;
-//        for(; i < ln; i++) {
-//          this.released.push(this.bindings[button][i]);
-//        }
-//      }
     },
     
     bindAction: function (event, button, action) {
