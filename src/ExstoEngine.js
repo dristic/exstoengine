@@ -138,6 +138,16 @@ if(!Array.indexOf){
 			array.splice(array.indexOf(object), 1);
 		},
 		
+		find: function (array, func) {
+		  var i = 0,
+		      ln = array.length,
+		      result;
+		  for(; i < ln; i++) {
+		    result = func(array[i]);
+		    if(result) return array[i];
+		  }
+		},
+		
 		average: function(array) {
 			var ret = 0;
 			

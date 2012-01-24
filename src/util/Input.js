@@ -18,7 +18,6 @@ ex.using([
 	    
 	    _keyListenerElement: document,
 	    _inputTarget: document,
-	    _controllers: {},
 	    
 	    // Keeping the current and previous state allows us to detect
 	    // all forms of input. (pressed, released, down)
@@ -26,24 +25,6 @@ ex.using([
 	    _inputState: {},
 	    _previousState: {},
 	    _released: [],
-	    
-	    /**
-	     * Returns the gameController assigned to a specific
-	     * player.
-	     * 
-	     * @returns {ex.util.GameController}
-	     */
-	    getController: function(playerId) {
-	      return this._controllers[playerId];
-	    },
-	    
-	    registerController: function(controller) {
-	      this._controllers[controller.name] = controller;
-	    },
-	    
-	    unregisterController: function (name) {
-	      delete this._controllers[name];
-	    },
 	    
 	    update: function(dt) {
 	      // Set the new state and then update the current state.

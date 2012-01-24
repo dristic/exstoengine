@@ -22,10 +22,11 @@ ex.using([
      * 
      * @constructor
      */
-    constructor: function(renderer, collisionManager) {
+    constructor: function(name, renderer) {
+      this.name = name;
       this.active = true;
       this.renderer = renderer;
-      this.collisionManager = collisionManager;
+      this.collisionManager = new ex.util.CollisionManager();
       this.objects = [];
       this.globalObjects = [];
       this.objectsToRemove = [];
@@ -55,6 +56,11 @@ ex.using([
       var i = this.objects.length;
       while(i--) {
         this.objects[i].update(dt);
+      }
+      
+      //--Step collision manager
+      if(this.collisionManager != null) {
+        this.collisionManager.update(dt);
       }
     },
     
@@ -126,7 +132,7 @@ ex.using([
         this.renderer.removeRenderable(object);
       }
       
-      if(this.collisionManager){
+      if(this.collisionManager) {
         if(object.collides) {
           this.collisionManager.removeCollidable(object);
         }
@@ -149,7 +155,7 @@ ex.using([
     removeAllObjects: function() {
       var index = this.objects.length;
       while(index--) {
-        this.removeObject(this.objects[index]);
+        this._removeObject(this.objects[index]);
       }
     },
     
@@ -166,7 +172,6 @@ ex.using([
     
     hide: function() {
       if(!this.objects) {
-        console.log("no objects", this);
         this.active = false;
         return;
       }
@@ -180,6 +185,14 @@ ex.using([
       this.active = false;
     },
     
+    pause: function () {
+      this.active = false;
+    },
+    
+    unpause: function () {
+      this.active = true;
+    },
+    
     getObject: function(name) {
       var index = this.objects.length;
       while(index--){
@@ -191,7 +204,14 @@ ex.using([
     },
     
     destroy: function() {
-      
+      this.active = false;
+      this.removeAllObjects();
+      this.collisionManager.destroy();
+      delete this.collisionManager;
+      delete this.renderer;
+      delete this.objects;
+      delete this.globalObjects;
+      delete this.objectsToRemove;
     }
   });
 });

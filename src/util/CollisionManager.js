@@ -20,12 +20,6 @@ ex.using([
 			this.collisionGroups = [];
 			this.detector = new ex.util.CollisionDetector();
 			this.resolver = new ex.util.CollisionResolver();
-			
-			this.benchmarkData = [];
-			this.benchmarkAverage = {
-					time: 0,
-					collisions: 0
-			};
 		},
 		
 		/**
@@ -64,30 +58,6 @@ ex.using([
 		  }
 		},
 		
-		updateBenchmark: function(newTime, newCollisionCount) {
-			if(this.benchmarkData.length > 200){
-				this.updateBenchmarkAverage();
-				this.benchmarkData = [];
-			}
-			this.benchmarkData.push({ 
-				time: newTime,
-				collisions: newCollisionCount
-			});
-		},
-		
-		updateBenchmarkAverage: function() {
-			var index = 0;
-			var sumTime = 0;
-			var sumCollisions = 0;
-			var dataCount = this.benchmarkData.length;
-			for(index; index < dataCount; index++){
-				sumTime += this.benchmarkData[index].time;
-				sumCollisions += this.benchmarkData[index].collisions;
-			}
-			this.benchmarkAverage.time = sumTime / dataCount;
-			this.benchmarkAverage.collisions = sumCollisions / dataCount;
-		},
-		
 		/**
 		 * Clears the collisions array, request collision detection on each
 		 * layer separately from the detector, then requests resolution of
@@ -104,28 +74,29 @@ ex.using([
 			
 			var collisions = [];
 			var index = 0;
-			
-			// If active level is set, use old layer-based collision detection
-			if(this.activeLevel != null){
-				index = this.activeLevel.layers.length;
-				while(index--){
-					collisions.push.apply(
-							collisions,
-							this.detector.detectGroupCollisions(this.activeLevel.layers[index].items, dt));
-				}
-			} 
+
 			// Or if collision groups exist, use that
-			else if(this.collisionGroups.length > 0) {
+			if(this.collisionGroups.length > 0) {
 				index = this.collisionGroups.length;
 				while(index--) {
-					collisions.push.apply(
-							collisions,
-							this.detector.detectGroupCollisions(this.collisionGroups[index], dt));
+				  var groupCollisions = this.detector.detectGroupCollisions(this.collisionGroups[index], dt);
+				  
+				  var i = 0,
+				      ln = groupCollisions.length;
+				  for(; i < ln; i++) {
+				    collisions.push(groupCollisions[i]);
+				  }
 				}
 			}
 			
 			this.resolver.resolveCollisions(collisions, dt);	
 			ex.Debug.time('collision');
+		},
+		
+		destroy: function () {
+		  delete this.collisionGroups;
+		  delete this.detector;
+		  delete this.resolver;
 		}
 	});	
 });

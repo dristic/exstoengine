@@ -15,7 +15,7 @@ ex.using([
         onOver: function (item) {},
         onOut: function (item) {},
         defaultSelection: 0,
-        controller: ex.Input.getController(0),
+        controller: null,
         controls: {
           moveUp: 'up',
           moveDown: 'down',

@@ -99,12 +99,12 @@ ex.using([
       for(var key in this.bindings) {
         var keyCode = parseInt(key);
         if(isNaN(keyCode)) keyCode = key;
-        if(ex.Input.isPressed(keyCode)) {
+        if(this.input.isPressed(keyCode)) {
           var i = this.bindings[key].length;
           while(i--) {
             this.buttonState[this.bindings[key][i]] = true;
           }
-        } else if(ex.Input.isReleased(keyCode)) {
+        } else if(this.input.isReleased(keyCode)) {
           var i = this.bindings[key].length;
           while(i--) {
             this.released.push(this.bindings[key][i]);
@@ -207,8 +207,6 @@ ex.using([
     },
     
     destroy: function () {
-      ex.Input.unregisterController(this.name);
-      
       this.bindings = null;
       this.released = null;
       this.buttonState = null;

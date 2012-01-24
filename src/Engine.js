@@ -1,16 +1,15 @@
 ex.using([
-          "ex.base.Component",
-          "ex.base.Point",
-          "ex.util.Debug",
-          "ex.util.AssetManager",
-          "ex.util.Input",
-          "ex.display.ImageRepository",
-          "ex.display.Renderable",
-          "ex.util.CollisionManager",
-          "ex.display.Camera",
-          "ex.display.rendering.Renderer"
-          ],
-	function () {
+  "ex.base.Component",
+  "ex.base.Point",
+  "ex.util.Debug",
+  "ex.util.AssetManager",
+  "ex.util.Input",
+  "ex.display.ImageRepository",
+  "ex.display.Renderable",
+  "ex.display.Camera",
+  "ex.display.rendering.Renderer",
+  "ex.world.World"
+], function () {
   
   var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||  
                               window.webkitRequestAnimationFrame || window.msRequestAnimationFrame; 
@@ -46,15 +45,14 @@ ex.using([
 			
 			this.loadingScreen = null;
 			this.currentWorld = null;
+			this.worlds = [];
+			this.worldsToRemove = [];
 			
 			this.lastTime = (new Date()).getTime();
 			this.components = [];
 			this.debug = false;
 			
-			ex.extend(this, options);
-			
-			//--Load collision manager
-			this.collisionManager = new ex.util.CollisionManager();
+			ex.extend(this, options);			
 			
 			//--Load new camera
 			this.camera = new ex.display.Camera(
@@ -92,28 +90,6 @@ ex.using([
 			ex.Debug.enable(debugType, loggingLevel);
 		},
 		
-		pause: function(world) {
-		  var worldToPause = world;
-		  if(!world) {
-		    worldToPause = this.currentWorld;
-		  }
-		  
-		  if(worldToPause.active) {
-		    worldToPause.active = false;
-		  }
-		},
-		
-		unpause: function(world) {
-		  var worldToUnpause = world;
-		  if(!world) {
-		    worldToUnpause = this.currentWorld;
-		  }
-		  
-		  if(!worldToUnpause.active) {
-		    worldToUnpause.active = true;
-		  }
-		},
-		
 		update: function () {
 			//--Calculate delta time
 			var newTime = (new Date()).getTime();
@@ -139,35 +115,44 @@ ex.using([
 		},
 		
 		integrate: function (dt) {
+		  // Garbage collect old worlds for stability.
+		  var i = 0,
+		      ln = this.worldsToRemove.length;
+		  for(; i < ln; i++) {
+		    this._removeWorld(this.worldsToRemove.pop());
+		  }
+		  
 		  //--Step components
-      var i = this.components.length;
+      i = this.components.length;
       while(i--) {
         this.components[i].update(dt);
       }
       
-      //--Step world
-      if(this.currentWorld != null) {
-        this.currentWorld.update(dt);
+      //--Step world 
+      i = 0;
+      ln = this.worlds.length;
+      for(; i < ln; i++) {
+        this.worlds[i].update(dt);
       }
-      
-      //--Step collision manager
-      if(this.collisionManager != null) {
-        this.collisionManager.update(dt);
-      }
-      
-      this.onUpdate(dt);
       
       ex.Input.update(dt);
       
-      //--Step camera
-      this.camera.update(dt);
+      if(this.onUpdate) {
+        this.onUpdate(dt);
+      }
 		},
 		
 		render: function (dt) {
       var that = this;
+      
+      //--Step camera
+      this.camera.update(dt);
+      
       //--Step renderer
       if(this.renderer != null) {
         that.renderer.update(dt, that.camera);
+        
+        // Use request animation frame to vsync drawing calls.
         /*requestAnimationFrame(function () {
           
         });*/
@@ -178,20 +163,56 @@ ex.using([
 			
 		},
 		
-		openWorld: function(world) {
-			if(this.currentWorld != null) {
-				this.currentWorld.destroy();
-			}
-			
-			this.currentWorld = new world(this.renderer, this.collisionManager);
+		addWorld: function (name, scene, setToCurrentWorld, sceneCallback) {
+		  // Default values
+		  name = name || "DefaultWorldName";
+		  if(!setToCurrentWorld && setToCurrentWorld != false) setToCurrentWorld = true;
+		  
+		  var world = new ex.world.World(name, this.renderer);
+		  
+		  // Check for removing current world.
+		  if(setToCurrentWorld == true) {
+		    if(this.currentWorld) {
+		      this.removeWorld(this.currentWorld);
+		    }
+		    this.currentWorld = world;
+		    
+		    // Reset camera position
+	      this.camera.reset();
+		  }
+		  
+		  // Check for loading a scene into the world.
+		  if(scene) {
+		    this.loadScene(scene, world, sceneCallback);
+		  }
+		  
+		  this.worlds.push(world);
+		  
+		  return world;
 		},
 		
-		loadScene: function(sceneName, callback, world) {
-		  if(!world) {
-		    world = this.currentWorld;
+		getWorld: function (name) {
+		  return ex.Array.find(this.worlds, function (world) {
+		    if(world.name == name) return true;
+		  });
+		},
+		
+		removeWorld: function (world) {
+		  // Safe remove world in case we are removing the world on an update function.
+		  this.worldsToRemove.push(world);
+		},
+		
+		_removeWorld: function (world) {
+		  if(this.currentWorld == world) {
+		    this.currentWorld = null;
 		  }
-			this.unloadScene(world);
-
+		  
+		  ex.Array.remove(this.worlds, world);
+		  
+		  world.destroy();
+		},
+		
+		loadScene: function(sceneName, world, callback) {
       world.addObject(this.loadingScreen);
       
 			var that = this;
@@ -206,28 +227,18 @@ ex.using([
 				var scene = new game.levels[sceneName](that);
 				ex.event.listenOnce('loadEnd', ex.Assets._eventHandler, function() {
 					var objects = scene.getObjects();
-					console.log(sceneName, objects);
+					
 					world.addObjects(objects);
 					world.removeObject(that.loadingScreen);
 
 					scene.finalSetup();
 					
 					if(callback) {
-					  callback();
+					  callback(world);
 					}
 				}, this);
 				ex.Assets.loadBulk(scene.getAssets());
 			});
-		},
-		
-		unloadScene: function(world) {
-		  if(!world) {
-		    world = this.currentWorld;
-		  }
-			world.removeAllObjects();
-			
-			// Reset camera position
-      this.camera.moveTo(0, 0);
 		},
 		
 		loadComponent: function(component) {
@@ -245,6 +256,10 @@ ex.using([
 					return this.components[i];
 				}
 			}
+		},
+			
+		unloadComponent: function (component) {
+		  this.components.splice(this.components.indexOf(component), 1);
 		}
 	});
 });

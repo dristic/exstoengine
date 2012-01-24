@@ -101,6 +101,16 @@ ex.using([
 			this.following = object;
 		},
 		
+		unfollow: function () {
+		  this.following = null;
+		},
+		
+		reset: function () {
+		  this.moveTo(0, 0);
+		  this.unfollow();
+		  this.unbind();
+		},
+		
 		/**
 		 * Calculates the bounds that the camera cannot go beyond.
 		 * @function
@@ -118,6 +128,10 @@ ex.using([
 	      maxX: x + width - this.width,
 	      maxY: y + height - this.height
 		  }
+		},
+		
+		unbind: function () {
+		  this.bounds = null;
 		}
 	});
 });
