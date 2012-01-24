@@ -28,6 +28,7 @@ ex.using([
       this.collisionManager = collisionManager;
       this.objects = [];
       this.globalObjects = [];
+      this.objectsToRemove = [];
     },
     
     /**
@@ -43,6 +44,13 @@ ex.using([
       if(!this.active) {
         return;
       }
+      
+      // Remove old objects
+      var n = this.objectsToRemove.length;
+      while(n--) {
+        this._removeObject(this.objectsToRemove.pop());
+      }
+      
       // update objects
       var i = this.objects.length;
       while(i--) {
@@ -100,6 +108,11 @@ ex.using([
      * @param {Object} object
      */
     removeObject: function(object) {
+      // Tag the object for removal on the next update loop.
+      this.objectsToRemove.push(object);
+    },
+    
+    _removeObject: function (object) {
       // Remove object from world
       var index = this.objects.length;
       while(index--) {

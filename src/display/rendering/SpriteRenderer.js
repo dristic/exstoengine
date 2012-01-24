@@ -103,7 +103,9 @@ ex.using([
           context.drawImage(
               this.img, 
               viewPortX, 
-              viewPortY);
+              viewPortY,
+              this.width,
+              this.height);
       } else {
           //--Ensure width and height are not 0 to avoid INVALID_STATE_ERR
         var rotCanvas = this.rendering.rotationCanvas,

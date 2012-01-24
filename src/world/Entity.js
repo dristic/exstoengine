@@ -118,6 +118,14 @@ ex.using([
      */
     onCollide: function(target, data) {
       
+    },
+    
+    destroy: function () {
+      delete this.position;
+      delete this.scrollFactor;
+      delete this.velocity;
+      delete this.sprite;
+      delete this.items;
     }
   });
 });
