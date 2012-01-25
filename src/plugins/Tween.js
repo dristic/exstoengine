@@ -2,21 +2,23 @@ ex.using([
   'ex.base.Vector',
   'ex.base.Component'
 ], function () {
+  var extween;
+  
   ex.define('ex.plugins.Tween', ex.base.Component, {
     __alias: 'ex.Tween',
     
     constructor: function () {
-      if(!ex.Tween.__instance) {
+      if(!extween.__instance) {
         this._super('constructor');
         
-        ex.Tween.__instance = this; 
+        extween.__instance = this; 
       } else {
         ex.Debug.log('ex.plugins.Tween has already been initialized!', 'INFO');
       }
     },
     
     update: function (dt) {
-      ex.Tween.__update(dt);
+      extween.__update(dt);
     },
     
     __statics: {
@@ -26,6 +28,14 @@ ex.using([
       
       tweens: [],
       
+      /**
+       * Adds a tween to the list to be changed over a period of time.
+       * 
+       * @param {Object} element The element to be tweened.
+       * @param {Number} duration The time period to tween over.
+       * @param {Object} properties The properties to tween assigned to their end values.
+       * @param {Options} options Extra tween options including callbacks, type, etc.
+       */
       add: function (element, duration, properties, options) {
         var tween = {
           element: element,
@@ -40,17 +50,17 @@ ex.using([
           tween.starting[key] = element[key];
         }
         
-        ex.Tween.tweens.push(tween);
+        extween.tweens.push(tween);
       },
       
       __update: function (dt) {
         var i = 0,
-            ln = ex.Tween.tweens.length,
+            ln = extween.tweens.length,
             tween,
             delta,
             remove = false;
         for(; i < ln; i++) {
-          tween = ex.Tween.tweens[i];
+          tween = extween.tweens[i];
           
           // Update the tween's properties.
           tween.elapsed += dt;
@@ -85,10 +95,10 @@ ex.using([
           
           // Remove tween if needed and complete it.
           if(remove == true) {
-            if(ex.Tween.tweens[i].options.callback) {
-              ex.Tween.tweens[i].options.callback();
+            if(extween.tweens[i].options.callback) {
+              extween.tweens[i].options.callback();
             }
-            ex.Tween.tweens.splice(i, 1);
+            extween.tweens.splice(i, 1);
             i--;
             ln--;
             remove = false;
@@ -97,4 +107,7 @@ ex.using([
       }
     }
   });
+  
+  // Set globals for data hiding.
+  extween = ex.Tween;
 });
