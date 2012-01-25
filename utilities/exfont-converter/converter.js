@@ -16,6 +16,18 @@ function init() {
         weight = $('weight').value,
         strokeColor = $('stroke-color').value,
         lineWidth = $('line-width').value,
+        gradient = {
+          isGradient: $('gradient').checked,
+          type: $('gradient-type').value,
+          sx: $('gradient-sx').value,
+          sy: $('gradient-sy').value,
+          sr: $('gradient-sr').value,
+          dx: $('gradient-dx').value,
+          dy: $('gradient-dy').value,
+          dr: $('gradient-dr').value,
+          colorStops: $('gradient-colorstops').value.split(','),
+          colorStopColors: $('gradient-colorstopcolors').value.split(',')
+        },
         shadow = {
           color: $('shadow-color').value,
           x: parseInt($('shadow-x').value),
@@ -35,7 +47,7 @@ function init() {
       chars += String.fromCharCode(i);
     }
     
-    setFontStyle(face, size, color, weight, strokeColor, lineWidth, shadow);
+    setFontStyle(face, size, color, weight, strokeColor, lineWidth, shadow, gradient);
     
     // Resize the canvas
     var height = context.measureText('m').width,
@@ -43,7 +55,7 @@ function init() {
     canvas.height = height + parseInt(heightPad);
     canvas.width = width;
     
-    setFontStyle(face, size, color, weight, strokeColor, lineWidth, shadow);
+    setFontStyle(face, size, color, weight, strokeColor, lineWidth, shadow, gradient);
     
     if(clear) context.clearRect(0, 0, width, height);
     
@@ -77,7 +89,7 @@ function init() {
   }
   
   // Sets the style for drawing fonts.
-  function setFontStyle(face, size, color, weight, strokeColor, lineWidth, shadow) {
+  function setFontStyle(face, size, color, weight, strokeColor, lineWidth, shadow, gradientOptions) {
     context.font = weight + ' ' + size + 'pt ' + face;
     context.fillStyle = color;
     context.textBaseline = 'top';
@@ -88,6 +100,35 @@ function init() {
     context.shadowOffsetX = shadow.x;
     context.shadowOffsetY = shadow.y;
     context.shadowBlur = shadow.blur;
+    
+    // Set gradient fill style.
+    if(gradientOptions.isGradient) {
+      var gradient;
+      
+      if(gradientOptions.type == 'linear') {
+        gradient = context.createLinearGradient(
+            gradientOptions.sx, 
+            gradientOptions.sy, 
+            gradientOptions.dx, 
+            gradientOptions.dy);
+      } else {
+        gradient = context.createRadialGradient(
+            gradientOptions.sx,
+            gradientOptions.sy,
+            gradientOptions.sr,
+            gradientOptions.dx,
+            gradientOptions.dy,
+            gradientOptions.dr);
+      }
+      
+      var i = 0,
+          ln = gradientOptions.colorStops.length;
+      for(; i != ln; i++) {
+        gradient.addColorStop(parseInt(gradientOptions.colorStops[i]), gradientOptions.colorStopColors[i]);
+      }
+      
+      context.fillStyle = gradient;
+    }
   };
   
   // Utility functions.
