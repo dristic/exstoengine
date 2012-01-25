@@ -23,6 +23,9 @@ if(!Array.indexOf){
 (function () {
 	"use strict";
 	
+	// Used for the ex.clone function.
+	function Clone() {};
+	
 	/**
 	 * Copies the values from one object to another object.
 	 * 
@@ -32,13 +35,28 @@ if(!Array.indexOf){
 	 * 
 	 * @param {Object} object The object to copy values to
 	 * @param {Object} other The object to copy values from
+	 * @param {Bool} deep Copy the object recursively through object properties.
 	 * 
 	 * @return {Object} Returns the new object for chaining
 	 */
-	ex.extend = function (object, other) {
+	ex.extend = function (object, other, deep) {
 		for(var prop in other) {
-			object[prop] = other[prop];
+		  // Only copy defined values.
+		  if(other[prop] !== undefined) {
+		    // Prevent never ending loop.
+		    if(object === other[prop]) {
+		      continue;
+		    }
+		    
+		    // If we are deep copying, recursively copy objects and arrays.
+		    if((typeof src == "Object" || typeof src == "Array") && deep) {
+	        object[prop] = ex.extend({}, other[prop], deep);
+	      } else {
+	        object[prop] = other[prop];
+	      }
+		  }
 		}
+		
 		return object;
 	};
 	
@@ -75,9 +93,38 @@ if(!Array.indexOf){
 		 * @returns {Object} cloned object constructor
 		 */
 		clone: function (object) {
-			function Constructor() {};
-		    Constructor.prototype = object;
-		    return new Constructor();
+		  Clone.prototype = object;
+		  return new Clone();
+		},
+		
+		copy: function (object) {
+		  var newObject;
+		  
+		  if(ex.isObject(object)) {
+        newObject = newObject || {};
+        ex.extend(newObject, object, true);
+      } else if (ex.isArray(object)) {
+        newObject = newObject || [];
+        ex.extend(newObject, object, true);
+      } else {
+        // This should never be reached in clean code, 
+        // but fail gracefully if a string, int, etc is passed in.
+        newObject = object;
+      }
+      
+      return newObject;
+		},
+		
+		/**
+		 * Copies the prototype of the base class to a new object to keep
+		 * instanceof calls working but not create a pointer to the old prototype.
+		 * Reference: http://simonsarris.com/blog/291-javascript-copy-function
+		 */
+		derive: function (baseclass, subclass) {
+		  function subproto() {};
+		  subproto.prototype = baseclass.prototype;
+		  subclass.prototype = new subproto();
+		  subclass.prototype.constructor = subclass;
 		},
 		
 		/**
@@ -115,6 +162,18 @@ if(!Array.indexOf){
 		 */
 		toInt: function (number) {
 			return number | 0;
+		},
+		
+		isObject: function (object) {
+		  return typeof object == "object";
+		},
+		
+		isArray: function (array) {
+		  return array.constructor == Array;
+		},
+		
+		isFunction: function (func) {
+		  return typeof func == 'function';
 		}
 	});
 	
@@ -161,13 +220,6 @@ if(!Array.indexOf){
 			return ret;
 		}
 	};
-	
-	/**
-	 * Returns true of object is an Array
-	 */
-	ex.isArray = function(object) {
-    return object.constructor == Array;
-	}
 	
 	/**
 	 * The main namespace for all engine classes and global functions.
@@ -598,23 +650,21 @@ if(!Array.indexOf){
 		if (base == null) {
 			throw new Error("The base class has not been defined for " + namespace);
 		}
-
-		var _base = ex.clone(base.prototype);
+		
 		function NewClass() {
 			// empty function to hold new class
 			base.apply(this);
 		};
 
-		// Set constructor: Priority on extension, then base class
-		if (typeof extension.constructor == "function"
-				&& extension.constructor != Object) {
+		// Set the new constructor if one was provided.
+		if (ex.isFunction(extension.constructor) && extension.constructor != Object) {
 			NewClass = extension.constructor;
-		} else if (typeof _base.constructor == "function") {
-			NewClass.constructor = _base.constructor;
 		}
+		
+		// Extend the new class from the base class.
+    ex.derive(base, NewClass);
 
-		// clone, mix-in, set _super call, and add to namespace
-		NewClass.prototype = _base;
+		// Mix-in, set _super call, and add to namespace
 		ex.extend(NewClass.prototype, extension);
 		NewClass.prototype._super = function(func, args) {
 			// Change this._super so that any _super calls in the 
