@@ -44,6 +44,7 @@ ex.using([
       this.collides = collides;
       this.anchored = anchored;
       this.mass = 1;
+      this.elasticity = 0;
       
       // Display data
       this.sprite = sprite;
