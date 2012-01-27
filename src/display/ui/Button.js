@@ -60,6 +60,13 @@ ex.using([
           if(this.actions.released) this.actions.released();
         }
       }
+    },
+    
+    destroy: function () {
+      delete this.actions;
+      delete this.state;
+      delete this.width;
+      delete this.items;
     }
   });
   
