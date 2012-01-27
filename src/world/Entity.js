@@ -44,6 +44,7 @@ ex.using([
       this.collides = collides;
       this.anchored = anchored;
       this.mass = 1;
+      this.gravity = ex.Data.get('gravity');
       
       // Display data
       this.sprite = sprite;
@@ -64,9 +65,7 @@ ex.using([
      */
     update : function(dt) {
       this.sprite.update(dt);
-      if(!this.anchored){
-        this.updatePosition(this.velocity, dt);
-      }
+      this.updatePosition(this.velocity);
     },
     
     /**
@@ -84,9 +83,9 @@ ex.using([
      * @param {ex.base.Vector} vector
      * @param {Number} dt
      */
-    updatePosition: function(vector, dt) {
+    updatePosition: function(vector) {
       if(!this.anchored){
-        this.position.addScaled(vector, dt);
+        this.position.add(vector);
       }
     },  
     

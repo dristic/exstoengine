@@ -4,7 +4,7 @@ ex.using([
   ex.define("ex.world.World", {
     
     /**
-     * The world object cotains all the relevant game data such as
+     * The world object contains all the relevant game data such as
      * levels, menus, and entities.
      * 
      * @name ex.world.World
@@ -14,7 +14,7 @@ ex.using([
      * @param {ex.util.CollisionManager} collisionManager the collision
      *    manager to use on the world
      * 
-     * @proeprty {ex.display.Renderer} renderer
+     * @property {ex.display.Renderer} renderer
      * @property {ex.simplex.Map[]} levels all levels in the world
      * @property {Object[]} objects all objects in the current scene
      * @property {Object[]} globalobjects all objects that persist 
