@@ -22,10 +22,10 @@ ex.using([
       }
       
       if(this.entity.facing == 'left') {
-        this.entity.velocity.x -= this.entity.speed * dt;
+        this.entity.velocity.x = -this.entity.speed * dt;
         this.entity.moving = true;
       } else {
-        this.entity.velocity.x += this.entity.speed * dt;
+        this.entity.velocity.x = this.entity.speed * dt;
         this.entity.moving = true;
       }
       return false;
