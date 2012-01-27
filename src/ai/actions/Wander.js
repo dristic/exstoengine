@@ -4,20 +4,12 @@ ex.using([
   ex.define('ex.ai.actions.Wander', ex.ai.Action, {
     constructor: function(entity) {
       this.entity = entity;
-      this.currentX = this.entity.position.x;
-      this.lastX = 0;
       
       this._super("constructor", [0, false]);
     },
     
-    update: function(dt) {
-      // Update position data
-      this.lastX = this.currentX;
-      this.currentX = this.entity.position.x;      
-      
-      // If movement less then a pixel, turn around
-      if(Math.abs(this.currentX - this.lastX) < this.entity.velocity * dt) {
-        console.log("Flip the bitch!");
+    update: function(dt) {     
+      if(this.isObstructed()) {
         this.turnAround(dt);
       }
       
@@ -27,6 +19,31 @@ ex.using([
       } else {
         this.entity.velocity.x = this.entity.speed * dt;
         this.entity.moving = true;
+      }
+      return false;
+    },
+    
+    isObstructed: function() {
+      if(!this.entity.collisionData || !this.entity.collisionData.tiles) {
+        console.log("no collision data");
+        return false;
+      }
+      
+      var tiles = this.entity.collisionData.tiles;
+      var minY = this.entity.position.y - tiles[0].height,
+          maxY = this.entity.position.y + this.entity.height;
+      
+      var index = tiles.length,
+          tile;
+      while(index--) {
+        tile = tiles[index];
+        if(tile.position.y >= minY && tile.position.y <= maxY) {
+          if(this.entity.facing == 'left' && tile.position.x <= this.entity.position.x){
+            return true;
+          } else if (this.entity.facing == 'right' && tile.position.x >= this.entity.position.x) {
+            return true;
+          }
+        }
       }
       return false;
     },
