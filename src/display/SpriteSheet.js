@@ -7,7 +7,7 @@ ex.using([
       this.image = image;
       this.frameRate = frameRate;
       this.renderingRect = 
-        new ex.base.Rectangle(new ex.Vector(0,0), frameWidth, frameHeight);
+        new ex.base.Rectangle(0, 0, frameWidth, frameHeight);
     },
     
     isReady: function() {

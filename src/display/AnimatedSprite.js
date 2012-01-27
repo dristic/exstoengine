@@ -180,8 +180,8 @@ ex.using([
 			var xFrame = frame % xNumFrames;
 			var yFrame = Math.floor(frame / xNumFrames);
 			
-			renderingRect.position.x = xFrame * renderingRect.width;
-			renderingRect.position.y = yFrame * renderingRect.height;
+			renderingRect.x = xFrame * renderingRect.width;
+			renderingRect.y = yFrame * renderingRect.height;
 		},
 		
 		/**

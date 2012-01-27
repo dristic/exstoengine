@@ -79,8 +79,8 @@ ex.using([
           && (viewPortY + spriteSheet.renderingRect.height) > 0
           && viewPortY < camHeight) {
         context.drawImage(spriteSheet.image, 
-                  spriteSheet.renderingRect.position.x, 
-                  spriteSheet.renderingRect.position.y,
+                  spriteSheet.renderingRect.x, 
+                  spriteSheet.renderingRect.y,
                   spriteSheet.renderingRect.width,
                   spriteSheet.renderingRect.height,
                   viewPortX, 
