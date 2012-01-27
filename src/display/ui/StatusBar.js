@@ -50,7 +50,7 @@ ex.using([
       this.options.inner.width = 0;
       
       // Add to items list for rendering
-      this.items = [this.options.outer, this.options.inner];
+      this.items = [this.options.inner, this.options.outer];
       
       this._super("constructor", [true, 1.0]);
     },

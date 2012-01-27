@@ -35,14 +35,19 @@ ex.using([
 		  this.type = "AnimatedSprite";
 
 		  this.position = new ex.Vector(0,0);
+		  this.scrollFactor = { x: 0, y: 0 };
 		  
 			this.spriteSheets = this._prepareSpriteSheets(spriteSheets);
 			this.animations = {};
 			this.currentAnimation = null;
+			this.currentAnimationName = null;
 			this.currentIndex = 0;
 			this.currentFrame = 0;
 			this.playing = false;
 			this.playQueue = [];
+			this.scaled = false;
+			this.width = this.spriteSheets[0].renderingRect.width;
+			this.height = this.spriteSheets[0].renderingRect.height;
 			
 			this.timer = 0; // will be (1 / frameRate)
 		},
@@ -88,16 +93,37 @@ ex.using([
 			if(override == true) {
 	      this.playQueue = [];
 			} else {
-			  if(this.currentAnimation == this.animations[name] && this.playQueue.length == 0) {
+			  if(this.currentAnimationName == name && this.playQueue.length == 0) {
           return;
         }
 			}
 			
 			this.currentAnimation = this.animations[name];
+			this.currentAnimationName = name;
+			
+			if(this.scaled == false) {
+			  this.width = this.currentAnimation.sheet.renderingRect.width;
+	      this.height = this.currentAnimation.sheet.renderingRect.height;
+			}
+			
       this.currentFrame = 0;
       this.currentIndex = 0;
       this.timer = (1 / this.animations[name].sheet.frameRate);
       this.playing = true;
+		},
+		
+		/**
+		 * Plays an animation and queues the current animation
+		 * so it only plays through once.
+		 * @function
+		 * @name playOnce
+		 * @memberOf ex.display.AnimatedSprite
+		 * @param {String} name The name of the animation to play.
+		 */
+		playOnce: function (name, override) {
+		  var currentAnimationName = this.currentAnimationName;
+		  this.play(name, override);
+		  this.queue(currentAnimationName);
 		},
 		
 		/**

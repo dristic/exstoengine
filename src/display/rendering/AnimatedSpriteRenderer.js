@@ -71,7 +71,7 @@ ex.using([
       
       // Position of the animated sprite in the viewport
       var viewPortX = ex.toInt(this.position.x - (camX * this.scrollFactor.x)),
-        viewPortY = ex.toInt(this.position.y - (camY * this.scrollFactor.y));
+          viewPortY = ex.toInt(this.position.y - (camY * this.scrollFactor.y));
       
       // Render only if the animated sprite is within the viewport
       if((viewPortX + spriteSheet.renderingRect.width) > 0
@@ -85,8 +85,8 @@ ex.using([
                   spriteSheet.renderingRect.height,
                   viewPortX, 
                   viewPortY,
-                  spriteSheet.renderingRect.width,
-                  spriteSheet.renderingRect.height);
+                  this.width,
+                  this.height);
       }
     }
   });
