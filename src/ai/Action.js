@@ -10,6 +10,10 @@ ex.using([
     // Default update, completes instantly
     update: function(dt) {
       return true;
+    },
+    
+    destroy: function() {
+      
     }
   });
 });

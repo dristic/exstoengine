@@ -16,15 +16,22 @@ ex.using([
       this.actionList.push(action);
     },
     
+    remove: function(action) {
+      console.log("Removing action", action.name);
+      action.destroy();
+      ex.Array.remove(this.actionList, action);
+    },
+    
     update: function(dt) {
       var blockMask = 0,
-          index = 0,
+          index = this.actionList.length,
           action = null;
       
-      for(; index != this.actionList.length; index++) {
+      
+      while(index--) {
         action = this.actionList[index];
         
-        // If blocking, skip to next action
+        // If channel is already blocked, skip to next action
         if(action.mask & blockMask) {
           continue;
         }
@@ -32,9 +39,14 @@ ex.using([
         // Action complete if it returns true
         var complete = action.update(dt);
         
-        // If complete, remove the action from the action list
+        // If complete, remove action
         if(complete) {
-          this.actionList.splice(index, 1);
+          this.remove(this.actionList[index]);
+        }
+        
+        // Update blocked channels
+        if(action.blocking) {
+          blockMask = blockMask | action.mask;
         }
       }
     }

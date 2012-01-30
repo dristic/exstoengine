@@ -9,9 +9,10 @@ ex.using([
 ], function(){
   ex.define('ex.ai.actions.Wander', ex.ai.Action, {
     constructor: function(entity) {
+      this.name = "wander";
       this.entity = entity;
       
-      this._super("constructor", [0, false]);
+      this._super("constructor", [1, false]);
     },
     
     update: function(dt) {     
@@ -31,7 +32,6 @@ ex.using([
     
     isObstructed: function() {
       if(!this.entity.collisionData || !this.entity.collisionData.tiles) {
-        console.log("no collision data");
         return false;
       }
       
