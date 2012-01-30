@@ -1,5 +1,5 @@
 ex.using([
-    "ex.util.CollisionManager"
+  'ex.base.WorldComponent'
 ], function() {
   ex.define("ex.world.World", {
     
@@ -22,14 +22,28 @@ ex.using([
      * 
      * @constructor
      */
-    constructor: function(name, renderer) {
+    constructor: function(name, renderer, options) {
       this.name = name;
       this.active = true;
       this.renderer = renderer;
-      this.collisionManager = new ex.util.CollisionManager();
+      this.components = [];
       this.objects = [];
       this.globalObjects = [];
       this.objectsToRemove = [];
+      
+      this.options = options;
+      
+      var i = 0,
+          ln = options.components.length,
+          component;
+      for(; i != ln; i++) {
+        component = new options.components[i]();
+        if(component instanceof ex.base.WorldComponent) {
+          this.components.push(component);
+        } else {
+          ex.Debug.log('Component must be an instance of ex.base.WorldComponent: ' + component, 'ERROR');
+        }
+      }
     },
     
     /**
@@ -53,14 +67,17 @@ ex.using([
       }
       
       // update objects
-      var i = this.objects.length;
-      while(i--) {
+      var i = 0,
+          ln = this.objects.length;
+      for(; i != ln; i++) {
         this.objects[i].update(dt);
       }
       
-      //--Step collision manager
-      if(this.collisionManager != null) {
-        this.collisionManager.update(dt);
+      //--Step components
+      i = 0;
+      ln = this.components.length;
+      for(; i != ln; i++) {
+        this.components.update(dt);
       }
     },
     
@@ -80,10 +97,10 @@ ex.using([
         this.renderer.addRenderable(object);
       }
       
-      if(this.collisionManager){
-        if(object.collides) {
-          this.collisionManager.addCollidable(object);
-        }
+      var i = 0,
+          ln = this.components.length;
+      for(; i != ln; i++) {
+        this.components[i].addObject(object);
       }
     },
     
@@ -132,10 +149,10 @@ ex.using([
         this.renderer.removeRenderable(object);
       }
       
-      if(this.collisionManager) {
-        if(object.collides) {
-          this.collisionManager.removeCollidable(object);
-        }
+      var i = 0,
+          ln = this.components.length;
+      for(; i != ln; i++) {
+        this.components[i].removeObject(object);
       }
       
       if(object.destroy) {
@@ -204,10 +221,14 @@ ex.using([
     },
     
     destroy: function() {
+      var i = 0,
+          ln = this.components.length;
+      for(; i != ln; i++) {
+        this.components[i].destroy();
+      }
+      
       this.active = false;
       this.removeAllObjects();
-      this.collisionManager.destroy();
-      delete this.collisionManager;
       delete this.renderer;
       delete this.objects;
       delete this.globalObjects;

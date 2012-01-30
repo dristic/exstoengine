@@ -26,42 +26,51 @@ ex.using([
 		 * @param {Int} frameRate The frame rate of the game
 		 * @constructor
 		 */
-		constructor: function (width, height, frameRate, bgColor, options) {
+		constructor: function (options) {
 			//--Fail if canvas is not supported
 			if(!document.createElement("canvas").getContext) {
 			  ex.Debug.log("Your browser does not support canvas!");
 			  return;
 			}
 			
-			//--Public
-			this.frameRate = frameRate || 50;
-			this.deltaTime = 1 / this.frameRate;
-			this.width = width;
-			this.height = height;
-			this.fullscreen = false;
-			this.fullscreenType = false;
-			this.renderingContext = ex.display.rendering.Renderer.CANVAS2D;
-			this.renderingParams = {canvas: null};
+			this.defaults = {
+		    rendering: {
+		      width: 500,
+		      height: 500,
+		      frameRate: 60,
+		      bgColor: '#000',
+		      fullscreen: false,
+		      fullscreenType: 'resize',
+		      context: ex.display.rendering.Renderer.CANVAS2D,
+		      params: { canvas: null }
+		    },
+		    loadingScreen: null,
+		    debug: false,
+			  world: {
+			    components: []
+			  }  
+			};
 			
-			this.loadingScreen = null;
+			this.options = ex.extend({}, this.defaults, true);
+			ex.extend(this.options, options, true);
+			
+			//--Public
+			this.deltaTime = 1 / this.options.rendering.frameRate;
 			this.currentWorld = null;
 			this.worlds = [];
 			this.worldsToRemove = [];
 			
 			this.lastTime = (new Date()).getTime();
 			this.components = [];
-			this.debug = false;
-			
-			ex.extend(this, options);			
 			
 			//--Load new camera
 			this.camera = new ex.display.Camera(
 					new ex.base.Point(0,0),
-					this.width,
-					this.height);
+					this.options.rendering.width,
+					this.options.rendering.height);
 			
 			//--Load renderer
-			this.renderer = new ex.display.rendering.Renderer(this);
+			this.renderer = new ex.display.rendering.Renderer(this.options.rendering);
 			
 			// Switch input to focus on the main game element.
 			ex.Input.changeInputTarget(this.renderer.getRenderingElement());
@@ -71,7 +80,7 @@ ex.using([
       }
 			
 			//--Setup update interval
-			var _gameInterval = setInterval(ex.bind(this, this.update), (1 / frameRate) * 1000);
+			var _gameInterval = setInterval(ex.bind(this, this.update), (1 / this.options.rendering.frameRate) * 1000);
 		},
 		
 		_setupFullscreenViewport: function() {
@@ -81,12 +90,12 @@ ex.using([
 		
 		_resizeViewport: function() {
 		  this.renderer._resizeViewport();
-		  this.camera.width = this.width;
-		  this.camera.height = this.height;
+		  this.camera.width = this.renderer.width;
+		  this.camera.height = this.renderer.height;
 		},
 		
 		enableDebugging: function(debugType, loggingLevel) {
-			this.debug = true;
+			this.options.debug = true;
 			ex.Debug.enable(debugType, loggingLevel);
 		},
 		
@@ -168,7 +177,7 @@ ex.using([
 		  name = name || "DefaultWorldName";
 		  if(!setToCurrentWorld && setToCurrentWorld != false) setToCurrentWorld = true;
 		  
-		  var world = new ex.world.World(name, this.renderer);
+		  var world = new ex.world.World(name, this.renderer, this.options.world);
 		  
 		  // Check for removing current world.
 		  if(setToCurrentWorld == true) {

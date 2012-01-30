@@ -4,7 +4,7 @@
  * @class ex.util.Collidable
  */
 (function() {
-	ex.define("ex.util.Collidable", {
+	ex.define("ex.physics.Collidable", {
 		constructor: function() {
 			
 		},
