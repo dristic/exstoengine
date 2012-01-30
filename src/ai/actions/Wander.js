@@ -1,3 +1,9 @@
+/**
+ * This action is a simple collision-based wandering routine. When the entity
+ * runs into an obstruction (a tile), it turns around and goes back the other
+ * way.
+ */
+
 ex.using([
   'ex.ai.Action'
 ], function(){
