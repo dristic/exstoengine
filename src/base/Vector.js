@@ -155,6 +155,12 @@
   	  } else {
   	    return true;
   	  }
-  	}
+  	},
+  	
+  	inverse: function () {
+      this.x = 1 / this.x;
+      this.y = 1 / this.y;
+      return this;
+    }
 	});
 }());

@@ -46,20 +46,20 @@
 		}
 	});
 	
-	function resolveBoxToMap(box, map, data, dt) {	
+	function resolveBoxToMap(box, map, data, dt) {
 		data = data.pen;
 		if(data.y != 0) {
 			if(data.y > 0) data.y += 0.1;
 			else data.y -= 0.1;
 			box.position.y -= data.y;
-			box.velocity.y = 0;
+			box.velocity.y = -box.velocity.y * box.elasticity;
 		}
 		
 		if(data.x != 0) {
 			if(data.x > 0) data.x += 0.1;
 			else data.x -= 0.1;
 			box.position.x -= data.x;
-			box.velocity.x = 0;
+			box.velocity.x = -box.velocity.x * box.elasticity;
 		}
 	};
 	

@@ -45,6 +45,7 @@ ex.using([
       this.anchored = anchored;
       this.mass = 1;
       this.gravity = ex.Data.get('gravity');
+      this.elasticity = 0;
       
       // Display data
       this.sprite = sprite;

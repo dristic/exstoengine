@@ -71,7 +71,7 @@ ex.using([
     destroy: function () {
       delete this.options['onTick'];
       delete this.options['onComplete'];
-      this.options = null;
+      delete this.options;
       this.started = false;
     }
   });

@@ -20,6 +20,23 @@
             </select>
   </p>
   <p>
+    <b>Gradient: </b>
+    <input type="checkbox" id="gradient" title="Gradient" value="gradient" />
+    Type: <select id="gradient-type">
+              <option value="linear">Linear</option>
+              <option value="radial">Radial</option>
+            </select>
+    sx: <input type="number" id="gradient-sx" min="0" step="1" value="1" title="Gradient Sx" />
+    sy: <input type="number" id="gradient-sy" min="0" step="1" value="1" title="Gradient Sy" />
+    sr: <input type="number" id="gradient-sr" min="0" step="1" value="1" title="Gradient Sr" />
+    dx: <input type="number" id="gradient-dx" min="0" step="1" value="1" title="Gradient Dx" />
+    dy: <input type="number" id="gradient-dy" min="0" step="1" value="1" title="Gradient Dy" />
+    dr: <input type="number" id="gradient-dr" min="0" step="1" value="1" title="Gradient Dr" />
+    
+    Color Stops: <input type="text" id="gradient-colorstops" title="Gradient Color Stops" value="0, 1" />
+    Color Stop Colors: <input type="text" id="gradient-colorstopcolors" title="Gradient Color Stop Colors" value="#FFF, #000" />
+  </p>
+  <p>
     <b>Stroke: </b>
     Stroke Color: <input type="text" id="stroke-color" title="Stroke Color" value="rgba(0, 0, 0, 0)" />
     Line Width: <input type="number" id="line-width" min="0" step="1" value="0" title="Line Width" />

@@ -9,6 +9,7 @@ ex.using([
       this.defaults = {
         position: new ex.Vector(50, 50),
         offset: 3,
+        orientation: 'horizontal',
         update: 'manual',
         updateOptions: {
           target: null,
@@ -45,12 +46,18 @@ ex.using([
       this.options.outer.position = this.options.position;
       this.options.inner.position = this.options.position.clone().addNumber(this.options.offset);
       
-      this.totalWidth = this.options.inner.width;
+      if(this.options.orientation == 'vertical') {
+        this.totalWidth = this.options.inner.height;
+        this.initialY = this.options.inner.position.y;
+        this.options.inner.height = 0;
+      } else {
+        this.totalWidth = this.options.inner.width;
+        this.options.inner.width = 0;
+      }
       this.currentWidth = 0;
-      this.options.inner.width = 0;
       
       // Add to items list for rendering
-      this.items = [this.options.outer, this.options.inner];
+      this.items = [this.options.inner, this.options.outer];
       
       this._super("constructor", [true, 1.0]);
     },
@@ -64,7 +71,12 @@ ex.using([
         this.updatePercentage(percent);
       }
       
-      this.options.inner.width = this.currentWidth;
+      if(this.options.orientation == 'horizontal') {
+        this.options.inner.width = this.currentWidth; 
+      } else {
+        this.options.inner.height = this.currentWidth;
+        this.options.inner.position.y = Math.ceil(this.initialY + this.totalWidth - this.currentWidth);
+      }
     },
     
     updatePercentage: function (percent) {

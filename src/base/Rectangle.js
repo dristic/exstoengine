@@ -2,6 +2,8 @@ ex.using([
     "ex.base.Point"          
 ],function () {
 	ex.define("ex.base.Rectangle", {
+	  __alias: 'ex.Rectangle',
+	  
 		/**
 		 * @name ex.base.Rectangle
 		 * @param {ex.base.Point} position of top left corner
@@ -13,8 +15,9 @@ ex.using([
 		 * @property {Number} height
 		 * @constructor
 		 */
-		constructor: function(position, width, height) {
-			this.position = position;
+		constructor: function(x, y, width, height) {
+			this.x = x;
+			this.y = y;
 			this.width = width;
 			this.height = height;
 		},
@@ -31,7 +34,7 @@ ex.using([
 		 * @returns {Boolean}
 		 */
 		containsPoint: function(x, y) {
-			if(x instanceof ExstoEngine.Base.Point) {
+			if(x instanceof ex.base.Point) {
 				if(x.x > this.x && x.x  < this.position.x + this.width 
 				   && x.y > this.y && x.y < this.position.y + this.height) {
 					return true;
@@ -39,8 +42,8 @@ ex.using([
 					return false;
 				}
 			} else {
-				if(x > this.position.x && x < this.position.x + this.width
-				   && y > this.position.y && y < this.position.y + this.height) {
+				if(x > this.x && x < this.x + this.width
+				   && y > this.y && y < this.y + this.height) {
 			   		return true;
 			   } else {
 			   		return false;
@@ -63,11 +66,11 @@ ex.using([
 		 */
 		translate: function(x, y) {
 			if(x instanceof ex.base.Point || x instanceof ex.base.Vector){
-				this.position.x -= x.x;
-				this.position.y -= x.y;
+				this.x -= x.x;
+				this.y -= x.y;
 			} else {
-				this.position.x -= x;
-				this.position.y -= y;
+				this.x -= x;
+				this.y -= y;
 			}
 			return this;
 		}

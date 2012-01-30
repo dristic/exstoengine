@@ -100,12 +100,22 @@ ex.using([
       }
             
       if (this.rotationEnabled == false) {
+        if(!this.renderingRect) {
           context.drawImage(
               this.img, 
               viewPortX, 
               viewPortY,
               this.width,
               this.height);
+        } else {
+          var renderingRect = this.renderingRect;
+          context.drawImage(
+              this.img,
+              renderingRect.x, renderingRect.y,
+              renderingRect.width, renderingRect.height,
+              viewPortX, viewPortY,
+              renderingRect.width, renderingRect.height);
+        }
       } else {
           //--Ensure width and height are not 0 to avoid INVALID_STATE_ERR
         var rotCanvas = this.rendering.rotationCanvas,
