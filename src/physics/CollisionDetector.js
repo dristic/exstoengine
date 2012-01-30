@@ -19,7 +19,7 @@
 					for(target = source + 1; target < group.length; target++){
 						if(group[target].collides){
 							var result = this.detectCollisionBetween(
-									group[source], 
+									group[source],
 									group[target],
 									dt);
 							if(result != null){
@@ -139,11 +139,14 @@
 	 */
 	function boxToMapCheck(box, map, dt){	
 		// Swap box and map if the arguments get pushed in backwards
-		if(box.type == "TileMap"){
+		if(box.type == "Map"){
 			var temp = box;
 			box = map;
 			map = temp;
 		}
+		
+		// Collision map actually just wraps a tile map so it can extend Collidable.
+		map = map.tileMap;
 		
 		// find collisions between tiles and box
 		var collidedTiles = [],

@@ -5,12 +5,20 @@
  */
 (function() {
 	ex.define("ex.physics.Collidable", {
-		constructor: function() {
-			
+	  constructor: function (type) {
+	    this.type = type;
+	  },
+	  
+	  update: function (dt) {
+	    // Never should be used, just there for world.
+	  },
+	  
+		integrate: function (dt) {
+		  
 		},
 		
-		getBounds: function() {
-			
+		destroy: function () {
+		  
 		}
 	});
 }());

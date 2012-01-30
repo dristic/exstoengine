@@ -1,7 +1,9 @@
 ex.using([
     'ex.base.WorldComponent',
     'ex.physics.CollisionDetector',
-    'ex.physics.CollisionResolver'
+    'ex.physics.CollisionResolver',
+    'ex.physics.Collidable',
+    'ex.physics.Force'
 ], function(){
 	ex.define("ex.physics.CollisionManager", ex.base.WorldComponent, {
 		
@@ -16,58 +18,42 @@ ex.using([
 		 * 
 		 * @constructor
 		 */
-		constructor: function() {
-			this.activeLevel = null;
+		constructor: function () {
 			this.collisionGroups = [];
+			this.forces = [];
 			this.detector = new ex.physics.CollisionDetector();
 			this.resolver = new ex.physics.CollisionResolver();
 		},
 		
-		/**
-		 * Sets the level for the manager to handle collisions on.
-		 * 
-		 * @function
-		 * @name setActiveLevel
-		 * @memberOf ex.util.CollisionManager
-		 * 
-		 * @param {ex.simplex.Map} level
-		 */
-		setActiveLevel: function(level) {
-			this.activeLevel = level;
-			console.log("Active Level: " + this.activeLevel.name);
-		},
-		
 		addObject: function (object) {
-		  if(object.collides) {
-		    this.addCollidable(object);
+		  if(object instanceof ex.physics.Collidable) {
+		    var index = this.collisionGroups.length - 1;
+	      if(index == -1) {
+	        this.collisionGroups.push([]);
+	        index++;
+	      }
+	      this.collisionGroups[index].push(object);
+		  } else if (object instanceof ex.physics.Force) {
+		    this.forces.push(object);
 		  }
 		},
 		
 		removeObject: function (object) {
-		  if(object.collides) {
-		    this.removeCollidable(object);
-		  }
-		},
-		
-		addCollidable: function(object) {
-		  var index = this.collisionGroups.length - 1;
-		  if(index == -1) {
-		    this.collisionGroups.push([]);
-		    index++;
-		  }
-		  this.collisionGroups[index].push(object);
-		},
-		
-		removeCollidable: function(object) {
-		  var groupIndex = this.collisionGroups.length,
-		      objectIndex = 0;
-		  while(groupIndex--) {
-		    objectIndex = this.collisionGroups[groupIndex].length;
-		    while(objectIndex--) {
-		      if(object === this.collisionGroups[groupIndex][objectIndex]) {
-		        this.collisionGroups[groupIndex].splice(objectIndex, 1);
-		      }
-		    }
+		  if(object instanceof ex.physics.Collidable) {
+		    var groupIndex = this.collisionGroups.length,
+            objectIndex = 0;
+        while(groupIndex--) {
+          objectIndex = this.collisionGroups[groupIndex].length;
+          while(objectIndex--) {
+            if(object === this.collisionGroups[groupIndex][objectIndex]) {
+              this.collisionGroups[groupIndex].splice(objectIndex, 1);
+              object.destroy();
+            }
+          }
+        }
+		  } else if (object instanceof ex.physics.Force) {
+		    ex.Array.remove(this.forces, object);
+		    object.destroy();
 		  }
 		},
 		
@@ -82,13 +68,34 @@ ex.using([
 		 * 
 		 * @param {Number} dt timestep
 		 */
-		update: function(dt) {
+		update: function (dt) {
 			ex.Debug.time('collision');
+			
+			// Solve for all forces.
+			var i = 0,
+          ln = this.collisionGroups.length;
+      for(; i != ln; i++) {
+        var n = 0,
+            nln = this.forces.length;
+        for(; n != nln; n++) {
+          this.forces[n].solve(dt, this.collisionGroups[i]);
+        }
+      }
+			
+			// Integrate all objects forward in time.
+			i = 0;
+	    ln = this.collisionGroups.length;
+			for(; i != ln; i++) {
+			  n = 0;
+	      nln = this.collisionGroups[i].length;
+			  for(; n != nln; n++) {
+			    this.collisionGroups[i][n].integrate(dt);
+			  }
+			}
 			
 			var collisions = [];
 			var index = 0;
-
-			// Or if collision groups exist, use that
+		  
 			if(this.collisionGroups.length > 0) {
 				index = this.collisionGroups.length;
 				while(index--) {
@@ -102,7 +109,8 @@ ex.using([
 				}
 			}
 			
-			this.resolver.resolveCollisions(collisions, dt);	
+			this.resolver.resolveCollisions(collisions, dt);
+			
 			ex.Debug.time('collision');
 		},
 		

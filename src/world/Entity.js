@@ -28,29 +28,17 @@ ex.using([
      * @property {ex.display.Sprite} sprite
      * @constructor
      */
-    constructor : function(name, position, width, height, sprite, collides, anchored) {
+    constructor : function(name, position, width, height, sprite) {
       this._super('constructor', []);
       
       // Referencing data
       this.name = name;
       this.type = "Entity";
       
-      // Physical data
-      this.position = position;
-      this.scrollFactor = new ex.base.Vector(1,1);
-      this.width = width;
-      this.height = height;
-      this.velocity = new ex.base.Vector(0,0);
-      this.collides = collides;
-      this.anchored = anchored;
-      this.mass = 1;
-      this.elasticity = 0;
-      
       // Display data
       this.sprite = sprite;
-      this.sprite.scrollFactor = this.scrollFactor; // pointer to this.scrollFactor
+      this.sprite.scrollFactor = new ex.base.Vector(1, 1); // pointer to this.scrollFactor
       this.sprite.position = this.position; // pointer to this.position
-      this.visible = true;
       this.items = [this.sprite];
     },
 
