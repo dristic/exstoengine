@@ -1,5 +1,5 @@
 (function() {
-	ex.define("ex.util.CollisionResolver", {
+	ex.define("ex.physics.CollisionResolver", {
 		constructor: function(){
 			this.algorithms = {
 					EntityToTileMap: 	resolveBoxToMap,

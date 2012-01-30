@@ -1,8 +1,9 @@
 ex.using([
-    'ex.util.CollisionDetector',
-    'ex.util.CollisionResolver'
+    'ex.base.WorldComponent',
+    'ex.physics.CollisionDetector',
+    'ex.physics.CollisionResolver'
 ], function(){
-	ex.define("ex.util.CollisionManager", {
+	ex.define("ex.physics.CollisionManager", ex.base.WorldComponent, {
 		
 		/**
 		 * The engine component that handles collision detection and
@@ -18,8 +19,8 @@ ex.using([
 		constructor: function() {
 			this.activeLevel = null;
 			this.collisionGroups = [];
-			this.detector = new ex.util.CollisionDetector();
-			this.resolver = new ex.util.CollisionResolver();
+			this.detector = new ex.physics.CollisionDetector();
+			this.resolver = new ex.physics.CollisionResolver();
 		},
 		
 		/**
@@ -34,6 +35,18 @@ ex.using([
 		setActiveLevel: function(level) {
 			this.activeLevel = level;
 			console.log("Active Level: " + this.activeLevel.name);
+		},
+		
+		addObject: function (object) {
+		  if(object.collides) {
+		    this.addCollidable(object);
+		  }
+		},
+		
+		removeObject: function (object) {
+		  if(object.collides) {
+		    this.removeCollidable(object);
+		  }
 		},
 		
 		addCollidable: function(object) {

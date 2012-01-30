@@ -1,5 +1,5 @@
 ex.using([
-  'ex.physics.Collidable'
+  'ex.physics.CollisionManager'
 ], function () {
   ex.define('ex.physics.Physics', {});
 });

@@ -1,5 +1,5 @@
 (function() {
-	ex.define("ex.util.CollisionDetector", {
+	ex.define("ex.physics.CollisionDetector", {
 		constructor: function() {
 			this.algorithms = {
 				EntityToTileMap: 	boxToMapCheck,

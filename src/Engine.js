@@ -45,7 +45,12 @@ ex.using([
 		      params: { canvas: null }
 		    },
 		    loadingScreen: null,
-		    debug: false,
+		    debug: {
+		      enabled: false,
+		      type: ex.Debug.DOM,
+		      level: ex.util.Logger.LEVEL.ALL
+		    },
+		    components: [],
 			  world: {
 			    components: []
 			  }  
@@ -59,9 +64,20 @@ ex.using([
 			this.currentWorld = null;
 			this.worlds = [];
 			this.worldsToRemove = [];
-			
 			this.lastTime = (new Date()).getTime();
+			
+			// Debugging
+			if(this.options.debug.enabled) {
+			  this.enableDebugging(this.options.debug.type, this.options.debug.level);
+			}
+			
+			// Components
 			this.components = [];
+			var i = 0,
+			    ln = this.options.components.length;
+			for(; i != ln; i++) {
+			  this.loadComponent(new this.options.components[i]());
+			}
 			
 			//--Load new camera
 			this.camera = new ex.display.Camera(
@@ -222,7 +238,7 @@ ex.using([
 		},
 		
 		loadScene: function(sceneName, world, callback) {
-      world.addObject(this.loadingScreen);
+      world.addObject(this.options.loadingScreen);
       
 			var that = this;
 			var sceneNamespace = "game.levels." + sceneName;
@@ -238,7 +254,7 @@ ex.using([
 					var objects = scene.getObjects();
 					
 					world.addObjects(objects);
-					world.removeObject(that.loadingScreen);
+					world.removeObject(that.options.loadingScreen);
 
 					scene.finalSetup();
 					

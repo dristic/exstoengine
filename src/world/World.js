@@ -77,7 +77,7 @@ ex.using([
       i = 0;
       ln = this.components.length;
       for(; i != ln; i++) {
-        this.components.update(dt);
+        this.components[i].update(dt);
       }
     },
     
