@@ -1,31 +1,41 @@
 
 ex.using([
-  'ex.ai.Action'
+  'ex.ai.Action',
+  'ex.ai.actions.Shoot'
 ], function(){
   ex.define('ex.ai.actions.Chase', ex.ai.Action, {
-    constructor: function(entity, target, maxRange) {
+    constructor: function(entity, target, maxRange, speedModifier) {
       this.name = "chase";
       this.entity = entity;
       this.target = target;
       this.maxRange = maxRange;
       
-      this.speedModifier = 2;
+      this.speedModifier = speedModifier || 1;
       
       this._super("constructor", [1, true]);
     },
     
     update: function(dt) {
-      var distance = this.entity.position.distance(this.target.position);
-      
-      // Action complete cases
-      if(distance > this.maxRange) {
+      var distX = Math.abs(this.entity.position.x - this.target.position.x),
+      minY = this.entity.position.y - this.target.height,
+      maxY = this.entity.position.y + this.entity.height;
+  
+      if(distX < this.maxRange
+          && this.target.position.y > minY
+          && this.target.position.y < maxY) {
+        this.moveTowardTarget(dt);
+        this.attackTarget(dt);
+        return false;
+      } else {
         return true;
-      } else if (this.target.health == 0) {
-        return true;
-      } 
-      
-      this.moveTowardTarget(dt);
-      return false;
+      }
+    },
+    
+    attackTarget: function(dt) {
+      this.entity.cooldown += Math.random() * dt;
+      if(this.entity.weapon.cooldown <= 0) {
+        this.entity.ai.push(new ex.ai.actions.Shoot(this.entity.weapon));
+      }
     },
     
     moveTowardTarget: function(dt) {

@@ -20,9 +20,13 @@ ex.using([
     },
     
     update: function(dt) {
-      var distance = this.entity.position.distance(this.target.position);
-      if(distance < this.sightRange) {
-        console.log("chasing player");
+      var distX = Math.abs(this.entity.position.x - this.target.position.x),
+          minY = this.entity.position.y - this.target.height,
+          maxY = this.entity.position.y + this.entity.height;
+      
+      if(distX < this.sightRange
+          && this.target.position.y > minY
+          && this.target.position.y < maxY) {
         this.entity.ai.push(new ex.ai.actions.Chase(this.entity, this.target, 200));
       }
     }
