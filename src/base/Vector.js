@@ -161,6 +161,17 @@
       this.x = 1 / this.x;
       this.y = 1 / this.y;
       return this;
+    },
+    
+    /**
+     * Trims this vector to the positive and negative values of
+     * the other vector.
+     */
+    limit: function (v) {
+      if(this.x > v.x) this.x = v.x;
+      else if(this.x < -v.x) this.x = -v.x;
+      if(this.y > v.y) this.y = v.y;
+      else if(this.y < -v.y) this.y = -v.y;
     }
 	});
 }());

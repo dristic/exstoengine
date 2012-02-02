@@ -32,12 +32,13 @@ ex.using([
       this.objectsToRemove = [];
       
       this.options = options;
+      this.options.componentConfig = this.options.componentConfig || [];
       
       var i = 0,
           ln = options.components.length,
           component;
       for(; i != ln; i++) {
-        component = new options.components[i]();
+        component = new options.components[i](this.renderer, this.options.componentConfig[i]);
         if(component instanceof ex.base.WorldComponent) {
           this.components.push(component);
         } else {
@@ -55,7 +56,9 @@ ex.using([
      * 
      * @param {Number} dt timestep
      */
-    update: function(dt) {
+    update: function (dt) {
+      ex.Debug.time('world');
+      
       if(!this.active) {
         return;
       }
@@ -79,6 +82,21 @@ ex.using([
       for(; i != ln; i++) {
         this.components[i].update(dt);
       }
+      
+      ex.Debug.time('world');
+    },
+    
+    /**
+     * Called after the engine has drawn the game to the screen
+     * for any debug drawing of entities, collision objects,
+     * triggers, etc.
+     */
+    debug: function (dt, camera) {
+      i = 0;
+      ln = this.components.length;
+      for(; i != ln; i++) {
+        this.components[i].debug(dt, camera);
+      }
     },
     
     /**
@@ -90,10 +108,12 @@ ex.using([
      * 
      * @param {Object} object
      */
-    addObject: function(object) {
-      this.objects.push(object);
+    addObject: function(object, recursive) {
+      if(!recursive) {
+        this.objects.push(object);
+      }
       
-      if(object instanceof ex.display.Renderable || object.items != null) {
+      if(object instanceof ex.display.Renderable) {
         this.renderer.addRenderable(object);
       }
       
@@ -101,6 +121,14 @@ ex.using([
           ln = this.components.length;
       for(; i != ln; i++) {
         this.components[i].addObject(object);
+      }
+      
+      if(object.items) {
+        i = 0;
+        ln = object.items.length;
+        for(; i != ln; i++) {
+          this.addObject(object.items[i], true);
+        }
       }
     },
     
@@ -135,17 +163,11 @@ ex.using([
       this.objectsToRemove.push(object);
     },
     
-    _removeObject: function (object) {
-      // Remove object from world
-      var index = this.objects.length;
-      while(index--) {
-        if(this.objects[index] === object){
-          this.objects.splice(index, 1);
-        }
-      }
+    _removeObject: function (object, recursive) {
+      if(!recursive) ex.Array.remove(this.objects, object);
       
       // Remove object from renderer and collisionManager
-      if(object instanceof ex.display.Renderable || object.items != null) {
+      if(object instanceof ex.display.Renderable) {
         this.renderer.removeRenderable(object);
       }
       
@@ -153,6 +175,14 @@ ex.using([
           ln = this.components.length;
       for(; i != ln; i++) {
         this.components[i].removeObject(object);
+      }
+      
+      if(object.items) {
+        i = 0;
+        ln = object.items.length;
+        for(; i != ln; i++) {
+          this._removeObject(object.items[i], true);
+        }
       }
       
       if(object.destroy) {

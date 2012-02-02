@@ -5,8 +5,9 @@
  */
 (function() {
 	ex.define("ex.physics.Collidable", {
-	  constructor: function (type) {
+	  constructor: function (type, data) {
 	    this.type = type;
+	    this.data = data;
 	  },
 	  
 	  update: function (dt) {
@@ -14,6 +15,10 @@
 	  },
 	  
 		integrate: function (dt) {
+		  
+		},
+		
+		onCollide: function (target, data, dt) {
 		  
 		},
 		

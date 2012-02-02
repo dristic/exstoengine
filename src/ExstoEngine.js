@@ -174,6 +174,10 @@ if(!Array.indexOf){
 		
 		isFunction: function (func) {
 		  return typeof func == 'function';
+		},
+		
+		isNull: function (object) {
+		  return typeof object == 'undefined';
 		}
 	});
 	

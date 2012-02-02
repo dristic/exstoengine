@@ -94,7 +94,7 @@ ex.using([
       }
     },
     
-    update: function(dt) {
+    update: function (dt) {
       // Update button states
       for(var key in this.bindings) {
         var keyCode = parseInt(key);

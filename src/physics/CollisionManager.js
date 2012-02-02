@@ -18,11 +18,25 @@ ex.using([
 		 * 
 		 * @constructor
 		 */
-		constructor: function () {
+		constructor: function (renderer, options) {
 			this.collisionGroups = [];
 			this.forces = [];
 			this.detector = new ex.physics.CollisionDetector();
 			this.resolver = new ex.physics.CollisionResolver();
+			this.renderer = renderer;
+			
+			this.defaults = {
+			    debugDraw: false
+			};
+			
+			this.options = ex.extend({}, this.defaults);
+			ex.extend(this.options, options);
+			
+			// Debug drawing.
+			this.context = null;
+			if(this.options.debugDraw && this.renderer.type == ex.display.rendering.Renderer.CANVAS2D) {
+			  this.context = this.renderer.renderingContext.context;
+			}
 		},
 		
 		addObject: function (object) {
@@ -68,7 +82,7 @@ ex.using([
 		 * 
 		 * @param {Number} dt timestep
 		 */
-		update: function (dt) {
+		update: function (dt, camera) {
 			ex.Debug.time('collision');
 			
 			// Solve for all forces.
@@ -112,6 +126,33 @@ ex.using([
 			this.resolver.resolveCollisions(collisions, dt);
 			
 			ex.Debug.time('collision');
+		},
+		
+		debug: function (dt, camera) {
+		  if(this.options.debugDraw == true) {
+		    this.draw(this.context, camera);
+		  }
+		},
+		
+		draw: function (context, camera) {
+	    context.save();
+	    
+	    context.strokeStyle = '#FF0000';
+      context.lineWidth = 1;
+	    
+      var i = 0,
+          ln = this.collisionGroups.length;
+      for(; i != ln; i++) {
+        n = 0;
+        nln = this.collisionGroups[i].length;
+        for(; n != nln; n++) {
+          if(this.collisionGroups[i][n].draw) {
+            this.collisionGroups[i][n].draw(context, camera.position.x, camera.position.y);
+          }
+        }
+      }
+      
+      context.restore();
 		},
 		
 		destroy: function () {

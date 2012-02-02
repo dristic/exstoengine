@@ -2,6 +2,10 @@ ex.using([
 
 ], function () {
   ex.define('ex.base.WorldComponent', {
+    constructor: function (renderer, options) {
+      
+    },
+    
     addObject: function (object) {
       
     },
@@ -11,6 +15,10 @@ ex.using([
     },
     
     removeObject: function (object) {
+      
+    },
+    
+    debug: function (dt, camera) {
       
     },
     

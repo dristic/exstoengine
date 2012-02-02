@@ -35,7 +35,7 @@ ex.using([
 		  this.type = "AnimatedSprite";
 
 		  this.position = new ex.Vector(0,0);
-		  this.scrollFactor = { x: 0, y: 0 };
+		  this.scrollFactor = { x: 1, y: 1 };
 		  
 			this.spriteSheets = this._prepareSpriteSheets(spriteSheets);
 			this.animations = {};

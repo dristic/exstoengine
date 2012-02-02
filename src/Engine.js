@@ -170,6 +170,8 @@ ex.using([
 		render: function (dt) {
       var that = this;
       
+      ex.Debug.time('render');
+      
       //--Step camera
       this.camera.update(dt);
       
@@ -181,6 +183,14 @@ ex.using([
         /*requestAnimationFrame(function () {
           
         });*/
+      }
+      
+      ex.Debug.time('render');
+      
+      var i = 0,
+          ln = this.worlds.length;
+      for(; i < ln; i++) {
+        this.worlds[i].debug(dt, this.camera);
       }
 		},
 		
