@@ -10,19 +10,28 @@
 			};
 		},
 		
-		detectGroupCollisions: function(group, dt) {
-			var collisions = [];
-			var source = 0;
-			var target = 0;
-			for(source; source < group.length; source++) {
-				for(target = source + 1; target < group.length; target++) {
-					var result = this.detectCollisionBetween(
-							group[source],
-							group[target],
-							dt);
-					if(result != null) {
-						collisions.push(result);
-					}
+		detectCollisions: function(collidables, dt) {
+			var collisions = [],
+			    sourceIndex = 0,
+			    targetIndex = 0,
+			    source,
+			    target;
+			for(sourceIndex; sourceIndex < collidables.length; sourceIndex++) {
+				for(targetIndex = sourceIndex + 1; targetIndex < collidables.length; targetIndex++) {
+				  source = collidables[sourceIndex];
+				  target = collidables[targetIndex];
+				  
+				  // Use bit masking to check if they should collide.
+				  if((source.collisionBit & target.collisionBitMask)
+				      && (target.collisionBit & source.collisionBitMask)) {
+				    var result = this.detectCollisionBetween(
+	              source,
+	              target,
+	              dt);
+	          if(result != null) {
+	            collisions.push(result);
+	          }
+				  } 
 				}
 			}
 			

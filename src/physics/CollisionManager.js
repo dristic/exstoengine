@@ -19,7 +19,7 @@ ex.using([
 		 * @constructor
 		 */
 		constructor: function (renderer, options) {
-			this.collisionGroups = [];
+			this.collidables = [];
 			this.forces = [];
 			this.detector = new ex.physics.CollisionDetector();
 			this.resolver = new ex.physics.CollisionResolver();
@@ -41,12 +41,7 @@ ex.using([
 		
 		addObject: function (object) {
 		  if(object instanceof ex.physics.Collidable) {
-		    var index = this.collisionGroups.length - 1;
-	      if(index == -1) {
-	        this.collisionGroups.push([]);
-	        index++;
-	      }
-	      this.collisionGroups[index].push(object);
+		    this.collidables.push(object);
 		  } else if (object instanceof ex.physics.Force) {
 		    this.forces.push(object);
 		  }
@@ -54,17 +49,8 @@ ex.using([
 		
 		removeObject: function (object) {
 		  if(object instanceof ex.physics.Collidable) {
-		    var groupIndex = this.collisionGroups.length,
-            objectIndex = 0;
-        while(groupIndex--) {
-          objectIndex = this.collisionGroups[groupIndex].length;
-          while(objectIndex--) {
-            if(object === this.collisionGroups[groupIndex][objectIndex]) {
-              this.collisionGroups[groupIndex].splice(objectIndex, 1);
-              object.destroy();
-            }
-          }
-        }
+		    ex.Array.remove(this.collidables, object);
+		    object.destroy();
 		  } else if (object instanceof ex.physics.Force) {
 		    ex.Array.remove(this.forces, object);
 		    object.destroy();
@@ -87,41 +73,19 @@ ex.using([
 			
 			// Solve for all forces.
 			var i = 0,
-          ln = this.collisionGroups.length;
-      for(; i != ln; i++) {
-        var n = 0,
-            nln = this.forces.length;
-        for(; n != nln; n++) {
-          this.forces[n].solve(dt, this.collisionGroups[i]);
-        }
-      }
+			    ln = this.forces.length;
+			for(; i != ln; i++) {
+			  this.forces[i].solve(dt, this.collidables);
+			}
 			
 			// Integrate all objects forward in time.
 			i = 0;
-	    ln = this.collisionGroups.length;
+			ln = this.collidables.length;
 			for(; i != ln; i++) {
-			  n = 0;
-	      nln = this.collisionGroups[i].length;
-			  for(; n != nln; n++) {
-			    this.collisionGroups[i][n].integrate(dt);
-			  }
+			  this.collidables[i].integrate(dt);
 			}
 			
-			var collisions = [];
-			var index = 0;
-		  
-			if(this.collisionGroups.length > 0) {
-				index = this.collisionGroups.length;
-				while(index--) {
-				  var groupCollisions = this.detector.detectGroupCollisions(this.collisionGroups[index], dt);
-				  
-				  var i = 0,
-				      ln = groupCollisions.length;
-				  for(; i < ln; i++) {
-				    collisions.push(groupCollisions[i]);
-				  }
-				}
-			}
+			var collisions = this.detector.detectCollisions(this.collidables, dt);
 			
 			this.resolver.resolveCollisions(collisions, dt);
 			
