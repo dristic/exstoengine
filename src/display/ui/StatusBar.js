@@ -4,10 +4,11 @@ ex.using([
   'ex.display.Rectangle',
   'ex.display.Renderable'
 ], function() { 
-  ex.define("ex.display.ui.StatusBar", ex.display.Renderable, {
+  ex.define("ex.display.ui.StatusBar", {
     constructor: function(options) {
       this.defaults = {
         position: new ex.Vector(50, 50),
+        scrollFactor: new ex.Vector(0, 0),
         offset: 3,
         orientation: 'horizontal',
         update: 'manual',
@@ -46,6 +47,9 @@ ex.using([
       this.options.outer.position = this.options.position;
       this.options.inner.position = this.options.position.clone().addNumber(this.options.offset);
       
+      this.options.outer.scrollFactor = this.options.scrollFactor;
+      this.options.inner.scrollFactor = this.options.scrollFactor;
+      
       if(this.options.orientation == 'vertical') {
         this.totalWidth = this.options.inner.height;
         this.initialY = this.options.inner.position.y;
@@ -58,8 +62,6 @@ ex.using([
       
       // Add to items list for rendering
       this.items = [this.options.inner, this.options.outer];
-      
-      this._super("constructor", [true, 1.0]);
     },
     
     update: function(dt) {

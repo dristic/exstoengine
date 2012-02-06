@@ -1,9 +1,11 @@
 (function() {
-	ex.define("ex.util.CollisionResolver", {
+  var DAMPING = 0.98;
+  
+	ex.define("ex.physics.CollisionResolver", {
 		constructor: function(){
 			this.algorithms = {
-					EntityToTileMap: 	resolveBoxToMap,
-					EntityToEntity: 	resolveBoxToBox,
+			    RigidBoxToCollisionMap: 	resolveBoxToMap,
+			    RigidBoxToRigidBox: 	resolveBoxToBox,
 				};
 		},
 		
@@ -40,13 +42,15 @@
 		 */
 		resolveCollisionBetween: function(source, target, data, dt) {
 			var selector = source.type + "To" + target.type;
-			if(this.algorithms[selector]){
+			if(this.algorithms[selector]) {
 				return this.algorithms[selector](source, target, data, dt);
 			}
 		}
 	});
 	
 	function resolveBoxToMap(box, map, data, dt) {
+	  if(box.mass == 0) return;
+	  
 		data = data.pen;
 		if(data.y != 0) {
 			if(data.y > 0) data.y += 0.1;
@@ -61,6 +65,8 @@
 			box.position.x -= data.x;
 			box.velocity.x = -box.velocity.x * box.elasticity;
 		}
+		
+		box.velocity.scale(DAMPING);
 	};
 	
 	function resolveBoxToBox(source, target, data, dt) {		

@@ -4,7 +4,7 @@ ex.using([
   'ex.display.Text',
   'ex.display.Renderable'
 ], function() { 
-  ex.define("ex.display.ui.Menu", ex.display.Renderable, {
+  ex.define("ex.display.ui.Menu", {
     constructor: function(options) {
       this.defaults = {
         items: [{
@@ -166,8 +166,6 @@ ex.using([
     
     destroy: function () {
       ex.Input.changeCursor(ex.Input.CURSOR.AUTO);
-      
-      this._super('destroy');
     }
   });
 });

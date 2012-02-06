@@ -1,5 +1,5 @@
 ex.using([
-    "ex.util.CollisionManager"
+  'ex.base.WorldComponent'
 ], function() {
   ex.define("ex.world.World", {
     
@@ -22,14 +22,29 @@ ex.using([
      * 
      * @constructor
      */
-    constructor: function(name, renderer) {
+    constructor: function(name, renderer, options) {
       this.name = name;
       this.active = true;
       this.renderer = renderer;
-      this.collisionManager = new ex.util.CollisionManager();
+      this.components = [];
       this.objects = [];
       this.globalObjects = [];
       this.objectsToRemove = [];
+      
+      this.options = options;
+      this.options.componentConfig = this.options.componentConfig || [];
+      
+      var i = 0,
+          ln = options.components.length,
+          component;
+      for(; i != ln; i++) {
+        component = new options.components[i](this.renderer, this.options.componentConfig[i]);
+        if(component instanceof ex.base.WorldComponent) {
+          this.components.push(component);
+        } else {
+          ex.Debug.log('Component must be an instance of ex.base.WorldComponent: ' + component, 'ERROR');
+        }
+      }
     },
     
     /**
@@ -41,7 +56,9 @@ ex.using([
      * 
      * @param {Number} dt timestep
      */
-    update: function(dt) {
+    update: function (dt) {
+      ex.Debug.time('world');
+      
       if(!this.active) {
         return;
       }
@@ -53,14 +70,32 @@ ex.using([
       }
       
       // update objects
-      var i = this.objects.length;
-      while(i--) {
+      var i = 0,
+          ln = this.objects.length;
+      for(; i != ln; i++) {
         this.objects[i].update(dt);
       }
       
-      //--Step collision manager
-      if(this.collisionManager != null) {
-        this.collisionManager.update(dt);
+      //--Step components
+      i = 0;
+      ln = this.components.length;
+      for(; i != ln; i++) {
+        this.components[i].update(dt);
+      }
+      
+      ex.Debug.time('world');
+    },
+    
+    /**
+     * Called after the engine has drawn the game to the screen
+     * for any debug drawing of entities, collision objects,
+     * triggers, etc.
+     */
+    debug: function (dt, camera) {
+      i = 0;
+      ln = this.components.length;
+      for(; i != ln; i++) {
+        this.components[i].debug(dt, camera);
       }
     },
     
@@ -73,16 +108,26 @@ ex.using([
      * 
      * @param {Object} object
      */
-    addObject: function(object) {
-      this.objects.push(object);
+    addObject: function(object, recursive) {
+      if(!recursive) {
+        this.objects.push(object);
+      }
       
-      if(object instanceof ex.display.Renderable || object.items != null) {
+      if(object instanceof ex.display.Renderable) {
         this.renderer.addRenderable(object);
       }
       
-      if(this.collisionManager){
-        if(object.collides) {
-          this.collisionManager.addCollidable(object);
+      var i = 0,
+          ln = this.components.length;
+      for(; i != ln; i++) {
+        this.components[i].addObject(object);
+      }
+      
+      if(object.items) {
+        i = 0;
+        ln = object.items.length;
+        for(; i != ln; i++) {
+          this.addObject(object.items[i], true);
         }
       }
     },
@@ -118,23 +163,25 @@ ex.using([
       this.objectsToRemove.push(object);
     },
     
-    _removeObject: function (object) {
-      // Remove object from world
-      var index = this.objects.length;
-      while(index--) {
-        if(this.objects[index] === object){
-          this.objects.splice(index, 1);
-        }
-      }
+    _removeObject: function (object, recursive) {
+      if(!recursive) ex.Array.remove(this.objects, object);
       
       // Remove object from renderer and collisionManager
-      if(object instanceof ex.display.Renderable || object.items != null) {
+      if(object instanceof ex.display.Renderable) {
         this.renderer.removeRenderable(object);
       }
       
-      if(this.collisionManager) {
-        if(object.collides) {
-          this.collisionManager.removeCollidable(object);
+      var i = 0,
+          ln = this.components.length;
+      for(; i != ln; i++) {
+        this.components[i].removeObject(object);
+      }
+      
+      if(object.items) {
+        i = 0;
+        ln = object.items.length;
+        for(; i != ln; i++) {
+          this._removeObject(object.items[i], true);
         }
       }
       
@@ -204,10 +251,14 @@ ex.using([
     },
     
     destroy: function() {
+      var i = 0,
+          ln = this.components.length;
+      for(; i != ln; i++) {
+        this.components[i].destroy();
+      }
+      
       this.active = false;
       this.removeAllObjects();
-      this.collisionManager.destroy();
-      delete this.collisionManager;
       delete this.renderer;
       delete this.objects;
       delete this.globalObjects;

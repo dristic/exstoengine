@@ -2,7 +2,7 @@ ex.using([
   'ex.display.Renderable',
   'ex.display.Text'
 ], function() {	
-	ex.define("ex.display.ui.StatusText", ex.display.Renderable, {
+	ex.define("ex.display.ui.StatusText", {
 		constructor: function(options) {
 			this.options = {
 				position: new ex.base.Vector(50,50),
@@ -26,8 +26,6 @@ ex.using([
 			this.items = [
 			  new ex.display.Text('Loading...', this.options.position, this.options.text)
       ];
-			
-			this._super("constructor", [true, 1.0]);
 		},
 		
 		update: function (dt) {

@@ -1,31 +1,27 @@
 (function() {
-	ex.define("ex.util.CollisionDetector", {
+	ex.define("ex.physics.CollisionDetector", {
 		constructor: function() {
 			this.algorithms = {
-				EntityToTileMap: 	boxToMapCheck,
-				TileMapToEntity: 	boxToMapCheck,
-				EntityToEntity: 	boxToBoxCheck,
+				RigidBoxToCollisionMap: 	boxToMapCheck,
+				CollisionMapToRigidBox: 	boxToMapCheck,
+				RigidBoxToRigidBox:      	boxToBoxCheck,
 				EntityToTrigger:	boxToBoxCheck,
 				TriggerToEntity:	boxToBoxCheck,
 			};
 		},
 		
-		detectGroupCollisions: function(group, dt){
+		detectGroupCollisions: function(group, dt) {
 			var collisions = [];
 			var source = 0;
 			var target = 0;
 			for(source; source < group.length; source++) {
-				if(group[source].collides){
-					for(target = source + 1; target < group.length; target++){
-						if(group[target].collides){
-							var result = this.detectCollisionBetween(
-									group[source], 
-									group[target],
-									dt);
-							if(result != null){
-								collisions.push(result);
-							}
-						}
+				for(target = source + 1; target < group.length; target++) {
+					var result = this.detectCollisionBetween(
+							group[source],
+							group[target],
+							dt);
+					if(result != null) {
+						collisions.push(result);
 					}
 				}
 			}
@@ -69,7 +65,7 @@
 		}
 		
 		var penVector = new ex.base.Vector(0,0),
-			tempPenVector = new ex.base.Vector(0,0);
+			  tempPenVector = new ex.base.Vector(0,0);
 		// Find y penetration
 		if(source.velocity.y > 0) {
 			// Find out if box is penetrating top edge of tile
@@ -139,31 +135,34 @@
 	 */
 	function boxToMapCheck(box, map, dt){	
 		// Swap box and map if the arguments get pushed in backwards
-		if(box.type == "TileMap"){
+		if(box.type == "CollisionMap") {
 			var temp = box;
 			box = map;
 			map = temp;
 		}
 		
+		// Collision map actually just wraps a tile map so it can extend Collidable.
+		var tileMap = map.tileMap;
+		
 		// find collisions between tiles and box
 		var collidedTiles = [],
-			xPos = 0,
-			yPos = 0,
-			firstTile = map.getTile(box.position.x, box.position.y) || { position: { x: 0, y: 0 }},
-			xMax = Math.floor((box.width + box.position.x - firstTile.position.x) / map.tileWidth),
-			yMax = Math.floor((box.height + box.position.y - firstTile.position.y) / map.tileHeight),
-			penVector = new ex.base.Vector(0, 0),
-			tempPenVector = new ex.base.Vector(0, 0),
-			i,
-			currentTile,
-			tile;
+  			xPos = 0,
+  			yPos = 0,
+  			firstTile = tileMap.getTile(box.position.x, box.position.y) || { position: { x: 0, y: 0 }},
+  			xMax = Math.floor((box.width + box.position.x - firstTile.position.x) / tileMap.tileWidth),
+  			yMax = Math.floor((box.height + box.position.y - firstTile.position.y) / tileMap.tileHeight),
+  			penVector = new ex.base.Vector(0, 0),
+  			tempPenVector = new ex.base.Vector(0, 0),
+  			i,
+  			currentTile,
+  			tile;
 		
 		// Generate list of tile collisions
 		for(yPos; yPos <= yMax; yPos++) {
 			for(xPos; xPos <= xMax; xPos++) {
-				currentTile = map.getTile(
-						box.position.x + (xPos*map.tileWidth), 
-						box.position.y + (yPos*map.tileHeight));
+				currentTile = tileMap.getTile(
+						box.position.x + (xPos*tileMap.tileWidth), 
+						box.position.y + (yPos*tileMap.tileHeight));
 					
 				if(currentTile){
 					if(currentTile.value != 0) {
@@ -206,13 +205,13 @@
 			
 			if(tempPenVector.x != 0 && tempPenVector.y != 0) {
 				var deltaDX = box.velocity.x * dt,
-					deltaDY = box.velocity.y * dt,
-					x2 = tempPenVector.x,
-					y2 = tempPenVector.y,
-					x1 = x2 - deltaDX,
-					y1 = y2 - deltaDY,
-					b = -(y2 - (( (y1 - y2) / (x1 - x2) ) * x2)),
-					top = tempPenVector.y > 0;
+  					deltaDY = box.velocity.y * dt,
+  					x2 = tempPenVector.x,
+  					y2 = tempPenVector.y,
+  					x1 = x2 - deltaDX,
+  					y1 = y2 - deltaDY,
+  					b = -(y2 - (( (y1 - y2) / (x1 - x2) ) * x2)),
+  					top = tempPenVector.y > 0;
 					
 				if(top) {
 					if(b < 0)

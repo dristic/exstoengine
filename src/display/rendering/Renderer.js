@@ -30,18 +30,17 @@ ex.using([
 		 * @property {Context} context
 		 * @property {ex.display.Renderable[]} renderables objects to render
 		 */
-		constructor: function (engine) {
-		  this.engine = engine;
+		constructor: function (options) {
 		  // Set dimensions and background color
-		  this.width = engine.width;
-		  this.height = engine.height;
-		  this.bgColor = engine.bgColor;
-		  this.fullscreen = engine.fullscreen;
-		  this.fullscreenType = engine.fullscreenType;
+		  this.width = options.width;
+		  this.height = options.height;
+		  this.bgColor = options.bgColor;
+		  this.fullscreen = options.fullscreen;
+		  this.fullscreenType = options.fullscreenType;
 		  
 		  this.renderables = [];
 			this.renderingContext = null;
-			this.type = engine.renderingContext;
+			this.type = options.context;
 			
 			// Setup the default renderers
 			this.renderers = {
@@ -52,7 +51,7 @@ ex.using([
 			  SpriteMap: new ex.display.rendering.SpriteMapRenderer()
 			};
 			
-			this.setup(engine.renderingParams);
+			this.setup(options.params);
 		},
 		
 		/**
@@ -87,15 +86,15 @@ ex.using([
       if(this.type == ex.display.rendering.Renderer.DOM) {
         switch(this.fullscreenType) {
           case 'resize':
-            this.width = this.engine.width = window.innerWidth;
-            this.height = this.engine.height = window.innerHeight;
+            this.width = window.innerWidth;
+            this.height = window.innerHeight;
             this.renderingContext.resizeViewport(this.width, this.height);
         }
       } else if (this.type == ex.display.rendering.Renderer.CANVAS2D) {
         switch(this.fullscreenType) {
           case 'resize':
-            this.width = this.engine.width = window.innerWidth;
-            this.height = this.engine.height = window.innerHeight;
+            this.width = window.innerWidth;
+            this.height = window.innerHeight;
             this.renderingContext.resizeViewport(this.width, this.height);
             break;
           case 'scale':
@@ -112,43 +111,32 @@ ex.using([
 		 * @param {Renderable} object The object to add to the rendering list.
 		 */
 		addRenderable: function (object) {
-		  // Check for complex type containing items.
-		  // Add items to renderables but don't add the object itself because
-		  // it cannot be rendered.
-		  if(object.items) {
-		    var i = 0,
-		        ln = object.items.length;
-		    for(; i < ln; i++) {
-		      this.addRenderable(object.items[i]);
-		    }
-		  } else {
-		    // Checking to see if a renderer exists for this object
-		    if(!object.renderer && !this.renderers[object.type]) {
-		      ex.Debug.log('There is no renderer setup for ' + object.type, 'ERROR');
-		    }
-		    
-		    if(this.type == ex.display.rendering.Renderer.DOM) {
-	        if(!object.renderer) {
-	          this.renderers[object.type].setupDom.call(object, this.renderingContext.el);
-	        } else {
-	          object.renderer.setupDom.call(object, this.renderingContext.el);
-	        }
-	      } else if(this.type == ex.display.rendering.Renderer.CANVAS2D) {
-	        if(!object.renderer) {
-	          this.renderers[object.type].setup2dCanvas.call(object, this.renderingContext.canvas);
-	        } else {
-	          object.renderer.setup2dCanvas.call(object, this.renderingContext.canvas);
-	        }
-	      } else if(this.type == ex.display.rendering.Renderer.CANVAS3D) {
-	        if(!object.renderer) {
-	          this.renderers[object.type].setup3dCanvas.call(object, this.renderingContext.canvas);
-	        } else {
-	          object.renderer.setup3dCanvas.call(object, this.renderingContext.canvas);
-	        }
-	      }
-	      
-	      this.renderables.push(object);
-		  }
+	    // Checking to see if a renderer exists for this object
+	    if(!object.renderer && !this.renderers[object.type]) {
+	      ex.Debug.log('There is no renderer setup for ' + object.type, 'ERROR');
+	    }
+	    
+	    if(this.type == ex.display.rendering.Renderer.DOM) {
+        if(!object.renderer) {
+          this.renderers[object.type].setupDom.call(object, this.renderingContext.el);
+        } else {
+          object.renderer.setupDom.call(object, this.renderingContext.el);
+        }
+      } else if(this.type == ex.display.rendering.Renderer.CANVAS2D) {
+        if(!object.renderer) {
+          this.renderers[object.type].setup2dCanvas.call(object, this.renderingContext.canvas);
+        } else {
+          object.renderer.setup2dCanvas.call(object, this.renderingContext.canvas);
+        }
+      } else if(this.type == ex.display.rendering.Renderer.CANVAS3D) {
+        if(!object.renderer) {
+          this.renderers[object.type].setup3dCanvas.call(object, this.renderingContext.canvas);
+        } else {
+          object.renderer.setup3dCanvas.call(object, this.renderingContext.canvas);
+        }
+      }
+      
+      this.renderables.push(object);
 		},
 		
 		/**
