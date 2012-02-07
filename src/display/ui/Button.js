@@ -14,7 +14,7 @@ ex.using([
       }
     },
     
-    constructor: function (position, image, width, actions) {
+    constructor: function (position, image, width, actions, userData) {
       var sprite = new ex.display.Sprite(position, image);
       
       // Define the initial button rendering rect.
@@ -28,6 +28,7 @@ ex.using([
         released: null,
         over: null
       };
+      this.userData = userData || {};
       
       this.items = [sprite];
     },
@@ -43,11 +44,11 @@ ex.using([
           if(this.state != STATE.DOWN) {
             if(this.actions.pressed) this.actions.pressed();
           }
-          if(this.actions.down) this.actions.down();
+          if(this.actions.down) this.actions.down(this, this.userData);
           this.state = STATE.DOWN;
           sprite.renderingRect.x = this.width * 2;
         } else {
-          if(this.state != STATE.OVER && this.actions.over) this.actions.over();
+          if(this.state != STATE.OVER && this.actions.over) this.actions.over(this, this.userData);
           this.state = STATE.OVER;
           sprite.renderingRect.x = this.width;
         }
@@ -57,7 +58,7 @@ ex.using([
           this.state = STATE.UP;
           sprite.renderingRect.x = 0;
           
-          if(this.actions.released) this.actions.released();
+          if(this.actions.released) this.actions.released(this, this.userData);
         }
       }
     },
@@ -67,6 +68,7 @@ ex.using([
       delete this.state;
       delete this.width;
       delete this.items;
+      delete this.userData;
     }
   });
   
