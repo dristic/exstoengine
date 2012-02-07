@@ -83,8 +83,8 @@ ex.using([
                   spriteSheet.renderingRect.y,
                   spriteSheet.renderingRect.width,
                   spriteSheet.renderingRect.height,
-                  viewPortX, 
-                  viewPortY,
+                  viewPortX + spriteSheet.offset.x, 
+                  viewPortY + spriteSheet.offset.y,
                   this.width,
                   this.height);
       }

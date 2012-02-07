@@ -3,11 +3,12 @@ ex.using([
   "ex.base.Vector"
 ], function(){
   ex.define("ex.display.SpriteSheet", {
-    constructor: function(image, frameWidth, frameHeight, frameRate) {
+    constructor: function(image, frameWidth, frameHeight, frameRate, offset) {
       this.image = image;
       this.frameRate = frameRate;
       this.renderingRect = 
         new ex.base.Rectangle(0, 0, frameWidth, frameHeight);
+      this.offset = offset || { x: 0, y: 0 };
     },
     
     isReady: function() {

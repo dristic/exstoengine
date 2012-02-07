@@ -522,6 +522,10 @@ if(!Array.indexOf){
 			return num >> 0;
 		},
 		
+		abs: function (num) {
+		  return num < 0 ? -num : num;
+		},
+		
 		/**
 		 * Returns a random integer between min and max
 		 * Using Math.round() will give you a non-uniform distribution!

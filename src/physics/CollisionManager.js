@@ -103,17 +103,11 @@ ex.using([
 	    
 	    context.strokeStyle = '#FF0000';
       context.lineWidth = 1;
-	    
+      
       var i = 0,
-          ln = this.collisionGroups.length;
+          ln = this.collidables.length;
       for(; i != ln; i++) {
-        n = 0;
-        nln = this.collisionGroups[i].length;
-        for(; n != nln; n++) {
-          if(this.collisionGroups[i][n].draw) {
-            this.collisionGroups[i][n].draw(context, camera.position.x, camera.position.y);
-          }
-        }
+        this.collidables[i].draw(context, camera.position.x, camera.position.y);
       }
       
       context.restore();

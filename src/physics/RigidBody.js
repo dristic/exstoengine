@@ -31,12 +31,12 @@ ex.using([
         this.acceleration.x = 0;
         this.acceleration.y = 0;
         
-        this.position.addScaled(this.velocity, dt);
-        
         this.velocity.limit(this.maxVelocity);
         
         if(this.velocity.x < this.zero && this.velocity.x > -this.zero) this.velocity.x = 0;
         if(this.velocity.y < this.zero && this.velocity.y > -this.zero) this.velocity.y = 0;
+        
+        this.position.addScaled(this.velocity, dt);
       }
     },
     
