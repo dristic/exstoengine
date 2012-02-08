@@ -5,7 +5,7 @@ ex.using([
 ], function () {
   var STATE;
   
-  ex.define('ex.display.ui.Button', ex.display.Renderable, {
+  ex.define('ex.display.ui.Button', {
     __statics: {
       STATE: {
         UP: 0,
