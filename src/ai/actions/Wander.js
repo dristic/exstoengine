@@ -21,10 +21,10 @@ ex.using([
       }
       
       if(this.entity.facing == 'left') {
-        this.entity.velocity.x = -this.entity.speed * dt;
+        this.entity.physical.applyImpulse(-this.entity.speed * dt, 0);
         this.entity.moving = true;
       } else {
-        this.entity.velocity.x = this.entity.speed * dt;
+        this.entity.physical.applyImpulse(this.entity.speed * dt, 0);
         this.entity.moving = true;
       }
       return false;
@@ -36,17 +36,17 @@ ex.using([
       }
       
       var tiles = this.entity.collisionData.tiles;
-      var minY = this.entity.position.y - tiles[0].height,
-          maxY = this.entity.position.y + this.entity.height;
+      var minY = this.entity.physical.position.y - tiles[0].height,
+          maxY = this.entity.physical.position.y + this.entity.physical.height;
       
       var index = tiles.length,
           tile;
       while(index--) {
         tile = tiles[index];
         if(tile.position.y >= minY && tile.position.y <= maxY) {
-          if(this.entity.facing == 'left' && tile.position.x <= this.entity.position.x){
+          if(this.entity.facing == 'left' && tile.position.x <= this.entity.physical.position.x){
             return true;
-          } else if (this.entity.facing == 'right' && tile.position.x >= this.entity.position.x) {
+          } else if (this.entity.facing == 'right' && tile.position.x >= this.entity.physical.position.x) {
             return true;
           }
         }
@@ -60,7 +60,10 @@ ex.using([
       } else {
         this.entity.facing = 'left';
       }
-      this.entity.velocity.x = 0;
+      if(this.entity.weapon) {
+        this.entity.weapon.facing = this.entity.facing;
+      }
+      this.entity.physical.velocity.x = 0;
     }
   });
 });

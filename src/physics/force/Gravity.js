@@ -12,7 +12,7 @@ ex.using([
           rigidBody;
       for(; i != ln; i++) {
         rigidBody = collidables[i];
-        if(rigidBody.velocity) {
+        if(rigidBody.velocity && rigidBody.gravity != false) {
           collidables[i].applyForce(0, this.strength);
         }
       }

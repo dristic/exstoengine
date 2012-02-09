@@ -16,13 +16,13 @@ ex.using([
     },
     
     update: function(dt) {
-      var distX = Math.abs(this.entity.position.x - this.target.position.x),
-      minY = this.entity.position.y - this.target.height,
-      maxY = this.entity.position.y + this.entity.height;
+      var distX = Math.abs(this.entity.physical.position.x - this.target.physical.position.x),
+      minY = this.entity.physical.position.y - this.target.physical.height,
+      maxY = this.entity.physical.position.y + this.entity.physical.height;
   
       if(distX < this.maxRange
-          && this.target.position.y > minY
-          && this.target.position.y < maxY) {
+          && this.target.physical.position.y > minY
+          && this.target.physical.position.y < maxY) {
         this.moveTowardTarget(dt);
         this.attackTarget(dt);
         return false;
@@ -40,14 +40,17 @@ ex.using([
     
     moveTowardTarget: function(dt) {
       var speed = this.entity.speed * this.speedModifier;
-      if(this.target.position.x < this.entity.position.x) {
+      if(this.target.physical.position.x < this.entity.physical.position.x) {
         this.entity.facing = 'left';
-        this.entity.velocity.x = -speed * dt;
+        this.entity.physical.applyImpulse(-speed * dt, 0);
         this.entity.moving = true;
       } else {
         this.entity.facing = 'right';
-        this.entity.velocity.x = speed * dt;
+        this.entity.physical.applyImpulse(speed * dt, 0);
         this.entity.moving = true;
+      }
+      if(this.entity.weapon) {
+        this.entity.weapon.facing = this.entity.facing;
       }
     }
   });

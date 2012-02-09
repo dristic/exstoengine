@@ -20,13 +20,13 @@ ex.using([
     },
     
     update: function(dt) {
-      var distX = Math.abs(this.entity.position.x - this.target.position.x),
-          minY = this.entity.position.y - this.target.height,
-          maxY = this.entity.position.y + this.entity.height;
+      var distX = Math.abs(this.entity.physical.position.x - this.target.physical.position.x),
+          minY = this.entity.physical.position.y - this.target.physical.height,
+          maxY = this.entity.physical.position.y + this.entity.physical.height;
       
       if(distX < this.sightRange
-          && this.target.position.y > minY
-          && this.target.position.y < maxY) {
+          && this.target.physical.position.y > minY
+          && this.target.physical.position.y < maxY) {
         this.entity.ai.push(new ex.ai.actions.Chase(this.entity, this.target, 200));
       }
     }
