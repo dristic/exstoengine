@@ -259,7 +259,7 @@ ex.using([
 			
 			// Loads level code and assets
 			ex.using([sceneNamespace], function() {
-				var scene = new game.levels[sceneName](that);
+				var scene = new game.levels[sceneName](that, world);
 				ex.event.listenOnce('loadEnd', ex.Assets._eventHandler, function() {
 					var objects = scene.getObjects();
 					
