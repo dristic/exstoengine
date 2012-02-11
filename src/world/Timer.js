@@ -56,7 +56,7 @@ ex.using([
         }
         
         // Check for complete.
-        if(this.options.length) {
+        if(this.options.length > 0) {
           if(this.duration > this.options.length) {
             if(this.options.onComplete) {
               this.options.onComplete();
