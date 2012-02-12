@@ -198,7 +198,9 @@ if(!Array.indexOf){
 		},
 		
 		remove: function(array, object) {
-			array.splice(array.indexOf(object), 1);
+		  if(array.indexOf(object) != -1) {
+		    array.splice(array.indexOf(object), 1);
+		  }
 		},
 		
 		find: function (array, func) {
