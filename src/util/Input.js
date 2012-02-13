@@ -1,6 +1,5 @@
 ex.using([
   'ex.base.GlobalComponent',
-  'ex.util.DOM',
   'ex.util.GameController',
   'ex.base.Vector',
   'ex.util.Key'
