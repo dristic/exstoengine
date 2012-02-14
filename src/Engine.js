@@ -247,33 +247,93 @@ ex.using([
 		  world.destroy();
 		},
 		
+		preloadScenes: function(sceneNames) {
+		  if(!ex.isArray(sceneNames)) {
+		    ex.Debug.log("Cannot preload scenes because argument is not an array", 'ERROR');
+		  }
+		  
+		  var index = sceneNames.length;
+		  while(index--) {
+		    this.preloadScene(sceneNames[index]);
+		  }
+		},
+		
+		preloadScene: function(sceneName) {
+		  if(game.levels[sceneName] && game.levels[sceneName].assetsLoaded) {
+		    ex.Debug.log('Preloading scene "' + sceneName + '": already preloaded, skipped.', 'INFO');
+		  } else {
+		    ex.Debug.log('Preloading scene "' + sceneName + '"...', 'INFO');
+		    ex.event.listenOnce('loadEnd', ex.Assets._eventHandler, function() {
+		      ex.Debug.log('Preloading scene "' + sceneName + '" complete.', 'INFO');
+		    });
+		    this._loadSceneAssets(sceneName);
+		  }
+		},
+		
+		/**
+		 * Wrapper function for scene loading, will load assets before code
+		 * if assets have not already been preloaded.
+		 */
 		loadScene: function(sceneName, world, callback) {
+		  var that = this;
+		  //this.options.loadingScreen.reset();
       world.addObject(this.options.loadingScreen);
       
-			var that = this;
-			var sceneNamespace = "game.levels." + sceneName;
-			  
-			ex.event.listenOnce('loadStart', ex.Assets._eventHandler, function() {
-			  console.log('Began loading assets for scene "' + sceneName + '".');
-			}, this);
-			
-			// Loads level code and assets
-			ex.using([sceneNamespace], function() {
-				var scene = new game.levels[sceneName](that, world);
-				ex.event.listenOnce('loadEnd', ex.Assets._eventHandler, function() {
-					var objects = scene.getObjects();
-					
-					world.addObjects(objects);
-					world.removeObject(that.options.loadingScreen);
-
-					scene.finalSetup();
-					
-					if(callback) {
-					  callback(world);
-					}
-				}, this);
-				ex.Assets.loadBulk(scene.getAssets());
-			});
+      // Load assets if not already loaded
+			if(!game.levels[sceneName] || !game.levels[sceneName].assetsLoaded) {
+			  ex.event.listenOnce('loadStart', ex.Assets._eventHandler, function() {
+			    ex.Debug.log('Loading assets for scene "' + sceneName + '"...', 'INFO');
+			  });
+			  ex.event.listenOnce('loadEnd', ex.Assets._eventHandler, function() {
+          ex.Debug.log('Loading assets for scene "' + sceneName + '" complete.', 'INFO');
+			    world.removeObject(that.options.loadingScreen);
+          ex.Debug.log('Loading objects for scene "' + sceneName + '"...', 'INFO');
+		      that._loadScene(sceneName, world, callback);
+		      ex.Debug.log('Loading objects for scene "' + sceneName + '" complete.', 'INFO');
+			  });
+			  this._loadSceneAssets(sceneName);
+			} else {
+			  world.removeObject(this.options.loadingScreen);
+			  ex.Debug.log('Loading objects for scene "' + sceneName + '"...', 'INFO');
+	      this._loadScene(sceneName, world, callback);
+	      ex.Debug.log('Loading objects for scene "' + sceneName + '" complete.', 'INFO');
+			}
+		},
+		
+		/**
+		 * Loads scene assets
+		 */
+		_loadSceneAssets: function(sceneName) {
+		  var that = this;
+      var sceneNamespace = "game.levels." + sceneName;
+      
+      ex.using([sceneNamespace], function() {
+        ex.event.listenOnce('loadEnd', ex.Assets._eventHandler, function() {
+          game.levels[sceneName].assetsLoaded = true;
+        });
+        var scene = new game.levels[sceneName]();
+        ex.Assets.loadBulk(scene.getAssets());
+      });
+		},
+		
+		/**
+		 * Loads scene code
+		 */
+		_loadScene: function(sceneName, world, callback) {
+		  var that = this;
+      var sceneNamespace = "game.levels." + sceneName;
+      
+      ex.using([sceneNamespace], function() {
+        var scene = new game.levels[sceneName](that, world);
+        var objects = scene.getObjects();
+          
+        world.addObjects(objects);
+        scene.finalSetup();
+          
+        if(callback) {
+          callback(world);
+        }
+      });
 		},
 		
 		loadComponent: function(component) {
