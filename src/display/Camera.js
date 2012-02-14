@@ -23,6 +23,7 @@ ex.using([
 			this.following = null;
 			this.offset = null;
 			this.bounds = null;
+			this.timer = null;
 		},
 		
 		/**
@@ -32,7 +33,7 @@ ex.using([
 		 * @memberOf ex.display.Camera
 		 * @param {Number} dt
 		 */
-		update: function(dt) {
+		update: function (dt) {
 			if(this.following != null) {
 			  var halfWidth = (this.width >> 1),
 			      halfHeight = (this.height >> 1),
@@ -60,6 +61,35 @@ ex.using([
 			  if(this.position.y < this.bounds.minY) this.position.y = this.bounds.minY;
 			  else if(this.position.y > this.bounds.maxY) this.position.y = this.bounds.maxY;
 			}
+			
+			if(this.timer) this.timer.update(dt);
+		},
+		
+		shake: function (frequency, strength, duration) {
+		  var that = this,
+		      offsets = {
+		        x: 0,
+		        y: 0
+		      };
+		  this.timer = new ex.world.Timer({
+		    delay: frequency,
+		    length: duration,
+		    onTick: function () {
+		      var x = ex.Math.getRandomInt(strength, -strength),
+		          y = ex.Math.getRandomInt(strength, -strength);
+		      offsets.x += x;
+		      offsets.y += y;
+		      that.position.x += x;
+		      that.position.y += y;
+		    },
+		    onComplete: function () {
+		      that.timer.destroy();
+		      that.timer = null;
+		      that.position.x -= offsets.x;
+		      that.position.y -= offsets.y;
+		    }
+		  });
+		  this.timer.start();
 		},
 		
 		/**
@@ -106,6 +136,10 @@ ex.using([
 		},
 		
 		reset: function () {
+		  if(this.timer) {
+		    this.timer.destroy();
+	      this.timer = null;
+		  }
 		  this.moveTo(0, 0);
 		  this.unfollow();
 		  this.unbind();
