@@ -60,6 +60,14 @@ ex.using([
         canvas: function () {
           var el = document.createElement('canvas');
           return !ex.isNull(el.getContext);
+        },
+        
+        localStorage: function () {
+          try {
+            return 'localStorage' in window && window['localStorage'] !== null;
+          } catch(e) {
+            return false;
+          }
         }
       }
     }
