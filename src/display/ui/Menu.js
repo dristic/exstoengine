@@ -24,6 +24,8 @@ ex.using([
         }
       };
       
+      this.enabled = true;
+      
       this.options = {};
       ex.extend(this.options, this.defaults);
       ex.extend(this.options, options);
@@ -83,6 +85,14 @@ ex.using([
       }
     },
     
+    enable: function () {
+      this.enabled = true;
+    },
+    
+    disable: function () {
+      this.enabled = false;
+    },
+    
     _addInputBindings: function() {
       var index = this.bindings.length;
       while(index--) {
@@ -140,7 +150,7 @@ ex.using([
     },
     
     onClick: function () {
-      if(this.items[this.currentSelection].containsPoint(ex.Input.mouse.x, ex.Input.mouse.y)) {
+      if(this.items[this.currentSelection].containsPoint(ex.Input.mouse.x, ex.Input.mouse.y) && this.enabled) {
         this.activateCurrentSelection();
       }
     },
@@ -157,18 +167,20 @@ ex.using([
      * @param {Number} dt timestep
      */
     update: function(dt) {
-      var i = 0,
-          ln = this.options.items.length,
-          item,
-          found = false;
-      for(; i < ln; i++) {
-        item = this.options.items[i].item;
-        if(item.containsPoint(ex.Input.mouse.x, ex.Input.mouse.y)) {
-          found = true;
-          ex.Input.changeCursor(ex.Input.CURSOR.POINTER);
-          this.options.onOut(this.options.items[this.currentSelection].item);
-          this.currentSelection = i;
-          this.options.onOver(this.options.items[this.currentSelection].item);
+      if(this.enabled) {
+        var i = 0,
+            ln = this.options.items.length,
+            item,
+            found = false;
+        for(; i < ln; i++) {
+          item = this.options.items[i].item;
+          if(item.containsPoint(ex.Input.mouse.x, ex.Input.mouse.y)) {
+            found = true;
+            ex.Input.changeCursor(ex.Input.CURSOR.POINTER);
+            this.options.onOut(this.options.items[this.currentSelection].item);
+            this.currentSelection = i;
+            this.options.onOver(this.options.items[this.currentSelection].item);
+          }
         }
       }
       
