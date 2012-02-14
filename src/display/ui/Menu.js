@@ -63,6 +63,26 @@ ex.using([
       this._addInputBindings();
     },
     
+    addItem: function (item, action) {
+      this.options.items.push({
+        item: item,
+        action: action
+      });
+      this.items.push(item);
+    },
+    
+    removeItem: function (item) {
+      ex.Array.remove(this.items, item);
+      
+      var i = 0,
+          ln = this.options.items.length;
+      for(; i != ln; i++) {
+        if(this.options.items[i].item == item) {
+          this.options.items.splice(i, 1);
+        }
+      }
+    },
+    
     _addInputBindings: function() {
       var index = this.bindings.length;
       while(index--) {
