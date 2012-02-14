@@ -28,7 +28,7 @@ ex.using([
         this.rendering.el.style.opacity = 0;
         return;
       } else {
-        this.rendering.el.style.opacity = this.opacity;
+        this.rendering.el.style.opacity = this.alpha;
       }
       
       // Position of the sprite in the viewport
@@ -86,6 +86,8 @@ ex.using([
       if(!this.isVisible()){
         return;
       }
+      
+      context.globalAlpha = this.alpha;
       
       // Position of the sprite in the viewport
       var viewPortX = ex.toInt(this.position.x - (camX * this.scrollFactor.x)),
