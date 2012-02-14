@@ -247,6 +247,9 @@ ex.using([
 		  world.destroy();
 		},
 		
+		/**
+		 * Loads assets for multiple scenes silently (no loading screen)
+		 */
 		preloadScenes: function(sceneNames) {
 		  if(!ex.isArray(sceneNames)) {
 		    ex.Debug.log("Cannot preload scenes because argument is not an array", 'ERROR');
@@ -258,6 +261,9 @@ ex.using([
 		  }
 		},
 		
+		/**
+		 * Loads assets for a scene silently (no loading screen)
+		 */
 		preloadScene: function(sceneName) {
 		  if(game.levels[sceneName] && game.levels[sceneName].assetsLoaded) {
 		    ex.Debug.log('Preloading scene "' + sceneName + '": already preloaded, skipped.', 'INFO');
