@@ -9,9 +9,9 @@ ex.using([
 		 * @name ex.display.Renderable
 		 * @constructor
 		 */
-		constructor: function(visible, opacity, position, width, height) {
+		constructor: function(visible, alpha, position, width, height) {
 			this.visible = visible;
-			this.opacity = opacity;
+			this.alpha = alpha;
 			position = position || new ex.Vector(0, 0);
 			width = width || 0;
 			height = height || 0;
@@ -30,7 +30,7 @@ ex.using([
 		 * @returns {Boolean}
 		 */
 		isVisible : function() {
-			if (this.visible && this.opacity > 0.0) {
+			if (this.visible && this.alpha > 0.0) {
 				return true;
 			} else {
 				return false;
@@ -52,7 +52,7 @@ ex.using([
 		},
 
 		/**
-		 * Sets visible property to true, does not affect opacity.
+		 * Sets visible property to true, does not affect alpha.
 		 * 
 		 * @function
 		 * @name show
@@ -63,7 +63,7 @@ ex.using([
 		},
 
 		/**
-		 * Sets visible property to false, does not affect opacity.
+		 * Sets visible property to false, does not affect alpha.
 		 * 
 		 * @function
 		 * @name hide
