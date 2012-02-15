@@ -287,7 +287,7 @@ ex.using([
 			if(!game.levels[sceneName] || !game.levels[sceneName].assetsLoaded) {
 			  ex.event.listenOnce('loadEnd', ex.Assets._eventHandler, function() {
           ex.Debug.log('Loading assets for scene "' + sceneName + '" complete.', 'INFO');
-			    this._hideLoadingScreenAndLoadScene(world, sceneName, callback);
+			    that._hideLoadingScreenAndLoadScene(world, sceneName, callback);
 			  });
 			  this._loadSceneAssets(sceneName);
 			} else {
