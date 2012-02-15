@@ -50,7 +50,7 @@ ex.using([
             suffix: ''
           }
         }),
-            
+        
         new ex.display.ui.StatusBar({
           position: new ex.Vector(340, 305),
           update: 'auto',
@@ -85,8 +85,10 @@ ex.using([
 		 * @param {Number} dt timestep
 		 */
 		update: function(dt){
-			this.items[2].update(dt);
-			this.items[3].update(dt);
+			var index = this.items.length;
+			while(index--) {
+			  this.items[index].update(dt);
+			}
 		}
 	});
 });

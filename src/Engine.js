@@ -282,28 +282,39 @@ ex.using([
 		 */
 		loadScene: function(sceneName, world, callback) {
 		  var that = this;
-		  //this.options.loadingScreen.reset();
-      world.addObject(this.options.loadingScreen);
-      
+		  this._showLoadingScreen(world);
       // Load assets if not already loaded
 			if(!game.levels[sceneName] || !game.levels[sceneName].assetsLoaded) {
-			  ex.event.listenOnce('loadStart', ex.Assets._eventHandler, function() {
-			    ex.Debug.log('Loading assets for scene "' + sceneName + '"...', 'INFO');
-			  });
 			  ex.event.listenOnce('loadEnd', ex.Assets._eventHandler, function() {
           ex.Debug.log('Loading assets for scene "' + sceneName + '" complete.', 'INFO');
-			    world.removeObject(that.options.loadingScreen);
-          ex.Debug.log('Loading objects for scene "' + sceneName + '"...', 'INFO');
-		      that._loadScene(sceneName, world, callback);
-		      ex.Debug.log('Loading objects for scene "' + sceneName + '" complete.', 'INFO');
+			    this._hideLoadingScreenAndLoadScene(world, sceneName, callback);
 			  });
 			  this._loadSceneAssets(sceneName);
 			} else {
-			  world.removeObject(this.options.loadingScreen);
-			  ex.Debug.log('Loading objects for scene "' + sceneName + '"...', 'INFO');
-	      this._loadScene(sceneName, world, callback);
-	      ex.Debug.log('Loading objects for scene "' + sceneName + '" complete.', 'INFO');
+			  this._hideLoadingScreenAndLoadScene(world, sceneName, callback);
 			}
+		},
+		
+		_showLoadingScreen: function(world) {
+		  var loadingScreen = this.options.loadingScreen,
+		      fadeInDelay = loadingScreen.fadeInDelay || 1;
+      loadingScreen.alpha = 0;
+      world.addObject(loadingScreen);
+      ex.Tween.add(loadingScreen, fadeInDelay, { alpha: 1 });
+		},
+		
+		_hideLoadingScreenAndLoadScene: function(world, sceneName, callback) {
+		  var that = this,
+		      loadingScreen = this.options.loadingScreen,
+          fadeOutDelay = loadingScreen.fadeOutDelay || 1;
+		  ex.Tween.add(loadingScreen, fadeOutDelay, { alpha: 0 }, 
+	      { callback: function() {
+  		    world.removeObject(loadingScreen);
+  	      ex.Debug.log('Loading objects for scene "' + sceneName + '"...', 'INFO');
+  	      that._loadScene(sceneName, world, callback);
+  	      ex.Debug.log('Loading objects for scene "' + sceneName + '" complete.', 'INFO');
+	      }
+		  });
 		},
 		
 		/**
@@ -314,6 +325,9 @@ ex.using([
       var sceneNamespace = "game.levels." + sceneName;
       
       ex.using([sceneNamespace], function() {
+        ex.event.listenOnce('loadStart', ex.Assets._eventHandler, function() {
+          ex.Debug.log('Loading assets for scene "' + sceneName + '"...', 'INFO');
+        });
         ex.event.listenOnce('loadEnd', ex.Assets._eventHandler, function() {
           game.levels[sceneName].assetsLoaded = true;
         });
