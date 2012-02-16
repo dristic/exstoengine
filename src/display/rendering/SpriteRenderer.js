@@ -87,6 +87,7 @@ ex.using([
         return;
       }
       
+      var alpha = context.globalAlpha;
       context.globalAlpha = this.alpha;
       
       // Position of the sprite in the viewport
@@ -137,6 +138,8 @@ ex.using([
             viewPortX, 
             viewPortY);
       }
+      
+      context.globalAlpha = alpha;
     }
   });
 });
