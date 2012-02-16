@@ -124,7 +124,7 @@ function init() {
       var i = 0,
           ln = gradientOptions.colorStops.length;
       for(; i != ln; i++) {
-        gradient.addColorStop(parseInt(gradientOptions.colorStops[i]), gradientOptions.colorStopColors[i]);
+        gradient.addColorStop(parseFloat(gradientOptions.colorStops[i]), gradientOptions.colorStopColors[i]);
       }
       
       context.fillStyle = gradient;
