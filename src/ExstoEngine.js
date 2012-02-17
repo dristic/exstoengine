@@ -224,6 +224,20 @@ if(!Array.indexOf){
 			ret = ret / array.length;
 			
 			return ret;
+		},
+		
+		to2D: function (cols, rows, array) {
+		  var x = 0,
+          y = 0,
+          index = 0;
+      var output = new Array(rows);
+      for(y = 0; y < rows; y++) {
+        output[y] = new Array(cols);
+        for(x = 0; x < cols; x++, index++) {
+          output[y][x] = array[index];
+        }
+      }
+      return output;
 		}
 	};
 	
