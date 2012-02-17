@@ -5,7 +5,7 @@ ex.using([
 ], function () {
   var STATE;
   
-  ex.define('ex.display.ui.Button', {
+  ex.define('ex.display.ui.Button', ex.world.Entity, {
     __statics: {
       STATE: {
         UP: 0,
@@ -14,57 +14,60 @@ ex.using([
       }
     },
     
-    constructor: function (position, image, width, actions, userData) {
-      var sprite = new ex.display.Sprite(position, image);
-      
-      // Define the initial button rendering rect.
-      sprite.renderingRect = new ex.Rectangle(0, 0, width, image.height);
-      
-      this.width = width;
-      this.state = STATE.UP;
-      this.actions = actions || {
-        pressed: null,
-        down: null,
-        released: null,
-        over: null
+    constructor: function (position, sprite, options) {
+      this.defaults = {
+        actions: {
+          pressed: null,
+          down: null,
+          released: null,
+          over: null
+        },
+        userData: {},
+        autoUpdateSprite: false
       };
-      this.userData = userData || {};
       
-      this.items = [sprite];
+      this.options = ex.extend({}, this.defaults, true);
+      ex.extend(this.options, options, true);
+      
+      this.state = STATE.UP;
+      
+      sprite.position = ex.clone(position);
+      
+      this._super('constructor', ["Button", [sprite]]);
     },
     
     update: function (dt) {
-      var sprite = this.items[0],
-          spriteRect = new ex.Rectangle(sprite.position.x, sprite.position.y, this.width, sprite.height);
+      var sprite = this.items[0];
+      sprite.update(dt);
       
       // Check for over and down states.
-      if(spriteRect.containsPoint(ex.Input.mouse.x, ex.Input.mouse.y)) {
+      if(sprite.containsPoint(ex.Input.mouse.x, ex.Input.mouse.y)) {
         ex.Input.changeCursor(ex.Input.CURSOR.POINTER);
         if(ex.Input.isDown(ex.util.Key.LMB)) {
           if(this.state != STATE.DOWN) {
-            if(this.actions.pressed) this.actions.pressed();
+            if(this.options.actions.pressed) this.options.actions.pressed(this, this.options.userData);
           }
-          if(this.actions.down) this.actions.down(this, this.userData);
+          if(this.options.actions.down) this.options.actions.down(this, this.options.userData);
           this.state = STATE.DOWN;
-          sprite.renderingRect.x = this.width * 2;
+          if(this.options.autoUpdateSprite) sprite.play('down');
         } else {
-          if(this.state != STATE.OVER && this.actions.over) this.actions.over(this, this.userData);
+          if(this.state != STATE.OVER && this.options.actions.over) this.options.actions.over(this, this.options.userData);
           this.state = STATE.OVER;
-          sprite.renderingRect.x = this.width;
+          if(this.options.autoUpdateSprite) sprite.play('over');
         }
       } else {
-        if(this.state == STATE.OVER) {
+        if(this.state == STATE.OVER || this.state == STATE.DOWN) {
           ex.Input.changeCursor(ex.Input.CURSOR.AUTO);
           this.state = STATE.UP;
-          sprite.renderingRect.x = 0;
           
-          if(this.actions.released) this.actions.released(this, this.userData);
+          if(this.options.actions.released) this.options.actions.released(this, this.userData);
+          if(this.options.autoUpdateSprite) sprite.play('up');
         }
       }
     },
     
     destroy: function () {
-      delete this.actions;
+      delete this.options.actions;
       delete this.state;
       delete this.width;
       delete this.items;

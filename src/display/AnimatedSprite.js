@@ -31,10 +31,8 @@ ex.using([
 		 * @constructor
 		 */
 		constructor: function(spriteSheets) {
-		  this._super("constructor", [true, 1.0, ex.Vector(0,0), 1, 1]);
 		  this.type = "AnimatedSprite";
-
-		  this.position = new ex.Vector(0,0);
+		  
 		  this.scrollFactor = { x: 1, y: 1 };
 		  
 			this.spriteSheets = this._prepareSpriteSheets(spriteSheets);
@@ -46,10 +44,15 @@ ex.using([
 			this.playing = false;
 			this.playQueue = [];
 			this.scaled = false;
-			this.width = this.spriteSheets[0].renderingRect.width;
-			this.height = this.spriteSheets[0].renderingRect.height;
 			
 			this.timer = 0; // will be (1 / frameRate)
+			
+			this._super("constructor", 
+			    [true, 
+			     1.0, 
+			     ex.Vector(0,0), 
+			     this.spriteSheets[0].renderingRect.width, 
+			     this.spriteSheets[0].renderingRect.height]);
 		},
 		
 		_prepareSpriteSheets: function(spriteSheets) {
