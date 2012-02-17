@@ -33,7 +33,10 @@ ex.using([
      * @param {Number} dt delta time, length of each time cycle
      */
     update : function (dt) {
-      
+      var index = this.items.length;
+      while(index--) {
+        this.items[index].update(dt);
+      }
     },
     
     destroy: function () {

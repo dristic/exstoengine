@@ -77,6 +77,10 @@ ex.using([
 	      sheet: this.spriteSheets[sheetNumber],
 	      frames: frames
 	    };
+//	    if(!this.currentAnimation) {
+//	      this.currentAnimation = this.animations[name];
+//	      this.currentAnimationName = name;
+//	    }
 		},
 		
 		/**
@@ -89,48 +93,41 @@ ex.using([
 		 * is already playing this will reset it to frame 1 instead 
 		 * of allowing it to continue
 		 */
-		play: function(name, override) {
-			if(override == true) {
-	      this.playQueue = [];
-			} else {
-			  if(this.currentAnimationName == name && this.playQueue.length == 0) {
-          return;
-        }
-			}
-			
-			this.currentAnimation = this.animations[name];
-			this.currentAnimationName = name;
-			
-			if(this.scaled == false) {
-			  this.width = this.currentAnimation.sheet.renderingRect.width;
-	      this.height = this.currentAnimation.sheet.renderingRect.height;
-			}
-			
-      this.currentFrame = 0;
-      this.currentIndex = 0;
-      this.timer = (1 / this.animations[name].sheet.frameRate);
-      this.playing = true;
-		},
-		
-		/**
-		 * Plays an animation and queues the current animation
-		 * so it only plays through once.
-		 * @function
-		 * @name playOnce
-		 * @memberOf ex.display.AnimatedSprite
-		 * @param {String} name The name of the animation to play.
-		 */
-		playOnce: function (name, override) {
-		  var currentAnimationName = this.currentAnimationName;
-		  this.play(name, override);
-		  this.queue(currentAnimationName);
+		play: function(name, loop, override) {
+		  if(override == true) {
+		    this.playQueue = [];
+		    if(this.currentAnimation) {
+  		    this._queue({ 
+  		      name: this.currentAnimationName, 
+  		      loop: this.currentAnimation.loop });
+		    }
+		  } else if(this.currentAnimationName == name) {
+		    // Do nothing if animation is already playing and we're not overriding
+		    return;
+		  } else {  // if we're not overriding and this is new, queue it
+		    this._queue({ name: name, loop: loop });
+		  }
+		  
+		  this.currentAnimation = this.animations[name];
+		  this.currentAnimationName = name;
+		  this.currentAnimation.loop = loop;
+		  
+		  if(this.scaled == false) {
+		    this.width = this.currentAnimation.sheet.renderingRect.width;
+		    this.height = this.currentAnimation.sheet.renderingRect.height;
+		  }
+		  
+		  this.currentFrame = 0;
+		  this.currentIndex = 0;
+		  this.timer = (1 / this.animations[name].sheet.frameRate);
+		  this.playing = true;
 		},
 		
 		/**
 		 * Puts a function into the play queue.
 		 * @param {String} name The name of the animation to play.
 		 */
-		queue: function (name) {
+		_queue: function (name) {
 		  this.playQueue.push(name);
 		},
 		
@@ -154,6 +151,20 @@ ex.using([
 			this.playing = true;
 		},
 		
+		_animationComplete: function() {
+		  return (this.currentIndex > this.currentAnimation.frames.length - 1);
+		},
+		
+		_goToNextAnimation: function() {
+		  if(this.playQueue.length != 0) {
+		    var next = this.playQueue.shift();
+		    this.play(next.name, next.loop, false);
+		  } else if(this.currentAnimation.loop == false) {
+		    this.stop();
+		  }
+		  this.currentIndex = 0;
+		},
+		
 		/**
 		 * If the animation is playing, this checks if it is time to advance
 		 * to the next frame.
@@ -163,32 +174,32 @@ ex.using([
 		 * @param {Number} dt timestep
 		 */
 		update: function(dt) {
-		  var frameRate = this.currentAnimation.sheet.frameRate;
-			//--Ensure we are playing and frameRate > 0
-			if(this.playing == true && frameRate > 0) {
-				this.timer -= dt;
-				//--If it is time to go to the next frame
-				if(this.timer < 0) {
-					//--Ensure image is available
-					if(this.currentAnimation.sheet.isReady()) {
-						//--Go to correct frame
-						var index = this.currentIndex++;
-						if(index > this.currentAnimation.frames.length - 1) {
-						  // Check to see if we need to play a different animation.
-						  if(this.playQueue.length > 0) {
-						    this.play(this.playQueue.shift());
-						  }
-						  index = this.currentIndex = 0;
-						}
-						this.currentFrame = this.currentAnimation.frames[index];
-						
-						this.goToFrame(this.currentFrame);
-					}
-					
-					// Add this after in case the animation changed.
-					this.timer += (1 / this.currentAnimation.sheet.frameRate);
-				}
-			}
+		  if(this.currentAnimation == null) {
+		    return;
+		  }
+		  
+		  // Get framerate && check for playing
+      var frameRate = this.currentAnimation.sheet.frameRate;
+		  if(!this.playing || frameRate == 0) {
+		    return;
+		  }
+		  
+		  // Decrement and check timer
+		  this.timer -= dt;
+		  if(this.timer >= 0) {
+		    return;
+		  }
+		  
+		  // If spritesheet is ready, play it
+		  if(this.currentAnimation.sheet.isReady()) {
+		    this.currentIndex++;
+		    if(this._animationComplete()) {
+		      this._goToNextAnimation();
+		    }
+		    this.currentFrame = this.currentAnimation.frames[this.currentIndex];
+		    this.goToFrame(this.currentFrame);
+		  }
+		  this.timer += (1 / this.currentAnimation.sheet.frameRate);
 		},
 		
 		/**

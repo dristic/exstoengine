@@ -64,6 +64,10 @@ ex.using([
      * @param {Number} camHeight viewport height
      */
     render2dCanvas: function (context, camX, camY, camWidth, camHeight) {
+      if(this.currentAnimation == null) {
+        return;
+      }
+      
       var spriteSheet = this.currentAnimation.sheet;
       if(!this.isVisible()){
         return;
