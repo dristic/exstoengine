@@ -233,33 +233,23 @@ ex.using([
       },
       
       _loadAudio: function(name, filePath, options) {
-        var numChannels = 4;
-        if(options && options.numChannels){
-          numChannels = options.numChannels;
-        }
-        
-        var exSound = new ex.sound.Sound(new Audio());
-        var that = exSound;
-        var that2 = this;
+        var audio = new Audio();
+        var that = this;
         
         this._ready = false;
         
-        that.audio.onError = this._throwUnableToLoadFileError;
-        that.audio.src = filePath;
-        that.audio.addEventListener('canplaythrough', function (event) {
+        audio.onError = this._throwUnableToLoadFileError;
+        audio.src = filePath;
+        audio.addEventListener('canplaythrough', function (event) {
           var asset = {type: 'Audio', name: name, filePath: filePath, options: options};
-          that2._eventHandler.dispatchEvent('assetLoaded',  asset);
-          that2._debugOnAssetLoaded(asset);
-          that2._assetsLoaded++;
-          that2._audio.numAssets++;
-          that2._checkReadyState();
-          while(numChannels--) {
-            that.channels.push(that.audio.cloneNode(true));
-            that.readyChannels.push(true);
-          }
+          that._eventHandler.dispatchEvent('assetLoaded',  asset);
+          that._debugOnAssetLoaded(asset);
+          that._assetsLoaded++;
+          that._audio.numAssets++;
+          that._checkReadyState();
         });
         
-        this._audio[name] = exSound;
+        this._audio[name] = audio;
       },
       
       _loadVideo: function(name, filePath, options) {

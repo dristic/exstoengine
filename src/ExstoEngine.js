@@ -203,6 +203,14 @@ if(!Array.indexOf){
 		  }
 		},
 		
+		each: function (array, func) {
+		  var i = 0,
+		      ln = array.length;
+		  for(; i != ln; i++) {
+		    func(array[i], i);
+		  }
+		},
+		
 		find: function (array, func) {
 		  var i = 0,
 		      ln = array.length,
@@ -271,7 +279,7 @@ if(!Array.indexOf){
 				namespace;
 			
 			// If the class has no dependencies, load it and return
-			if(typeof namespaces == 'undefined'){
+			if(typeof namespaces == 'undefined') {
 				func();
 				return;
 			}
