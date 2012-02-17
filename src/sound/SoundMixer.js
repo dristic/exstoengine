@@ -6,13 +6,12 @@ ex.using([
 	ex.define("ex.sound.SoundMixer", {
 		__statics: {
 		  audio: [],
-		  volumes: [],
 		  muted: false,
 		  masterVolume: 1,
-		  tempMasterVolume: 1,
 		  
 		  registerAudio: function (audio) {
 		    audio.volume = mixer.masterVolume;
+		    audio.muted = mixer.muted;
 		    mixer.audio.push(audio);
 		  },
 		  
@@ -29,33 +28,17 @@ ex.using([
 		  },
 	    
 	    muteAll: function () {
-	      var manager = mixer;
-	      manager.volumes = [];
-	      
-	      var i = 0,
-	          ln = manager.audio.length,
-	          audio;
-	      for(; i != ln; i++) {
-	        audio = manager.audio[i];
-	        manager.volumes.push(audio.volume);
-	        audio.volume = 0;
-	      }
-	      
-	      mixer.tempMasterVolume = mixer.masterVolume;
-	      mixer.masterVolume = 0;
+	      ex.Array.each(mixer.audio, function (channel, index) {
+	        channel.muted = true;
+	      });
 	      
 	      mixer.muted = true;
 	    },
 	    
 	    unmuteAll: function () {
-	      var manager = mixer,
-	          i = 0,
-	          ln = manager.audio.length;
-	      for(; i != ln; i++) {
-	        manager.audio[i].volume = manager.volumes[i];
-	      }
-	      
-	      mixer.masterVolume = mixer.tempMasterVolume;
+	      ex.Array.each(mixer.audio, function (channel, index) {
+	        channel.muted = false;
+	      });
 	      
 	      mixer.muted = false;
 	    }
