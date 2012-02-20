@@ -159,12 +159,18 @@ ex.using([
 		},
 		
 		_goToNextAnimation: function() {
-		  if(this.playQueue.length != 0) {
+		  if(this.playQueue.length > 0) {
 		    var next = this.playQueue.shift();
-		    this.play(next.name, next.loop, false);
+		    this.currentAnimation = this.animations[next.name];
+		    this.currentAnimationName = next.name;
+		    this.currentAnimation.loop = next.loop;
+		    this.currentFrame = 0;
+	      this.timer = (1 / this.animations[next.name].sheet.frameRate);
+	      this.playing = true;
 		  } else if(this.currentAnimation.loop == false) {
 		    this.stop();
 		  }
+		  
 		  this.currentIndex = 0;
 		},
 		

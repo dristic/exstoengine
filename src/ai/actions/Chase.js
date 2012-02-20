@@ -24,7 +24,9 @@ ex.using([
           && this.target.physical.position.y > minY
           && this.target.physical.position.y < maxY) {
         this.moveTowardTarget(dt);
-        this.attackTarget(dt);
+        if(this.entity.weapon) {
+          this.attackTarget(dt);
+        }
         return false;
       } else {
         return true;
