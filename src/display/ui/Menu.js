@@ -156,7 +156,11 @@ ex.using([
     },
     
     activateCurrentSelection: function() {
-      this.options.items[this.currentSelection].action();
+      var selection = this.options.items[this.currentSelection];
+      
+      if(selection.action) {
+        selection.action(selection.item);
+      }
     },
     
     /**

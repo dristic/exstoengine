@@ -1,7 +1,8 @@
 ex.using([
   'ex.display.Renderable',
   'ex.display.Sprite',
-  'ex.base.Rectangle'
+  'ex.base.Rectangle',
+  'ex.world.Entity'
 ], function () {
   var STATE;
   
