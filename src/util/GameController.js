@@ -196,6 +196,7 @@ ex.using([
           if(this.actions[button].length == 0) {
             delete this.actions[button];
           }
+          return;
         }
       }
     },
