@@ -60,6 +60,10 @@ ex.using([], function () {
         },
         
         addEventListener: function (event, func) {
+          if(ex.isNull(this._listeners)) {
+            ex.Debug.log('EventTarget _listeners is not defined. Maybe you forgot to call _super in the constructor?', 'ERROR');
+          }
+          
           if(typeof this._listeners[event] == "undefined") {
             this._listeners[event] = [];
           }
