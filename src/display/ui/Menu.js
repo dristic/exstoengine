@@ -17,9 +17,9 @@ ex.using([
         defaultSelection: 0,
         controller: null,
         controls: {
-          moveUp: 'up',
-          moveDown: 'down',
-          activate: 'use',
+          up: 'up',
+          down: 'down',
+          activate: 'activate',
           click: 'click'
         }
       };
@@ -46,22 +46,6 @@ ex.using([
       }
       
       this._calculateOffset();
-      
-      this.bindings = [
-        {
-          selector: this.options.controls.moveUp,
-          action: ex.bind(this, this.moveUpMenu)
-        }, {
-          selector: this.options.controls.moveDown,
-          action: ex.bind(this, this.moveDownMenu)
-        }, {
-          selector: this.options.controls.activate,
-          action: ex.bind(this, this.activateCurrentSelection)
-        }, {
-          selector: this.options.controls.click,
-          action: ex.bind(this, this.onClick)
-        }
-      ];
       this._addInputBindings();
     },
     
@@ -93,23 +77,29 @@ ex.using([
       this.enabled = false;
     },
     
-    _addInputBindings: function() {
-      var index = this.bindings.length;
-      while(index--) {
-        this.options.controller.bindAction(
-          'pressed',
-          this.bindings[index].selector, 
-          this.bindings[index].action);
+    _addInputBindings: function () {
+      if(this.options.controller) {
+        if(this.options.controls.up) 
+          this.options.controller.bindAction('pressed', this.options.controls.up, ex.bind(this, this.moveUpMenu));
+        if(this.options.controls.down) 
+          this.options.controller.bindAction('pressed', this.options.controls.down, ex.bind(this, this.moveDownMenu));
+        if(this.options.controls.activate)
+          this.options.controller.bindAction('pressed', this.options.controls.activate, ex.bind(this, this.activateCurrentSelection));
+        if(this.options.controls.click)
+          this.options.controller.bindAction('pressed', this.options.controls.click, ex.bind(this, this.onClick));
       }
     },
     
     _removeInputBindings: function() {
-      var index = this.bindings.length;
-      while(index--) {
-        this.options.controller.unbindAction(
-          'pressed',
-          this.bindings[index].selector, 
-          this.bindings[index].action);
+      if(this.options.controller) {
+        if(this.options.controls.up) 
+          this.options.controller.unbindAction('pressed', this.options.controls.up, ex.bind(this, this.moveUpMenu));
+        if(this.options.controls.down) 
+          this.options.controller.unbindAction('pressed', this.options.controls.down, ex.bind(this, this.moveDownMenu));
+        if(this.options.controls.activate)
+          this.options.controller.unbindAction('pressed', this.options.controls.activate, ex.bind(this, this.activateCurrentSelection));
+        if(this.options.controls.click)
+          this.options.controller.unbindAction('pressed', this.options.controls.click, ex.bind(this, this.onClick));
       }
     },
     
@@ -150,16 +140,18 @@ ex.using([
     },
     
     onClick: function () {
-      if(this.items[this.currentSelection].containsPoint(ex.Input.mouse.x, ex.Input.mouse.y) && this.enabled) {
+      if(this.items[this.currentSelection].containsPoint(ex.Input.mouse.x, ex.Input.mouse.y)) {
         this.activateCurrentSelection();
       }
     },
     
     activateCurrentSelection: function() {
-      var selection = this.options.items[this.currentSelection];
-      
-      if(selection.action) {
-        selection.action(selection.item);
+      if(this.enabled) {
+        var selection = this.options.items[this.currentSelection];
+        
+        if(selection.action) {
+          selection.action(selection.item);
+        }
       }
     },
     

@@ -1,5 +1,7 @@
 (function () {
 	ex.define("ex.util.Key", {
+	  __alias: 'ex.Key',
+	  
 		__statics: {
 		  LMB: 0,     //// Chrome mouse button values.
 		  MMB: 1,     // We will have to synthesize these values

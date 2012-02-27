@@ -1,6 +1,5 @@
 ex.using([
   'ex.base.GlobalComponent',
-  'ex.util.GameController',
   'ex.base.Vector',
   'ex.util.Key'
 ], function() {
@@ -28,12 +27,40 @@ ex.using([
 	    update: function(dt) {
 	      // Set the new state and then update the current state.
 	      ex.extend(this._previousState, this._inputState);
+	      
 	      var i = 0,
 	          ln = this._released.length;
 	      for(; i < ln; i++) {
 	        this._inputState[this._released[i]] = false;
 	      }
 	      this._released = [];
+	    },
+	    
+	    /**
+	     * Checks if the button is pressed or held down.
+	     * @param {String} key The button to check.
+	     */
+	    isDown: function (key) {
+	      if(key.charAt && key.charAt(0) != '#') key = ex.util.Key[key];
+	      return this._inputState[key];
+	    },
+	    
+	    /**
+	     * Checks if the button was just pressed.
+	     * @param {String} key The button to check.
+	     */
+	    isPressed: function (key) {
+	      if(key.charAt && key.charAt(0) != '#') key = ex.util.Key[key];
+	      return this._inputState[key] == true && (this._previousState[key] == false || this._previousState[key] == null);
+	    },
+	    
+	    /**
+	     * Checks if the button was just released.
+	     * @param {String} key The button to check.
+	     */
+	    isReleased: function (key) {
+	      if(key.charAt && key.charAt(0) != '#') key = ex.util.Key[key];
+	      return this._inputState[key] == false && this._previousState[key] == true;
 	    },
 	    
 	    /**
@@ -51,45 +78,6 @@ ex.using([
 	      this._addEventListenersOnInput();
 	    },
 	    
-	    /**
-	     * Loads a map that specifies the input event to controller mapping.
-	     */
-	    loadInputMaps: function(inputControllerMaps) {
-	      var index = 0,
-	          ln = inputControllerMaps.length;
-	      for(; index < ln; index++) {
-	        this.addController(index, inputControllerMaps[index]);
-	        ex.Debug.log("Player " + index + " controller created.", ex.util.Logger.LEVEL.DEBUG);
-	      }
-	    },
-	    
-	    /**
-	     * Checks if the button is pressed or held down.
-	     * @param {String} key The button to check.
-	     */
-	    isDown: function (key) {
-	      if(key.charAt && key.charAt(0) != '#') key = ex.util.Key[key];
-	      return this._inputState[key];
-	    },
-	    
-	    /**
-	     * Checks if the button was just pressed this frame.
-	     * @param {String} key The button to check.
-	     */
-	    isPressed: function (key) {
-	      if(key.charAt && key.charAt(0) != '#') key = ex.util.Key[key];
-	      return this._inputState[key] == true && (this._previousState[key] == false || this._previousState[key] == null);
-	    },
-	    
-	    /**
-	     * Checks if the button was just released this frame.
-	     * @param {String} key The button to check.
-	     */
-	    isReleased: function (key) {
-	      if(key.charAt && key.charAt(0) != '#') key = ex.util.Key[key];
-	      return this._inputState[key] == false && this._previousState[key] == true;
-	    },
-	    
 	    bindElement: function (downEvent, upEvent, elementId) {
 	      elementId = elementId.substr(1);
 	      var element = ex.Element.getById(elementId);
@@ -99,12 +87,10 @@ ex.using([
 	    
 	    _onElementDown: function (event) {
 	      ex.Input._inputState['#' + event.target.id] = true;
-	      ex.Input._controllerButtonDown('#' + event.target.id);
 	    },
 	    
 	    _onElementUp: function (event) {
 	      ex.Input._released.push('#' + event.target.id);
-	      ex.Input._controllerButtonUp('#' + event.target.id);
 	    },
 	    
 	    unbindElement: function (downEvent, upEvent, elementId) {

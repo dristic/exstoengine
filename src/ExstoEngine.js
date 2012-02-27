@@ -139,11 +139,11 @@ if(!Array.indexOf){
 		 * @param func {Function} function to run on each property of object
 		 */
 		each: function (object, func) {
-			for (var property in object) {
-		        if (Object.prototype.propertyIsEnumerable.call(object, property)) {
-		            action(property, object[property]);
-		        }
-		    }
+		  for (var property in object) {
+        if (Object.prototype.propertyIsEnumerable.call(object, property)) {
+          action(property, object[property]);
+        }
+	    }
 		},
 		
 		/**
@@ -169,7 +169,7 @@ if(!Array.indexOf){
 		},
 		
 		isArray: function (array) {
-		  return array.constructor == Array;
+		  return Object.prototype.toString.call(array) == '[object Array]';
 		},
 		
 		isFunction: function (func) {
@@ -205,9 +205,11 @@ if(!Array.indexOf){
 		
 		each: function (array, func) {
 		  var i = 0,
-		      ln = array.length;
+		      ln = array.length,
+		      result = true;
 		  for(; i != ln; i++) {
-		    func(array[i], i);
+		    result = func(array[i], i);
+		    if(result == false) return;
 		  }
 		},
 		

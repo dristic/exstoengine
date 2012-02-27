@@ -1,7 +1,8 @@
 ex.using([
-  'ex.base.WorldComponent'
+  'ex.base.WorldComponent',
+  'ex.event.EventTarget'
 ], function() {
-  ex.define("ex.world.World", {
+  ex.define("ex.world.World", ex.event.EventTarget, {
     
     /**
      * The world object contains all the relevant game data such as
@@ -45,6 +46,8 @@ ex.using([
           ex.Debug.log('Component must be an instance of ex.base.WorldComponent: ' + component, 'ERROR');
         }
       }
+      
+      this._super('constructor');
     },
     
     /**
@@ -57,11 +60,11 @@ ex.using([
      * @param {Number} dt timestep
      */
     update: function (dt) {
-      ex.Debug.time('world');
-      
-      if(!this.active) {
+      if(this.active == false) {
         return;
       }
+      
+      ex.Debug.time('world');
       
       // Remove old objects
       var n = this.objectsToRemove.length;
@@ -207,37 +210,55 @@ ex.using([
     },
     
     show: function() {
-      var index = this.objects.length;
-      while(index--) {
-        if(this.objects[index] instanceof ex.display.Renderable 
-            || this.objects[index].items != null) {
-          this.renderer.addRenderable(this.objects[index]);
+      var that = this;
+      
+      function addRenderable(object) {
+        if(object instanceof ex.display.Renderable) {
+          that.renderer.addRenderable(object);
+        }
+        
+        if(object.items) {
+          ex.Array.each(object.items, addRenderable);
         }
       }
-      this.active = true;
+      
+      ex.Array.each(this.objects, addRenderable);
+      
+      this.hidden = false;
+      
+      this.dispatchEvent('show');
     },
     
     hide: function() {
-      if(!this.objects) {
-        this.active = false;
-        return;
-      }
-      var index = this.objects.length;
-      while(index--) {
-        if(this.objects[index] instanceof ex.display.Renderable 
-            || this.objects[index].items != null) {
-          this.renderer.removeRenderable(this.objects[index]);
+      var that = this;
+      
+      function removeRenderable(object) {
+        if(object instanceof ex.display.Renderable) {
+          that.renderer.removeRenderable(object);
+        }
+        
+        if(object.items) {
+          ex.Array.each(object.items, removeRenderable);
         }
       }
-      this.active = false;
+      
+      ex.Array.each(this.objects, removeRenderable);
+      
+      this.hidden = true;
+      
+      this.dispatchEvent('hide');
     },
     
     pause: function () {
       this.active = false;
+      
+      this.dispatchEvent('pause');
     },
     
     unpause: function () {
       this.active = true;
+      
+      this.dispatchEvent('unpause');
     },
     
     getObject: function(name) {
