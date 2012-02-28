@@ -118,7 +118,7 @@ ex.using([
      * @memberOf ex.display.ui.TitleMenu
      */
     moveUpMenu: function() {
-      if(this.currentSelection != 0) {
+      if(this.currentSelection != 0 && this.enabled) {
         this.options.onOut(this.options.items[this.currentSelection].item);
         this.currentSelection--;
         this.options.onOver(this.options.items[this.currentSelection].item);
@@ -132,7 +132,7 @@ ex.using([
      * @memberOf ex.display.ui.TitleMenu
      */
     moveDownMenu: function() {
-      if(this.currentSelection < (this.options.items.length - 1)) {
+      if(this.currentSelection < (this.options.items.length - 1) && this.enabled) {
         this.options.onOut(this.options.items[this.currentSelection].item);
         this.currentSelection++;
         this.options.onOver(this.options.items[this.currentSelection].item);

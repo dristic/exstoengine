@@ -37,6 +37,20 @@ ex.using([
        * @param {Options} options Extra tween options including callbacks, type, etc.
        */
       add: function (element, duration, properties, options) {
+        var tween = this.__generateTween(element, duration, properties, options);
+        
+        extween.tweens.push(tween);
+      },
+      
+      delayedCall: function (duration, callback) {
+        var tween = this.__generateTween({}, duration, {}, {
+          callback: callback
+        });
+        
+        extween.tweens.push(tween);
+      },
+      
+      __generateTween: function (element, duration, properties, options) {
         var tween = {
           element: element,
           duration: duration,
@@ -50,7 +64,7 @@ ex.using([
           tween.starting[key] = element[key];
         }
         
-        extween.tweens.push(tween);
+        return tween;
       },
       
       __update: function (dt) {
