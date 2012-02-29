@@ -99,11 +99,6 @@ ex.using([
 		play: function(name, loop, override) {
 		  if(override == true) {
 		    this.playQueue = [];
-		    if(this.currentAnimation) {
-  		    this._queue({ 
-  		      name: this.currentAnimationName, 
-  		      loop: this.currentAnimation.loop });
-		    }
 		  } else if(this.currentAnimationName == name) {
 		    // Do nothing if animation is already playing and we're not overriding
 		    return;
@@ -167,11 +162,13 @@ ex.using([
 		    this.currentFrame = 0;
 	      this.timer = (1 / this.animations[next.name].sheet.frameRate);
 	      this.playing = true;
+	      this.currentIndex = 0;
 		  } else if(this.currentAnimation.loop == false) {
+		    this.currentIndex = this.currentAnimation.frames.length - 1;
 		    this.stop();
+		  } else {
+		    this.currentIndex = 0;
 		  }
-		  
-		  this.currentIndex = 0;
 		},
 		
 		/**
