@@ -64,8 +64,6 @@ ex.using([
         return;
       }
       
-      ex.Debug.time('world');
-      
       // Remove old objects
       var n = this.objectsToRemove.length;
       while(n--) {
@@ -85,8 +83,6 @@ ex.using([
       for(; i != ln; i++) {
         this.components[i].update(dt);
       }
-      
-      ex.Debug.time('world');
     },
     
     /**

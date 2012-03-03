@@ -22,6 +22,7 @@ ex.using([
     constructor: function (audio, options) {
       this.defaults = {
           volume: 1,
+          endTime: Number.MAX_VALUE,
           loop: false,
           maxChannels: 10,
           preloadChannels: 1
@@ -80,7 +81,7 @@ ex.using([
         
         if(!loop) {
           var checkEnded = ex.bind(this, this._onChannelEnded);
-          audio.addEventListener('ended', checkEnded);
+          ex.event.listen('ended', audio, checkEnded);
           this.endedListeners[index] = checkEnded;
         } else {
           audio.loop = loop;
@@ -91,8 +92,9 @@ ex.using([
     },
     
     _onChannelEnded: function (event) {
-      var index = this.channels.indexOf(event.target);
-      event.target.removeEventListener('ended', this.endedListeners[index]);
+      var index = event.target.__audioId;
+      ex.event.unlisten('ended', event.target, this.endedListeners[index]);
+      ex.event.unlisten('timeupdate', event.target, event.target.__updateHandler);
       this.endedListeners[index] = null;
       this.seek(event.target.initialTime, index);
       
@@ -142,8 +144,25 @@ ex.using([
     
     _generateAudioChannel: function () {
       this.readyChannels.push(this.channels.push(this.audio.cloneNode(true)) - 1);
-      ex.sound.SoundMixer.registerAudio(this.channels[this.channels.length - 1]);
-      this.channels[this.channels.length - 1].volume = this.volume;
+      
+      var channel = this.channels[this.channels.length - 1];
+      ex.sound.SoundMixer.registerAudio(channel);
+      channel.volume = this.volume;
+      channel.__audioId = this.channels.length - 1;
+      channel.__updateHandler = ex.bind(this, this.__onTimeUpdate);
+      
+      ex.event.listen('timeupdate', channel, channel.__updateHandler);
+    },
+    
+    __onTimeUpdate: function (event) {
+      var audio = event.target;
+      if(audio.currentTime >= this.options.endTime) {
+        if(audio.loop == true) {
+          this.seek(audio.initialTime, audio.__audioId);
+        } else {
+          this.stop(audio.__audioId);
+        }
+      }
     },
     
     seek: function (time, channel) {

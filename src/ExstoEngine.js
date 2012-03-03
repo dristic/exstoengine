@@ -26,6 +26,10 @@ if(!Array.indexOf){
 	// Used for the ex.clone function.
 	function Clone() {};
 	
+	// Used for unique id numbers.
+	ex.UID_PROPERTY = '__uniqueId';
+	ex.uidCounter = 0;
+	
 	/**
 	 * Copies the values from one object to another object.
 	 * 
@@ -178,6 +182,10 @@ if(!Array.indexOf){
 		
 		isNull: function (object) {
 		  return typeof object == 'undefined';
+		},
+		
+		uid: function (object) {
+		  return object[ex.UID_PROPERTY] || (object[ex.UID_PROPERTY] = ++ex.uidCounter);
 		}
 	});
 	

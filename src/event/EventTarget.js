@@ -81,7 +81,7 @@ ex.using([], function () {
          * @returns {Boolean}
          */
         dispatchEvent: function (event, eventObject) {
-          if(this._listeners[event] == null){
+          if(this._listeners[event] == null) {
             return false;
           }
           

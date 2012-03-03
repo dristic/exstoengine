@@ -116,6 +116,8 @@ ex.using([
 		},
 		
 		update: function () {
+		  ex.Debug.time('engine');
+		  
 			//--Calculate delta time
 			var newTime = (new Date()).getTime();
 			var dt = newTime - this.lastTime;
@@ -136,7 +138,9 @@ ex.using([
 			
 			if(this.debug){
 				ex.Debug.benchmarkEngine(dt);
-			}	
+			}
+			
+			ex.Debug.time('engine');
 		},
 		
 		integrate: function (dt) {
