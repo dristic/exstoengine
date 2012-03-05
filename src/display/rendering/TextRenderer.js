@@ -38,6 +38,8 @@ ex.using([
       
       context.globalAlpha = this.options.alpha;
       
+      
+      
       if(this.options.type == 'canvas') {
         context.font = this.options.font;
         context.fillStyle = this.options.color;
@@ -48,9 +50,13 @@ ex.using([
             this.position.y,
             this.options.maxWidth);
       } else if(this.options.type == 'sprite') {
-        var i = 0,
+        var i = 0, 
             ln = this.text.length,
-            charCode, width, x, objX = this.position.x;
+            charCode, 
+            width, 
+            x, 
+            objX = this.position.x - (camX * this.scrollFactor.x),
+            objY = this.position.y - (camY * this.scrollFactor.y);
         for(; i < ln; i++) {
           charCode = this.text.charCodeAt(i);
           width = this.options.fontData.widths[charCode];
@@ -61,7 +67,7 @@ ex.using([
               width,
               this.img.height,
               objX,
-              this.position.y,
+              objY,
               width,
               this.img.height);
           objX += width;

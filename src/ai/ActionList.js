@@ -17,7 +17,6 @@ ex.using([
     },
     
     remove: function(action) {
-      console.log("Removing action", action.name);
       action.destroy();
       ex.Array.remove(this.actionList, action);
     },
