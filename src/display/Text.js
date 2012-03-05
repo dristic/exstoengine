@@ -23,6 +23,7 @@ ex.using([
       
       this.text = text;
       this.position = position;
+      this.scrollFactor = new ex.Vector(0, 0);
       
       this._super("constructor", [true, 1.0]);
       
