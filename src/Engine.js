@@ -96,7 +96,8 @@ ex.using([
       }
 			
 			//--Setup update interval
-			var _gameInterval = setInterval(ex.bind(this, this.update), (1 / this.options.rendering.frameRate) * 1000);
+			//var _gameInterval = setInterval(ex.bind(this, this.update), (1 / this.options.rendering.frameRate) * 1000);
+			requestAnimationFrame(ex.bind(this, this.update));
 		},
 		
 		_setupFullscreenViewport: function() {
@@ -135,6 +136,8 @@ ex.using([
 			}
 			
 			this.render(dt);
+			
+			requestAnimationFrame(ex.bind(this, this.update));
 			
 			if(this.debug){
 				ex.Debug.benchmarkEngine(dt);
