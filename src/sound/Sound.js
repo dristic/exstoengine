@@ -166,12 +166,16 @@ ex.using([
     },
     
     seek: function (time, channel) {
-      if(ex.isNull(channel) == false) {
-        this.channels[channel].currentTime = time;
-      } else {
-        ex.Array.each(this.channels, function (channel, i) {
-          channel.currentTime = time;
-        });
+      try {
+        if(ex.isNull(channel) == false) {
+          this.channels[channel].currentTime = time;
+        } else {
+          ex.Array.each(this.channels, function (channel, i) {
+            channel.currentTime = time;
+          });
+        }
+      } catch (e) {
+        // Minor hack because the audio api is still buggy in browsers.
       }
     },
     
