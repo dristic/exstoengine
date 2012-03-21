@@ -1,5 +1,6 @@
 ex.using([
-    'ex.display.rendering.RenderingContext'
+  'ex.display.rendering.RenderingContext',
+  'ex.util.Device'
 ], function () {
   ex.define('ex.display.rendering.RenderingContext2dCanvas', ex.display.rendering.RenderingContext, {
     constructor: function (width, height, renderers, canvas, bgColor) {
@@ -28,15 +29,22 @@ ex.using([
     render: function (items, camX, camY, camWidth, camHeight) {
       // Move buffer to front.
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.context.drawImage(this.bufferCanvas, 0, 0);
       
-      // Draw everything else to the back buffer.
-      this.buffer.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      if(ex.Device.isMobile() == false) {
+        this.context.drawImage(this.bufferCanvas, 0, 0);
+        
+        // Draw everything else to the back buffer.
+        this.buffer.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      }
+      
       var i = 0,
           ln = items.length,
           item,
           renderers = this.renderers,
           context = this.buffer;
+      
+      if(ex.Device.isMobile()) context = this.context;
+      
       for(; i < ln; i++) {
         item = items[i];
         if(!item.renderer) {

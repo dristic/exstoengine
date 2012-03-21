@@ -269,6 +269,7 @@ if(!Array.indexOf){
 		_defined: [],
 		
 		config: {
+			baseExUrl: "",
 			baseUrl: ""
 		},
 		
@@ -363,7 +364,9 @@ if(!Array.indexOf){
 			
 			// If we are loading ex classes, build from ex path
 			if(parts[0] == 'ex') {
-				fileUrl = ex.config.baseUrl;
+				fileUrl = ex.config.baseExUrl;
+			} else {
+			  fileUrl += "/" + ex.config.baseUrl;
 			}
 			
 			var i = -1;
@@ -586,7 +589,7 @@ if(!Array.indexOf){
 		while(i--){
 			var script = scripts[i];
 			if(pattern.test(script.src) == true){
-				ex.config.baseUrl = script.src.split("/ExstoEngine.js", 1)[0];
+				ex.config.baseExUrl = script.src.split("/ExstoEngine.js", 1)[0];
 			}
 		}
 	}
