@@ -11,8 +11,14 @@ ex.using([
   "ex.world.World"
 ], function () {
   
-  var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||  
-                              window.webkitRequestAnimationFrame || window.msRequestAnimationFrame; 
+  var requestAnimationFrame = 
+        window.requestAnimationFrame 
+        || window.mozRequestAnimationFrame 
+        || window.webkitRequestAnimationFrame 
+        || window.msRequestAnimationFrame
+        || function (callback) {
+             setTimeout(callback, (1/30) * 1000);
+           };
   
   var MAX_FRAME_TIME = 5;
 	
