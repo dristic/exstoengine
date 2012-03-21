@@ -426,7 +426,7 @@ if(!Array.indexOf){
 				// Add script tag with on load parameter
 				this.addScriptTag(url, function () {
 					ex.Loader.onScriptLoad(url);
-					delete this.onload;
+					this.onload = null;
 				});
 			}
 			
