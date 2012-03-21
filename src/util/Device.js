@@ -1,12 +1,30 @@
 ex.using([
 
 ], function () {
+  var uagent = navigator.userAgent.toLowerCase();
+  
   ex.define('ex.util.Device', {
     __alias: 'ex.Device',
     
     __statics: {
       isOnline: function () {
         return navigator.onLine;
+      },
+      
+      isMobile: function () {
+        return ex.Device.isiOS();
+      },
+      
+      isiOS: function () {
+        return ex.Device.isiPhone() || ex.Device.isiPad();
+      },
+      
+      isiPhone: function () {
+        return uagent.search('iphone') > -1;
+      },
+      
+      isiPad: function () {
+        return uagent.search('ipad') > -1;
       },
       
       cache: {
@@ -54,7 +72,7 @@ ex.using([
           
           window.applicationCache.update();
         }
-      }
+      },
       
       supports: {
         canvas: function () {
