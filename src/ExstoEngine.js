@@ -20,9 +20,7 @@ if(!Array.indexOf){
     };
 }
 
-(function () {
-	"use strict";
-	
+(function () {	
 	// Used for the ex.clone function.
 	function Clone() {};
 	
@@ -418,8 +416,8 @@ if(!Array.indexOf){
 				this._callbacks[url] = callback;
 			}
 			
-			this._queue.push(url);
-			//this._queue.push(url + "? ex=" + this._date.getTime());
+			//this._queue.push(url);
+			this._queue.push(url + "? ex=" + this._date.getTime());
 		},
 		
 		startQueue: function () {
@@ -478,7 +476,7 @@ if(!Array.indexOf){
       xmlHttp.send();
       
       xmlHttp.onreadystatechange = function () {
-        if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        if((xmlHttp.readyState == 4 && xmlHttp.status == 200) || xmlHttp.status == 0) {
           callback(xmlHttp.responseText);
         }
       }

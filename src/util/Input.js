@@ -108,6 +108,9 @@ ex.using([
 	      ex.event.listen('mousedown', this._inputTarget, this._onMouseDown);
 	      ex.event.listen('mouseup', this._inputTarget, this._onMouseUp);
 	      ex.event.listen('mousemove', this._inputTarget, this._onMouseMove);
+	      ex.event.listen('touchstart', this._inputTarget, this._onMouseDown);
+        ex.event.listen('touchend', this._inputTarget, this._onMouseUp);
+        ex.event.listen('touchmove', this._inputTarget, this._onMouseMove);
 	    },
 	    
 	    _removeEventListenersFromInput: function() {
@@ -116,6 +119,9 @@ ex.using([
         ex.event.unlisten('mousedown', this._inputTarget, this._onMouseDown);
         ex.event.unlisten('mouseup', this._inputTarget, this._onMouseUp);
         ex.event.unlisten('mousemove', this._inputTarget, this._onMouseMove);
+        ex.event.unlisten('touchstart', this._inputTarget, this._onMouseDown);
+        ex.event.unlisten('touchend', this._inputTarget, this._onMouseUp);
+        ex.event.unlisten('touchmove', this._inputTarget, this._onMouseMove);
 	    },
 	    
 	    _onKeyDown: function(event) {

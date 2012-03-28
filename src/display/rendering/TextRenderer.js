@@ -61,7 +61,7 @@ ex.using([
           charCode = this.text.charCodeAt(i);
           width = this.options.fontData.widths[charCode];
           x = this.options.fontData.positions[charCode];
-          context.drawImage(this.img,
+          /*context.drawImage(this.img,
               x,
               0,
               width,
@@ -69,7 +69,7 @@ ex.using([
               objX,
               objY,
               width,
-              this.img.height);
+              this.img.height);*/
           objX += width;
         }
       }
