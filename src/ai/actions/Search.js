@@ -14,7 +14,7 @@ ex.using([
       // Setup sub-actions
       this.actions = {
           chase: new ex.ai.actions.Chase(this.entity, this.target, this.sightRange)
-      }
+      };
       
       this._super("constructor", [1, true]);
     },
@@ -24,9 +24,9 @@ ex.using([
           minY = this.entity.physical.position.y - this.target.physical.height,
           maxY = this.entity.physical.position.y + this.entity.physical.height;
       
-      if(distX < this.sightRange
-          && this.target.physical.position.y > minY
-          && this.target.physical.position.y < maxY) {
+      if(distX < this.sightRange &&
+          this.target.physical.position.y > minY &&
+          this.target.physical.position.y < maxY) {
         this.entity.ai.push(new ex.ai.actions.Chase(this.entity, this.target, 200));
       }
     }

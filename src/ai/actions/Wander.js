@@ -15,7 +15,7 @@ ex.using([
       this._super("constructor", [1, false]);
     },
     
-    update: function(dt) {     
+    update: function (dt) {
       if(this.isObstructed()) {
         this.turnAround(dt);
       }
@@ -30,7 +30,7 @@ ex.using([
       return false;
     },
     
-    isObstructed: function() {
+    isObstructed: function () {
       if(!this.entity.collisionData || !this.entity.collisionData.tiles) {
         return false;
       }
@@ -54,7 +54,7 @@ ex.using([
       return false;
     },
     
-    turnAround: function(dt) {
+    turnAround: function (dt) {
       if(this.entity.facing == 'left') {
         this.entity.facing = 'right';
       } else {

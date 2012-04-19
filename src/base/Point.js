@@ -4,7 +4,7 @@
 		 * @name ex.base.Point
 		 * @param {Number} x magnitude on x axis
 		 * @param {Number} y magnitude on y axis
-		 * 
+		 *
 		 * @property {Number} x
 		 * @property {Number} y
 		 * @constructor
@@ -21,7 +21,7 @@
 		 * @name add
 		 * @memberOf ex.base.Point
 		 * @param {ex.base.Point or ex.base.Vector} other Point or Vector to add
-		 * to this Point 
+		 * to this Point
 		 */
 		add: function(other) {
 			this.x += other.x;
@@ -35,11 +35,11 @@
 		 * @name subtract
 		 * @memberOf ex.base.Point
 		 * @param {ex.base.Point or ex.base.Vector} other Point or Vector to
-		 * subtract from this Point 
+		 * subtract from this Point
 		 */
 		subtract: function(other) {
 			this.x -= other.x;
 			this.y -= other.y;
 		}
-	});	
+	});
 }());

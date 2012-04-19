@@ -20,9 +20,9 @@ ex.using([
       minY = this.entity.physical.position.y - this.target.physical.height,
       maxY = this.entity.physical.position.y + this.entity.physical.height;
   
-      if(distX < this.maxRange
-          && this.target.physical.position.y > minY
-          && this.target.physical.position.y < maxY) {
+      if(distX < this.maxRange &&
+          this.target.physical.position.y > minY &&
+          this.target.physical.position.y < maxY) {
         this.moveTowardTarget(dt);
         if(this.entity.weapon) {
           this.attackTarget(dt);

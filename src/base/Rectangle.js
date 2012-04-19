@@ -1,5 +1,5 @@
 ex.using([
-    "ex.base.Point"          
+    "ex.base.Point"
 ],function () {
 	ex.define("ex.base.Rectangle", {
 	  __alias: 'ex.Rectangle',
@@ -9,7 +9,7 @@ ex.using([
 		 * @param {ex.base.Point} position of top left corner
 		 * @param {Number} width width of rectangle
 		 * @param {Number} height height of rectangle
-		 * 
+		 *
 		 * @property {ex.base.Point} position top left corner
 		 * @property {Number} width
 		 * @property {Number} height
@@ -27,26 +27,26 @@ ex.using([
 		 * @function
 		 * @name containsPoint
 		 * @memberOf ex.base.Rectangle
-		 * @param {Number or ex.base.Point} x 
-		 * 			point's x axis value or an ex.base.Point
-		 * @param {Number} [y] 
-		 * 			point's y axis value (not used if x is an ex.base.Point)
+		 * @param {Number or ex.base.Point} x
+		 *     point's x axis value or an ex.base.Point
+		 * @param {Number} [y]
+		 *     point's y axis value (not used if x is an ex.base.Point)
 		 * @returns {Boolean}
 		 */
-		containsPoint: function(x, y) {
+		containsPoint: function (x, y) {
 			if(x instanceof ex.base.Point) {
-				if(x.x > this.x && x.x  < this.position.x + this.width 
-				   && x.y > this.y && x.y < this.position.y + this.height) {
+				if(x.x > this.x && x.x  < this.position.x + this.width &&
+				   x.y > this.y && x.y < this.position.y + this.height) {
 					return true;
 				} else {
 					return false;
 				}
 			} else {
-				if(x > this.x && x < this.x + this.width
-				   && y > this.y && y < this.y + this.height) {
-			   		return true;
+				if(x > this.x && x < this.x + this.width &&
+				   y > this.y && y < this.y + this.height) {
+				    return true;
 			   } else {
-			   		return false;
+			       return false;
 			   }
 			}
 		},
@@ -56,11 +56,11 @@ ex.using([
 		 * @function
 		 * @name translate
 		 * @memberOf ex.base.Rectangle
-		 * @param {Number, ex.base.Point, or ex.base.Vector} x 
-		 * 			translation on x axis value, ex.base.Point offset, 
+		 * @param {Number, ex.base.Point, or ex.base.Vector} x
+		 *    translation on x axis value, ex.base.Point offset,
 		 * or ex.base.Vector offset
-		 * @param {Number} [y] 
-		 * 			translation on y axis value (not used if x is an 
+		 * @param {Number} [y]
+		 *    translation on y axis value (not used if x is an
 		 * ex.base.Point or ex.base.Vector)
 		 * @return {ex.base.Rectangle} this
 		 */

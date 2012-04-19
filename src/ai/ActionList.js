@@ -1,5 +1,5 @@
 ex.using([
-  'ex.ai.Action',
+  'ex.ai.Action'
 ], function() {
   ex.define("ex.ai.ActionList", {
     constructor: function() {
