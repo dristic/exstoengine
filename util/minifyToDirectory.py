@@ -1,3 +1,7 @@
+#################################
+# This file is deprecated as of 4/24/2012
+#################################
+
 import os, os.path, shutil, sys
 from array import array
 
