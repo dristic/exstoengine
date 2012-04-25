@@ -28,7 +28,7 @@ file.traverse(config.source, function (arr) {
     var filename = arr[loop.iteration()],
         ext = filename.substr(filename.lastIndexOf('.'));
     
-    if(ext != '.js') {
+    if(ext != '.js' || config.precompiles.indexOf(filename) != -1) {
       loop.next();
       return;
     }
@@ -44,7 +44,6 @@ file.traverse(config.source, function (arr) {
     
     fileData.forEach(function (data) {
       src += data.code;
-      console.log(data.defines + ' | ' + data.requires);
     });
     
     // Write src to file.

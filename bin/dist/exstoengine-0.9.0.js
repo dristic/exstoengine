@@ -238,6 +238,154 @@ Array.indexOf || (Array.prototype.indexOf = function(a) {
 var exports = exports || null;
 
 exports && ex.extend(exports, ex), function() {
+    function c() {
+        ex.Array.each(a, function(a) {
+            a();
+        }), a = [], b = !0;
+    }
+    function d() {
+        document.addEventListener ? (document.removeEventListener("DOMContentLoaded", d, !1), c()) : document.attachEvent && (document.detachEvent("onreadystatechange", d, !1), c());
+    }
+    var a = [], b = !1;
+    ex.extend(ex, {
+        ready: function(e) {
+            a.push(e);
+            if (document.readyState === "complete" || b == 1) return setTimeout(c, 1);
+            document.addEventListener ? (document.addEventListener("DOMContentLoaded", d, !1), window.addEventListener("load", c, !1)) : document.attachEvent && (document.attachEvent("onreadystatechange", d), window.attachEvent("onload", c));
+        }
+    });
+}(), ex.using([], function() {
+    ex.define("ex.ai.Action", {
+        constructor: function(a, b) {
+            this.mask = a || 0, this.blocking = b || !1;
+        },
+        update: function(a) {
+            return !0;
+        },
+        destroy: function() {}
+    });
+}), ex.using([ "ex.ai.Action" ], function() {
+    ex.define("ex.ai.ActionList", {
+        constructor: function() {
+            this.masks = {
+                animation: 1,
+                movement: 2,
+                behavior: 4
+            }, this.actionList = [];
+        },
+        push: function(a) {
+            this.actionList.push(a);
+        },
+        remove: function(a) {
+            a.destroy(), ex.Array.remove(this.actionList, a);
+        },
+        update: function(a) {
+            var b = 0, c = this.actionList.length, d = null;
+            while (c--) {
+                d = this.actionList[c];
+                if (d.mask & b) continue;
+                var e = d.update(a);
+                e && this.remove(this.actionList[c]), d.blocking && (b |= d.mask);
+            }
+        }
+    });
+}), ex.using([ "ex.ai.Action" ], function() {
+    ex.define("ex.ai.actions.Idle", ex.ai.Action, {
+        constructor: function(a) {
+            this.name = "idle", this.entity = a, this._super("constructor", [ 1, !0 ]);
+        },
+        update: function(a) {
+            return !1;
+        }
+    });
+}), ex.using([ "ex.ai.Action" ], function() {
+    ex.define("ex.ai.actions.Shoot", ex.ai.Action, {
+        constructor: function(a) {
+            this.name = "shoot", this.weapon = a, this._super("constructor", [ 1, !1 ]);
+        },
+        update: function(a) {
+            return this.weapon.shoot(), !0;
+        }
+    });
+}), ex.using([ "ex.ai.Action", "ex.ai.actions.Shoot" ], function() {
+    ex.define("ex.ai.actions.Chase", ex.ai.Action, {
+        constructor: function(a, b, c, d) {
+            this.name = "chase", this.entity = a, this.target = b, this.maxRange = c, this.speedModifier = d || 1, this._super("constructor", [ 1, !0 ]);
+        },
+        update: function(a) {
+            var b = Math.abs(this.entity.physical.position.x - this.target.physical.position.x), c = this.entity.physical.position.y - this.target.physical.height, d = this.entity.physical.position.y + this.entity.physical.height;
+            return b < this.maxRange && this.target.physical.position.y > c && this.target.physical.position.y < d ? (this.moveTowardTarget(a), this.entity.weapon && this.attackTarget(a), !1) : !0;
+        },
+        attackTarget: function(a) {
+            this.entity.cooldown += Math.random() * a, this.entity.weapon.cooldown <= 0 && this.entity.ai.push(new ex.ai.actions.Shoot(this.entity.weapon));
+        },
+        moveTowardTarget: function(a) {
+            var b = this.entity.speed * this.speedModifier;
+            this.target.physical.position.x < this.entity.physical.position.x ? (this.entity.facing = "left", this.entity.physical.applyImpulse(-b * a, 0), this.entity.moving = !0) : (this.entity.facing = "right", this.entity.physical.applyImpulse(b * a, 0), this.entity.moving = !0), this.entity.weapon && (this.entity.weapon.facing = this.entity.facing);
+        }
+    });
+}), ex.using([ "ex.ai.Action" ], function() {
+    ex.define("ex.ai.actions.Wander", ex.ai.Action, {
+        constructor: function(a) {
+            this.name = "wander", this.entity = a, this._super("constructor", [ 1, !1 ]);
+        },
+        update: function(a) {
+            return this.isObstructed() && this.turnAround(a), this.entity.facing == "left" ? (this.entity.physical.applyImpulse(-this.entity.speed * a, 0), this.entity.moving = !0) : (this.entity.physical.applyImpulse(this.entity.speed * a, 0), this.entity.moving = !0), !1;
+        },
+        isObstructed: function() {
+            if (!this.entity.collisionData || !this.entity.collisionData.tiles) return !1;
+            var a = this.entity.collisionData.tiles, b = this.entity.physical.position.y - a[0].height, c = this.entity.physical.position.y + this.entity.physical.height, d = a.length, e;
+            while (d--) {
+                e = a[d];
+                if (e.position.y >= b && e.position.y <= c) {
+                    if (this.entity.facing == "left" && e.position.x <= this.entity.physical.position.x) return !0;
+                    if (this.entity.facing == "right" && e.position.x >= this.entity.physical.position.x) return !0;
+                }
+            }
+            return !1;
+        },
+        turnAround: function(a) {
+            this.entity.facing == "left" ? this.entity.facing = "right" : this.entity.facing = "left", this.entity.weapon && (this.entity.weapon.facing = this.entity.facing), this.entity.physical.velocity.x = 0;
+        }
+    });
+}), ex.using([ "ex.ai.Action", "ex.ai.actions.Wander", "ex.ai.actions.Chase" ], function() {
+    ex.define("ex.ai.actions.Search", ex.ai.Action, {
+        constructor: function(a, b, c) {
+            this.name = "search", this.entity = a, this.target = b, this.sightRange = c, this.actions = {
+                chase: new ex.ai.actions.Chase(this.entity, this.target, this.sightRange)
+            }, this._super("constructor", [ 1, !0 ]);
+        },
+        update: function(a) {
+            var b = Math.abs(this.entity.physical.position.x - this.target.physical.position.x), c = this.entity.physical.position.y - this.target.physical.height, d = this.entity.physical.position.y + this.entity.physical.height;
+            b < this.sightRange && this.target.physical.position.y > c && this.target.physical.position.y < d && this.entity.ai.push(new ex.ai.actions.Chase(this.entity, this.target, 200));
+        }
+    });
+}), function() {
+    ex.define("ex.base.Point", {
+        constructor: function(a, b) {
+            this.x = a, this.y = b;
+        },
+        add: function(a) {
+            this.x += a.x, this.y += a.y;
+        },
+        subtract: function(a) {
+            this.x -= a.x, this.y -= a.y;
+        }
+    });
+}(), ex.using([ "ex.base.Point" ], function() {
+    ex.define("ex.base.Rectangle", {
+        __alias: "ex.Rectangle",
+        constructor: function(a, b, c, d) {
+            this.x = a, this.y = b, this.width = c, this.height = d;
+        },
+        containsPoint: function(a, b) {
+            return a instanceof ex.base.Point ? a.x > this.x && a.x < this.position.x + this.width && a.y > this.y && a.y < this.position.y + this.height ? !0 : !1 : a > this.x && a < this.x + this.width && b > this.y && b < this.y + this.height ? !0 : !1;
+        },
+        translate: function(a, b) {
+            return a instanceof ex.base.Point || a instanceof ex.base.Vector ? (this.x -= a.x, this.y -= a.y) : (this.x -= a, this.y -= b), this;
+        }
+    });
+}), function() {
     ex.define("ex.base.Vector", {
         __alias: "ex.Vector",
         constructor: function(a, b) {
@@ -303,395 +451,6 @@ exports && ex.extend(exports, ex), function() {
         },
         update: function(a) {},
         destroy: function() {}
-    });
-}), function() {
-    ex.define("ex.base.Point", {
-        constructor: function(a, b) {
-            this.x = a, this.y = b;
-        },
-        add: function(a) {
-            this.x += a.x, this.y += a.y;
-        },
-        subtract: function(a) {
-            this.x -= a.x, this.y -= a.y;
-        }
-    });
-}(), ex.using([ "ex.base.Point" ], function() {
-    ex.define("ex.base.Rectangle", {
-        __alias: "ex.Rectangle",
-        constructor: function(a, b, c, d) {
-            this.x = a, this.y = b, this.width = c, this.height = d;
-        },
-        containsPoint: function(a, b) {
-            return a instanceof ex.base.Point ? a.x > this.x && a.x < this.position.x + this.width && a.y > this.y && a.y < this.position.y + this.height ? !0 : !1 : a > this.x && a < this.x + this.width && b > this.y && b < this.y + this.height ? !0 : !1;
-        },
-        translate: function(a, b) {
-            return a instanceof ex.base.Point || a instanceof ex.base.Vector ? (this.x -= a.x, this.y -= a.y) : (this.x -= a, this.y -= b), this;
-        }
-    });
-}), ex.using([ "ex.base.Vector", "ex.display.Renderable" ], function() {
-    ex.define("ex.display.Sprite", ex.display.Renderable, {
-        constructor: function(a, b) {
-            this.type = "Sprite", this.position = a, this.img = b || new Image, this.rotation = 0, this.rotationEnabled = !1, this.rendering = null, this.scrollFactor = new ex.base.Vector(1, 1), this.width = this.img.naturalWidth, this.height = this.img.naturalHeight, this.width == 0 && this.height == 0 && ex.event.listen("load", this.img, function() {
-                this._recalcDimensions();
-            }, this), this._super("constructor", [ !0, 1 ]);
-        },
-        _recalcDimensions: function() {
-            this.width = this.img.naturalWidth, this.height = this.img.naturalHeight, this.rendering && this.rendering.rotationCanvas ? (this.rendering.rotationCanvas.width = this.width, this.rendering.rotationCanvas.height = this.height) : this.rendering && this.rendering.el && (this.rendering.el.style.width = this.width + "px", this.rendering.el.style.height = this.height + "px");
-        },
-        update: function(a) {
-            typeof this.onUpdate == "function" && this.onUpdate(a);
-        },
-        getBounds: function() {
-            return new ex.base.Rectangle(this.position, this.width, this.height);
-        }
-    });
-}), function() {
-    ex.define("ex.physics.Collidable", {
-        constructor: function(a, b) {
-            this.type = a, this.data = b, this.collisionBit = -1, this.collisionBitMask = -1;
-        },
-        setCollisionGroup: function(a) {
-            this.collisionBit = ex.isNull(a) ? -1 : 1 << a;
-        },
-        setCollidableGroups: function(a) {
-            this.collisionBitMask = 0;
-            var b = 0, c = a.length;
-            for (; b != c; b++) this.collisionBitMask = this.collisionBitMask | 1 << a[b];
-        },
-        setAllCollidableGroups: function() {
-            this.collisionMaskBit = -1;
-        },
-        update: function(a) {},
-        integrate: function(a) {},
-        onCollide: function(a, b, c) {},
-        destroy: function() {}
-    });
-}(), function() {
-    function a(a, b, c) {
-        if (a.position.x <= b.position.x) {
-            if (a.position.x + a.width < b.position.x) return null;
-        } else if (b.position.x + b.width < a.position.x) return null;
-        if (a.position.y <= b.position.y) {
-            if (a.position.y + a.height < b.position.y) return null;
-        } else if (b.position.y + b.height < a.position.y) return null;
-        var d = new ex.base.Vector(0, 0), e = new ex.base.Vector(0, 0);
-        a.velocity.y > 0 ? a.position.y < b.position.y && a.position.y + a.height > b.position.y && (e.y = a.position.y + a.height - b.position.y) : a.velocity.y < 0 && b.position.y < a.position.y && b.position.y + b.height > a.position.y && (e.y = a.position.y - (b.position.y + b.height)), a.velocity.x > 0 ? a.position.x < b.position.x && a.position.x + a.width > b.position.x && (e.x = a.position.x + a.width - b.position.x) : a.velocity.x < 0 && b.position.x < a.position.x && b.position.x + b.width > a.position.x && (e.x = a.position.x - (b.position.x + b.width));
-        if (e.x != 0 && e.y != 0) {
-            var f = a.velocity.x * c, g = a.velocity.y * c, h = e.x, i = e.y, j = h - f, k = i - g, l = -(i - (k - i) / (j - h) * h), m = e.y > 0;
-            m ? l < 0 ? d.x = e.x : d.y = e.y : l > 0 ? d.x = e.x : d.y = e.y;
-        } else e.x != 0 ? d.x = e.x : e.y != 0 && (d.y = e.y);
-        return {
-            source: a,
-            target: b,
-            data: {
-                pen: d
-            }
-        };
-    }
-    function b(a, b, c) {
-        if (a.type == "CollisionMap") {
-            var d = a;
-            a = b, b = d;
-        }
-        var e = b.tileMap, f = [], g = 0, h = 0, i = e.getTile(a.position.x, a.position.y) || {
-            position: {
-                x: 0,
-                y: 0
-            }
-        }, j = Math.floor((a.width + a.position.x - i.position.x) / e.tileWidth), k = Math.floor((a.height + a.position.y - i.position.y) / e.tileHeight), l = new ex.base.Vector(0, 0), m = new ex.base.Vector(0, 0), n, o, p;
-        for (h; h <= k; h++) {
-            for (g; g <= j; g++) o = e.getTile(a.position.x + g * e.tileWidth, a.position.y + h * e.tileHeight), o && o.value != 0 && f.push(o);
-            g = 0;
-        }
-        n = f.length;
-        while (n--) {
-            p = f[n], a.velocity.y > 0 && p.edges.top ? a.position.y < p.position.y && a.position.y + a.height > p.position.y && (m.y = a.position.y + a.height - p.position.y) : a.velocity.y < 0 && p.edges.bottom && p.position.y < a.position.y && p.position.y + p.height > a.position.y && (m.y = a.position.y - (p.position.y + p.height)), a.velocity.x > 0 && p.edges.left ? a.position.x < p.position.x && a.position.x + a.width > p.position.x && (m.x = a.position.x + a.width - p.position.x) : a.velocity.x < 0 && p.edges.right && p.position.x < a.position.x && p.position.x + p.width > a.position.x && (m.x = a.position.x - (p.position.x + p.width));
-            if (m.x != 0 && m.y != 0) {
-                var q = a.velocity.x * c, r = a.velocity.y * c, s = m.x, t = m.y, u = s - q, v = t - r, w = -(t - (v - t) / (u - s) * s), x = m.y > 0;
-                x ? w < 0 ? l.x = m.x : l.y = m.y : w > 0 ? l.x = m.x : l.y = m.y;
-            } else m.x != 0 ? l.x = m.x : m.y != 0 && (l.y = m.y);
-            m = new ex.base.Vector(0, 0);
-        }
-        return f.length > 0 ? {
-            source: a,
-            target: b,
-            data: {
-                pen: l,
-                tiles: f
-            }
-        } : null;
-    }
-    ex.define("ex.physics.CollisionDetector", {
-        constructor: function() {
-            this.algorithms = {
-                RigidBoxToCollisionMap: b,
-                CollisionMapToRigidBox: b,
-                RigidBoxToRigidBox: a,
-                EntityToTrigger: a,
-                TriggerToEntity: a
-            };
-        },
-        detectCollisions: function(a, b) {
-            var c = [], d = 0, e = 0, f, g;
-            for (d; d < a.length; d++) for (e = d + 1; e < a.length; e++) {
-                f = a[d], g = a[e];
-                if (f.collisionBit & g.collisionBitMask && g.collisionBit & f.collisionBitMask) {
-                    var h = this.detectCollisionBetween(f, g, b);
-                    h != null && c.push(h);
-                }
-            }
-            return c;
-        },
-        detectCollisionBetween: function(a, b, c) {
-            var d = a.type + "To" + b.type;
-            if (this.algorithms[d]) return this.algorithms[d](a, b, c);
-        }
-    });
-}(), function() {
-    function b(b, c, d, e) {
-        if (b.mass == 0) return;
-        d = d.pen, d.y != 0 && (d.y > 0 ? d.y += .1 : d.y -= .1, b.position.y -= d.y, b.velocity.y = -b.velocity.y * b.elasticity), d.x != 0 && (d.x > 0 ? d.x += .1 : d.x -= .1, b.position.x -= d.x, b.velocity.x = -b.velocity.x * b.elasticity), b.velocity.scale(a);
-    }
-    function c(a, c, d, e) {
-        if (a.anchored) {
-            if (c.anchored) return;
-            b(c, a, d, e);
-        } else c.anchored && b(a, c, d, e);
-    }
-    var a = .98;
-    ex.define("ex.physics.CollisionResolver", {
-        constructor: function() {
-            this.algorithms = {
-                RigidBoxToCollisionMap: b,
-                RigidBoxToRigidBox: c
-            };
-        },
-        resolveCollisions: function(a, b) {
-            var c = a.length;
-            while (c--) this.resolveCollisionBetween(a[c].source, a[c].target, a[c].data, b), a[c].source.onCollide(a[c].target, a[c].data, b), a[c].target.onCollide(a[c].source, a[c].data, b);
-        },
-        resolveCollisionBetween: function(a, b, c, d) {
-            var e = a.type + "To" + b.type;
-            if (this.algorithms[e]) return this.algorithms[e](a, b, c, d);
-        }
-    });
-}(), ex.using([ "ex.base.WorldComponent", "ex.physics.CollisionDetector", "ex.physics.CollisionResolver", "ex.physics.Collidable", "ex.physics.Force" ], function() {
-    ex.define("ex.physics.CollisionManager", ex.base.WorldComponent, {
-        constructor: function(a, b) {
-            this.collidables = [], this.forces = [], this.detector = new ex.physics.CollisionDetector, this.resolver = new ex.physics.CollisionResolver, this.renderer = a, this.defaults = {
-                debugDraw: !1
-            }, this.options = ex.extend({}, this.defaults), ex.extend(this.options, b), this.context = null, this.options.debugDraw && this.renderer.type == ex.display.rendering.Renderer.CANVAS2D && (this.context = this.renderer.renderingContext.context);
-        },
-        addObject: function(a) {
-            a instanceof ex.physics.Collidable ? this.collidables.push(a) : a instanceof ex.physics.Force && this.forces.push(a);
-        },
-        removeObject: function(a) {
-            a instanceof ex.physics.Collidable ? (ex.Array.remove(this.collidables, a), a.destroy()) : a instanceof ex.physics.Force && (ex.Array.remove(this.forces, a), a.destroy());
-        },
-        update: function(a, b) {
-            ex.Debug.time("collision");
-            var c = 0, d = this.forces.length;
-            for (; c != d; c++) this.forces[c].solve(a, this.collidables);
-            c = 0, d = this.collidables.length;
-            for (; c != d; c++) this.collidables[c].integrate(a);
-            var e = this.detector.detectCollisions(this.collidables, a);
-            this.resolver.resolveCollisions(e, a), ex.Debug.time("collision");
-        },
-        debug: function(a, b) {
-            this.options.debugDraw == 1 && this.draw(this.context, b);
-        },
-        draw: function(a, b) {
-            a.save(), a.strokeStyle = "#FF0000", a.lineWidth = 1;
-            var c = 0, d = this.collidables.length;
-            for (; c != d; c++) this.collidables[c].draw(a, b.position.x, b.position.y);
-            a.restore();
-        },
-        destroy: function() {
-            delete this.collisionGroups, delete this.detector, delete this.resolver;
-        }
-    });
-}), function() {
-    ex.define("ex.world.Tile", {
-        constructor: function(a, b, c, d, e, f, g, h) {
-            this.value = a, this.position = b, this.width = c, this.height = d, this.mass = 1, this.visible = !0, this.neighbors = {
-                top: e,
-                bottom: f,
-                left: g,
-                right: h
-            }, this.edges = {
-                top: !1,
-                bottom: !1,
-                left: !1,
-                right: !1
-            }, this.update();
-        },
-        update: function(a) {
-            if (this.value == 0) {
-                this._setAllEdgesTo(!1), a || this.updateNeighbors();
-                return;
-            }
-            this.neighbors.top && this.neighbors.top.value == 0 ? this.edges.top = !0 : !this.neighbors.top && this.value > 0 ? this.edges.top = !0 : this.edges.top = !1, this.neighbors.bottom && this.neighbors.bottom.value == 0 ? this.edges.bottom = !0 : !this.neighbors.bottom && this.value > 0 ? this.edges.bottom = !0 : this.edges.bottom = !1, this.neighbors.left && this.neighbors.left.value == 0 ? this.edges.left = !0 : !this.neighbors.left && this.value > 0 ? this.edges.left = !0 : this.edges.left = !1, this.neighbors.right && this.neighbors.right.value == 0 ? this.edges.right = !0 : !this.neighbors.right && this.value > 0 ? this.edges.right = !0 : this.edges.right = !1, a || this.updateNeighbors();
-        },
-        updateNeighbors: function() {
-            this.neighbors.up && this.neighbors.up.update(!0), this.neighbors.down && this.neighbors.down.update(!0), this.neighbors.left && this.neighbors.left.update(!0), this.neighbors.right && this.neighbors.right.update(!0);
-        },
-        setValue: function(a) {
-            this.value = a, this.update();
-        },
-        setPosition: function(a, b) {
-            this.position.x = a, this.position.y = b;
-        },
-        _setAllEdgesTo: function(a) {
-            this.edges.up = a, this.edges.down = a, this.edges.left = a, this.edges.right = a;
-        }
-    });
-}(), ex.using([ "ex.world.Tile", "ex.base.Vector" ], function() {
-    function a(a, b, c) {
-        var d = 0, e = 0, f = [];
-        for (d; d < a.length; d++) {
-            f[d] = [];
-            for (e = 0; e < a[d].length; e++) f[d][e] = new ex.world.Tile(a[d][e], new ex.base.Vector(e * b, d * c), b, c);
-        }
-        return f;
-    }
-    function b(a) {
-        var b = 0, c = 0;
-        for (b; b < a.length; b++) for (c = 0; c < a[b].length; c++) c == 0 ? (a[b][c].neighbors.left = null, a[b][c].neighbors.right = a[b][c + 1]) : c == a[b].length - 1 ? (a[b][c].neighbors.left = a[b][c - 1], a[b][c].neighbors.right = null) : (a[b][c].neighbors.left = a[b][c - 1], a[b][c].neighbors.right = a[b][c + 1]), b == 0 ? (a[b][c].neighbors.top = null, a[b][c].neighbors.bottom = a[b + 1][c]) : b == a.length - 1 ? (a[b][c].neighbors.top = a[b - 1][c], a[b][c].neighbors.bottom = null) : (a[b][c].neighbors.top = a[b - 1][c], a[b][c].neighbors.bottom = a[b + 1][c]), a[b][c].update();
-    }
-    ex.define("ex.world.TileMap", {
-        constructor: function(c, d, e) {
-            this.tileWidth = c, this.tileHeight = d, this.data = a(e, c, d), b(this.data), this.width = e[0].length * this.tileWidth, this.height = e.length * this.tileHeight;
-        },
-        getTile: function(a, b) {
-            return a = Math.floor(a / this.tileWidth), b = Math.floor(b / this.tileHeight), a >= 0 && a < this.data[0].length && b >= 0 && b < this.data.length ? this.data[b][a] : null;
-        },
-        setTile: function(a, b, c) {
-            a = Math.floor(a / this.tileWidth), b = Math.floor(b / this.tileHeight), this.data[b][a].setValue(c);
-        }
-    });
-}), ex.using([ "ex.world.TileMap", "ex.physics.Collidable" ], function() {
-    ex.define("ex.physics.CollisionMap", ex.physics.Collidable, {
-        constructor: function(a, b, c, d) {
-            this.tileMap = new ex.world.TileMap(a, b, c), this._super("constructor", [ "CollisionMap", d ]);
-        },
-        draw: function(a, b, c) {
-            var d = 0, e = 0, f, g, h;
-            for (; d != this.tileMap.data.length; d++) {
-                e = 0;
-                for (; e != this.tileMap.data[d].length; e++) f = this.tileMap.data[d][e], f.value > 0 && (g = f.position.x - b, h = f.position.y - c, a.beginPath(), f.edges.top && (a.moveTo(g, h), a.lineTo(g + f.width, h)), f.edges.bottom && (a.moveTo(g, h + f.height), a.lineTo(g + f.width, h + f.height)), f.edges.left && (a.moveTo(g, h), a.lineTo(g, h + f.height)), f.edges.right && (a.moveTo(g + f.width, h), a.lineTo(g + f.width, h + f.height)), a.stroke(), a.closePath());
-            }
-        }
-    });
-}), ex.using([ "ex.event.EventTarget" ], function() {
-    ex.define("ex.base.Component", ex.event.EventTarget, {
-        constructor: function() {
-            this._super("constructor");
-        },
-        update: function(a) {},
-        name: "Component"
-    });
-}), function() {
-    ex.define("ex.base.GlobalComponent", {
-        __alias: "GlobalComponent",
-        __statics: {
-            type: "GlobalComponent"
-        }
-    });
-}(), ex.using([], function() {
-    ex.event = {
-        listen: function(a, b, c, d, e) {
-            typeof a != "string" && ex.Debug.log("Event must be a string!"), d != null && (c = ex.bind(d, c)), e = e || !1, typeof b.attachEvent != "undefined" ? b.attachEvent("on" + a, c, e) : typeof b.addEventListener != "undefined" && b.addEventListener(a, c, e);
-        },
-        listenOnce: function(a, b, c, d) {
-            var e = function() {
-                ex.event.unlisten(a, b, c), c.call(this, arguments);
-            };
-            ex.event.listen(a, b, e, d);
-        },
-        unlisten: function(a, b, c) {
-            b.removeEventListener && b.removeEventListener(a, c);
-        }
-    }, ex.define("ex.event.EventTarget", {
-        constructor: function() {
-            this._listeners = {};
-        },
-        addEventListener: function(a, b) {
-            ex.isNull(this._listeners) && ex.Debug.log("EventTarget _listeners is not defined. Maybe you forgot to call _super in the constructor?", "ERROR"), typeof this._listeners[a] == "undefined" && (this._listeners[a] = []), this._listeners[a].push(b);
-        },
-        dispatchEvent: function(a, b) {
-            if (this._listeners[a] == null) return !1;
-            b = b || {}, b.target = this;
-            var c = this._listeners[a].length;
-            while (c--) {
-                var d = this._listeners[a][c], e = d(b);
-                if (e == 0) break;
-            }
-            return !0;
-        },
-        removeEventListener: function(a, b) {
-            this._listeners[a].splice(this._listeners[a].indexOf(b), 1);
-        }
-    });
-}), ex.using([ "ex.event.EventTarget" ], function() {
-    ex.define("ex.world.Entity", ex.event.EventTarget, {
-        constructor: function(a, b) {
-            this._super("constructor", []), this.name = a, this.type = "Entity", this.items = b || [];
-        },
-        update: function(a) {
-            var b = this.items.length;
-            while (b--) this.items[b].update(a);
-        },
-        destroy: function() {
-            delete this.items;
-        }
-    });
-}), ex.using([], function() {
-    ex.define("ex.ai.Action", {
-        constructor: function(a, b) {
-            this.mask = a || 0, this.blocking = b || !1;
-        },
-        update: function(a) {
-            return !0;
-        },
-        destroy: function() {}
-    });
-}), ex.using([ "ex.ai.Action" ], function() {
-    ex.define("ex.ai.ActionList", {
-        constructor: function() {
-            this.masks = {
-                animation: 1,
-                movement: 2,
-                behavior: 4
-            }, this.actionList = [];
-        },
-        push: function(a) {
-            this.actionList.push(a);
-        },
-        remove: function(a) {
-            a.destroy(), ex.Array.remove(this.actionList, a);
-        },
-        update: function(a) {
-            var b = 0, c = this.actionList.length, d = null;
-            while (c--) {
-                d = this.actionList[c];
-                if (d.mask & b) continue;
-                var e = d.update(a);
-                e && this.remove(this.actionList[c]), d.blocking && (b |= d.mask);
-            }
-        }
-    });
-}), ex.using([ "ex.ai.Action", "ex.ai.actions.Wander", "ex.ai.actions.Chase" ], function() {
-    ex.define("ex.ai.actions.Search", ex.ai.Action, {
-        constructor: function(a, b, c) {
-            this.name = "search", this.entity = a, this.target = b, this.sightRange = c, this.actions = {
-                chase: new ex.ai.actions.Chase(this.entity, this.target, this.sightRange)
-            }, this._super("constructor", [ 1, !0 ]);
-        },
-        update: function(a) {
-            var b = Math.abs(this.entity.physical.position.x - this.target.physical.position.x), c = this.entity.physical.position.y - this.target.physical.height, d = this.entity.physical.position.y + this.entity.physical.height;
-            b < this.sightRange && this.target.physical.position.y > c && this.target.physical.position.y < d && this.entity.ai.push(new ex.ai.actions.Chase(this.entity, this.target, 200));
-        }
     });
 }), ex.using([ "ex.display.Renderable", "ex.base.Rectangle", "ex.base.Point" ], function() {
     ex.define("ex.display.AnimatedSprite", ex.display.Renderable, {
@@ -876,6 +635,65 @@ exports && ex.extend(exports, ex), function() {
             this.image == null ? (a.fillStyle = "#888888", a.fillRect(this.position.x, this.position.y, this.size.x, this.size.y)) : a.drawImage(this.image, f, g, this.size.x, this.size.y);
         }
     });
+}), function() {
+    ex.define("ex.world.Tile", {
+        constructor: function(a, b, c, d, e, f, g, h) {
+            this.value = a, this.position = b, this.width = c, this.height = d, this.mass = 1, this.visible = !0, this.neighbors = {
+                top: e,
+                bottom: f,
+                left: g,
+                right: h
+            }, this.edges = {
+                top: !1,
+                bottom: !1,
+                left: !1,
+                right: !1
+            }, this.update();
+        },
+        update: function(a) {
+            if (this.value == 0) {
+                this._setAllEdgesTo(!1), a || this.updateNeighbors();
+                return;
+            }
+            this.neighbors.top && this.neighbors.top.value == 0 ? this.edges.top = !0 : !this.neighbors.top && this.value > 0 ? this.edges.top = !0 : this.edges.top = !1, this.neighbors.bottom && this.neighbors.bottom.value == 0 ? this.edges.bottom = !0 : !this.neighbors.bottom && this.value > 0 ? this.edges.bottom = !0 : this.edges.bottom = !1, this.neighbors.left && this.neighbors.left.value == 0 ? this.edges.left = !0 : !this.neighbors.left && this.value > 0 ? this.edges.left = !0 : this.edges.left = !1, this.neighbors.right && this.neighbors.right.value == 0 ? this.edges.right = !0 : !this.neighbors.right && this.value > 0 ? this.edges.right = !0 : this.edges.right = !1, a || this.updateNeighbors();
+        },
+        updateNeighbors: function() {
+            this.neighbors.up && this.neighbors.up.update(!0), this.neighbors.down && this.neighbors.down.update(!0), this.neighbors.left && this.neighbors.left.update(!0), this.neighbors.right && this.neighbors.right.update(!0);
+        },
+        setValue: function(a) {
+            this.value = a, this.update();
+        },
+        setPosition: function(a, b) {
+            this.position.x = a, this.position.y = b;
+        },
+        _setAllEdgesTo: function(a) {
+            this.edges.up = a, this.edges.down = a, this.edges.left = a, this.edges.right = a;
+        }
+    });
+}(), ex.using([ "ex.world.Tile", "ex.base.Vector" ], function() {
+    function a(a, b, c) {
+        var d = 0, e = 0, f = [];
+        for (d; d < a.length; d++) {
+            f[d] = [];
+            for (e = 0; e < a[d].length; e++) f[d][e] = new ex.world.Tile(a[d][e], new ex.base.Vector(e * b, d * c), b, c);
+        }
+        return f;
+    }
+    function b(a) {
+        var b = 0, c = 0;
+        for (b; b < a.length; b++) for (c = 0; c < a[b].length; c++) c == 0 ? (a[b][c].neighbors.left = null, a[b][c].neighbors.right = a[b][c + 1]) : c == a[b].length - 1 ? (a[b][c].neighbors.left = a[b][c - 1], a[b][c].neighbors.right = null) : (a[b][c].neighbors.left = a[b][c - 1], a[b][c].neighbors.right = a[b][c + 1]), b == 0 ? (a[b][c].neighbors.top = null, a[b][c].neighbors.bottom = a[b + 1][c]) : b == a.length - 1 ? (a[b][c].neighbors.top = a[b - 1][c], a[b][c].neighbors.bottom = null) : (a[b][c].neighbors.top = a[b - 1][c], a[b][c].neighbors.bottom = a[b + 1][c]), a[b][c].update();
+    }
+    ex.define("ex.world.TileMap", {
+        constructor: function(c, d, e) {
+            this.tileWidth = c, this.tileHeight = d, this.data = a(e, c, d), b(this.data), this.width = e[0].length * this.tileWidth, this.height = e.length * this.tileHeight;
+        },
+        getTile: function(a, b) {
+            return a = Math.floor(a / this.tileWidth), b = Math.floor(b / this.tileHeight), a >= 0 && a < this.data[0].length && b >= 0 && b < this.data.length ? this.data[b][a] : null;
+        },
+        setTile: function(a, b, c) {
+            a = Math.floor(a / this.tileWidth), b = Math.floor(b / this.tileHeight), this.data[b][a].setValue(c);
+        }
+    });
 }), ex.using([ "ex.world.TileMap", "ex.display.Renderable" ], function() {
     ex.define("ex.display.SpriteMap", ex.display.Renderable, {
         constructor: function(a, b, c, d, e) {
@@ -903,6 +721,110 @@ exports && ex.extend(exports, ex), function() {
         isReady: function() {
             return this.image.width <= 0 || this.image.height <= 0 ? !1 : !0;
         }
+    });
+}), ex.using([ "ex.base.Vector", "ex.display.Renderable" ], function() {
+    ex.define("ex.display.Sprite", ex.display.Renderable, {
+        constructor: function(a, b) {
+            this.type = "Sprite", this.position = a, this.img = b || new Image, this.rotation = 0, this.rotationEnabled = !1, this.rendering = null, this.scrollFactor = new ex.base.Vector(1, 1), this.width = this.img.naturalWidth, this.height = this.img.naturalHeight, this.width == 0 && this.height == 0 && ex.event.listen("load", this.img, function() {
+                this._recalcDimensions();
+            }, this), this._super("constructor", [ !0, 1 ]);
+        },
+        _recalcDimensions: function() {
+            this.width = this.img.naturalWidth, this.height = this.img.naturalHeight, this.rendering && this.rendering.rotationCanvas ? (this.rendering.rotationCanvas.width = this.width, this.rendering.rotationCanvas.height = this.height) : this.rendering && this.rendering.el && (this.rendering.el.style.width = this.width + "px", this.rendering.el.style.height = this.height + "px");
+        },
+        update: function(a) {
+            typeof this.onUpdate == "function" && this.onUpdate(a);
+        },
+        getBounds: function() {
+            return new ex.base.Rectangle(this.position, this.width, this.height);
+        }
+    });
+}), ex.using([], function() {
+    ex.event = {
+        listen: function(a, b, c, d, e) {
+            typeof a != "string" && ex.Debug.log("Event must be a string!"), d != null && (c = ex.bind(d, c)), e = e || !1, typeof b.attachEvent != "undefined" ? b.attachEvent("on" + a, c, e) : typeof b.addEventListener != "undefined" && b.addEventListener(a, c, e);
+        },
+        listenOnce: function(a, b, c, d) {
+            var e = function() {
+                ex.event.unlisten(a, b, c), c.call(this, arguments);
+            };
+            ex.event.listen(a, b, e, d);
+        },
+        unlisten: function(a, b, c) {
+            b.removeEventListener && b.removeEventListener(a, c);
+        }
+    }, ex.define("ex.event.EventTarget", {
+        constructor: function() {
+            this._listeners = {};
+        },
+        addEventListener: function(a, b) {
+            ex.isNull(this._listeners) && ex.Debug.log("EventTarget _listeners is not defined. Maybe you forgot to call _super in the constructor?", "ERROR"), typeof this._listeners[a] == "undefined" && (this._listeners[a] = []), this._listeners[a].push(b);
+        },
+        dispatchEvent: function(a, b) {
+            if (this._listeners[a] == null) return !1;
+            b = b || {}, b.target = this;
+            var c = this._listeners[a].length;
+            while (c--) {
+                var d = this._listeners[a][c], e = d(b);
+                if (e == 0) break;
+            }
+            return !0;
+        },
+        removeEventListener: function(a, b) {
+            this._listeners[a].splice(this._listeners[a].indexOf(b), 1);
+        }
+    });
+}), ex.using([ "ex.event.EventTarget" ], function() {
+    ex.define("ex.world.Entity", ex.event.EventTarget, {
+        constructor: function(a, b) {
+            this._super("constructor", []), this.name = a, this.type = "Entity", this.items = b || [];
+        },
+        update: function(a) {
+            var b = this.items.length;
+            while (b--) this.items[b].update(a);
+        },
+        destroy: function() {
+            delete this.items;
+        }
+    });
+}), ex.using([ "ex.display.Renderable", "ex.display.Sprite", "ex.base.Rectangle", "ex.world.Entity" ], function() {
+    var a;
+    ex.define("ex.display.ui.Button", ex.world.Entity, {
+        __statics: {
+            STATE: {
+                UP: 0,
+                OVER: 1,
+                DOWN: 2
+            }
+        },
+        constructor: function(b, c, d) {
+            this.defaults = {
+                actions: {
+                    pressed: null,
+                    down: null,
+                    released: null,
+                    over: null
+                },
+                userData: {},
+                autoUpdateSprite: !1
+            }, this.options = ex.extend({}, this.defaults, !0), ex.extend(this.options, d, !0), this.state = a.UP, c.position = ex.clone(b), this._super("constructor", [ "Button", [ c ] ]);
+        },
+        update: function(b) {
+            var c = this.items[0];
+            c.update(b);
+            if (c.containsPoint(ex.Input.mouse.x, ex.Input.mouse.y)) ex.Input.changeCursor(ex.Input.CURSOR.POINTER), ex.Input.isDown(ex.util.Key.LMB) ? (this.state != a.DOWN && this.options.actions.pressed && this.options.actions.pressed(this, this.options.userData), this.options.actions.down && this.options.actions.down(this, this.options.userData), this.state = a.DOWN, this.options.autoUpdateSprite && c.play("down")) : (this.state != a.OVER && this.options.actions.over && this.options.actions.over(this, this.options.userData), this.state = a.OVER, this.options.autoUpdateSprite && c.play("over")); else if (this.state == a.OVER || this.state == a.DOWN) ex.Input.changeCursor(ex.Input.CURSOR.AUTO), this.state = a.UP, this.options.actions.released && this.options.actions.released(this, this.userData), this.options.autoUpdateSprite && c.play("up");
+        },
+        destroy: function() {
+            delete this.options.actions, delete this.state, delete this.width, delete this.items, delete this.userData;
+        }
+    }), a = ex.display.ui.Button.STATE;
+}), ex.using([ "ex.event.EventTarget" ], function() {
+    ex.define("ex.base.Component", ex.event.EventTarget, {
+        constructor: function() {
+            this._super("constructor");
+        },
+        update: function(a) {},
+        name: "Component"
     });
 }), ex.using([ "ex.base.Vector", "ex.display.Renderable" ], function() {
     ex.define("ex.display.Rectangle", ex.display.Renderable, {
@@ -997,6 +919,47 @@ exports && ex.extend(exports, ex), function() {
         },
         updatePercentage: function(a) {
             a > 1 && (a /= 100), this.currentWidth = this.totalWidth * a;
+        }
+    });
+}), ex.using([ "ex.display.Renderable" ], function() {
+    ex.define("ex.display.Text", ex.display.Renderable, {
+        constructor: function(a, b, c) {
+            this.type = "Text", this.defaults = {
+                type: "canvas",
+                maxWidth: null,
+                color: "#FFFFFF",
+                font: "14pt Arial",
+                textAlign: "left",
+                prefix: "",
+                suffix: "",
+                fontData: {},
+                alpha: 1
+            }, this.options = {}, ex.extend(this.options, this.defaults), ex.extend(this.options, c), this.text = a, this.position = b, this.scrollFactor = new ex.Vector(0, 0), this._super("constructor", [ !0, 1 ]);
+            if (this.options.type == "sprite") this.loadFontData(this.options.fontData); else {
+                var d = document.createElement("canvas").getContext("2d");
+                d.font = this.options.font, this.height = d.measureText("m"), this.width = d.measureText(this.text);
+            }
+        },
+        setText: function(a, b) {
+            a instanceof String == 0 && (a = a.toString()), this.text = a, b == 1 && this._calculateWidth();
+        },
+        _calculateWidth: function() {
+            if (this.options.type == "sprite") {
+                this.width = 0;
+                var a = 0, b = this.text.length, c, d;
+                for (; a < b; a++) c = this.text.charCodeAt(a), d = this.options.fontData.widths[c], this.width += d;
+            } else {
+                var e = document.createElement("canvas").getContext("2d");
+                e.font = this.options.font, this.width = e.measureText(this.text);
+            }
+        },
+        loadFontData: function(a) {
+            this.options.fontData = a;
+            if (!a.img) {
+                var b = a.data, c = new Image;
+                c.src = b, a.img = c;
+            }
+            this.img = a.img, this.height = a.height, this._calculateWidth();
         }
     });
 }), ex.using([ "ex.display.Renderable", "ex.display.Text" ], function() {
@@ -1310,7 +1273,293 @@ exports && ex.extend(exports, ex), function() {
             }, this.images[a].src = "", this.images[a].src = b + "? ex=" + (new Date).getTime();
         }
     });
-}(), ex.using([ "ex.display.rendering.RenderingContextDom", "ex.display.rendering.RenderingContext2dCanvas", "ex.display.rendering.RenderingContext3dCanvas", "ex.display.rendering.SpriteRenderer", "ex.display.rendering.RectangleRenderer", "ex.display.rendering.TextRenderer", "ex.display.rendering.AnimatedSpriteRenderer", "ex.display.rendering.SpriteMapRenderer" ], function() {
+}(), ex.using([], function() {
+    ex.define("ex.display.rendering.ObjectRenderer", {
+        setupDom: function() {},
+        renderDom: function() {},
+        destroyDom: function() {},
+        setup2dCanvas: function() {},
+        render2dCanvas: function() {},
+        destroy2dCanvas: function() {},
+        setup3dCanvas: function() {},
+        render3dCanvas: function() {},
+        destroy3dCanvas: function() {}
+    });
+}), ex.using([ "ex.display.rendering.ObjectRenderer" ], function() {
+    ex.define("ex.display.rendering.AnimatedSpriteRenderer", ex.display.rendering.ObjectRenderer, {
+        setupDom: function(a) {
+            var b = this.currentAnimation.sheet, c = document.createElement("div");
+            c.style.backgroundImage = "url(" + b.image.src + ")", c.style.display = "block", c.style.width = b.renderingRect.width + "px", c.style.height = b.renderingRect.height + "px", c.style.position = "absolute", c.style.left = this.position.x + "px", c.style.top = this.position.y + "px", c.style.zIndex = "100", this.rendering = {
+                el: c
+            }, a.appendChild(this.rendering.el);
+        },
+        destroyDom: function(a) {
+            a.removeChild(this.rendering.el), this.rendering = null;
+        },
+        renderDom: function(a, b, c, d, e) {
+            var f = this.currentAnimation.sheet, g = ex.toInt(this.position.x - b * this.scrollFactor.x), h = ex.toInt(this.position.y - c * this.scrollFactor.y);
+            if (g + this.width < 0 || g > d || h + this.height < 0 || h > e) {
+                this.visible && (this.visible = !1, this.rendering.el.style = "none");
+                return;
+            }
+            this.visible == 0 && (this.visible = !0, this.rendering.el.style = "inherit"), this.rendering.el.style.backgroundPosition = f.renderingRect.position.x + "px" + " " + f.renderingRect.position.y + "px", this.rendering.el.style.left = g + "px", this.rendering.el.style.top = h + "px";
+        },
+        render2dCanvas: function(a, b, c, d, e) {
+            if (this.currentAnimation == null) return;
+            var f = this.currentAnimation.sheet;
+            if (!this.isVisible()) return;
+            var g = ex.toInt(this.position.x - b * this.scrollFactor.x), h = ex.toInt(this.position.y - c * this.scrollFactor.y);
+            g + f.renderingRect.width > 0 && g < d && h + f.renderingRect.height > 0 && h < e && a.drawImage(f.image, f.renderingRect.x, f.renderingRect.y, f.renderingRect.width, f.renderingRect.height, g + f.offset.x, h + f.offset.y, this.width, this.height);
+        }
+    });
+}), ex.using([ "ex.display.rendering.ObjectRenderer" ], function() {
+    ex.define("ex.display.rendering.RectangleRenderer", ex.display.rendering.ObjectRenderer, {
+        setupDom: function(a) {},
+        destroyDom: function(a) {},
+        renderDom: function(a, b, c, d, e) {},
+        setup2dCanvas: function() {
+            this.rendering = {
+                rotationCanvas: document.createElement("canvas")
+            }, this.rendering.rotationCanvas.width = this.width, this.rendering.rotationCanvas.height = this.height, this.rendering.rotationContext = this.rendering.rotationCanvas.getContext("2d");
+        },
+        render2dCanvas: function(a, b, c, d, e) {
+            if (!this.isVisible()) return;
+            var f = ex.toInt(this.position.x - b * this.scrollFactor.x), g = ex.toInt(this.position.y - c * this.scrollFactor.y);
+            if (!(f + this.width < 0 || f > d || g + this.height < 0 || g > e)) {
+                if (this.rotationEnabled != 0) throw "Not implemented.";
+                a.save(), this.options.alpha < 1 && (a.globalAlpha = this.options.alpha), this.options.stroke.type != "none" && (a.strokeStyle = this.getStrokeStyle(a), a.lineWidth = this.getLineWidth(), a.strokeRect(f, g, this.width, this.height)), this.options.fill.type != "none" && (a.fillStyle = this.getFillStyle(a), a.fillRect(f, g, this.width, this.height)), a.restore();
+            }
+        }
+    });
+}), function() {
+    ex.define("ex.display.rendering.RenderingContext", {
+        constructor: function(a, b) {
+            this.width = a, this.height = b;
+        },
+        render: function(a, b, c, d, e) {}
+    });
+}(), ex.using([ "ex.display.rendering.RenderingContext" ], function() {
+    ex.define("ex.display.rendering.RenderingContext2dCanvas", ex.display.rendering.RenderingContext, {
+        constructor: function(a, b, c, d, e) {
+            this._super("constructor", [ a, b ]), this.canvas = d || document.createElement("canvas"), this.canvas.width = a, this.canvas.height = b, this.canvas.style.backgroundColor = e, this.context = this.canvas.getContext("2d"), this.bufferCanvas = document.createElement("canvas"), this.bufferCanvas.width = a, this.bufferCanvas.height = b, this.bufferCanvas.style.backgroundColor = e, this.buffer = this.bufferCanvas.getContext("2d"), d == null && document.body.appendChild(this.canvas), this.renderers = c;
+        },
+        render: function(a, b, c, d, e) {
+            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height), this.context.drawImage(this.bufferCanvas, 0, 0), this.buffer.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            var f = 0, g = a.length, h, i = this.renderers, j = this.buffer;
+            for (; f < g; f++) h = a[f], h.renderer ? h.renderer.render2dCanvas.call(h, j, b, c, d, e) : i[h.type].render2dCanvas.call(h, j, b, c, d, e);
+        },
+        resizeViewport: function(a, b) {
+            this.canvas.width = a, this.canvas.height = b;
+        }
+    });
+}), ex.using([ "ex.display.rendering.RenderingContext" ], function() {
+    ex.define("ex.display.rendering.RenderingContext3dCanvas", ex.display.rendering.RenderingContext, {});
+}), ex.using([ "ex.display.rendering.RenderingContext" ], function() {
+    ex.define("ex.display.rendering.RenderingContextDom", ex.display.rendering.RenderingContext, {
+        constructor: function(a, b, c, d, e) {
+            this._super("constructor", [ a, b ]), this.el = d || document.createElement("div"), this.el.id = "exstoGame", this.el.style.display = "block", this.el.style.width = a + "px", this.el.style.height = b + "px", this.el.style.overflow = "hidden", this.el.style.position = "relative", this.el.style.backgroundColor = e, d == null && document.body.appendChild(this.el), this.renderers = c;
+        },
+        resizeViewport: function(a, b) {
+            this.el.style.width = a + "px", this.el.style.height = b + "px";
+        },
+        render: function(a, b, c, d, e) {
+            var f = 0, g = a.length, h, i = this.el, j = this.renderers;
+            for (; f < g; f++) h = a[f], h.renderer ? h.renderer.renderDom.call(h, i, b, c, d, e) : j[h.type].renderDom.call(h, i, b, c, d, e);
+        }
+    });
+}), ex.using([ "ex.display.rendering.ObjectRenderer" ], function() {
+    ex.define("ex.display.rendering.SpriteMapRenderer", ex.display.rendering.ObjectRenderer, {
+        setupDom: function(a) {
+            var b = document.createElement("div");
+            b.style.position = "absolute", b.style.left = this.position.x + "px", b.style.top = this.position.y + "px", b.style.display = "block", b.style.width = this.tileMap.width + "px", b.style.height = this.tileMap.height + "px", b.style.zIndex = "99";
+            var c = this.tileMap.data.length - 1, d = 0;
+            for (c; c > -1; c--) {
+                for (d; d < this.tileMap.data[c].length; d++) {
+                    var e = this.tileMap.data[c][d], f = 0, g = 0, h = e.value;
+                    if (h != 0) {
+                        while (--h) f += this.tileMap.tileWidth, f >= this.tileSet.width && (g += this.tileMap.tileHeight, f = 0);
+                        var i = document.createElement("div");
+                        i.style.position = "absolute", i.style.left = e.position.x + "px", i.style.top = e.position.y - this.yOffset * c + "px", i.style.display = "block", i.style.width = e.width + "px", i.style.height = e.height + "px", i.style.backgroundImage = "url(" + this.tileSet.src + ")", i.style.backgroundPosition = -f + "px" + " " + -g + "px", b.appendChild(i);
+                    } else {
+                        var i = document.createElement("div");
+                        i.style.position = "absolute", i.style.left = e.position.x + "px", i.style.top = e.position.y - this.yOffset * c + "px", i.style.width = e.width + "px", i.style.height = e.height + "px", i.style.display = "none", b.appendChild(i);
+                    }
+                }
+                d = 0;
+            }
+            this.rendering = {
+                el: b
+            }, a.appendChild(this.rendering.el);
+        },
+        renderDom: function(a, b, c, d, e) {
+            if (!this.visible) {
+                this.rendering.el.style.opacity = 0;
+                return;
+            }
+            this.rendering.el.style.opacity = this.opacity;
+            var f = ex.toInt(this.position.x - b * this.scrollFactor.x), g = ex.toInt(this.position.y - c * this.scrollFactor.y);
+            if (f + this.tileMap.width < 0 || f > d || g + this.tileMap.height < 0 || g > e) {
+                this.rendering.el.style.display = "none";
+                return;
+            }
+            this.rendering.el.style.display = "inherit";
+            var h = this.tileMap.data.length - 1, i = 0;
+            for (h; h > -1; h--) {
+                for (i; i < this.tileMap.data[h].length; i++) {
+                    var j = this.tileMap.data[h][i], k = j.value;
+                    if (k != 0) {
+                        var l = ex.toInt(this.position.x + j.position.x - b * this.scrollFactor.x), m = ex.toInt(this.position.y + j.position.y + c * this.scrollFactor.y - e / 2);
+                        if (l + j.width < 0 || l > d || m + j.height < 0 || m > e) {
+                            if (j.visible == 1) {
+                                var n = h * this.tileMap.data[0].length + i, a = this.rendering.el.childNodes[n];
+                                a.style.display = "none", j.visible = !1;
+                            }
+                        } else if (j.visible == 0) {
+                            var n = h * this.tileMap.data[0].length + i, a = this.rendering.el.childNodes[n];
+                            j.visible = !0, a.style.display = "inherit";
+                        }
+                    }
+                }
+                i = 0;
+            }
+            this.rendering.el.style.left = -b + "px", this.rendering.el.style.top = -c + "px";
+        },
+        destroyDom: function(a) {
+            a.removeChild(this.rendering.el), this.rendering = null;
+        },
+        setup2dCanvas: function(a) {
+            if (this.options.preRender == 1) {
+                this.preRenderCanvas = document.createElement("canvas"), this.preRenderCanvas.width = this.tileMap.width, this.preRenderCanvas.height = this.tileMap.height, this.preRenderContext = this.preRenderCanvas.getContext("2d");
+                var b = this.options.alpha;
+                this.options.alpha = 1, ex.display.rendering.SpriteMapRenderer.renderSpriteMapToContext(this, this.preRenderContext), this.options.alpha = b;
+            }
+        },
+        render2dCanvas: function(a, b, c, d, e) {
+            if (!this.isVisible()) return;
+            var f = ex.toInt(this.position.x - b * this.scrollFactor.x), g = ex.toInt(this.position.y - c * this.scrollFactor.y);
+            if (f + this.tileMap.width < 0 || f > d || g + this.tileMap.height < 0 || g > e) if (this.options.repeat == 0) return;
+            var h = ex.display.rendering.SpriteMapRenderer;
+            if (this.options.repeat == 0) this.options.preRender == 1 ? h.renderPreRenderedSpriteMapToContext(this, a, {
+                x: f,
+                y: g
+            }, d, e) : h.renderSpriteMapToContext(this, a, {
+                x: f,
+                y: g
+            }); else {
+                var i = f % this.tileMap.width, j = g % this.tileMap.height, k, l;
+                f > 0 && (i -= this.tileMap.width), g > 0 && (j -= this.tileMap.height), k = i, l = j;
+                while (k < d) {
+                    while (l < e) this.options.preRender == 1 ? h.renderPreRenderedSpriteMapToContext(this, a, {
+                        x: k,
+                        y: l
+                    }, d, e) : h.renderSpriteMapToContext(this, a, {
+                        x: k,
+                        y: l
+                    }), l += this.tileMap.height;
+                    l = j, k += this.tileMap.width;
+                }
+            }
+        },
+        __statics: {
+            renderPreRenderedSpriteMapToContext: function(a, b, c, d, e) {
+                b.save(), b.globalAlpha = a.options.alpha, c = c || {
+                    x: 0,
+                    y: 0
+                };
+                var f = -c.x, g = -c.y, h = d - c.x, i = e - c.y, j = c.x, k = c.y;
+                f < 0 && (f = 0), g < 0 && (g = 0), f + h > a.preRenderCanvas.width && (h = a.preRenderCanvas.width - f), g + i > a.preRenderCanvas.height && (i = a.preRenderCanvas.height - g), j < 0 && (j = 0), k < 0 && (k = 0), b.drawImage(a.preRenderCanvas, f, g, h, i, j, k, h, i), b.restore();
+            },
+            renderSpriteMapToContext: function(a, b, c) {
+                b.save(), b.globalAlpha = a.options.alpha;
+                var d = a.tileMap.data.length - 1, e = 0;
+                c = c || {
+                    x: 0,
+                    y: 0
+                };
+                for (d; d > -1; d--) {
+                    for (e; e < a.tileMap.data[d].length; e++) {
+                        var f = a.tileMap.data[d][e], g = 0, h = 0, i = f.value;
+                        if (i != 0) {
+                            while (--i) g += a.tileMap.tileWidth, g >= a.tileSet.width && (h += a.tileMap.tileHeight, g = 0);
+                            b.drawImage(a.tileSet, g, h, a.tileMap.tileWidth, a.tileMap.tileHeight, f.position.x + c.x, f.position.y - a.options.offset.y * d + c.y, f.width, f.height);
+                        }
+                    }
+                    e = 0;
+                }
+                b.restore();
+            }
+        }
+    });
+}), ex.using([ "ex.display.rendering.ObjectRenderer" ], function() {
+    ex.define("ex.display.rendering.SpriteRenderer", ex.display.rendering.ObjectRenderer, {
+        setupDom: function(a) {
+            var b = this.img;
+            b.style.position = "absolute", b.style.width = this.width + "px", b.style.height = this.height + "px", b.style.left = this.position.x + "px", b.style.top = this.position.y + "px", this.rendering = {
+                el: b
+            }, a.appendChild(this.rendering.el);
+        },
+        destroyDom: function(a) {
+            a.removeChild(this.rendering.el), this.rendering = null;
+        },
+        renderDom: function(a, b, c, d, e) {
+            if (!this.visible) {
+                this.rendering.el.style.opacity = 0;
+                return;
+            }
+            this.rendering.el.style.opacity = this.alpha;
+            var f = ex.toInt(this.position.x - b * this.scrollFactor.x), g = ex.toInt(this.position.y - c * this.scrollFactor.y);
+            if (f + this.width < 0 || f > d || g + this.height < 0 || g > e) {
+                this.visible == 1 && (this.visible = !1, this.rendering.el.style.display = "none");
+                return;
+            }
+            this.visible == 0 && (this.visible = !0, this.rendering.el.style.display = "inherit"), this.rotationEnabled == 0 && (this.rendering.el.style.left = f + "px", this.rendering.el.style.top = g + "px");
+        },
+        setup2dCanvas: function() {
+            this.rendering = {
+                rotationCanvas: document.createElement("canvas")
+            }, this.rendering.rotationCanvas.width = this.width, this.rendering.rotationCanvas.height = this.height, this.rendering.rotationContext = this.rendering.rotationCanvas.getContext("2d");
+        },
+        render2dCanvas: function(a, b, c, d, e) {
+            if (!this.isVisible()) return;
+            var f = a.globalAlpha;
+            a.globalAlpha = this.alpha;
+            var g = ex.toInt(this.position.x - b * this.scrollFactor.x), h = ex.toInt(this.position.y - c * this.scrollFactor.y);
+            if (g + this.width < 0 || g > d || h + this.height < 0 || h > e) return;
+            if (this.rotationEnabled == 0) if (!this.renderingRect) a.drawImage(this.img, g, h, this.width, this.height); else {
+                var i = this.renderingRect;
+                a.drawImage(this.img, i.x, i.y, i.width, i.height, g, h, i.width, i.height);
+            } else {
+                var j = this.rendering.rotationCanvas, k = this.rendering.rotationContext;
+                j.width = this.img.width || 1, j.height = this.img.height || 1, k.save(), k.translate(this.width / 2, this.height / 2), k.rotate(this.rotation), k.translate(-this.width / 2, -this.height / 2), k.drawImage(this.img, 0, 0), k.restore(), a.drawImage(j, g, h);
+            }
+            a.globalAlpha = f;
+        }
+    });
+}), ex.using([ "ex.display.rendering.ObjectRenderer" ], function() {
+    ex.define("ex.display.rendering.TextRenderer", ex.display.rendering.ObjectRenderer, {
+        setupDom: function(a) {
+            var b = document.createElement("div");
+            b.innerHTML = this.text, b.style.position = "absolute", b.style.left = this.position.x + "px", b.style.top = this.position.y + "px", b.style.font = this.options.font, b.style.color = this.options.color, this.rendering = {
+                el: b
+            }, a.appendChild(this.rendering.el);
+        },
+        renderDom: function(a, b, c, d, e) {
+            this.rendering.el.innerHTML = this.text, this.rendering.el.style.left = this.position.x + "px", this.rendering.el.style.top = this.position.y + "px";
+        },
+        destroyDom: function(a) {
+            a.removeChild(this.rendering.el), this.rendering = null;
+        },
+        render2dCanvas: function(a, b, c, d, e) {
+            if (!this.isVisible()) return;
+            a.save(), a.globalAlpha = this.options.alpha;
+            if (this.options.type == "canvas") a.font = this.options.font, a.fillStyle = this.options.color, a.fillText(this.text, this.position.x, this.position.y, this.options.maxWidth || 9e6); else if (this.options.type == "sprite") {
+                var f = 0, g = this.text.length, h, i, j, k = this.position.x - b * this.scrollFactor.x, l = this.position.y - c * this.scrollFactor.y;
+                for (; f < g; f++) h = this.text.charCodeAt(f), i = this.options.fontData.widths[h], j = this.options.fontData.positions[h], a.drawImage(this.img, j, 0, i, this.img.height, k, l, i, this.img.height), k += i;
+            }
+            a.restore();
+        }
+    });
+}), ex.using([ "ex.display.rendering.RenderingContextDom", "ex.display.rendering.RenderingContext2dCanvas", "ex.display.rendering.RenderingContext3dCanvas", "ex.display.rendering.SpriteRenderer", "ex.display.rendering.RectangleRenderer", "ex.display.rendering.TextRenderer", "ex.display.rendering.AnimatedSpriteRenderer", "ex.display.rendering.SpriteMapRenderer" ], function() {
     ex.define("ex.display.rendering.Renderer", {
         __statics: {
             DOM: 1,
@@ -1359,7 +1608,14 @@ exports && ex.extend(exports, ex), function() {
             this.renderingContext.render(this.renderables, b.position.x, b.position.y, b.width, b.height);
         }
     });
-}), ex.using([], function() {
+}), function() {
+    ex.define("ex.base.GlobalComponent", {
+        __alias: "GlobalComponent",
+        __statics: {
+            type: "GlobalComponent"
+        }
+    });
+}(), ex.using([], function() {
     var a;
     ex.define("ex.sound.SoundMixer", {
         __statics: {
@@ -1871,6 +2127,15 @@ exports && ex.extend(exports, ex), function() {
             }
         }
     });
+}), ex.using([], function() {
+    ex.define("ex.base.WorldComponent", {
+        constructor: function(a, b) {},
+        addObject: function(a) {},
+        update: function(a) {},
+        removeObject: function(a) {},
+        debug: function(a, b) {},
+        destroy: function() {}
+    });
 }), ex.using([ "ex.base.WorldComponent", "ex.event.EventTarget" ], function() {
     ex.define("ex.world.World", ex.event.EventTarget, {
         constructor: function(a, b, c) {
@@ -2106,6 +2371,334 @@ exports && ex.extend(exports, ex), function() {
             this.components.splice(this.components.indexOf(a), 1);
         }
     });
+}), ex.using([ "ex.event.EventTarget" ], function() {
+    ex.define("ex.novus.NovusClient", "ex.event.EventTarget", {
+        constructor: function(a) {
+            this.url = a, this.socket = io.connect(a), this.listeners = {};
+            var b = this;
+            this.socket.on("login", function(a) {
+                b.callback(a.success);
+            }), this.socket.on("guestLogin", function(a) {
+                b.callback(a.success);
+            }), this.socket.on("roomList", function(a) {
+                b.callback(a.list);
+            }), this.socket.on("joinRoom", function(a) {
+                b.callback(a);
+            }), this.socket.on("createRoom", ex.bind(this, function(a) {
+                this.dispatchEvent("createRoom", a);
+            })), this.socket.on("roomMessage", ex.bind(this, function(a) {
+                var b = this.listeners[a.type] || [];
+                b.forEach(function(b, c, d) {
+                    b(a.message);
+                });
+            }));
+        },
+        on: function(a, b) {
+            typeof this.listeners[a] == "undefined" && (this.listeners[a] = []), this.listeners[a].push(b);
+        },
+        login: function(a, b, c) {
+            this.callback = c, this.socket.emit("login", {
+                name: a,
+                password: b
+            });
+        },
+        guestLogin: function(a, b) {
+            this.callback = b, this.socket.emit("guestLogin", {
+                name: a
+            });
+        },
+        roomList: function(a) {
+            this.callback = a, this.socket.emit("roomList", {});
+        },
+        createRoom: function(a) {
+            this.socket.emit("createRoom", {
+                name: a
+            });
+        },
+        joinRoom: function(a, b) {
+            this.callback = b, this.socket.emit("joinRoom", {
+                name: a
+            });
+        },
+        leaveRoom: function() {
+            this.socket.emit("leaveRoom", {});
+        },
+        message: function(a, b) {
+            this.socket.emit("roomMessage", {
+                type: a,
+                message: b
+            });
+        },
+        messageTo: function(a, b, c) {
+            this.socket.emit("roomMessageTo", {
+                name: a,
+                type: b,
+                message: c
+            });
+        }
+    });
+}), function() {
+    ex.define("ex.physics.Collidable", {
+        constructor: function(a, b) {
+            this.type = a, this.data = b, this.collisionBit = -1, this.collisionBitMask = -1;
+        },
+        setCollisionGroup: function(a) {
+            this.collisionBit = ex.isNull(a) ? -1 : 1 << a;
+        },
+        setCollidableGroups: function(a) {
+            this.collisionBitMask = 0;
+            var b = 0, c = a.length;
+            for (; b != c; b++) this.collisionBitMask = this.collisionBitMask | 1 << a[b];
+        },
+        setAllCollidableGroups: function() {
+            this.collisionMaskBit = -1;
+        },
+        update: function(a) {},
+        integrate: function(a) {},
+        onCollide: function(a, b, c) {},
+        destroy: function() {}
+    });
+}(), function() {
+    function a(a, b, c) {
+        if (a.position.x <= b.position.x) {
+            if (a.position.x + a.width < b.position.x) return null;
+        } else if (b.position.x + b.width < a.position.x) return null;
+        if (a.position.y <= b.position.y) {
+            if (a.position.y + a.height < b.position.y) return null;
+        } else if (b.position.y + b.height < a.position.y) return null;
+        var d = new ex.base.Vector(0, 0), e = new ex.base.Vector(0, 0);
+        a.velocity.y > 0 ? a.position.y < b.position.y && a.position.y + a.height > b.position.y && (e.y = a.position.y + a.height - b.position.y) : a.velocity.y < 0 && b.position.y < a.position.y && b.position.y + b.height > a.position.y && (e.y = a.position.y - (b.position.y + b.height)), a.velocity.x > 0 ? a.position.x < b.position.x && a.position.x + a.width > b.position.x && (e.x = a.position.x + a.width - b.position.x) : a.velocity.x < 0 && b.position.x < a.position.x && b.position.x + b.width > a.position.x && (e.x = a.position.x - (b.position.x + b.width));
+        if (e.x != 0 && e.y != 0) {
+            var f = a.velocity.x * c, g = a.velocity.y * c, h = e.x, i = e.y, j = h - f, k = i - g, l = -(i - (k - i) / (j - h) * h), m = e.y > 0;
+            m ? l < 0 ? d.x = e.x : d.y = e.y : l > 0 ? d.x = e.x : d.y = e.y;
+        } else e.x != 0 ? d.x = e.x : e.y != 0 && (d.y = e.y);
+        return {
+            source: a,
+            target: b,
+            data: {
+                pen: d
+            }
+        };
+    }
+    function b(a, b, c) {
+        if (a.type == "CollisionMap") {
+            var d = a;
+            a = b, b = d;
+        }
+        var e = b.tileMap, f = [], g = 0, h = 0, i = e.getTile(a.position.x, a.position.y) || {
+            position: {
+                x: 0,
+                y: 0
+            }
+        }, j = Math.floor((a.width + a.position.x - i.position.x) / e.tileWidth), k = Math.floor((a.height + a.position.y - i.position.y) / e.tileHeight), l = new ex.base.Vector(0, 0), m = new ex.base.Vector(0, 0), n, o, p;
+        for (h; h <= k; h++) {
+            for (g; g <= j; g++) o = e.getTile(a.position.x + g * e.tileWidth, a.position.y + h * e.tileHeight), o && o.value != 0 && f.push(o);
+            g = 0;
+        }
+        n = f.length;
+        while (n--) {
+            p = f[n], a.velocity.y > 0 && p.edges.top ? a.position.y < p.position.y && a.position.y + a.height > p.position.y && (m.y = a.position.y + a.height - p.position.y) : a.velocity.y < 0 && p.edges.bottom && p.position.y < a.position.y && p.position.y + p.height > a.position.y && (m.y = a.position.y - (p.position.y + p.height)), a.velocity.x > 0 && p.edges.left ? a.position.x < p.position.x && a.position.x + a.width > p.position.x && (m.x = a.position.x + a.width - p.position.x) : a.velocity.x < 0 && p.edges.right && p.position.x < a.position.x && p.position.x + p.width > a.position.x && (m.x = a.position.x - (p.position.x + p.width));
+            if (m.x != 0 && m.y != 0) {
+                var q = a.velocity.x * c, r = a.velocity.y * c, s = m.x, t = m.y, u = s - q, v = t - r, w = -(t - (v - t) / (u - s) * s), x = m.y > 0;
+                x ? w < 0 ? l.x = m.x : l.y = m.y : w > 0 ? l.x = m.x : l.y = m.y;
+            } else m.x != 0 ? l.x = m.x : m.y != 0 && (l.y = m.y);
+            m = new ex.base.Vector(0, 0);
+        }
+        return f.length > 0 ? {
+            source: a,
+            target: b,
+            data: {
+                pen: l,
+                tiles: f
+            }
+        } : null;
+    }
+    ex.define("ex.physics.CollisionDetector", {
+        constructor: function() {
+            this.algorithms = {
+                RigidBoxToCollisionMap: b,
+                CollisionMapToRigidBox: b,
+                RigidBoxToRigidBox: a,
+                EntityToTrigger: a,
+                TriggerToEntity: a
+            };
+        },
+        detectCollisions: function(a, b) {
+            var c = [], d = 0, e = 0, f, g;
+            for (d; d < a.length; d++) for (e = d + 1; e < a.length; e++) {
+                f = a[d], g = a[e];
+                if (f.collisionBit & g.collisionBitMask && g.collisionBit & f.collisionBitMask) {
+                    var h = this.detectCollisionBetween(f, g, b);
+                    h != null && c.push(h);
+                }
+            }
+            return c;
+        },
+        detectCollisionBetween: function(a, b, c) {
+            var d = a.type + "To" + b.type;
+            if (this.algorithms[d]) return this.algorithms[d](a, b, c);
+        }
+    });
+}(), function() {
+    function b(b, c, d, e) {
+        if (b.mass == 0) return;
+        d = d.pen, d.y != 0 && (d.y > 0 ? d.y += .1 : d.y -= .1, b.position.y -= d.y, b.velocity.y = -b.velocity.y * b.elasticity), d.x != 0 && (d.x > 0 ? d.x += .1 : d.x -= .1, b.position.x -= d.x, b.velocity.x = -b.velocity.x * b.elasticity), b.velocity.scale(a);
+    }
+    function c(a, c, d, e) {
+        if (a.anchored) {
+            if (c.anchored) return;
+            b(c, a, d, e);
+        } else c.anchored && b(a, c, d, e);
+    }
+    var a = .98;
+    ex.define("ex.physics.CollisionResolver", {
+        constructor: function() {
+            this.algorithms = {
+                RigidBoxToCollisionMap: b,
+                RigidBoxToRigidBox: c
+            };
+        },
+        resolveCollisions: function(a, b) {
+            var c = a.length;
+            while (c--) this.resolveCollisionBetween(a[c].source, a[c].target, a[c].data, b), a[c].source.onCollide(a[c].target, a[c].data, b), a[c].target.onCollide(a[c].source, a[c].data, b);
+        },
+        resolveCollisionBetween: function(a, b, c, d) {
+            var e = a.type + "To" + b.type;
+            if (this.algorithms[e]) return this.algorithms[e](a, b, c, d);
+        }
+    });
+}(), ex.using([ "ex.base.Vector" ], function() {
+    ex.define("ex.physics.Force", {
+        update: function(a) {},
+        solve: function(a, b) {},
+        destroy: function() {}
+    });
+}), ex.using([ "ex.base.WorldComponent", "ex.physics.CollisionDetector", "ex.physics.CollisionResolver", "ex.physics.Collidable", "ex.physics.Force" ], function() {
+    ex.define("ex.physics.CollisionManager", ex.base.WorldComponent, {
+        constructor: function(a, b) {
+            this.collidables = [], this.forces = [], this.detector = new ex.physics.CollisionDetector, this.resolver = new ex.physics.CollisionResolver, this.renderer = a, this.defaults = {
+                debugDraw: !1
+            }, this.options = ex.extend({}, this.defaults), ex.extend(this.options, b), this.context = null, this.options.debugDraw && this.renderer.type == ex.display.rendering.Renderer.CANVAS2D && (this.context = this.renderer.renderingContext.context);
+        },
+        addObject: function(a) {
+            a instanceof ex.physics.Collidable ? this.collidables.push(a) : a instanceof ex.physics.Force && this.forces.push(a);
+        },
+        removeObject: function(a) {
+            a instanceof ex.physics.Collidable ? (ex.Array.remove(this.collidables, a), a.destroy()) : a instanceof ex.physics.Force && (ex.Array.remove(this.forces, a), a.destroy());
+        },
+        update: function(a, b) {
+            ex.Debug.time("collision");
+            var c = 0, d = this.forces.length;
+            for (; c != d; c++) this.forces[c].solve(a, this.collidables);
+            c = 0, d = this.collidables.length;
+            for (; c != d; c++) this.collidables[c].integrate(a);
+            var e = this.detector.detectCollisions(this.collidables, a);
+            this.resolver.resolveCollisions(e, a), ex.Debug.time("collision");
+        },
+        debug: function(a, b) {
+            this.options.debugDraw == 1 && this.draw(this.context, b);
+        },
+        draw: function(a, b) {
+            a.save(), a.strokeStyle = "#FF0000", a.lineWidth = 1;
+            var c = 0, d = this.collidables.length;
+            for (; c != d; c++) this.collidables[c].draw(a, b.position.x, b.position.y);
+            a.restore();
+        },
+        destroy: function() {
+            delete this.collisionGroups, delete this.detector, delete this.resolver;
+        }
+    });
+}), ex.using([ "ex.world.TileMap", "ex.physics.Collidable" ], function() {
+    ex.define("ex.physics.CollisionMap", ex.physics.Collidable, {
+        constructor: function(a, b, c, d) {
+            this.tileMap = new ex.world.TileMap(a, b, c), this._super("constructor", [ "CollisionMap", d ]);
+        },
+        draw: function(a, b, c) {
+            var d = 0, e = 0, f, g, h;
+            for (; d != this.tileMap.data.length; d++) {
+                e = 0;
+                for (; e != this.tileMap.data[d].length; e++) f = this.tileMap.data[d][e], f.value > 0 && (g = f.position.x - b, h = f.position.y - c, a.beginPath(), f.edges.top && (a.moveTo(g, h), a.lineTo(g + f.width, h)), f.edges.bottom && (a.moveTo(g, h + f.height), a.lineTo(g + f.width, h + f.height)), f.edges.left && (a.moveTo(g, h), a.lineTo(g, h + f.height)), f.edges.right && (a.moveTo(g + f.width, h), a.lineTo(g + f.width, h + f.height)), a.stroke(), a.closePath());
+            }
+        }
+    });
+}), ex.using([ "ex.physics.Force" ], function() {
+    ex.define("ex.physics.force.Gravity", ex.physics.Force, {
+        constructor: function(a) {
+            this.strength = a;
+        },
+        solve: function(a, b) {
+            var c = 0, d = b.length, e;
+            for (; c != d; c++) e = b[c], e.velocity && e.gravity != 0 && b[c].applyForce(0, this.strength);
+        }
+    });
+}), ex.using([ "ex.base.Vector", "ex.physics.Collidable" ], function() {
+    ex.define("ex.physics.RigidBody", ex.physics.Collidable, {
+        constructor: function(a, b, c) {
+            this.position = b, this.velocity = new ex.Vector(0, 0), this.acceleration = new ex.Vector(0, 0), this.mass = 1, this.elasticity = 0, this.maxVelocity = new ex.Vector(3e3, 3e3), this.zero = .01, this._super("constructor", [ a, c ]);
+        },
+        applyForce: function(a, b) {
+            this.acceleration.x += a / this.mass, this.acceleration.y += b / this.mass;
+        },
+        applyImpulse: function(a, b) {
+            this.velocity.x += a, this.velocity.y += b;
+        },
+        integrate: function(a) {
+            this.mass != 0 && (this.velocity.addScaled(this.acceleration, a), this.acceleration.x = 0, this.acceleration.y = 0, this.velocity.limit(this.maxVelocity), this.velocity.x < this.zero && this.velocity.x > -this.zero && (this.velocity.x = 0), this.velocity.y < this.zero && this.velocity.y > -this.zero && (this.velocity.y = 0), this.position.addScaled(this.velocity, a));
+        },
+        linkObject: function(a) {
+            a.position = this.position;
+        }
+    });
+}), ex.using([ "ex.physics.RigidBody" ], function() {
+    ex.define("ex.physics.RigidBox", ex.physics.RigidBody, {
+        constructor: function(a, b, c, d) {
+            this.width = b, this.height = c, this._super("constructor", [ "RigidBox", a, d ]);
+        },
+        draw: function(a, b, c) {
+            a.strokeRect(this.position.x - b, this.position.y - c, this.width, this.height);
+        }
+    });
+}), ex.using([ "ex.physics.CollisionManager", "ex.physics.CollisionMap", "ex.physics.RigidBox", "ex.physics.force.Gravity" ], function() {
+    ex.define("ex.physics.Physics", {});
+}), ex.using([ "ex.base.Component" ], function() {
+    ex.define("ex.plugins.Data", ex.base.Component, {
+        __alias: "ex.Data",
+        __statics: {
+            data: {},
+            storageKeys: null,
+            setStorageKeys: function(a) {
+                this.storageKeys = a;
+            },
+            clear: function() {
+                localStorage.clear();
+            },
+            save: function() {
+                var a = {};
+                if (this.storageKeys) {
+                    var b = 0, c = this.storageKeys.length, d;
+                    for (; b != c; b++) d = this.storageKeys[b], a[d] = this.data[d];
+                } else a = this.data;
+                a = JSON.stringify(a), localStorage.data = a;
+            },
+            load: function() {
+                var a = localStorage.data;
+                if (a) {
+                    a = JSON.parse(a);
+                    if (this.storageKeys) {
+                        var b = 0, c = this.storageKeys.length, d;
+                        for (; b != c; b++) d = this.storageKeys[b], this.data[d] = a[d];
+                    } else ex.extend(this.data, a, !0);
+                }
+                return a;
+            },
+            set: function(a, b) {
+                ex.Data.data[a] = b;
+            },
+            get: function(a) {
+                return ex.Data.data[a];
+            }
+        }
+    });
 }), ex.using([ "ex.base.Vector" ], function() {
     ex.define("ex.plugins.Particle2", {
         constructor: function(a) {
@@ -2214,6 +2807,59 @@ exports && ex.extend(exports, ex), function() {
             while (d--) this.particles[d].render(a, b, c);
         }
     });
+}), ex.using([ "ex.base.Vector", "ex.base.Component" ], function() {
+    var a;
+    ex.define("ex.plugins.Tween", ex.base.Component, {
+        __alias: "ex.Tween",
+        constructor: function() {
+            a.__instance ? ex.Debug.log("ex.plugins.Tween has already been initialized!", "INFO") : (this._super("constructor"), a.__instance = this);
+        },
+        update: function(b) {
+            a.__update(b);
+        },
+        __statics: {
+            __instance: null,
+            tweens: [],
+            add: function(b, c, d, e) {
+                var f = this.__generateTween(b, c, d, e);
+                a.tweens.push(f);
+            },
+            delayedCall: function(b, c) {
+                var d = this.__generateTween({}, b, {}, {
+                    callback: c
+                });
+                a.tweens.push(d);
+            },
+            __generateTween: function(a, b, c, d) {
+                var e = {
+                    element: a,
+                    duration: b,
+                    elapsed: 0,
+                    properties: c,
+                    starting: {},
+                    options: d || {}
+                };
+                for (var f in c) e.starting[f] = a[f];
+                return e;
+            },
+            __update: function(b) {
+                var c = 0, d = a.tweens.length, e, f, g = !1;
+                for (; c < d; c++) {
+                    e = a.tweens[c], e.elapsed += b, f = b;
+                    if (e.options.delay) {
+                        if (!(e.elapsed > e.options.delay)) continue;
+                        e.elapsed -= e.options.delay, e.options.delay = null;
+                    }
+                    e.elapsed > e.duration && (f = e.duration - e.elapsed, e.elapsed = e.duration, g = !0);
+                    for (var h in e.properties) if (g == 0) {
+                        var i = (e.properties[h] - e.starting[h]) / e.duration * f;
+                        e.element[h] += i;
+                    } else e.element[h] = e.properties[h];
+                    g == 1 && (a.tweens[c].options.callback && a.tweens[c].options.callback(), a.tweens.splice(c, 1), c--, d--, g = !1);
+                }
+            }
+        }
+    }), a = ex.Tween;
 }), ex.using([ "ex.event.EventTarget", "ex.util.Input" ], function() {
     var a;
     ex.define("ex.util.Controller", ex.event.EventTarget, {
@@ -2296,956 +2942,6 @@ exports && ex.extend(exports, ex), function() {
             this.unbindAllActions(), this.unbindAll(), this.bindings = null, this.released = null, this.buttonState = null, this.previousState = null, this.actions = null, this.input = null;
         }
     }), a = ex.Input;
-}), ex.using([ "ex.base.Point", "ex.base.Vector", "ex.display.Renderable" ], function() {
-    ex.define("ex.world.Layer", ex.display.Renderable, {
-        constructor: function(a, b, c, d) {
-            this.name = a, this.items = [], this.map = b, this.map != null && this.items.push(this.map), c == null ? this.position = new ex.base.Point(0, 0) : this.position = c, d == null ? this.scrollFactor = new ex.base.Vector(1, 1) : this.scrollFactor = d, this._super("constructor", [ !0, 1 ]);
-        },
-        addItem: function(a) {
-            a instanceof ex.world.CollisionMap ? this.map == null ? this._setMap(a) : console.error("Layers cannot contain more than one CollisionMap") : (a.visible = this.visible, a.opacity = this.opacity, this.items.push(a));
-        },
-        getItem: function(a) {
-            var b = this.items.length;
-            while (b--) if (this.items[b].name == a) return this.items[b];
-        },
-        _setMap: function(a) {
-            this.map = a, this.items.push(this.map);
-        },
-        removeItem: function(a) {
-            var b = this.items.length;
-            while (b--) this.items[b] === a && this.items.splice(b, 1);
-        },
-        update: function(a) {
-            var b = this.items.length;
-            while (b--) this.items[b].update(a);
-        },
-        render: function(a, b, c, d, e) {
-            if (!this.isVisible()) return;
-            var f = this.items.length;
-            while (f--) this.items[f].render(a, b * this.scrollFactor.x, c * this.scrollFactor.y, d, e);
-        },
-        debugRender: function(a, b, c, d, e) {
-            this.render(a, b, c);
-            var f = this.items.length;
-            while (f--) this.items[f].debugRender(a, b * this.scrollFactor.x, c * this.scrollFactor.y, d, e);
-        }
-    });
-}), ex.using([ "ex.world.Layer" ], function() {
-    ex.define("ex.world.Map", {
-        constructor: function(a) {
-            this.name = a, this.layers = [];
-        },
-        addLayer: function(a) {
-            a != null && this.layers.push(a);
-        },
-        getLayer: function(a) {
-            if (a == null) return null;
-            var b = this.layers.length;
-            while (b--) if (this.layers[b].name == a) return this.layers[b];
-            return null;
-        },
-        removeLayer: function(a) {
-            var b = this.layers.length;
-            while (b--) this.layers[b].name == a && this.layers.splice(b, 1);
-        },
-        toggleLayer: function(a) {
-            var b = this.layers[a];
-            b.visible = !b.visible;
-        },
-        update: function(a) {
-            var b = this.layers.length;
-            while (b--) this.layers[b].update(a);
-        },
-        render: function(a, b, c, d, e) {
-            var f = this.layers.length;
-            while (f--) this.layers[f].render(a, b, c, d, e);
-        }
-    });
-}), ex.using([ "ex.event.EventTarget" ], function() {
-    ex.define("ex.world.Trigger", ex.event.EventTarget, {
-        constructor: function(a, b, c) {
-            this.position = a, this.velocity = new ex.base.Vector(0, 0), this.width = b, this.height = c, this.anchored = !0, this.collides = !0, this.type = "Trigger", this._super("constructor", []);
-        },
-        onCollide: function(a, b) {
-            this.dispatchEvent(a.name, b);
-        },
-        update: function(a) {},
-        setupDom: function(a) {},
-        renderDom: function(a, b, c, d, e) {},
-        destroyDom: function(a) {},
-        render2dCanvas: function() {},
-        debugRender: function() {}
-    });
-}), ex.using([ "ex.ai.Action", "ex.ai.actions.Shoot" ], function() {
-    ex.define("ex.ai.actions.Chase", ex.ai.Action, {
-        constructor: function(a, b, c, d) {
-            this.name = "chase", this.entity = a, this.target = b, this.maxRange = c, this.speedModifier = d || 1, this._super("constructor", [ 1, !0 ]);
-        },
-        update: function(a) {
-            var b = Math.abs(this.entity.physical.position.x - this.target.physical.position.x), c = this.entity.physical.position.y - this.target.physical.height, d = this.entity.physical.position.y + this.entity.physical.height;
-            return b < this.maxRange && this.target.physical.position.y > c && this.target.physical.position.y < d ? (this.moveTowardTarget(a), this.entity.weapon && this.attackTarget(a), !1) : !0;
-        },
-        attackTarget: function(a) {
-            this.entity.cooldown += Math.random() * a, this.entity.weapon.cooldown <= 0 && this.entity.ai.push(new ex.ai.actions.Shoot(this.entity.weapon));
-        },
-        moveTowardTarget: function(a) {
-            var b = this.entity.speed * this.speedModifier;
-            this.target.physical.position.x < this.entity.physical.position.x ? (this.entity.facing = "left", this.entity.physical.applyImpulse(-b * a, 0), this.entity.moving = !0) : (this.entity.facing = "right", this.entity.physical.applyImpulse(b * a, 0), this.entity.moving = !0), this.entity.weapon && (this.entity.weapon.facing = this.entity.facing);
-        }
-    });
-}), ex.using([ "ex.ai.Action" ], function() {
-    ex.define("ex.ai.actions.Idle", ex.ai.Action, {
-        constructor: function(a) {
-            this.name = "idle", this.entity = a, this._super("constructor", [ 1, !0 ]);
-        },
-        update: function(a) {
-            return !1;
-        }
-    });
-}), ex.using([ "ex.ai.Action" ], function() {
-    ex.define("ex.ai.actions.Shoot", ex.ai.Action, {
-        constructor: function(a) {
-            this.name = "shoot", this.weapon = a, this._super("constructor", [ 1, !1 ]);
-        },
-        update: function(a) {
-            return this.weapon.shoot(), !0;
-        }
-    });
-}), ex.using([ "ex.ai.Action" ], function() {
-    ex.define("ex.ai.actions.Wander", ex.ai.Action, {
-        constructor: function(a) {
-            this.name = "wander", this.entity = a, this._super("constructor", [ 1, !1 ]);
-        },
-        update: function(a) {
-            return this.isObstructed() && this.turnAround(a), this.entity.facing == "left" ? (this.entity.physical.applyImpulse(-this.entity.speed * a, 0), this.entity.moving = !0) : (this.entity.physical.applyImpulse(this.entity.speed * a, 0), this.entity.moving = !0), !1;
-        },
-        isObstructed: function() {
-            if (!this.entity.collisionData || !this.entity.collisionData.tiles) return !1;
-            var a = this.entity.collisionData.tiles, b = this.entity.physical.position.y - a[0].height, c = this.entity.physical.position.y + this.entity.physical.height, d = a.length, e;
-            while (d--) {
-                e = a[d];
-                if (e.position.y >= b && e.position.y <= c) {
-                    if (this.entity.facing == "left" && e.position.x <= this.entity.physical.position.x) return !0;
-                    if (this.entity.facing == "right" && e.position.x >= this.entity.physical.position.x) return !0;
-                }
-            }
-            return !1;
-        },
-        turnAround: function(a) {
-            this.entity.facing == "left" ? this.entity.facing = "right" : this.entity.facing = "left", this.entity.weapon && (this.entity.weapon.facing = this.entity.facing), this.entity.physical.velocity.x = 0;
-        }
-    });
-}), ex.using([], function() {
-    ex.define("ex.base.WorldComponent", {
-        constructor: function(a, b) {},
-        addObject: function(a) {},
-        update: function(a) {},
-        removeObject: function(a) {},
-        debug: function(a, b) {},
-        destroy: function() {}
-    });
-}), ex.using([ "ex.display.rendering.ObjectRenderer" ], function() {
-    ex.define("ex.display.rendering.AnimatedSpriteRenderer", ex.display.rendering.ObjectRenderer, {
-        setupDom: function(a) {
-            var b = this.currentAnimation.sheet, c = document.createElement("div");
-            c.style.backgroundImage = "url(" + b.image.src + ")", c.style.display = "block", c.style.width = b.renderingRect.width + "px", c.style.height = b.renderingRect.height + "px", c.style.position = "absolute", c.style.left = this.position.x + "px", c.style.top = this.position.y + "px", c.style.zIndex = "100", this.rendering = {
-                el: c
-            }, a.appendChild(this.rendering.el);
-        },
-        destroyDom: function(a) {
-            a.removeChild(this.rendering.el), this.rendering = null;
-        },
-        renderDom: function(a, b, c, d, e) {
-            var f = this.currentAnimation.sheet, g = ex.toInt(this.position.x - b * this.scrollFactor.x), h = ex.toInt(this.position.y - c * this.scrollFactor.y);
-            if (g + this.width < 0 || g > d || h + this.height < 0 || h > e) {
-                this.visible && (this.visible = !1, this.rendering.el.style = "none");
-                return;
-            }
-            this.visible == 0 && (this.visible = !0, this.rendering.el.style = "inherit"), this.rendering.el.style.backgroundPosition = f.renderingRect.position.x + "px" + " " + f.renderingRect.position.y + "px", this.rendering.el.style.left = g + "px", this.rendering.el.style.top = h + "px";
-        },
-        render2dCanvas: function(a, b, c, d, e) {
-            if (this.currentAnimation == null) return;
-            var f = this.currentAnimation.sheet;
-            if (!this.isVisible()) return;
-            var g = ex.toInt(this.position.x - b * this.scrollFactor.x), h = ex.toInt(this.position.y - c * this.scrollFactor.y);
-            g + f.renderingRect.width > 0 && g < d && h + f.renderingRect.height > 0 && h < e && a.drawImage(f.image, f.renderingRect.x, f.renderingRect.y, f.renderingRect.width, f.renderingRect.height, g + f.offset.x, h + f.offset.y, this.width, this.height);
-        }
-    });
-}), ex.using([], function() {
-    ex.define("ex.display.rendering.ObjectRenderer", {
-        setupDom: function() {},
-        renderDom: function() {},
-        destroyDom: function() {},
-        setup2dCanvas: function() {},
-        render2dCanvas: function() {},
-        destroy2dCanvas: function() {},
-        setup3dCanvas: function() {},
-        render3dCanvas: function() {},
-        destroy3dCanvas: function() {}
-    });
-}), ex.using([ "ex.display.rendering.ObjectRenderer" ], function() {
-    ex.define("ex.display.rendering.RectangleRenderer", ex.display.rendering.ObjectRenderer, {
-        setupDom: function(a) {},
-        destroyDom: function(a) {},
-        renderDom: function(a, b, c, d, e) {},
-        setup2dCanvas: function() {
-            this.rendering = {
-                rotationCanvas: document.createElement("canvas")
-            }, this.rendering.rotationCanvas.width = this.width, this.rendering.rotationCanvas.height = this.height, this.rendering.rotationContext = this.rendering.rotationCanvas.getContext("2d");
-        },
-        render2dCanvas: function(a, b, c, d, e) {
-            if (!this.isVisible()) return;
-            var f = ex.toInt(this.position.x - b * this.scrollFactor.x), g = ex.toInt(this.position.y - c * this.scrollFactor.y);
-            if (!(f + this.width < 0 || f > d || g + this.height < 0 || g > e)) {
-                if (this.rotationEnabled != 0) throw "Not implemented.";
-                a.save(), this.options.alpha < 1 && (a.globalAlpha = this.options.alpha), this.options.stroke.type != "none" && (a.strokeStyle = this.getStrokeStyle(a), a.lineWidth = this.getLineWidth(), a.strokeRect(f, g, this.width, this.height)), this.options.fill.type != "none" && (a.fillStyle = this.getFillStyle(a), a.fillRect(f, g, this.width, this.height)), a.restore();
-            }
-        }
-    });
-}), function() {
-    ex.define("ex.display.rendering.RenderingContext", {
-        constructor: function(a, b) {
-            this.width = a, this.height = b;
-        },
-        render: function(a, b, c, d, e) {}
-    });
-}(), ex.using([ "ex.display.rendering.RenderingContext" ], function() {
-    ex.define("ex.display.rendering.RenderingContext2dCanvas", ex.display.rendering.RenderingContext, {
-        constructor: function(a, b, c, d, e) {
-            this._super("constructor", [ a, b ]), this.canvas = d || document.createElement("canvas"), this.canvas.width = a, this.canvas.height = b, this.canvas.style.backgroundColor = e, this.context = this.canvas.getContext("2d"), this.bufferCanvas = document.createElement("canvas"), this.bufferCanvas.width = a, this.bufferCanvas.height = b, this.bufferCanvas.style.backgroundColor = e, this.buffer = this.bufferCanvas.getContext("2d"), d == null && document.body.appendChild(this.canvas), this.renderers = c;
-        },
-        render: function(a, b, c, d, e) {
-            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height), this.context.drawImage(this.bufferCanvas, 0, 0), this.buffer.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            var f = 0, g = a.length, h, i = this.renderers, j = this.buffer;
-            for (; f < g; f++) h = a[f], h.renderer ? h.renderer.render2dCanvas.call(h, j, b, c, d, e) : i[h.type].render2dCanvas.call(h, j, b, c, d, e);
-        },
-        resizeViewport: function(a, b) {
-            this.canvas.width = a, this.canvas.height = b;
-        }
-    });
-}), ex.using([ "ex.display.rendering.RenderingContext" ], function() {
-    ex.define("ex.display.rendering.RenderingContext3dCanvas", ex.display.rendering.RenderingContext, {});
-}), ex.using([ "ex.display.rendering.RenderingContext" ], function() {
-    ex.define("ex.display.rendering.RenderingContextDom", ex.display.rendering.RenderingContext, {
-        constructor: function(a, b, c, d, e) {
-            this._super("constructor", [ a, b ]), this.el = d || document.createElement("div"), this.el.id = "exstoGame", this.el.style.display = "block", this.el.style.width = a + "px", this.el.style.height = b + "px", this.el.style.overflow = "hidden", this.el.style.position = "relative", this.el.style.backgroundColor = e, d == null && document.body.appendChild(this.el), this.renderers = c;
-        },
-        resizeViewport: function(a, b) {
-            this.el.style.width = a + "px", this.el.style.height = b + "px";
-        },
-        render: function(a, b, c, d, e) {
-            var f = 0, g = a.length, h, i = this.el, j = this.renderers;
-            for (; f < g; f++) h = a[f], h.renderer ? h.renderer.renderDom.call(h, i, b, c, d, e) : j[h.type].renderDom.call(h, i, b, c, d, e);
-        }
-    });
-}), ex.using([ "ex.display.rendering.ObjectRenderer" ], function() {
-    ex.define("ex.display.rendering.SpriteMapRenderer", ex.display.rendering.ObjectRenderer, {
-        setupDom: function(a) {
-            var b = document.createElement("div");
-            b.style.position = "absolute", b.style.left = this.position.x + "px", b.style.top = this.position.y + "px", b.style.display = "block", b.style.width = this.tileMap.width + "px", b.style.height = this.tileMap.height + "px", b.style.zIndex = "99";
-            var c = this.tileMap.data.length - 1, d = 0;
-            for (c; c > -1; c--) {
-                for (d; d < this.tileMap.data[c].length; d++) {
-                    var e = this.tileMap.data[c][d], f = 0, g = 0, h = e.value;
-                    if (h != 0) {
-                        while (--h) f += this.tileMap.tileWidth, f >= this.tileSet.width && (g += this.tileMap.tileHeight, f = 0);
-                        var i = document.createElement("div");
-                        i.style.position = "absolute", i.style.left = e.position.x + "px", i.style.top = e.position.y - this.yOffset * c + "px", i.style.display = "block", i.style.width = e.width + "px", i.style.height = e.height + "px", i.style.backgroundImage = "url(" + this.tileSet.src + ")", i.style.backgroundPosition = -f + "px" + " " + -g + "px", b.appendChild(i);
-                    } else {
-                        var i = document.createElement("div");
-                        i.style.position = "absolute", i.style.left = e.position.x + "px", i.style.top = e.position.y - this.yOffset * c + "px", i.style.width = e.width + "px", i.style.height = e.height + "px", i.style.display = "none", b.appendChild(i);
-                    }
-                }
-                d = 0;
-            }
-            this.rendering = {
-                el: b
-            }, a.appendChild(this.rendering.el);
-        },
-        renderDom: function(a, b, c, d, e) {
-            if (!this.visible) {
-                this.rendering.el.style.opacity = 0;
-                return;
-            }
-            this.rendering.el.style.opacity = this.opacity;
-            var f = ex.toInt(this.position.x - b * this.scrollFactor.x), g = ex.toInt(this.position.y - c * this.scrollFactor.y);
-            if (f + this.tileMap.width < 0 || f > d || g + this.tileMap.height < 0 || g > e) {
-                this.rendering.el.style.display = "none";
-                return;
-            }
-            this.rendering.el.style.display = "inherit";
-            var h = this.tileMap.data.length - 1, i = 0;
-            for (h; h > -1; h--) {
-                for (i; i < this.tileMap.data[h].length; i++) {
-                    var j = this.tileMap.data[h][i], k = j.value;
-                    if (k != 0) {
-                        var l = ex.toInt(this.position.x + j.position.x - b * this.scrollFactor.x), m = ex.toInt(this.position.y + j.position.y + c * this.scrollFactor.y - e / 2);
-                        if (l + j.width < 0 || l > d || m + j.height < 0 || m > e) {
-                            if (j.visible == 1) {
-                                var n = h * this.tileMap.data[0].length + i, a = this.rendering.el.childNodes[n];
-                                a.style.display = "none", j.visible = !1;
-                            }
-                        } else if (j.visible == 0) {
-                            var n = h * this.tileMap.data[0].length + i, a = this.rendering.el.childNodes[n];
-                            j.visible = !0, a.style.display = "inherit";
-                        }
-                    }
-                }
-                i = 0;
-            }
-            this.rendering.el.style.left = -b + "px", this.rendering.el.style.top = -c + "px";
-        },
-        destroyDom: function(a) {
-            a.removeChild(this.rendering.el), this.rendering = null;
-        },
-        setup2dCanvas: function(a) {
-            if (this.options.preRender == 1) {
-                this.preRenderCanvas = document.createElement("canvas"), this.preRenderCanvas.width = this.tileMap.width, this.preRenderCanvas.height = this.tileMap.height, this.preRenderContext = this.preRenderCanvas.getContext("2d");
-                var b = this.options.alpha;
-                this.options.alpha = 1, ex.display.rendering.SpriteMapRenderer.renderSpriteMapToContext(this, this.preRenderContext), this.options.alpha = b;
-            }
-        },
-        render2dCanvas: function(a, b, c, d, e) {
-            if (!this.isVisible()) return;
-            var f = ex.toInt(this.position.x - b * this.scrollFactor.x), g = ex.toInt(this.position.y - c * this.scrollFactor.y);
-            if (f + this.tileMap.width < 0 || f > d || g + this.tileMap.height < 0 || g > e) if (this.options.repeat == 0) return;
-            var h = ex.display.rendering.SpriteMapRenderer;
-            if (this.options.repeat == 0) this.options.preRender == 1 ? h.renderPreRenderedSpriteMapToContext(this, a, {
-                x: f,
-                y: g
-            }, d, e) : h.renderSpriteMapToContext(this, a, {
-                x: f,
-                y: g
-            }); else {
-                var i = f % this.tileMap.width, j = g % this.tileMap.height, k, l;
-                f > 0 && (i -= this.tileMap.width), g > 0 && (j -= this.tileMap.height), k = i, l = j;
-                while (k < d) {
-                    while (l < e) this.options.preRender == 1 ? h.renderPreRenderedSpriteMapToContext(this, a, {
-                        x: k,
-                        y: l
-                    }, d, e) : h.renderSpriteMapToContext(this, a, {
-                        x: k,
-                        y: l
-                    }), l += this.tileMap.height;
-                    l = j, k += this.tileMap.width;
-                }
-            }
-        },
-        __statics: {
-            renderPreRenderedSpriteMapToContext: function(a, b, c, d, e) {
-                b.save(), b.globalAlpha = a.options.alpha, c = c || {
-                    x: 0,
-                    y: 0
-                };
-                var f = -c.x, g = -c.y, h = d - c.x, i = e - c.y, j = c.x, k = c.y;
-                f < 0 && (f = 0), g < 0 && (g = 0), f + h > a.preRenderCanvas.width && (h = a.preRenderCanvas.width - f), g + i > a.preRenderCanvas.height && (i = a.preRenderCanvas.height - g), j < 0 && (j = 0), k < 0 && (k = 0), b.drawImage(a.preRenderCanvas, f, g, h, i, j, k, h, i), b.restore();
-            },
-            renderSpriteMapToContext: function(a, b, c) {
-                b.save(), b.globalAlpha = a.options.alpha;
-                var d = a.tileMap.data.length - 1, e = 0;
-                c = c || {
-                    x: 0,
-                    y: 0
-                };
-                for (d; d > -1; d--) {
-                    for (e; e < a.tileMap.data[d].length; e++) {
-                        var f = a.tileMap.data[d][e], g = 0, h = 0, i = f.value;
-                        if (i != 0) {
-                            while (--i) g += a.tileMap.tileWidth, g >= a.tileSet.width && (h += a.tileMap.tileHeight, g = 0);
-                            b.drawImage(a.tileSet, g, h, a.tileMap.tileWidth, a.tileMap.tileHeight, f.position.x + c.x, f.position.y - a.options.offset.y * d + c.y, f.width, f.height);
-                        }
-                    }
-                    e = 0;
-                }
-                b.restore();
-            }
-        }
-    });
-}), ex.using([ "ex.display.rendering.ObjectRenderer" ], function() {
-    ex.define("ex.display.rendering.SpriteRenderer", ex.display.rendering.ObjectRenderer, {
-        setupDom: function(a) {
-            var b = this.img;
-            b.style.position = "absolute", b.style.width = this.width + "px", b.style.height = this.height + "px", b.style.left = this.position.x + "px", b.style.top = this.position.y + "px", this.rendering = {
-                el: b
-            }, a.appendChild(this.rendering.el);
-        },
-        destroyDom: function(a) {
-            a.removeChild(this.rendering.el), this.rendering = null;
-        },
-        renderDom: function(a, b, c, d, e) {
-            if (!this.visible) {
-                this.rendering.el.style.opacity = 0;
-                return;
-            }
-            this.rendering.el.style.opacity = this.alpha;
-            var f = ex.toInt(this.position.x - b * this.scrollFactor.x), g = ex.toInt(this.position.y - c * this.scrollFactor.y);
-            if (f + this.width < 0 || f > d || g + this.height < 0 || g > e) {
-                this.visible == 1 && (this.visible = !1, this.rendering.el.style.display = "none");
-                return;
-            }
-            this.visible == 0 && (this.visible = !0, this.rendering.el.style.display = "inherit"), this.rotationEnabled == 0 && (this.rendering.el.style.left = f + "px", this.rendering.el.style.top = g + "px");
-        },
-        setup2dCanvas: function() {
-            this.rendering = {
-                rotationCanvas: document.createElement("canvas")
-            }, this.rendering.rotationCanvas.width = this.width, this.rendering.rotationCanvas.height = this.height, this.rendering.rotationContext = this.rendering.rotationCanvas.getContext("2d");
-        },
-        render2dCanvas: function(a, b, c, d, e) {
-            if (!this.isVisible()) return;
-            var f = a.globalAlpha;
-            a.globalAlpha = this.alpha;
-            var g = ex.toInt(this.position.x - b * this.scrollFactor.x), h = ex.toInt(this.position.y - c * this.scrollFactor.y);
-            if (g + this.width < 0 || g > d || h + this.height < 0 || h > e) return;
-            if (this.rotationEnabled == 0) if (!this.renderingRect) a.drawImage(this.img, g, h, this.width, this.height); else {
-                var i = this.renderingRect;
-                a.drawImage(this.img, i.x, i.y, i.width, i.height, g, h, i.width, i.height);
-            } else {
-                var j = this.rendering.rotationCanvas, k = this.rendering.rotationContext;
-                j.width = this.img.width || 1, j.height = this.img.height || 1, k.save(), k.translate(this.width / 2, this.height / 2), k.rotate(this.rotation), k.translate(-this.width / 2, -this.height / 2), k.drawImage(this.img, 0, 0), k.restore(), a.drawImage(j, g, h);
-            }
-            a.globalAlpha = f;
-        }
-    });
-}), ex.using([ "ex.display.rendering.ObjectRenderer" ], function() {
-    ex.define("ex.display.rendering.TextRenderer", ex.display.rendering.ObjectRenderer, {
-        setupDom: function(a) {
-            var b = document.createElement("div");
-            b.innerHTML = this.text, b.style.position = "absolute", b.style.left = this.position.x + "px", b.style.top = this.position.y + "px", b.style.font = this.options.font, b.style.color = this.options.color, this.rendering = {
-                el: b
-            }, a.appendChild(this.rendering.el);
-        },
-        renderDom: function(a, b, c, d, e) {
-            this.rendering.el.innerHTML = this.text, this.rendering.el.style.left = this.position.x + "px", this.rendering.el.style.top = this.position.y + "px";
-        },
-        destroyDom: function(a) {
-            a.removeChild(this.rendering.el), this.rendering = null;
-        },
-        render2dCanvas: function(a, b, c, d, e) {
-            if (!this.isVisible()) return;
-            a.save(), a.globalAlpha = this.options.alpha;
-            if (this.options.type == "canvas") a.font = this.options.font, a.fillStyle = this.options.color, a.fillText(this.text, this.position.x, this.position.y, this.options.maxWidth); else if (this.options.type == "sprite") {
-                var f = 0, g = this.text.length, h, i, j, k = this.position.x - b * this.scrollFactor.x, l = this.position.y - c * this.scrollFactor.y;
-                for (; f < g; f++) h = this.text.charCodeAt(f), i = this.options.fontData.widths[h], j = this.options.fontData.positions[h], a.drawImage(this.img, j, 0, i, this.img.height, k, l, i, this.img.height), k += i;
-            }
-            a.restore();
-        }
-    });
-}), ex.using([ "ex.display.Renderable" ], function() {
-    ex.define("ex.display.Text", ex.display.Renderable, {
-        constructor: function(a, b, c) {
-            this.type = "Text", this.defaults = {
-                type: "canvas",
-                maxWidth: null,
-                color: "#FFFFFF",
-                font: "14pt Arial",
-                textAlign: "left",
-                prefix: "",
-                suffix: "",
-                fontData: {},
-                alpha: 1
-            }, this.options = {}, ex.extend(this.options, this.defaults), ex.extend(this.options, c), this.text = a, this.position = b, this.scrollFactor = new ex.Vector(0, 0), this._super("constructor", [ !0, 1 ]);
-            if (this.options.type == "sprite") this.loadFontData(this.options.fontData); else {
-                var d = document.createElement("canvas").getContext("2d");
-                d.font = this.options.font, this.height = d.measureText("m"), this.width = d.measureText(this.text);
-            }
-        },
-        setText: function(a, b) {
-            a instanceof String == 0 && (a = a.toString()), this.text = a, b == 1 && this._calculateWidth();
-        },
-        _calculateWidth: function() {
-            if (this.options.type == "sprite") {
-                this.width = 0;
-                var a = 0, b = this.text.length, c, d;
-                for (; a < b; a++) c = this.text.charCodeAt(a), d = this.options.fontData.widths[c], this.width += d;
-            } else {
-                var e = document.createElement("canvas").getContext("2d");
-                e.font = this.options.font, this.width = e.measureText(this.text);
-            }
-        },
-        loadFontData: function(a) {
-            this.options.fontData = a;
-            if (!a.img) {
-                var b = a.data, c = new Image;
-                c.src = b, a.img = c;
-            }
-            this.img = a.img, this.height = a.height, this._calculateWidth();
-        }
-    });
-}), ex.using([ "ex.display.Renderable", "ex.display.Sprite", "ex.base.Rectangle", "ex.world.Entity" ], function() {
-    var a;
-    ex.define("ex.display.ui.Button", ex.world.Entity, {
-        __statics: {
-            STATE: {
-                UP: 0,
-                OVER: 1,
-                DOWN: 2
-            }
-        },
-        constructor: function(b, c, d) {
-            this.defaults = {
-                actions: {
-                    pressed: null,
-                    down: null,
-                    released: null,
-                    over: null
-                },
-                userData: {},
-                autoUpdateSprite: !1
-            }, this.options = ex.extend({}, this.defaults, !0), ex.extend(this.options, d, !0), this.state = a.UP, c.position = ex.clone(b), this._super("constructor", [ "Button", [ c ] ]);
-        },
-        update: function(b) {
-            var c = this.items[0];
-            c.update(b);
-            if (c.containsPoint(ex.Input.mouse.x, ex.Input.mouse.y)) ex.Input.changeCursor(ex.Input.CURSOR.POINTER), ex.Input.isDown(ex.util.Key.LMB) ? (this.state != a.DOWN && this.options.actions.pressed && this.options.actions.pressed(this, this.options.userData), this.options.actions.down && this.options.actions.down(this, this.options.userData), this.state = a.DOWN, this.options.autoUpdateSprite && c.play("down")) : (this.state != a.OVER && this.options.actions.over && this.options.actions.over(this, this.options.userData), this.state = a.OVER, this.options.autoUpdateSprite && c.play("over")); else if (this.state == a.OVER || this.state == a.DOWN) ex.Input.changeCursor(ex.Input.CURSOR.AUTO), this.state = a.UP, this.options.actions.released && this.options.actions.released(this, this.userData), this.options.autoUpdateSprite && c.play("up");
-        },
-        destroy: function() {
-            delete this.options.actions, delete this.state, delete this.width, delete this.items, delete this.userData;
-        }
-    }), a = ex.display.ui.Button.STATE;
-});
-
-var ex = ex || {};
-
-Array.indexOf || (Array.prototype.indexOf = function(a) {
-    for (var b = 0; b < this.length; b++) if (this[b] == a) return b;
-    return -1;
-}), function() {
-    function a() {}
-    "use strict", ex.UID_PROPERTY = "__uniqueId", ex.uidCounter = 0, ex.extend = function(a, b, c) {
-        for (var d in b) if (b[d] !== undefined) {
-            if (a === b[d]) continue;
-            typeof src != "Object" && typeof src != "Array" || !c ? a[d] = b[d] : a[d] = ex.extend({}, b[d], c);
-        }
-        return a;
-    }, ex.extend(ex, {
-        bind: function(a, b) {
-            return function() {
-                return b.apply(a, arguments);
-            };
-        },
-        clone: function(b) {
-            return a.prototype = b, new a;
-        },
-        copy: function(a) {
-            var b;
-            return ex.isObject(a) ? (b = b || {}, ex.extend(b, a, !0)) : ex.isArray(a) ? (b = b || [], ex.extend(b, a, !0)) : b = a, b;
-        },
-        derive: function(a, b) {
-            function c() {}
-            c.prototype = a.prototype, b.prototype = new c, b.prototype.constructor = b;
-        },
-        each: function(a, b) {
-            for (var c in a) Object.prototype.propertyIsEnumerable.call(a, c) && action(c, a[c]);
-        },
-        toInt: function(a) {
-            return a | 0;
-        },
-        isObject: function(a) {
-            return typeof a == "object";
-        },
-        isArray: function(a) {
-            return Object.prototype.toString.call(a) == "[object Array]";
-        },
-        isFunction: function(a) {
-            return typeof a == "function";
-        },
-        isNull: function(a) {
-            return typeof a == "undefined";
-        },
-        uid: function(a) {
-            return a[ex.UID_PROPERTY] || (a[ex.UID_PROPERTY] = ++ex.uidCounter);
-        }
-    }), ex.Array = {
-        contains: function(a, b) {
-            var c = 0;
-            for (; c < a.length; c++) if (a[c] == b) return !0;
-            return !1;
-        },
-        remove: function(a, b) {
-            a.indexOf(b) != -1 && a.splice(a.indexOf(b), 1);
-        },
-        each: function(a, b) {
-            var c = 0, d = a.length, e = !0;
-            for (; c != d; c++) {
-                e = b(a[c], c);
-                if (e == 0) return;
-            }
-        },
-        find: function(a, b) {
-            var c = 0, d = a.length, e;
-            for (; c < d; c++) {
-                e = b(a[c]);
-                if (e) return a[c];
-            }
-        },
-        average: function(a) {
-            var b = 0, c = a.length;
-            while (c--) b += a[c];
-            return b /= a.length, b;
-        },
-        to2D: function(a, b, c) {
-            var d = 0, e = 0, f = 0, g = new Array(b);
-            for (e = 0; e < b; e++) {
-                g[e] = new Array(a);
-                for (d = 0; d < a; d++, f++) g[e][d] = c[f];
-            }
-            return g;
-        }
-    }, ex.extend(ex, {
-        _namespaces: {},
-        _classes: {},
-        _defined: [],
-        config: {
-            baseUrl: ""
-        },
-        using: function(a, b) {
-            var c = !0, d = 0, e;
-            if (typeof a == "undefined") {
-                b();
-                return;
-            }
-            for (; d < a.length; d++) e = a[d], ex.Array.contains(this._defined, e) == 0 && (c = !1, this.addRelationship(e, b), this.require(e));
-            ex.Loader.startQueue();
-            if (c == 1) {
-                b();
-                return;
-            }
-        },
-        require: function(a) {
-            ex.Loader.asyncFile(this.namespaceToUrl(a));
-        },
-        addRelationship: function(a, b) {
-            this._namespaces[a] || (this._namespaces[a] = []), this._namespaces[a].push(b), this._classes[b] || (this._classes[b] = []), this._classes[b].push(a);
-        },
-        namespaceToUrl: function(a) {
-            var b = a.split("."), c = "";
-            typeof window != "undefined" && (c = window.location.href.substr(0, window.location.href.lastIndexOf("/"))), b[0] == "ex" && (c = ex.config.baseUrl);
-            var d = -1;
-            while (++d < b.length) b[d] != "ex" && (c += "/" + b[d]);
-            return c += ".js", c;
-        }
-    }), ex.Loader = {
-        _urls: {},
-        _callbacks: {},
-        _queue: [],
-        _date: new Date,
-        asyncFile: function(a, b) {
-            if (typeof this._urls[a] != "undefined") return;
-            this._urls[a] = !1, typeof b != "undefined" && (this._callbacks[a] = b), this._queue.push(a);
-        },
-        startQueue: function() {
-            for (var a = 0; a < this._queue.length; a++) {
-                var b = this._queue[a];
-                this.addScriptTag(b, function() {
-                    ex.Loader.onScriptLoad(b), this.onload = null;
-                });
-            }
-            this._queue = [];
-        },
-        onScriptLoad: function(a) {
-            this._urls[a] = !0, a in this._callbacks && (this._callbacks[a](), delete this._callbacks[a]);
-        },
-        addScriptTag: function(a, b) {
-            var c = document.getElementsByTagName("head").item(0), d = document.createElement("script");
-            return d.language = "javascript", d.type = "text/javascript", d.defer = !1, d.src = a, d.onload = b, c.appendChild(d), d;
-        },
-        ajax: function(a, b, c) {
-            var d;
-            window.XMLHttpRequest ? d = new XMLHttpRequest : d = new ActiveXObject("Microsoft.XMLHTTP"), d.open("GET", a, !0), d.send(), d.onreadystatechange = function() {
-                d.readyState == 4 && d.status == 200 && c(d.responseText);
-            };
-        }
-    }, ex.Element = {
-        defaults: {
-            SCRIPT: {
-                language: "javascript",
-                type: "text/javascript"
-            }
-        },
-        createTag: function(a, b) {
-            var a = document.createElement(a);
-            return a = ex.extend(a, b), a;
-        },
-        getByTagName: function(a) {
-            return document.getElementsByTagName(a)[0];
-        },
-        getById: function(a) {
-            var b = document.getElementById(a);
-            return b || ex.Debug.log("ex.Element.getById: Could not find element with id " + a, "WARNING"), b;
-        }
-    }, ex.Math = {
-        average: function(a) {
-            var b = 0, c = a.length;
-            while (c--) b += a[c];
-            return b /= a.length, b;
-        },
-        floor: function(a) {
-            return a >> 0;
-        },
-        abs: function(a) {
-            return a < 0 ? -a : a;
-        },
-        getRandomInt: function(a, b) {
-            return Math.floor(Math.random() * (b - a + 1)) + a;
-        }
-    };
-    var b = b || null;
-    if (b == null) {
-        var c = document.getElementsByTagName("head")[0], d = c.getElementsByTagName("script"), e = new RegExp(/ExstoEngine\.js/), f = d.length;
-        while (f--) {
-            var g = d[f];
-            e.test(g.src) == 1 && (ex.config.baseUrl = g.src.split("/ExstoEngine.js", 1)[0]);
-        }
-    }
-}(), function() {
-    function a(a, b) {
-        function f() {}
-        c(a, null, b), typeof b.constructor == "function" && b.constructor != Object && (f = b.constructor), f.prototype = b, e(a, f), d(a, null, b, f);
-    }
-    function b(a, b, f) {
-        function g() {
-            b.apply(this);
-        }
-        c(a, b, f);
-        if (b == null) throw new Error("The base class has not been defined for " + a);
-        ex.isFunction(f.constructor) && f.constructor != Object && (g = f.constructor), ex.derive(b, g), ex.extend(g.prototype, f), g.prototype._super = function(a, c) {
-            this._super = b.prototype._super, b.prototype[a].apply(this, c), this._super = this._superTemp;
-        }, g.prototype._superTemp = g.prototype._super, e(a, g), d(a, b, f, g);
-    }
-    function c(a, b, c) {}
-    function d(a, b, c, f) {
-        "__statics" in f.prototype && e(a, f.prototype.__statics, !0);
-        if ("__alias" in f.prototype) {
-            var g = f.prototype.__alias;
-            g != a && (e(g, f), d(g, b, c, f));
-        }
-    }
-    function e(a, b, c) {
-        var d = window, e = a.split("."), f = 0, g = e.length;
-        for (; f < g; f++) {
-            var h = e[f];
-            d[h] = d[h] || {}, f == g - 1 && (c ? ex.extend(d[h], b) : d[h] = b), d = d[h];
-        }
-        return d;
-    }
-    ex.define = function(c, d, e) {
-        if (typeof c != "string") throw new Error("Cannot create class, namespace must be of type String.\n" + d.constructor);
-        e == null ? a(c, d) : b(c, d, e), this._defined.push(c);
-        if (typeof this._namespaces[c] != "undefined") {
-            var f = this._namespaces[c], g = f.length;
-            while (g--) {
-                var h = f[g];
-                ex.Array.remove(this._classes[h], c), this._classes[h].length == 0 && (h(), delete this._classes[h]), ex.Array.remove(this._namespaces[c], h), this._namespaces[c].length == 0 && delete this._namespaces[c];
-            }
-        }
-    };
-}();
-
-var exports = exports || null;
-
-exports && ex.extend(exports, ex), ex.using([ "ex.event.EventTarget" ], function() {
-    ex.define("ex.novus.NovusClient", "ex.event.EventTarget", {
-        constructor: function(a) {
-            this.url = a, this.socket = io.connect(a), this.listeners = {};
-            var b = this;
-            this.socket.on("login", function(a) {
-                b.callback(a.success);
-            }), this.socket.on("guestLogin", function(a) {
-                b.callback(a.success);
-            }), this.socket.on("roomList", function(a) {
-                b.callback(a.list);
-            }), this.socket.on("joinRoom", function(a) {
-                b.callback(a);
-            }), this.socket.on("createRoom", ex.bind(this, function(a) {
-                this.dispatchEvent("createRoom", a);
-            })), this.socket.on("roomMessage", ex.bind(this, function(a) {
-                var b = this.listeners[a.type] || [];
-                b.forEach(function(b, c, d) {
-                    b(a.message);
-                });
-            }));
-        },
-        on: function(a, b) {
-            typeof this.listeners[a] == "undefined" && (this.listeners[a] = []), this.listeners[a].push(b);
-        },
-        login: function(a, b, c) {
-            this.callback = c, this.socket.emit("login", {
-                name: a,
-                password: b
-            });
-        },
-        guestLogin: function(a, b) {
-            this.callback = b, this.socket.emit("guestLogin", {
-                name: a
-            });
-        },
-        roomList: function(a) {
-            this.callback = a, this.socket.emit("roomList", {});
-        },
-        createRoom: function(a) {
-            this.socket.emit("createRoom", {
-                name: a
-            });
-        },
-        joinRoom: function(a, b) {
-            this.callback = b, this.socket.emit("joinRoom", {
-                name: a
-            });
-        },
-        leaveRoom: function() {
-            this.socket.emit("leaveRoom", {});
-        },
-        message: function(a, b) {
-            this.socket.emit("roomMessage", {
-                type: a,
-                message: b
-            });
-        },
-        messageTo: function(a, b, c) {
-            this.socket.emit("roomMessageTo", {
-                name: a,
-                type: b,
-                message: c
-            });
-        }
-    });
-}), ex.using([ "ex.physics.Force" ], function() {
-    ex.define("ex.physics.force.Gravity", ex.physics.Force, {
-        constructor: function(a) {
-            this.strength = a;
-        },
-        solve: function(a, b) {
-            var c = 0, d = b.length, e;
-            for (; c != d; c++) e = b[c], e.velocity && e.gravity != 0 && b[c].applyForce(0, this.strength);
-        }
-    });
-}), ex.using([ "ex.base.Vector" ], function() {
-    ex.define("ex.physics.Force", {
-        update: function(a) {},
-        solve: function(a, b) {},
-        destroy: function() {}
-    });
-}), ex.using([ "ex.physics.CollisionManager", "ex.physics.CollisionMap", "ex.physics.RigidBox", "ex.physics.force.Gravity" ], function() {
-    ex.define("ex.physics.Physics", {});
-}), ex.using([ "ex.base.Vector", "ex.physics.Collidable" ], function() {
-    ex.define("ex.physics.RigidBody", ex.physics.Collidable, {
-        constructor: function(a, b, c) {
-            this.position = b, this.velocity = new ex.Vector(0, 0), this.acceleration = new ex.Vector(0, 0), this.mass = 1, this.elasticity = 0, this.maxVelocity = new ex.Vector(3e3, 3e3), this.zero = .01, this._super("constructor", [ a, c ]);
-        },
-        applyForce: function(a, b) {
-            this.acceleration.x += a / this.mass, this.acceleration.y += b / this.mass;
-        },
-        applyImpulse: function(a, b) {
-            this.velocity.x += a, this.velocity.y += b;
-        },
-        integrate: function(a) {
-            this.mass != 0 && (this.velocity.addScaled(this.acceleration, a), this.acceleration.x = 0, this.acceleration.y = 0, this.velocity.limit(this.maxVelocity), this.velocity.x < this.zero && this.velocity.x > -this.zero && (this.velocity.x = 0), this.velocity.y < this.zero && this.velocity.y > -this.zero && (this.velocity.y = 0), this.position.addScaled(this.velocity, a));
-        },
-        linkObject: function(a) {
-            a.position = this.position;
-        }
-    });
-}), ex.using([ "ex.physics.RigidBody" ], function() {
-    ex.define("ex.physics.RigidBox", ex.physics.RigidBody, {
-        constructor: function(a, b, c, d) {
-            this.width = b, this.height = c, this._super("constructor", [ "RigidBox", a, d ]);
-        },
-        draw: function(a, b, c) {
-            a.strokeRect(this.position.x - b, this.position.y - c, this.width, this.height);
-        }
-    });
-}), ex.using([ "ex.base.Component" ], function() {
-    ex.define("ex.plugins.Data", ex.base.Component, {
-        __alias: "ex.Data",
-        __statics: {
-            data: {},
-            storageKeys: null,
-            setStorageKeys: function(a) {
-                this.storageKeys = a;
-            },
-            clear: function() {
-                localStorage.clear();
-            },
-            save: function() {
-                var a = {};
-                if (this.storageKeys) {
-                    var b = 0, c = this.storageKeys.length, d;
-                    for (; b != c; b++) d = this.storageKeys[b], a[d] = this.data[d];
-                } else a = this.data;
-                a = JSON.stringify(a), localStorage.data = a;
-            },
-            load: function() {
-                var a = localStorage.data;
-                if (a) {
-                    a = JSON.parse(a);
-                    if (this.storageKeys) {
-                        var b = 0, c = this.storageKeys.length, d;
-                        for (; b != c; b++) d = this.storageKeys[b], this.data[d] = a[d];
-                    } else ex.extend(this.data, a, !0);
-                }
-                return a;
-            },
-            set: function(a, b) {
-                ex.Data.data[a] = b;
-            },
-            get: function(a) {
-                return ex.Data.data[a];
-            }
-        }
-    });
-}), ex.using([ "ex.base.Vector", "ex.base.Component" ], function() {
-    var a;
-    ex.define("ex.plugins.Tween", ex.base.Component, {
-        __alias: "ex.Tween",
-        constructor: function() {
-            a.__instance ? ex.Debug.log("ex.plugins.Tween has already been initialized!", "INFO") : (this._super("constructor"), a.__instance = this);
-        },
-        update: function(b) {
-            a.__update(b);
-        },
-        __statics: {
-            __instance: null,
-            tweens: [],
-            add: function(b, c, d, e) {
-                var f = this.__generateTween(b, c, d, e);
-                a.tweens.push(f);
-            },
-            delayedCall: function(b, c) {
-                var d = this.__generateTween({}, b, {}, {
-                    callback: c
-                });
-                a.tweens.push(d);
-            },
-            __generateTween: function(a, b, c, d) {
-                var e = {
-                    element: a,
-                    duration: b,
-                    elapsed: 0,
-                    properties: c,
-                    starting: {},
-                    options: d || {}
-                };
-                for (var f in c) e.starting[f] = a[f];
-                return e;
-            },
-            __update: function(b) {
-                var c = 0, d = a.tweens.length, e, f, g = !1;
-                for (; c < d; c++) {
-                    e = a.tweens[c], e.elapsed += b, f = b;
-                    if (e.options.delay) {
-                        if (!(e.elapsed > e.options.delay)) continue;
-                        e.elapsed -= e.options.delay, e.options.delay = null;
-                    }
-                    e.elapsed > e.duration && (f = e.duration - e.elapsed, e.elapsed = e.duration, g = !0);
-                    for (var h in e.properties) if (g == 0) {
-                        var i = (e.properties[h] - e.starting[h]) / e.duration * f;
-                        e.element[h] += i;
-                    } else e.element[h] = e.properties[h];
-                    g == 1 && (a.tweens[c].options.callback && a.tweens[c].options.callback(), a.tweens.splice(c, 1), c--, d--, g = !1);
-                }
-            }
-        }
-    }), a = ex.Tween;
 }), ex.using([], function() {
     var a = navigator.userAgent.toLowerCase();
     ex.define("ex.util.Device", {
@@ -3379,6 +3075,71 @@ exports && ex.extend(exports, ex), ex.using([ "ex.event.EventTarget" ], function
         }
     });
     var c = navigator.userAgent, d = navigator.appVersion.match(/MSIE/) != null, e = a(), f = d && e >= 8, g = d && !f, h = c.match(/firefox/i) != null, i = h && (c.match(/firefox\/2./i) != null || c.match(/firefox\/1./i) != null), j = h && !i, k = navigator.appVersion.match(/WebKit/) != null, l = navigator.appVersion.match(/Chrome/) != null, m = window.opera != null, n = b(), o = m && n < 10;
+}), ex.using([ "ex.base.Point", "ex.base.Vector", "ex.display.Renderable" ], function() {
+    ex.define("ex.world.Layer", ex.display.Renderable, {
+        constructor: function(a, b, c, d) {
+            this.name = a, this.items = [], this.map = b, this.map != null && this.items.push(this.map), c == null ? this.position = new ex.base.Point(0, 0) : this.position = c, d == null ? this.scrollFactor = new ex.base.Vector(1, 1) : this.scrollFactor = d, this._super("constructor", [ !0, 1 ]);
+        },
+        addItem: function(a) {
+            a instanceof ex.world.CollisionMap ? this.map == null ? this._setMap(a) : console.error("Layers cannot contain more than one CollisionMap") : (a.visible = this.visible, a.opacity = this.opacity, this.items.push(a));
+        },
+        getItem: function(a) {
+            var b = this.items.length;
+            while (b--) if (this.items[b].name == a) return this.items[b];
+        },
+        _setMap: function(a) {
+            this.map = a, this.items.push(this.map);
+        },
+        removeItem: function(a) {
+            var b = this.items.length;
+            while (b--) this.items[b] === a && this.items.splice(b, 1);
+        },
+        update: function(a) {
+            var b = this.items.length;
+            while (b--) this.items[b].update(a);
+        },
+        render: function(a, b, c, d, e) {
+            if (!this.isVisible()) return;
+            var f = this.items.length;
+            while (f--) this.items[f].render(a, b * this.scrollFactor.x, c * this.scrollFactor.y, d, e);
+        },
+        debugRender: function(a, b, c, d, e) {
+            this.render(a, b, c);
+            var f = this.items.length;
+            while (f--) this.items[f].debugRender(a, b * this.scrollFactor.x, c * this.scrollFactor.y, d, e);
+        }
+    });
+}), ex.using([ "ex.world.Layer" ], function() {
+    ex.define("ex.world.Map", {
+        constructor: function(a) {
+            this.name = a, this.layers = [];
+        },
+        addLayer: function(a) {
+            a != null && this.layers.push(a);
+        },
+        getLayer: function(a) {
+            if (a == null) return null;
+            var b = this.layers.length;
+            while (b--) if (this.layers[b].name == a) return this.layers[b];
+            return null;
+        },
+        removeLayer: function(a) {
+            var b = this.layers.length;
+            while (b--) this.layers[b].name == a && this.layers.splice(b, 1);
+        },
+        toggleLayer: function(a) {
+            var b = this.layers[a];
+            b.visible = !b.visible;
+        },
+        update: function(a) {
+            var b = this.layers.length;
+            while (b--) this.layers[b].update(a);
+        },
+        render: function(a, b, c, d, e) {
+            var f = this.layers.length;
+            while (f--) this.layers[f].render(a, b, c, d, e);
+        }
+    });
 }), ex.using([ "ex.event.EventTarget" ], function() {
     ex.define("ex.world.Timer", ex.event.EventTarget, {
         constructor: function(a) {
@@ -3405,5 +3166,20 @@ exports && ex.extend(exports, ex), ex.using([ "ex.event.EventTarget" ], function
         destroy: function() {
             delete this.options.onTick, delete this.options.onComplete, delete this.options, this.started = !1;
         }
+    });
+}), ex.using([ "ex.event.EventTarget" ], function() {
+    ex.define("ex.world.Trigger", ex.event.EventTarget, {
+        constructor: function(a, b, c) {
+            this.position = a, this.velocity = new ex.base.Vector(0, 0), this.width = b, this.height = c, this.anchored = !0, this.collides = !0, this.type = "Trigger", this._super("constructor", []);
+        },
+        onCollide: function(a, b) {
+            this.dispatchEvent(a.name, b);
+        },
+        update: function(a) {},
+        setupDom: function(a) {},
+        renderDom: function(a, b, c, d, e) {},
+        destroyDom: function(a) {},
+        render2dCanvas: function() {},
+        debugRender: function() {}
     });
 });

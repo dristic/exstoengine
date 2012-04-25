@@ -1,10 +1,7 @@
-/**
- * The base ExstoEngine library.
- * 
- * @name ex
- * 
- * @constructor
- */
+// Exsto Engine
+//====================
+// This is the core Exsto Engine library file. This file sets up polyfills,
+// creates helper functions, and defines the Loader and class system.
 var ex = ex || {};
 
 // Array indexOf fix for IE because IE is lame
@@ -773,3 +770,55 @@ var exports = exports || null;
 if(exports) {
 	ex.extend(exports, ex);
 }
+
+// ## ex.ready
+// This will add a function to be called when the engine is
+// completely loaded and ready to go.
+//
+// This is similar to how jQuery handles the ready state.
+(function () {
+  var readyList = [],
+      ready = false;
+  
+  function doReady() {
+    ex.Array.each(readyList, function (func) {
+      func();
+    });
+    
+    readyList = [];
+    ready = true;
+  };
+  
+  function DOMContentLoaded() {
+    if(document.addEventListener) {
+      document.removeEventListener('DOMContentLoaded', DOMContentLoaded, false);
+      doReady();
+    } else if(document.attachEvent) {
+      document.detachEvent('onreadystatechange', DOMContentLoaded, false);
+      doReady();
+    }
+  };
+  
+  ex.extend(ex, {
+    ready: function (func) {
+      readyList.push(func);
+      
+      // If the document is ready call the function immediately under
+      // a new thread.
+      if(document.readyState === 'complete' || ready == true) {
+        return setTimeout(doReady, 1);
+      }
+      
+      // Listen for dom content loaded on Mozilla, Opera, and webkit
+      if(document.addEventListener) {
+        document.addEventListener('DOMContentLoaded', DOMContentLoaded, false);
+        
+        window.addEventListener('load', doReady, false);
+      } else if(document.attachEvent) {
+        document.attachEvent('onreadystatechange', DOMContentLoaded);
+        
+        window.attachEvent('onload', doReady);
+      }
+    }
+  });
+})();

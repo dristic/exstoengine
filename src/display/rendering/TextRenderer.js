@@ -48,7 +48,7 @@ ex.using([
             this.text, 
             this.position.x, 
             this.position.y,
-            this.options.maxWidth);
+            this.options.maxWidth || 9000000);
       } else if(this.options.type == 'sprite') {
         var i = 0, 
             ln = this.text.length,

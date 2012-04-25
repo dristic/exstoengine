@@ -4,9 +4,16 @@ var tokens = {
     closing: '],'
   },
   defines: {
-    opening: 'ex.define("',
-    closing: '",'
+    opening: 'ex.define(',
+    closing: ','
   }
+};
+
+function cleanup(string) {
+  string = string.trim();
+  string = string.replace(/\'/gi, '');
+  string = string.replace(/\"/gi, '');
+  return string;
 };
 
 exports.requires = function (source) {
@@ -27,11 +34,7 @@ exports.requires = function (source) {
   }*/
   
   requires.forEach(function (el, i) {
-    var string = requires[i];
-    string = string.trim();
-    string = string.replace(/\'/gi, '');
-    string = string.replace(/\"/gi, '');
-    requires[i] = string;
+    requires[i] = cleanup(el);
   });
   
   return requires;
@@ -66,7 +69,7 @@ exports.defines = function (source) {
     params.defines = defines;
   }*/
   
-  defines = defines.trim();
+  defines = cleanup(defines);
   
   return defines;
 };
