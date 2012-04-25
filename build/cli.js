@@ -3,6 +3,8 @@ var command = process.argv[2];
 
 if(command == 'lint') {
   require('./jshint-test');
+} if(command == 'build') {
+  require('./uglify.js');
 } else {
   var message =
     'usage: exsto <command> \n' +
