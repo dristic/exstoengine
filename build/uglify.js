@@ -14,7 +14,7 @@ var config = {
     '../src/ExstoEngine.js'
   ],
   uglify: {
-    beautify: true
+    beautify: false
   }
 };
 
@@ -111,6 +111,17 @@ function parseExFile(source) {
 };
 
 function writeCodeToFile(code) {
+  console.log('Saving debug version.');
+  var debugFilename = 'dist/' + config.name + '-debug-' + config.version + '.js';
+  
+  file.write(debugFilename, code, function (err) {
+    if(err) {
+      throw err;
+    } else {
+      console.log('Debug file written to ' + debugFilename);
+    }
+  });
+  
   console.log('Compiling ast...');
   
   // Compile source text.
