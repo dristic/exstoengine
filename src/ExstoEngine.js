@@ -206,6 +206,8 @@ if(!Array.indexOf){
 		  if(array.indexOf(object) != -1) {
 		    array.splice(array.indexOf(object), 1);
 		  }
+		  
+		  return -1;
 		},
 		
 		each: function (array, func) {
